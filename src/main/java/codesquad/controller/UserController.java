@@ -23,4 +23,9 @@ public class UserController {
         model.addAttribute("users", users);
         return "users/list";
     }
+
+    @GetMapping("/")
+    public String main() {
+        return "/index";
+    }
 }
