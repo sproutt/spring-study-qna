@@ -6,12 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
 public class UserController {
-    private List<User> users = new LinkedList<>();
+    private List<User> users = new ArrayList<>();
 
     @PostMapping("/user/create")
     public String create(User user){
@@ -24,7 +24,7 @@ public class UserController {
     @GetMapping("/user/list")
     public String list(Model model){
         model.addAttribute("users", users);
-        return "list";
+        return "/list";
     }
 
 }
