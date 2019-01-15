@@ -16,7 +16,7 @@ public class UserController {
 
     @GetMapping("/")
     public String initial(){
-        return "/main/index";
+        return "/index";
     }
     @PostMapping("/user/create")
     public String create(User user) {
