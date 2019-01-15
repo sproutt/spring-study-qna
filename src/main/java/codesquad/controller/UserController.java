@@ -14,8 +14,12 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
+    @GetMapping("/")
+    public String initial(){
+        return "/main/index";
+    }
     @PostMapping("/user/create")
-    public String create(User user){
+    public String create(User user) {
         users.add(user);
         System.out.println(user);
         System.out.println("List size : " + users.size());
@@ -24,20 +28,19 @@ public class UserController {
 
 
     @GetMapping("/users")
-    public String list(Model model){
+    public String list(Model model) {
         model.addAttribute("users", users);
         return "users/list";
     }
 
     @GetMapping("/users/{userId}")
-    public String profile(Model model, @PathVariable String userId){
-        for(int i=0;i<users.size();i++){
-            if(users.get(i).getUserId().equals(userId)){
+    public String profile(Model model, @PathVariable String userId) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
                 System.out.println("found the user profile");
                 model.addAttribute("user", users.get(i));
             }
         }
-
         return "users/profile";
     }
 }
