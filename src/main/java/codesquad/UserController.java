@@ -15,42 +15,20 @@ public class UserController {
 
     List<User> userList = new ArrayList<User>();
 
-    @PostMapping(value="/user/form")
-    public String returnForm(Model model, HttpServletRequest request){
+    @GetMapping("/")
+    public String returnIndex(){
 
-        String userId = request.getParameter("userID");
-        String userPassword = request.getParameter("password");
-        String userName = request.getParameter("name");
-        String userEmail = request.getParameter("email");
-
-        User user = new User();
-        user.setUserId(userId);
-        user.setUserPassword(userPassword);
-        user.setUserName(userName);
-        user.setUserEmail(userEmail);
-
-        userList.add(user);
-
-        return "redirect:/users";
+        return "/index";
     }
 
 
-/*
-    @GetMapping(value="/user/list")
-    public String userList(Model model){
+    @GetMapping("/user/form")
+    public String returnForm(){
 
-        return "user/list";
+        return "/user/form";
     }
 
-    @GetMapping(value="/user/{userId}")
-    public String userModified(Model model){
 
-
-
-        return "user/list";
-    }
-
-*/
 
 
 }
