@@ -3,10 +3,9 @@ package codesquad;
 public class User {
 
     String userId;
-    String userPassword;
-    String userEmail;
-    String userName;
-
+    String password;
+    String name;
+    String email;
 
     public String getUserId() {
         return userId;
@@ -16,30 +15,28 @@ public class User {
         this.userId = userId;
     }
 
-    public String getUserPassword() {
-        return userPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public String getUserEmail() {
-        return userEmail;
+    public String getName() {
+        return name;
     }
 
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getEmail() {
+        return email;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setEmail(String email) {
+        this.email = email;
     }
-
-
 
 }
