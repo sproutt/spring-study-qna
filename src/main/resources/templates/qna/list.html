@@ -5,18 +5,22 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>#</th> <th>글쓴이</th> <th>제목</th> <th>내용</th><th></th>
+                    <th>#</th>
+                    <th>제목</th>
+                    <th>글쓴이</th>
+                    <th>내용</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {{#users}}
+                {{#questions}}
                 <tr>
                     <td>#</td>
-                    <td><a href="/users/{{userId}}">{{userId}}</a></td>
-                    <td>{{name}}</td>
-                    <td>{{email}}</td>
+                    <td><a href="/questions/{{index}}">{{title}}</a></td>
+                    <td>{{writer}}</td>
+                    <td>{{contents}}</td>
                 </tr>
-                {{/users}}
+                {{/questions}}
                 </tbody>
             </table>
         </div>

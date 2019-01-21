@@ -16,10 +16,6 @@ public class UserController {
 
     //TODO : Questions에 대한 질문 목록을 이곳에서 조회해준다. 이 전 Controller의 ArrayList를 그대로 전달
     //TODO : View 에서 사용자 목록을 구현하는 것을 참고해서 작성한다.
-    @GetMapping("/")
-    public String initial(){
-        return "/index";
-    }
 
     @PostMapping("/user/create")
     public String create(User user) {
@@ -45,5 +41,29 @@ public class UserController {
             }
         }
         return "users/profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(Model model, @PathVariable String userId) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                model.addAttribute("user", users.get(i));
+            }
+        }
+        return "/users/updateForm";
+    }
+
+    @PostMapping("/user/{userId}/update")
+    public String updateUser(@PathVariable String userId, User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                users.get(i).setUserId(user.getUserId());
+                users.get(i).setName(user.getName());
+                users.get(i).setEmail(user.getEmail());
+                users.get(i).setPassword(user.getPassword());
+                break;
+            }
+        }
+        return "redirect:/users";
     }
 }
