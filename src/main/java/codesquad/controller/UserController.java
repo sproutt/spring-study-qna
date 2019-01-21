@@ -14,9 +14,6 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    //TODO : Questions에 대한 질문 목록을 이곳에서 조회해준다. 이 전 Controller의 ArrayList를 그대로 전달
-    //TODO : View 에서 사용자 목록을 구현하는 것을 참고해서 작성한다.
-
     @PostMapping("/user/create")
     public String create(User user) {
         users.add(user);
