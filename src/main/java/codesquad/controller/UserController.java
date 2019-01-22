@@ -54,7 +54,6 @@ public class UserController {
     public String updateUser(@PathVariable String userId, User user) {
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserId().equals(userId)) {
-                users.get(i).setUserId(user.getUserId());
                 users.get(i).setName(user.getName());
                 users.get(i).setEmail(user.getEmail());
                 users.get(i).setPassword(user.getPassword());
