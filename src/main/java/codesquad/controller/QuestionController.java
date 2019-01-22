@@ -27,14 +27,15 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String bringQuestionsList(Model model){
+    public String bringQuestionsList(Model model) {
         model.addAttribute("questions", questions);
         return "qna/list";
     }
+
     @GetMapping("/questions/{index}")
     public String showQuestion(Model model, @PathVariable int index) {
-        for(int i=0;i<questions.size();i++){
-            if(questions.get(i).getIndex() == index){
+        for (int i = 0; i < questions.size(); i++) {
+            if (questions.get(i).getIndex() == index) {
                 model.addAttribute("question", questions.get(i));
                 break;
             }
