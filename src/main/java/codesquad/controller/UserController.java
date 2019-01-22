@@ -14,10 +14,6 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/")
-    public String initial(){
-        return "/index";
-    }
     @PostMapping("/user/create")
     public String create(User user) {
         users.add(user);
@@ -42,5 +38,29 @@ public class UserController {
             }
         }
         return "users/profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(Model model, @PathVariable String userId) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                model.addAttribute("user", users.get(i));
+            }
+        }
+        return "/users/updateForm";
+    }
+
+    @PostMapping("/user/{userId}/update")
+    public String updateUser(@PathVariable String userId, User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                users.get(i).setUserId(user.getUserId());
+                users.get(i).setName(user.getName());
+                users.get(i).setEmail(user.getEmail());
+                users.get(i).setPassword(user.getPassword());
+                break;
+            }
+        }
+        return "redirect:/users";
     }
 }
