@@ -23,7 +23,7 @@ public class QuestionController {
         return "index";
     }
 
-    @PostMapping("/question")
+    @PostMapping("/questions")
     public String question(Question question) {
         question.setIndex(++index);
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -34,7 +34,7 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public String show(@PathVariable Long index, Model model) {
         for (Question question : questions) {
-            if(question.getIndex() == index) {
+            if (question.getIndex() == index) {
                 model.addAttribute("question", question);
             }
         }
