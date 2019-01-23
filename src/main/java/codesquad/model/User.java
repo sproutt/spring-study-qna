@@ -1,11 +1,11 @@
-package codesquad;
+package codesquad.model;
 
 public class User {
 
-    String userId;
-    String password;
-    String name;
-    String email;
+    private String userId;
+    private String password;
+    private String name;
+    private String email;
 
     public String getUserId() {
         return userId;
