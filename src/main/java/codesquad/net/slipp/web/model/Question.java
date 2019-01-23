@@ -6,10 +6,6 @@ public class Question {
     private String contents;
 
 
-
-
-
-
     public String getWriter() {
         return writer;
     }
@@ -34,9 +30,9 @@ public class Question {
         this.contents = contents;
     }
 
-    public String toString(){
-        return  "Question{" +
-                "writer : "+writer+
+    public String toString() {
+        return "Question{" +
+                "writer : " + writer +
                 ", title : " + title +
                 ", contents :" + contents +
                 " }";

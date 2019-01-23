@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +19,7 @@ public class UserController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("/user/create")
-    public String welcome(User user, Model model){
+    public String welcome(User user, Model model) {
         users.add(user);
         logger.info(user.toString());
 
@@ -26,7 +27,7 @@ public class UserController {
     }
 
     @GetMapping("/user/list")
-    public String getList(Model model){
+    public String getList(Model model) {
         //logger.info(users.toString());
 
         model.addAttribute("users", users);
@@ -34,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/user/list/{userId}")
-    public String getProfile(@PathVariable String userId, Model model){
+    public String getProfile(@PathVariable String userId, Model model) {
         logger.info("검색: " + userId);
         User searchedUser = userSearch(users, userId);
         logger.info(searchedUser.toString());
@@ -42,10 +43,10 @@ public class UserController {
         return "/user/list_profile";
     }
 
-    public User userSearch(List<User> users , String userId) {
+    public User userSearch(List<User> users, String userId) {
         User searchedUser = null;
         for (User u : users) {
-            logger.info("비교" + u.getUserId() +"vs" + userId);
+            logger.info("비교" + u.getUserId() + "vs" + userId);
             if (u.getUserId().equals(userId)) {
                 searchedUser = u;
             }
