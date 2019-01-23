@@ -35,8 +35,7 @@ public class QuestionController {
     @RequestMapping(value="/questions/{index}")
     String getQuestionFormDetail(@PathVariable int index, Model model){
 
-        model.addAttribute("question", questions.get(index-1));
-        logger.info(questions.get(index-1).getTitle());
+        model.addAttribute("question", questions.get(index));
         return "/qna/showDetail";
     }
 
