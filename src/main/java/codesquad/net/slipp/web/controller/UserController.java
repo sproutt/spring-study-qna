@@ -1,5 +1,6 @@
-package codesquad.net.slipp.web;
+package codesquad.net.slipp.web.controller;
 
+import codesquad.net.slipp.web.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
