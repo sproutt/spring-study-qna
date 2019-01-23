@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @RequestMapping("/users")
-    public String getUsers(Model model){
+    public String getUsers(Model model) {
         logger.info(users.toString());
 
         model.addAttribute("users", users);
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @RequestMapping("/users/{id}/form")
-    public String getUserUpdateForm(@PathVariable int id, Model model, @RequestParam("msg") String msg){
+    public String getUserUpdateForm(@PathVariable int id, Model model, @RequestParam(required = false, name = "msg") String msg) {
 
         model.addAttribute("user", users.get(id));
         model.addAttribute("id", id);
@@ -56,17 +56,18 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @RequestMapping(value="/users/{id}/update")
-    public String updateUser(@PathVariable int id , User updatedUser, RedirectAttributes redirectAttributes){
-        if(updatedUser.getPassword() == users.get(id).getPassword()){
+    @RequestMapping(value = "/users/{id}/update", method = RequestMethod.POST)
+    public String updateUser(@PathVariable int id, User updatedUser, RedirectAttributes redirectAttributes) {
+
+        if (isSame(updatedUser.getPassword(), users.get(id).getPassword())) {
             //비밀번호 맞을시 업데이트
             users.set(id, updatedUser);
             return "redirect:/users";
         }
-        redirectAttributes.addAttribute("msg","잘못된 비밀번호입니다.");
-            // 비밀번호 틀릴시, 안내문구 전송해서,updateform 다시띄운후에 안내문구 출력.
+        redirectAttributes.addAttribute("msg", "잘못된 비밀번호입니다.");
+        // 비밀번호 틀릴시, 안내문구 전송해서,updateform 다시띄운후에 안내문구 출력.
 
-        return "redirect:/users/"+id+"/form";
+        return "redirect:/users/" + id + "/form";
     }
 
     public User userSearch(List<User> users, String userId) {
@@ -78,6 +79,10 @@ public class UserController {
             }
         }
         return searchedUser;
+    }
+
+    public boolean isSame(String a, String b) {
+        return a.equals(b);
     }
 
 
