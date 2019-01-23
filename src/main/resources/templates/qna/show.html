@@ -6,9 +6,11 @@
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
+            {{#questions}}
           <header class="qna-header">
-              <h2 class="qna-title">InitializingBean implements afterPropertiesSet() 호출되지 않는 문제.</h2>
-          </header>z
+              <h2 class="qna-title"><a href="/questions/1">{{title}}</a></h2>
+          </header>
+            {{/questions}}
         </div>
     </div>
 </div>

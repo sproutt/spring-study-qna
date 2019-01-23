@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -32,9 +33,11 @@ public class QuestionController {
     }
 
     @RequestMapping(value="/questions/{index}")
-    String getQuestionFormDetail(){
+    String getQuestionFormDetail(@PathVariable int index, Model model){
 
-        return
+        model.addAttribute("question", questions.get(index-1));
+        logger.info(questions.get(index-1).getTitle());
+        return "/qna/showDetail";
     }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
