@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class UserController {
@@ -27,7 +28,12 @@ public class UserController {
     }
 
     @GetMapping("/user/list")
-    public String getList(Model model) {
+    public String getList() {
+        return "redirect:/users";
+    }
+
+    @RequestMapping("/users/")
+    public String getUsers((Model model){
         //logger.info(users.toString());
 
         model.addAttribute("users", users);
