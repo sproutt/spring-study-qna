@@ -14,7 +14,7 @@ public class UserController {
     private List<User> users = new ArrayList<>();
     private Long id = 0L;
 
-    @PostMapping("/create")
+    @PostMapping("/users")
     public String create(User user) {
         user.setId(++id);
         users.add(user);
@@ -29,11 +29,38 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String profile(@PathVariable String userId, Model model) {
+        model.addAttribute("user", search(userId));
+        return "users/profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(@PathVariable String userId, Model model) {
+        model.addAttribute("user", search(userId));
+        return "users/updateForm";
+    }
+
+    public User search(String userId) {
         for (User user : users) {
             if (user.getUserId().equals(userId)) {
-                model.addAttribute("user", user);
+                return user;
             }
         }
-        return "users/profile";
+        return null;
+    }
+
+    @PostMapping("/users/{userId}")
+    public String update(@PathVariable String userId, User modifiedUser, Model model) {
+        User user = search(userId);
+        long index = user.getId();
+
+        if (!user.getPassword().equals(modifiedUser.getPassword())) {
+            model.addAttribute("mismatch", true);
+            return "users/updateForm";
+        }
+
+        modifiedUser.setId(index);
+        users.remove(user);
+        users.add((int) index - 1, modifiedUser);
+        return "redirect:/users";
     }
 }
