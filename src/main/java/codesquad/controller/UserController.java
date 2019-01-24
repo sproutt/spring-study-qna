@@ -60,7 +60,7 @@ public class UserController {
         return "/users/updateForm";
     }
 
-    @GetMapping("/users/{userId}/update")
+    @PostMapping("/users/{userId}/update")
     public String updateUser(User user) {
         for (int i = 0; i < users.size(); i++) {
             if (user.getUserId().equals(users.get(i).getUserId())) {
