@@ -1,4 +1,4 @@
-package codesquad.net.slipp.web;
+package codesquad.net.slipp.web.model;
 
 public class User {
     private String userId;
