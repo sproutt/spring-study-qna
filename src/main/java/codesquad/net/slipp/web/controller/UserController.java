@@ -72,10 +72,10 @@ public class UserController {
 
     public User userSearch(List<User> users, String userId) {
         User searchedUser = null;
-        for (User u : users) {
-            logger.info("비교" + u.getUserId() + "vs" + userId);
-            if (u.getUserId().equals(userId)) {
-                searchedUser = u;
+        for (User user : users) {
+            logger.info("비교" + user.getUserId() + "vs" + userId);
+            if (user.getUserId().equals(userId)) {
+                searchedUser = user;
             }
         }
         return searchedUser;

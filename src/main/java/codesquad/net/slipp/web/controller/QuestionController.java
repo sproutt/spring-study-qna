@@ -32,8 +32,8 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @RequestMapping(value="/questions/{index}")
-    String getQuestionFormDetail(@PathVariable int index, Model model){
+    @RequestMapping(value = "/questions/{index}")
+    String getQuestionFormDetail(@PathVariable int index, Model model) {
 
         model.addAttribute("question", questions.get(index));
         return "/qna/showDetail";
