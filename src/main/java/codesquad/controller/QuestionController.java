@@ -20,20 +20,20 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/")
-    public String questionList(Model model) {
+    public String showQuestions(Model model) {
         model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @PostMapping("/questions")
-    public String question(Question question) {
+    public String post(Question question) {
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/questions/{id}")
-    public String show(@PathVariable Long id, Model model) {
+    public String showQuestion(@PathVariable Long id, Model model) {
         Question question = questionRepository.findById(id).get();
         model.addAttribute("question", question);
         return "qna/show";
