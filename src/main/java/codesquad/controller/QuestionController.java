@@ -5,10 +5,7 @@ import codesquad.domain.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -50,6 +47,12 @@ public class QuestionController {
         modifiedQuestion.setId(id);
         modifiedQuestion.setCreatedDate(questionRepository.findById(id).get().getCreatedDate());
         questionRepository.save(modifiedQuestion);
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/questions/{id}")
+    public String delete(@PathVariable Long id) {
+        questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
     }
 }
