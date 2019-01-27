@@ -33,6 +33,3 @@ dependencies {
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.assertj:assertj-core:3.10.0')
 }
-
-//Spring Boot Overriding
-ext['hibernate.version'] = '5.2.11.Final'

@@ -1,66 +1,57 @@
 package codesquad.controller;
 
 import codesquad.domain.User;
+import codesquad.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
-    private Long id = 0L;
 
-    @PostMapping("/users")
+    @Autowired
+    private UserRepository userRepository;
+
+    @PostMapping("")
     public String create(User user) {
-        user.setId(++id);
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "users/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        model.addAttribute("user", search(userId));
+    @GetMapping("/{id}")
+    public String profile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
         return "users/profile";
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model) {
-        model.addAttribute("user", search(userId));
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
         return "users/updateForm";
     }
 
-    public User search(String userId) {
-        for (User user : users) {
-            if (user.getUserId().equals(userId)) {
-                return user;
-            }
-        }
-        return null;
-    }
-
-    @PostMapping("/users/{userId}")
-    public String update(@PathVariable String userId, User modifiedUser, Model model) {
-        User user = search(userId);
-        long index = user.getId();
+    @PutMapping("/{id}")
+    public String update(@PathVariable Long id, User modifiedUser, Model model) {
+        User user = userRepository.findById(id).get();
 
         if (!user.getPassword().equals(modifiedUser.getPassword())) {
             model.addAttribute("mismatch", true);
             return "users/updateForm";
         }
 
-        modifiedUser.setId(index);
-        users.remove(user);
-        users.add((int) index - 1, modifiedUser);
+        modifiedUser.setId(id);
+        userRepository.save(modifiedUser);
         return "redirect:/users";
     }
 }

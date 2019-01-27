@@ -1,8 +1,16 @@
 package codesquad.domain;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
 
-    private Long index;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String writer;
 
@@ -20,12 +28,12 @@ public class Question {
         this.createdDate = createdDate;
     }
 
-    public Long getIndex() {
-        return index;
+    public Long getId() {
+        return id;
     }
 
-    public void setIndex(Long index) {
-        this.index = index;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getWriter() {

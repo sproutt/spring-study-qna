@@ -1,6 +1,8 @@
 package codesquad.controller;
 
 import codesquad.domain.Question;
+import codesquad.domain.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,30 +16,26 @@ import java.util.*;
 @Controller
 public class QuestionController {
 
-    private List<Question> questions = new ArrayList<>();
-    private Long index = 0L;
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @GetMapping("/")
     public String questionList(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @PostMapping("/questions")
     public String question(Question question) {
-        question.setIndex(++index);
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
-    @GetMapping("/questions/{index}")
-    public String show(@PathVariable Long index, Model model) {
-        for (Question question : questions) {
-            if (question.getIndex() == index) {
-                model.addAttribute("question", question);
-            }
-        }
+    @GetMapping("/questions/{id}")
+    public String show(@PathVariable Long id, Model model) {
+        Question question = questionRepository.findById(id).get();
+        model.addAttribute("question", question);
         return "qna/show";
     }
 }
