@@ -1,20 +1,26 @@
 package codesquad.model;
 
+import javax.persistence.*;
+
+@Entity
 public class User {
-    private String name;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String userId;
+
+    private String name;
     private String email;
     private String password;
 
-    public User() {
-
+    public Long getId() {
+        return id;
     }
 
-    public User(String name, String userId, String email, String password) {
-        this.name = name;
-        this.userId = userId;
-        this.email = email;
-        this.password = password;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setName(String name) {
