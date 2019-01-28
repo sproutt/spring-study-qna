@@ -17,8 +17,8 @@
                 }
 
             </script>
-            <form name="question" method="post" action="/user/{{userId}}/update" onsubmit="return check()">
-                {{#user}}
+            {{#user}}
+            <form name="question" method="post" action="/user/{{id}}/update" onsubmit="return check()">
                 <div class="form-group">
                     <label/>사용자 아이디<br>
                     {{userId}}

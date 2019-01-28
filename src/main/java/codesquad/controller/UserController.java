@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-@RequestMapping("/users")
 public class UserController {
 
     @Autowired
@@ -48,15 +47,17 @@ public class UserController {
     }
 
     @PostMapping("/user/{id}/update")
-    public ModelAndView updateUser(@PathVariable Long id, User user) {
+    public String updateUser(@PathVariable Long id, User user) {
 
         ModelAndView modelAndView = new ModelAndView("redirect:/users");
+        System.out.println("user before : " + userRepository.findById(id).get().getName());
         userRepository.findById(id).get()
                 .setName(user.getName());
         userRepository.findById(id).get()
                 .setPassword(user.getPassword());
         userRepository.findById(id).get()
                 .setEmail(user.getEmail());
-        return modelAndView;
+        userRepository.save(userRepository.findById(id).get());
+        return "redirect:/users";
     }
 }
