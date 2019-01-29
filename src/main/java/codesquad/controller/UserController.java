@@ -49,9 +49,8 @@ public class UserController {
             model.addAttribute("mismatch", true);
             return "users/updateForm";
         }
-
-        modifiedUser.setId(id);
-        userRepository.save(modifiedUser);
+        user.update(modifiedUser);
+        userRepository.save(user);
         return "redirect:/users";
     }
 }

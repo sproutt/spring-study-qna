@@ -44,9 +44,9 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}")
     public String update(@PathVariable Long id, Question modifiedQuestion) {
-        modifiedQuestion.setId(id);
-        modifiedQuestion.setCreatedDate(questionRepository.findById(id).get().getCreatedDate());
-        questionRepository.save(modifiedQuestion);
+        Question question = questionRepository.findById(id).get();
+        question.update(modifiedQuestion);
+        questionRepository.save(question);
         return "redirect:/";
     }
 

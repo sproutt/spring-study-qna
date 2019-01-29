@@ -59,4 +59,10 @@ public class Question {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+    public void update(Question modifiedQuestion) {
+        this.writer = modifiedQuestion.writer;
+        this.title = modifiedQuestion.title;
+        this.contents = modifiedQuestion.contents;
+    }
 }
