@@ -1,10 +1,5 @@
 package codesquad.model;
 
-//TODO 1. use @Entity and map the Question class to Database Table
-//TODO 2. use @Id, @GeneratedValue annotation, make them as Question's key variable
-//TODO 3. use @Column annotation, mapping each table's field to table's column
-//TODO 4. Make QuestionRepository, this could extends CrudRepository
-
 import javax.persistence.*;
 
 @Entity
@@ -13,7 +8,7 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length=20)
+    @Column(nullable = false, length = 20)
     private String writer;
     private String title;
     private String contents;

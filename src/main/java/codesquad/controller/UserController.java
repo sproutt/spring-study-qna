@@ -47,9 +47,6 @@ public class UserController {
 
     @PostMapping("/user/{id}/update")
     public String updateUser(@PathVariable Long id, User user) {
-
-        ModelAndView modelAndView = new ModelAndView("redirect:/users");
-        System.out.println("user before : " + userRepository.findById(id).get().getName());
         userRepository.findById(id).get()
                 .setName(user.getName());
         userRepository.findById(id).get()
