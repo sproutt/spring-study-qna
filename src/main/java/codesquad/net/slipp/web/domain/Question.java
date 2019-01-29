@@ -1,6 +1,9 @@
-package codesquad.net.slipp.web.model;
+package codesquad.net.slipp.web.domain;
 
 public class Question {
+
+    private long id;
+
     private String writer;
     private String title;
     private String contents;

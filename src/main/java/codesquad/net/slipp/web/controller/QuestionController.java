@@ -1,6 +1,6 @@
 package codesquad.net.slipp.web.controller;
 
-import codesquad.net.slipp.web.model.Question;
+import codesquad.net.slipp.web.domain.Question;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
