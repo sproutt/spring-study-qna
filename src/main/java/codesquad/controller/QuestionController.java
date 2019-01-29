@@ -41,16 +41,27 @@ public class QuestionController {
 
     //TODO 8. As same as TODO 7, use findAll() method, and make show detail of question function.
     @GetMapping("/questions/{id}")
-    public ModelAndView showQuestion(Model model, @PathVariable Long id) {
+    public ModelAndView showQuestion(@PathVariable Long id) {
         ModelAndView modelAndView = new ModelAndView("qna/show");
         modelAndView.addObject("question", questionRepository.findById(id).get());
 
         return modelAndView;
     }
 
+
     //TODO 9. Requirement : In the question detail showing view, it should make it possible update question.
     // it should be done by edit qna/form.html file to qna/updateForm.html file and some change6 the details.
+    @PostMapping("/questions/{id}/update")
+    public String updateQuestion(@PathVariable Long id, Question question){
 
+        questionRepository.findById(id).get()
+                .setContents(question.getContents());
+        questionRepository.findById(id).get()
+                .setTitle(question.getTitle());
+        questionRepository.findById(id).get()
+                .setWriter(question.getWriter());
+        return "redirect:/questions";
+    }
     //TODO 10. Requirement : You can also delete question in the detail showing view.
     // use QuestionRepository's delete() method. When in you click the delete button in show.html, delete value should transmitted
     // such as hidden like "<input type='hidden' name='_method' value='DELETE'/>"
