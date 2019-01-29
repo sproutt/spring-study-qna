@@ -1,7 +1,7 @@
 package codesquad.controller;
 
-import codesquad.model.User;
-import codesquad.model.UserRepository;
+import codesquad.model.user.User;
+import codesquad.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
@@ -43,7 +40,7 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView profile(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("/users/profile");
-        mav.addObject("user",userRepository.findById(id));
+        mav.addObject("user",userRepository.findById(id).get());
         return mav;
     }
 

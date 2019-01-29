@@ -1,4 +1,4 @@
-package codesquad.model;
+package codesquad.model.user;
 
 import javax.persistence.*;
 
