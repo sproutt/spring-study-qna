@@ -5,6 +5,7 @@ import codesquad.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -71,7 +72,13 @@ public class QuestionController {
         questionRepository.save(questionRepository.findById(id).get());
         return "redirect:/";
     }
+
     //TODO 10. Requirement : You can also delete question in the detail showing view.
     // use QuestionRepository's delete() method. When in you click the delete button in show.html, delete value should transmitted
     // such as hidden like "<input type='hidden' name='_method' value='DELETE'/>"
+    @DeleteMapping("/questions/{id}/delete")
+    public String deleteQuestion(@PathVariable Long id, Question question){
+        questionRepository.delete(questionRepository.findById(id).get());
+        return "redirect:/";
+    }
 }
