@@ -27,7 +27,6 @@ public class UserController {
 
     @GetMapping("")
     public String getUserList(Model model) {
-        log.info(userRepository.findAll().toString());
         model.addAttribute("users", userRepository.findAll());
         return "/user/list";
     }
@@ -47,26 +46,34 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
-        ModelAndView mav = new ModelAndView("user/list_profile");
+        ModelAndView mav = new ModelAndView("/user/list_profile");
         mav.addObject("user", userRepository.findById(id).get());
         return mav;
     }
 
-    @RequestMapping("/users/{id}/form")
-    public String getUserUpdateForm(@PathVariable int id, Model model, @RequestParam(required = false, name = "msg") String msg) {
-
-        model.addAttribute("user", users.get(id));
-        model.addAttribute("id", id);
-        model.addAttribute("msg", msg);
-        return "/user/updateForm";
+    @RequestMapping("/{id}/form")
+    public ModelAndView getUserUpdateForm(@PathVariable long id, Model model, @RequestParam(required = false, name = "msg") String msg) {
+        ModelAndView mav = new ModelAndView("/user/updateForm");
+        log.info("form줄게!");
+        mav.addObject("user", userRepository.findById(id).get());
+        mav.addObject("msg", msg);
+        return mav;
     }
 
-    @RequestMapping(value = "/users/{id}/update", method = RequestMethod.POST)
-    public String updateUser(@PathVariable int id, User updatedUser, RedirectAttributes redirectAttributes) {
-
-        if (isSame(updatedUser.getPassword(), users.get(id).getPassword())) {
+    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
+    //업데이트 안됨 오류
+    //비밀번호 오류메세지 출력안됨 1
+    public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes) {
+        log.info("업데이트 포스트 메서드 실행!");
+        User user = userRepository.findById(id).get();
+        if (isSame(updatedUser.getPassword(), user.getPassword())) {
             //비밀번호 맞을시 업데이트
-            users.set(id, updatedUser);
+            System.out.println(updatedUser.getUserId());
+            user.setUserId(updatedUser.getUserId());
+            user.setPassword(updatedUser.getPassword());
+            user.setName(updatedUser.getName());
+            user.setEmail(updatedUser.getEmail());
+            userRepository.save(user);
             return "redirect:/users";
         }
         redirectAttributes.addAttribute("msg", "잘못된 비밀번호입니다.");
@@ -79,6 +86,5 @@ public class UserController {
     public boolean isSame(String a, String b) {
         return a.equals(b);
     }
-
 
 }
