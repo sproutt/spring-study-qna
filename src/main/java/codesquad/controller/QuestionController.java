@@ -35,7 +35,7 @@ public class QuestionController {
     public ModelAndView bringQuestionsList(Model model) {
         ModelAndView modelAndView = new ModelAndView("qna/list");
         modelAndView.addObject("questions", questionRepository
-        .findAll());
+                .findAll());
         return modelAndView;
     }
 
@@ -51,16 +51,25 @@ public class QuestionController {
 
     //TODO 9. Requirement : In the question detail showing view, it should make it possible update question.
     // it should be done by edit qna/form.html file to qna/updateForm.html file and some change6 the details.
-    @PostMapping("/questions/{id}/update")
-    public String updateQuestion(@PathVariable Long id, Question question){
+    @GetMapping("/questions/{id}/updateForm")
+    public ModelAndView questionUpdateForm(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("qna/updateForm");
+        modelAndView.addObject("question", questionRepository.findById(id).get());
+        return modelAndView;
+    }
 
+
+    @PostMapping("/questions/{id}/update")
+    public String updateQuestion(@PathVariable Long id, Question question) {
+        System.out.println("question update executed");
         questionRepository.findById(id).get()
                 .setContents(question.getContents());
         questionRepository.findById(id).get()
                 .setTitle(question.getTitle());
         questionRepository.findById(id).get()
                 .setWriter(question.getWriter());
-        return "redirect:/questions";
+        questionRepository.save(questionRepository.findById(id).get());
+        return "redirect:/";
     }
     //TODO 10. Requirement : You can also delete question in the detail showing view.
     // use QuestionRepository's delete() method. When in you click the delete button in show.html, delete value should transmitted
