@@ -18,33 +18,34 @@ import java.util.List;
 @RequestMapping("/questions")
 public class QuestionController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
-    private List<Question> questions = new ArrayList<Question>();
 
     @Autowired
     private QuestionRepository questionRepository;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public String getQuestionList(Model model) {
-        // 질문 리스트 불러오기
         model.addAttribute("questions", questionRepository.findAll());
+
         return "/qna/show";
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
     public String PostQuestion(Question question) {
         questionRepository.save(question);
+
         return "redirect:/questions";
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
     public String getQuestionForm() {
+
         return "/qna/form";
     }
 
     @RequestMapping(value = "/{id}")
     public String getQuestionFormDetail(@PathVariable long id, Model model) {
-
         model.addAttribute("question", questionRepository.findById(id).get());
+
         return "/qna/showDetail";
     }
 

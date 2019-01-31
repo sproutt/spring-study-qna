@@ -22,17 +22,19 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    Logger log = LoggerFactory.getLogger(this.getClass());
+    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("")
     public String getUserList(Model model) {
         model.addAttribute("users", userRepository.findAll());
+
         return "/user/list";
     }
 
     @PostMapping("")
     public String createUser(User user, Model model) {
         userRepository.save(user);
+
         return "redirect:/users";
     }
 
@@ -40,6 +42,7 @@ public class UserController {
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
         ModelAndView mav = new ModelAndView("/user/list_profile");
         mav.addObject("user", userRepository.findById(id).get());
+
         return mav;
     }
 
@@ -48,6 +51,7 @@ public class UserController {
         ModelAndView mav = new ModelAndView("/user/updateForm");
         mav.addObject("user", userRepository.findById(id).get());
         mav.addObject("msg", msg);
+
         return mav;
     }
 
@@ -55,7 +59,6 @@ public class UserController {
     public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes) {
         User user = userRepository.findById(id).get();
         if (isSame(updatedUser.getPassword(), user.getPassword())) {
-            //비밀번호 맞을시 업데이트
             System.out.println(updatedUser.getUserId());
             user.setUserId(updatedUser.getUserId());
             user.setPassword(updatedUser.getPassword());
@@ -65,13 +68,13 @@ public class UserController {
             return "redirect:/users";
         }
         redirectAttributes.addAttribute("msg", "잘못된 비밀번호입니다.");
-        // 비밀번호 틀릴시, 안내문구 전송해서,updateform 다시띄운후에 안내문구 출력.
 
         return "redirect:/users/" + id + "/form";
     }
 
 
     public boolean isSame(String a, String b) {
+
         return a.equals(b);
     }
 
