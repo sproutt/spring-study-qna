@@ -1,7 +1,8 @@
 package codesquad.controller;
 
-import codesquad.domain.Question;
-import codesquad.domain.QuestionRepository;
+import codesquad.domain.question.Question;
+import codesquad.domain.question.QuestionRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +10,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
 
+@AllArgsConstructor
 @Controller
 public class QuestionController {
 
-    @Autowired
     private QuestionRepository questionRepository;
 
     @GetMapping("/")

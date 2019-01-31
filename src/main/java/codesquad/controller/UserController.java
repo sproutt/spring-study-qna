@@ -1,20 +1,18 @@
 package codesquad.controller;
 
-import codesquad.domain.User;
-import codesquad.domain.UserRepository;
+import codesquad.domain.user.User;
+import codesquad.domain.user.UserRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
-
+@AllArgsConstructor
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-    @Autowired
     private UserRepository userRepository;
 
     @PostMapping("")
