@@ -54,21 +54,50 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
+        Object value = httpSession.getAttribute("sessionedUser");
+        if (value == null) {
+            return "users/login";
+        }
+        User user = (User) value;
+
+        if (!user.match(id)) {
+            return "qna/update_deny";
+        }
         model.addAttribute("question", questionRepository.findById(id).get());
         return "qna/updateForm";
     }
 
     @PutMapping("/questions/{id}")
-    public String update(@PathVariable Long id, Question modifiedQuestion) {
+    public String update(@PathVariable Long id, Question modifiedQuestion, HttpSession httpSession) {
+        Object value = httpSession.getAttribute("sessionedUser");
+        if (value == null) {
+            return "users/login";
+        }
+        User user = (User) value;
+
+        if (!user.match(id)) {
+            return "qna/update_deny";
+        }
+
         Question question = questionRepository.findById(id).get();
         question.update(modifiedQuestion);
+        question.setWriter(user.getName());
         questionRepository.save(question);
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}")
-    public String delete(@PathVariable Long id) {
+    public String delete(@PathVariable Long id, HttpSession httpSession) {
+        Object value = httpSession.getAttribute("sessionedUser");
+        if (value == null) {
+            return "users/login";
+        }
+        User user = (User) value;
+
+        if (!user.match(id)) {
+            return "qna/update_deny";
+        }
         questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
     }
