@@ -3,10 +3,11 @@ package codesquad.controller;
 import codesquad.domain.user.User;
 import codesquad.domain.user.UserRepository;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @AllArgsConstructor
 @Controller
@@ -43,12 +44,29 @@ public class UserController {
     public String update(@PathVariable Long id, User modifiedUser, Model model) {
         User user = userRepository.findById(id).get();
 
-        if (!user.getPassword().equals(modifiedUser.getPassword())) {
+        if (!user.match(modifiedUser.getPassword())) {
             model.addAttribute("mismatch", true);
             return "users/updateForm";
         }
         user.update(modifiedUser);
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/login")
+    public String loginForm() {
+        return "users/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession httpSession, Model model) {
+        User user = userRepository.findByUserId(userId);
+
+        if(user == null || !user.match(password)) {
+            model.addAttribute("mismatch", true);
+            return "users/login";
+        }
+        httpSession.setAttribute("sessionedUser", user);
+        return "redirect:/";
     }
 }

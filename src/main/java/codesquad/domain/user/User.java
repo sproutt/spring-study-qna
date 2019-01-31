@@ -30,4 +30,9 @@ public class User {
         this.name = modifiedUser.name;
         this.email = modifiedUser.email;
     }
+
+    public boolean match(String password) {
+        if(this.password.equals(password)) return true;
+        return false;
+    }
 }
