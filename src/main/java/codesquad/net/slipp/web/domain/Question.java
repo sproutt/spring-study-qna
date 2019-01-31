@@ -1,10 +1,20 @@
 package codesquad.net.slipp.web.domain;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Question {
 
+    @Id
+    @GeneratedValue
     private long id;
 
+    @Column(nullable = false, length = 20)
     private String writer;
+
     private String title;
     private String contents;
 

@@ -18,7 +18,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<User>();
 
     @Autowired
     private UserRepository userRepository;
@@ -33,16 +32,9 @@ public class UserController {
 
     @PostMapping("")
     public String createUser(User user, Model model) {
-        log.info(user.toString());
         userRepository.save(user);
         return "redirect:/users";
     }
-
-    @GetMapping("/list")
-    public String getList() {
-        return "redirect:/users";
-    }
-
 
     @GetMapping("/{id}")
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
@@ -54,17 +46,13 @@ public class UserController {
     @RequestMapping("/{id}/form")
     public ModelAndView getUserUpdateForm(@PathVariable long id, Model model, @RequestParam(required = false, name = "msg") String msg) {
         ModelAndView mav = new ModelAndView("/user/updateForm");
-        log.info("form줄게!");
         mav.addObject("user", userRepository.findById(id).get());
         mav.addObject("msg", msg);
         return mav;
     }
 
     @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    //업데이트 안됨 오류
-    //비밀번호 오류메세지 출력안됨 1
     public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes) {
-        log.info("업데이트 포스트 메서드 실행!");
         User user = userRepository.findById(id).get();
         if (isSame(updatedUser.getPassword(), user.getPassword())) {
             //비밀번호 맞을시 업데이트

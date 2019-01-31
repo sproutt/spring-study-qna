@@ -1,8 +1,10 @@
 package codesquad.net.slipp.web.controller;
 
 import codesquad.net.slipp.web.domain.Question;
+import codesquad.net.slipp.web.domain.QuestionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,23 +15,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
     Logger logger = LoggerFactory.getLogger(this.getClass());
     private List<Question> questions = new ArrayList<Question>();
 
-    @RequestMapping(value = "/qna/form", method = RequestMethod.GET)
-    public String getQuestionForm() {
-        //질문 등록폼 불러오기
+    @Autowired
+    private QuestionRepository questionRepository;
 
-        return "/qna/form";
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public String getQuestionList(Model model) {
+        // 질문 리스트 불러오기
+        model.addAttribute("questions", questionRepository.findAll());
+        return "/qna/show";
     }
 
-    @RequestMapping(value = "/questions", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public String PostQuestion(Question question) {
-        //질문 등록하기
+        questionRepository.save(question);
+        return "redirect:/questions";
+    }
 
-        questions.add(question);
-        return "redirect:/";
+    @RequestMapping(value = "/form", method = RequestMethod.GET)
+    public String getQuestionForm() {
+        return "/qna/form";
     }
 
     @RequestMapping(value = "/questions/{index}")
@@ -39,12 +48,6 @@ public class QuestionController {
         return "/qna/showDetail";
     }
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getQuestionList(Model model) {
-        // 질문 리스트 불러오기
-        model.addAttribute("questions", questions);
-        return "/qna/show";
-    }
 
     @RequestMapping(value = "/modify", method = RequestMethod.POST)
     public String get() {
