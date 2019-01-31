@@ -10,7 +10,7 @@ public class Question {
 
     @Id
     @GeneratedValue
-    private long id;
+    private Long id;
 
     @Column(nullable = false, length = 20)
     private String writer;
@@ -49,5 +49,13 @@ public class Question {
                 ", title : " + title +
                 ", contents :" + contents +
                 " }";
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }

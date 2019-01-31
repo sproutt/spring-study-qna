@@ -41,10 +41,10 @@ public class QuestionController {
         return "/qna/form";
     }
 
-    @RequestMapping(value = "/questions/{index}")
-    public String getQuestionFormDetail(@PathVariable int index, Model model) {
+    @RequestMapping(value = "/{id}")
+    public String getQuestionFormDetail(@PathVariable long id, Model model) {
 
-        model.addAttribute("question", questions.get(index));
+        model.addAttribute("question", questionRepository.findById(id).get());
         return "/qna/showDetail";
     }
 
