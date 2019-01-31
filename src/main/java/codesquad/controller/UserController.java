@@ -35,7 +35,16 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
+    public String updateForm(@PathVariable Long id, HttpSession httpSession, Model model) {
+        Object value = httpSession.getAttribute("sessionedUser");
+        if (value == null) {
+            return "users/invalid";
+        }
+        User user = (User) value;
+
+        if (!user.match(id)) {
+            return "users/update_deny";
+        }
         model.addAttribute("user", userRepository.findById(id).get());
         return "users/updateForm";
     }
@@ -62,7 +71,7 @@ public class UserController {
     public String login(String userId, String password, HttpSession httpSession, Model model) {
         User user = userRepository.findByUserId(userId);
 
-        if(user == null || !user.match(password)) {
+        if (user == null || !user.match(password)) {
             model.addAttribute("mismatch", true);
             return "users/login";
         }

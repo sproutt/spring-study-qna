@@ -35,4 +35,9 @@ public class User {
         if(this.password.equals(password)) return true;
         return false;
     }
+
+    public boolean match(Long id) {
+        if(this.id == id) return true;
+        return false;
+    }
 }
