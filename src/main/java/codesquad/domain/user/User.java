@@ -3,10 +3,7 @@ package codesquad.domain.user;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Getter
 @Setter
@@ -17,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String userId;
 
     private String password;
@@ -32,12 +30,10 @@ public class User {
     }
 
     public boolean match(String password) {
-        if(this.password.equals(password)) return true;
-        return false;
+        return this.password.equals(password);
     }
 
     public boolean match(Long id) {
-        if(this.id == id) return true;
-        return false;
+        return this.id == id;
     }
 }
