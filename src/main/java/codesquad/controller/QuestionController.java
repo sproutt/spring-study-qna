@@ -39,9 +39,7 @@ public class QuestionController {
         if (value == null) {
             return "users/invalid";
         }
-        User user = (User) value;
 
-        question.setWriter(user.getName());
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         questionRepository.save(question);
         return "redirect:/";
@@ -82,7 +80,6 @@ public class QuestionController {
 
         Question question = questionRepository.findById(id).get();
         question.update(modifiedQuestion);
-        question.setWriter(user.getName());
         questionRepository.save(question);
         return "redirect:/";
     }
