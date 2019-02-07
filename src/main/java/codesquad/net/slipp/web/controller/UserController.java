@@ -39,6 +39,7 @@ public class UserController {
 
         return "redirect:/users";
     }
+
     @GetMapping("/login")
     public String getLogin() {
         return "/user/login";
@@ -53,7 +54,7 @@ public class UserController {
             return "redirect:/";
         }
 
-        return "redirect:/users/login";
+        return "/users/login_failed";
     }
 
     @GetMapping("/logout")
@@ -72,17 +73,43 @@ public class UserController {
     }
 
     @RequestMapping("/{id}/form")
-    public ModelAndView getUserUpdateForm(@PathVariable long id, Model model, @RequestParam(required = false, name = "msg") String msg) {
+    public ModelAndView getUserUpdateForm(@PathVariable long id, Model model,
+                                          @RequestParam(required = false, name = "passwordErrorMessage") String passwordErrorMessage,
+                                          @RequestParam(required = false, name = "idErrorMessage") String idErrorMessage) {
         ModelAndView mav = new ModelAndView("/user/updateForm");
         mav.addObject("user", userRepository.findById(id).get());
-        mav.addObject("msg", msg);
+        mav.addObject("idErrorMessage", idErrorMessage);
+        mav.addObject("passwordErrorMessage", passwordErrorMessage);
+
 
         return mav;
     }
 
+    @RequestMapping("/updateForm")
+    public String getUpdateForm(HttpSession session) {
+        Object value = session.getAttribute("userSession");
+
+        if (value == null) {
+            return "redirect:/users/login";
+        }
+        User sessionedUser = (User)value;
+        return "redirect:/users/"+sessionedUser.getId()+"/form";
+    }
+
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes, @RequestBody String modifiedPassword) {
+    public String updateUser(@PathVariable long id, HttpSession session, User updatedUser, RedirectAttributes redirectAttributes, String modifiedPassword) {
         User user = userRepository.findById(id).get();
+        Object value = session.getAttribute("userSession");
+        User sessionedUser;
+        if (value == null) {
+            return "redirect:/users/login";
+        }
+        sessionedUser = (User) value;
+        if (!isSame(sessionedUser.getUserId(), updatedUser.getUserId())) {
+
+            redirectAttributes.addAttribute("idErrorMessage", "본인의 아이디가 아닙니다.");
+            return "redirect:/users/" + id + "/form";
+        }
         if (isSame(updatedUser.getPassword(), user.getPassword())) {
             user.setPassword(modifiedPassword);
             user.setName(updatedUser.getName());
@@ -90,7 +117,7 @@ public class UserController {
             userRepository.save(user);
             return "redirect:/users";
         }
-        redirectAttributes.addAttribute("msg", "잘못된 비밀번호입니다.");
+        redirectAttributes.addAttribute("passwordErrorMessage", "잘못된 비밀번호입니다.");
 
         return "redirect:/users/" + id + "/form";
     }

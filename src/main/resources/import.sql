@@ -1,1 +1,0 @@
-INSERT INTO USER (USER_ID, PASSWORD, NAME , EMAIL) VALUES ('admin', 'admin', 'admin', 'admin@naver.com');
