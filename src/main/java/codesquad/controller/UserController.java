@@ -17,12 +17,16 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    @GetMapping("/login")
+    public String login() {
+        return "users/login";
+    }
+
     @PostMapping("/user/create")
     public String create(User user) {
         userRepository.save(user);
         return "redirect:/users";
     }
-
 
     @GetMapping("/users")
     public String list(Model model) {
