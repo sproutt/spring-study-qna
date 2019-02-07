@@ -54,7 +54,7 @@ public class UserController {
             return "redirect:/";
         }
 
-        return "/users/login_failed";
+        return "/user/login_failed";
     }
 
     @GetMapping("/logout")
