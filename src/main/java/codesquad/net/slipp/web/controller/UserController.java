@@ -37,6 +37,14 @@ public class UserController {
 
         return "redirect:/users";
     }
+    @GetMapping("/login")
+    public String login(String userId, String password){
+        User user = userRepository.findByUserId(userId);
+        if(user!= null && user.getPassword() == password){
+            return "redirect:/";
+        }
+        return "redirect:/users/login";
+    }
 
     @GetMapping("/{id}")
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
