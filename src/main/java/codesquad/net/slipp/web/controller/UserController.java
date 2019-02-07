@@ -56,6 +56,13 @@ public class UserController {
         return "redirect:/users/login";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("userSession");
+
+        return "redirect:/";
+    }
+
     @GetMapping("/{id}")
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
         ModelAndView mav = new ModelAndView("/user/list_profile");
