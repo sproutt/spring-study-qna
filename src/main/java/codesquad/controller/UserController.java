@@ -8,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -20,10 +22,24 @@ public class UserController {
         return "users/login";
     }
 
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session){
+        User user = userRepository.findByUserId(userId);
+        System.out.println("login process");
+        if (user == null){
+            return "redirect:/users";
+        }
+        if(!password.equals(user.getPassword())){
+            return "redirect:/users";
+        }
+        session.setAttribute("sessionedUser", user);
+        return "redirect:/users";
+    }
+
     @PostMapping("/create")
     public String create(User user) {
         userRepository.save(user);
-        return "redirect:/users";
+        return "redirect:/users/";
     }
 
     @GetMapping("")
