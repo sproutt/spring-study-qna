@@ -38,18 +38,6 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/login")
-    public String getLogin() {
-
-        return "/user/login";
-    }
-
-    @PostMapping("/login")
-    public String postLogin(User user){
-
-        return "/";
-    }
-
     @GetMapping("/{id}")
     public ModelAndView getUserProfile(@PathVariable long id, Model model) {
         ModelAndView mav = new ModelAndView("/user/list_profile");
