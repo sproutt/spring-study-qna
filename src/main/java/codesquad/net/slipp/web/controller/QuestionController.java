@@ -7,9 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +46,26 @@ public class QuestionController {
 
         return "/qna/showDetail";
     }
+    @RequestMapping(value = "/{id}/form")
+    public String getQuestionUpdateForm(@PathVariable long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
 
+        return "/qna/updateForm";
+    }
 
-    @RequestMapping(value = "/modify", method = RequestMethod.POST)
-    public String get() {
-
-        return "redirect:/";
+    @PutMapping("/{id}")
+    public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion) {
+        Question question = questionRepository.findById(id).get();
+        question.setTitle(updatedQuestion.getTitle());
+        question.setWriter(updatedQuestion.getWriter());
+        question.setContents(updatedQuestion.getContents());
+        questionRepository.save(question);
+        return "redirect:/questions";
+    }
+    @DeleteMapping(value = "/{id}")
+    public String get(@PathVariable long id) {
+        questionRepository.deleteById(id);
+        return "redirect:/questions";
     }
 
 }

@@ -18,7 +18,6 @@ public class Question {
     private String title;
     private String contents;
 
-
     public String getWriter() {
         return writer;
     }

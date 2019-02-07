@@ -55,13 +55,11 @@ public class UserController {
         return mav;
     }
 
-    @RequestMapping(value = "/{id}/update", method = RequestMethod.POST)
-    public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes) {
+    @PutMapping("/{id}")
+    public String updateUser(@PathVariable long id, User updatedUser, RedirectAttributes redirectAttributes, @RequestBody String modifiedPassword) {
         User user = userRepository.findById(id).get();
         if (isSame(updatedUser.getPassword(), user.getPassword())) {
-            System.out.println(updatedUser.getUserId());
-            user.setUserId(updatedUser.getUserId());
-            user.setPassword(updatedUser.getPassword());
+            user.setPassword(modifiedPassword);
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
             userRepository.save(user);
