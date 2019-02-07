@@ -48,7 +48,7 @@ public class UserController {
     public String postLogin(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
         if (user != null && user.getPassword().equals(password)) {
-            session.setAttribute("user", user);
+            session.setAttribute("userSession", user);
 
             return "redirect:/";
         }
