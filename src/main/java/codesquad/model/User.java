@@ -8,11 +8,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
+    @Column(nullable = false, length = 50)
     private String name;
+
+    @Column(nullable = false, length = 50)
     private String email;
+
+    @Column(nullable = false, length = 50)
     private String password;
 
     public Long getId() {
@@ -53,5 +58,11 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public void update(User updatedUser) {
+        this.setName(updatedUser.getName());
+        this.setEmail(updatedUser.getEmail());
+        this.setPassword(updatedUser.getPassword());
     }
 }

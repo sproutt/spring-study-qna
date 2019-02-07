@@ -36,6 +36,12 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("sessionedUser");
+        return "redirect:/users ";
+    }
+
     @PostMapping("/create")
     public String create(User user) {
         userRepository.save(user);
@@ -57,21 +63,25 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView updateForm(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("users/updateForm");
-        modelAndView.addObject("user", userRepository
-                .findById(id).get());
-        return modelAndView;
+    public String updateForm(@PathVariable Long id,Model model, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        if(sessionedObject == null){
+            return "redirect:/users/login";
+        }
+        User sessionedUser = (User)sessionedObject;
+        model.addAttribute("user", sessionedUser);
+        return "users/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String updateUser(@PathVariable Long id, User user) {
-        userRepository.findById(id).get()
-                .setName(user.getName());
-        userRepository.findById(id).get()
-                .setPassword(user.getPassword());
-        userRepository.findById(id).get()
-                .setEmail(user.getEmail());
+    public String updateUser(@PathVariable Long id, User user, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        if(sessionedObject == null){
+            return "redirect:/users/login";
+        }
+        User sessionedUser = (User)sessionedObject;
+        User newUser = userRepository.findById(sessionedUser.getId()).get();
+        newUser.update(user);
         userRepository.save(userRepository.findById(id).get());
         return "redirect:/users";
     }
