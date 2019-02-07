@@ -15,6 +15,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -38,11 +40,19 @@ public class UserController {
         return "redirect:/users";
     }
     @GetMapping("/login")
-    public String login(String userId, String password){
+    public String getLogin() {
+        return "/user/login";
+    }
+
+    @PostMapping("/login")
+    public String postLogin(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
-        if(user!= null && user.getPassword() == password){
+        if (user != null && user.getPassword().equals(password)) {
+            session.setAttribute("user", user);
+
             return "redirect:/";
         }
+
         return "redirect:/users/login";
     }
 
