@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +36,11 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    public String getQuestionForm() {
-
+    public String getQuestionForm(HttpSession session) {
+        Object value = session.getAttribute("userSession");
+        if(value == null){
+            return "redirect:/users/login";
+        }
         return "/qna/form";
     }
 
