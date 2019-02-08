@@ -23,13 +23,12 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session){
+    public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
-        System.out.println("login process");
-        if (user == null){
+        if (user == null) {
             return "redirect:/users";
         }
-        if(!password.equals(user.getPassword())){
+        if (!password.equals(user.getPassword())) {
             return "redirect:/users";
         }
         session.setAttribute("sessionedUser", user);
@@ -37,7 +36,7 @@ public class UserController {
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("sessionedUser");
         return "redirect:/users ";
     }
@@ -63,12 +62,12 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id,Model model, HttpSession session) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
-        if(sessionedObject == null){
+        if (sessionedObject == null) {
             return "redirect:/users/login";
         }
-        User sessionedUser = (User)sessionedObject;
+        User sessionedUser = (User) sessionedObject;
         model.addAttribute("user", sessionedUser);
         return "users/updateForm";
     }
@@ -76,10 +75,10 @@ public class UserController {
     @PutMapping("/{id}/update")
     public String updateUser(@PathVariable Long id, User user, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
-        if(sessionedObject == null){
+        if (sessionedObject == null) {
             return "redirect:/users/login";
         }
-        User sessionedUser = (User)sessionedObject;
+        User sessionedUser = (User) sessionedObject;
         User newUser = userRepository.findById(sessionedUser.getId()).get();
         newUser.update(user);
         userRepository.save(userRepository.findById(id).get());

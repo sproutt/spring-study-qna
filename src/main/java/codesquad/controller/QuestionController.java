@@ -2,20 +2,29 @@ package codesquad.controller;
 
 import codesquad.model.Question;
 import codesquad.repository.QuestionRepository;
+import codesquad.repository.UserRepository;
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class QuestionController {
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private QuestionRepository questionRepository;
 
     @GetMapping("/qna/form")
-    public String questionForm() {
+    public String questionForm(HttpSession session) {
+        //TODO 1. 로그인 사용자만 질문을 할 수 있도록 구
+        //TODO 3. 로그인 하지 않은 사용자는 로그인페이지로 이동.
         return "qna/form";
     }
 
@@ -35,6 +44,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public ModelAndView showQuestion(@PathVariable Long id) {
+        //TODO 4. 글쓴이 필드에 User name값이 들어가도록 설정한다.
         ModelAndView modelAndView = new ModelAndView("qna/show");
         modelAndView.addObject("question", questionRepository.findById(id).get());
 
