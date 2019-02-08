@@ -44,7 +44,7 @@ public class QuestionController {
         return"redirect:/";
     }
 
-    @GetMapping("/question/update/{id}")
+    @PutMapping("/question/update/{id}")
     public String updateQuestion(Model model, @PathVariable Long id, HttpSession session)throws Exception{
         User user = (User)session.getAttribute("user");
         if(user == null){
@@ -59,7 +59,7 @@ public class QuestionController {
         return"/qna/updateForm";
     }
 
-    @PostMapping("/question/delete/{id}")
+    @DeleteMapping("/question/delete/{id}")
     public String deleteQuestion(Model model, @PathVariable Long id,HttpSession session)throws Exception{
         User user = (User)session.getAttribute("user");
         if(user == null){
