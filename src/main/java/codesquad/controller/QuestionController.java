@@ -1,9 +1,8 @@
 package codesquad.controller;
 
 import codesquad.model.Question;
+import codesquad.model.User;
 import codesquad.repository.QuestionRepository;
-import codesquad.repository.UserRepository;
-import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,15 +15,16 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private QuestionRepository questionRepository;
 
     @GetMapping("/qna/form")
-    public String questionForm(HttpSession session) {
-        //TODO 1. 로그인 사용자만 질문을 할 수 있도록 구
-        //TODO 3. 로그인 하지 않은 사용자는 로그인페이지로 이동.
+    public String questionForm(HttpSession session, Model model) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        if (sessionedObject == null) {
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = (User) sessionedObject;
+        model.addAttribute("user", sessionedUser);
         return "qna/form";
     }
 
@@ -35,7 +35,7 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public ModelAndView bringQuestionsList(Model model) {
+    public ModelAndView bringQuestionsList() {
         ModelAndView modelAndView = new ModelAndView("qna/list");
         modelAndView.addObject("questions", questionRepository
                 .findAll());
@@ -44,7 +44,6 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public ModelAndView showQuestion(@PathVariable Long id) {
-        //TODO 4. 글쓴이 필드에 User name값이 들어가도록 설정한다.
         ModelAndView modelAndView = new ModelAndView("qna/show");
         modelAndView.addObject("question", questionRepository.findById(id).get());
 
@@ -52,16 +51,20 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}/updateForm")
-    public ModelAndView questionUpdateForm(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("qna/updateForm");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
-        return modelAndView;
+    public String questionUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        User sessionedUser = (User) sessionedObject;
+
+        if (!sessionedUser.getName().equals(questionRepository.findById(id).get().getWriter())) {
+            return "redirect:/utils/authenticationError";
+        }
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "qna/updateForm";
     }
 
 
     @PutMapping("/questions/{id}/update")
     public String updateQuestion(@PathVariable Long id, Question question) {
-        System.out.println("question update executed");
         questionRepository.findById(id).get()
                 .setContents(question.getContents());
         questionRepository.findById(id).get()

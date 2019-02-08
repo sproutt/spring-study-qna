@@ -10,7 +10,11 @@ public class Question {
 
     @Column(nullable = false, length = 20)
     private String writer;
+
+    @Column(nullable = false, length = 40)
     private String title;
+
+    @Column(nullable = false, length = 40)
     private String contents;
 
     public Long getId() {
