@@ -29,7 +29,10 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String quest(Question question) {
+    public String quest(Question question, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        User sessionedUser = (User)sessionedObject;
+        question.setWriter(sessionedUser);
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -64,7 +67,7 @@ public class QuestionController {
 
 
     @PutMapping("/questions/{id}/update")
-    public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
+    public String updateQuestion(@PathVariable  Long id, Question question, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
         User sessionedUser = (User) sessionedObject;
         if (sessionedObject == null) {
