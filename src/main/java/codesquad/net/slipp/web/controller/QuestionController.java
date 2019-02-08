@@ -32,7 +32,13 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.POST)
-    public String PostQuestion(Question question) {
+    public String PostQuestion(Question question, HttpSession session) {
+        Object value = session.getAttribute("userSession");
+        if (value == null) {
+            return "redirect:/users/login";
+        }
+        User sessionUser = (User)value;
+        question.setWriter(sessionUser);
         questionRepository.save(question);
 
         return "redirect:/questions";
