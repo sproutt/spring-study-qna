@@ -55,4 +55,8 @@ public class User {
         this.email = email;
     }
 
+    public void update(User newUser) {
+        this.name = newUser.getName();
+        this.email = newUser.getEmail();
+    }
 }

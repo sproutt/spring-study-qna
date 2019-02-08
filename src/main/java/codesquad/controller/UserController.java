@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -40,32 +42,47 @@ public class UserController {
     @GetMapping("/{id}")
     public ModelAndView profile(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("/users/profile");
-        mav.addObject("user",userRepository.findById(id).get());
+        mav.addObject("user", userRepository.findById(id).get());
         return mav;
     }
 
-    /*
-    @GetMapping("/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model) {
-        User user = new User();
-        for (int i = 0; i < users.size(); i++) {
-            User tmp = users.get(i);
-            if (userId.equals(tmp.getUserId())) {
-                user = tmp;
-            }
+
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "/users/login";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/loginForm";
         }
-        model.addAttribute("user", user);
+        if (!user.getPassword().equals(password)) {
+            return "redirect:/users/loginForm";
+        }
+        session.setAttribute("user", user);
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/updateForm")
+    public String updateForm() {
         return "/users/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUser(User user) {
-        for (int i = 0; i < users.size(); i++) {
-            if (user.getUserId().equals(users.get(i).getUserId())) {
-                users.set(i, user);
-            }
-        }
-        return "redirect:/users";
+    @PostMapping("/update/{id}")
+    public String updateUser(User newUser, @PathVariable long id) {
+        User user = userRepository.findById(id).get();
+        user.update(newUser);
+        userRepository.save(user);
+        return "redirect:/users/logout";
     }
-*/
+
 }
