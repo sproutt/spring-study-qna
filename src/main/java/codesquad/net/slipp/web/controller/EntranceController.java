@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class EntranceController {
 
     @GetMapping("")
-    public String getEntrance(){
+    public String getEntrance() {
 
         return "redirect:/questions";
     }

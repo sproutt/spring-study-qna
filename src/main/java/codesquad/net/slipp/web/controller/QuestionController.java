@@ -37,7 +37,7 @@ public class QuestionController {
         if (value == null) {
             return "redirect:/users/login";
         }
-        User sessionUser = (User)value;
+        User sessionUser = (User) value;
         question.setWriter(sessionUser);
         questionRepository.save(question);
 

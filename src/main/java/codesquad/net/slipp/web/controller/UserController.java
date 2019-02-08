@@ -42,7 +42,7 @@ public class UserController {
 
     @GetMapping("/login")
     public String getLogin(Model model,
-                           @RequestParam(required=false, name="errorMessage") String errorMessage) {
+                           @RequestParam(required = false, name = "errorMessage") String errorMessage) {
         model.addAttribute("errorMessage", errorMessage);
 
         return "/user/login";
@@ -84,19 +84,19 @@ public class UserController {
         mav.addObject("idErrorMessage", idErrorMessage);
         mav.addObject("passwordErrorMessage", passwordErrorMessage);
 
-
         return mav;
     }
 
     @RequestMapping("/updateForm")
     public String getUpdateForm(HttpSession session) {
         Object value = session.getAttribute("userSession");
-
         if (value == null) {
+
             return "redirect:/users/login";
         }
-        User sessionedUser = (User)value;
-        return "redirect:/users/"+sessionedUser.getId()+"/form";
+        User sessionedUser = (User) value;
+
+        return "redirect:/users/" + sessionedUser.getId() + "/form";
     }
 
     @PutMapping("/{id}")
@@ -105,12 +105,13 @@ public class UserController {
         Object value = session.getAttribute("userSession");
         User sessionedUser;
         if (value == null) {
+
             return "redirect:/users/login";
         }
         sessionedUser = (User) value;
         if (!isSame(sessionedUser.getUserId(), updatedUser.getUserId())) {
-
             redirectAttributes.addAttribute("idErrorMessage", "본인의 아이디가 아닙니다.");
+
             return "redirect:/users/" + id + "/form";
         }
         if (isSame(updatedUser.getPassword(), user.getPassword())) {
@@ -118,13 +119,13 @@ public class UserController {
             user.setName(updatedUser.getName());
             user.setEmail(updatedUser.getEmail());
             userRepository.save(user);
+
             return "redirect:/users";
         }
         redirectAttributes.addAttribute("passwordErrorMessage", "잘못된 비밀번호입니다.");
 
         return "redirect:/users/" + id + "/form";
     }
-
 
     public boolean isSame(String a, String b) {
 
