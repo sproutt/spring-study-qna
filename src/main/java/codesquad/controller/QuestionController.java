@@ -39,7 +39,9 @@ public class QuestionController {
         if (value == null) {
             return "users/invalid";
         }
+        User user = (User) value;
 
+        question.setWriter(user);
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         questionRepository.save(question);
         return "redirect:/";
@@ -97,5 +99,13 @@ public class QuestionController {
         }
         questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
+    }
+
+    public boolean isLogin(HttpSession httpSession) {
+        Object value = httpSession.getAttribute("sessionedUser");
+        if (value == null) {
+            return false;
+        }
+        return true;
     }
 }
