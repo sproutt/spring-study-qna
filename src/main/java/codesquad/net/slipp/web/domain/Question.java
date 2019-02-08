@@ -1,9 +1,6 @@
 package codesquad.net.slipp.web.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Question {
@@ -12,17 +9,18 @@ public class Question {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name="fk_question_writer"))
+    private User writer;
 
     private String title;
     private String contents;
 
     public String getWriter() {
-        return writer;
+        return writer.getUserId();
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 

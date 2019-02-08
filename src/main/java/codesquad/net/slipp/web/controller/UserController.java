@@ -41,7 +41,10 @@ public class UserController {
     }
 
     @GetMapping("/login")
-    public String getLogin() {
+    public String getLogin(Model model,
+                           @RequestParam(required=false, name="errorMessage") String errorMessage) {
+        model.addAttribute("errorMessage", errorMessage);
+
         return "/user/login";
     }
 
