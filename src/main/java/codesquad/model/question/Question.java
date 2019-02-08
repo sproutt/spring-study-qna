@@ -1,19 +1,20 @@
 package codesquad.model.question;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import codesquad.model.user.User;
+
+import javax.persistence.*;
 
 @Entity
 public class Question {
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String writer;
     private String title;
     private String contents;
 
@@ -26,11 +27,11 @@ public class Question {
     }
 
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -51,7 +52,10 @@ public class Question {
     }
 
 
-
+    public void update(Question question){
+        this.contents = question.contents;
+        this.title = question.title;
+    }
 
 
 }
