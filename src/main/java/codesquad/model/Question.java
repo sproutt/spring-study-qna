@@ -8,6 +8,8 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
+
     @Column(nullable = false, length = 20)
     private String writer;
 
@@ -47,5 +49,10 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public void update(Question updateQuestion){
+        this.setTitle(updateQuestion.title);
+        this.setContents(updateQuestion.contents);
     }
 }

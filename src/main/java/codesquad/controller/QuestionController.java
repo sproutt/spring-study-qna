@@ -56,7 +56,7 @@ public class QuestionController {
         User sessionedUser = (User) sessionedObject;
 
         if (!sessionedUser.getName().equals(questionRepository.findById(id).get().getWriter())) {
-            return "redirect:/utils/authenticationError";
+            return "/utils/authenticationError";
         }
         model.addAttribute("question", questionRepository.findById(id).get());
         return "qna/updateForm";
@@ -64,19 +64,33 @@ public class QuestionController {
 
 
     @PutMapping("/questions/{id}/update")
-    public String updateQuestion(@PathVariable Long id, Question question) {
-        questionRepository.findById(id).get()
-                .setContents(question.getContents());
-        questionRepository.findById(id).get()
-                .setTitle(question.getTitle());
-        questionRepository.findById(id).get()
-                .setWriter(question.getWriter());
+    public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        User sessionedUser = (User) sessionedObject;
+        if (sessionedObject == null) {
+            return "redirect:/users/login";
+        }
+        if (!question.getWriter().equals(sessionedUser.getName())) {
+            return "redirect:/users/login";
+        }
+        Question originalQustion = questionRepository.findById(id).get();
+        originalQustion.update(question);
         questionRepository.save(questionRepository.findById(id).get());
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}/delete")
-    public String deleteQuestion(@PathVariable Long id, Question question) {
+    public String deleteQuestion(@PathVariable Long id, Question question, HttpSession session) {
+        Object sessionedObject = session.getAttribute("sessionedUser");
+        User sessionedUser = (User)sessionedObject;
+        if(sessionedObject == null){
+            return "redirect:/users/login";
+        }
+        if(sessionedUser.getName().equals(questionRepository.
+                findById(id).get().
+                getWriter())){
+            return "redirect:/users/login";
+        }
         questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
     }
