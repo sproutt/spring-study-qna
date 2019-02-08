@@ -58,7 +58,9 @@ public class QuestionController {
         Object sessionedObject = session.getAttribute("sessionedUser");
         User sessionedUser = (User) sessionedObject;
 
-        if (!sessionedUser.getName().equals(questionRepository.findById(id).get().getWriter())) {
+        if (!sessionedUser.getName().
+                equals(questionRepository.findById(id).
+                        get().getWriter().getName())) {
             return "/utils/authenticationError";
         }
         model.addAttribute("question", questionRepository.findById(id).get());
