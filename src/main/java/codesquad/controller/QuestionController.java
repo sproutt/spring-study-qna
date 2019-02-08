@@ -31,7 +31,7 @@ public class QuestionController {
     @PostMapping("/questions")
     public String quest(Question question, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User)sessionedObject;
+        User sessionedUser = (User) sessionedObject;
         question.setWriter(sessionedUser);
         questionRepository.save(question);
         return "redirect:/";
@@ -67,7 +67,7 @@ public class QuestionController {
 
 
     @PutMapping("/questions/{id}/update")
-    public String updateQuestion(@PathVariable  Long id, Question question, HttpSession session) {
+    public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
         User sessionedUser = (User) sessionedObject;
         if (sessionedObject == null) {
@@ -85,13 +85,13 @@ public class QuestionController {
     @DeleteMapping("/questions/{id}/delete")
     public String deleteQuestion(@PathVariable Long id, Question question, HttpSession session) {
         Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User)sessionedObject;
-        if(sessionedObject == null){
+        User sessionedUser = (User) sessionedObject;
+        if (sessionedObject == null) {
             return "redirect:/users/login";
         }
-        if(sessionedUser.getName().equals(questionRepository.
+        if (sessionedUser.getName().equals(questionRepository.
                 findById(id).get().
-                getWriter())){
+                getWriter())) {
             return "redirect:/users/login";
         }
         questionRepository.delete(questionRepository.findById(id).get());
