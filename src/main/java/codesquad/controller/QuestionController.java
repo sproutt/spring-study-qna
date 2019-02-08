@@ -3,6 +3,7 @@ package codesquad.controller;
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
 import codesquad.domain.user.User;
+import codesquad.utils.HttpSessionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,8 +27,7 @@ public class QuestionController {
 
     @GetMapping("/questions/form")
     public String questionForm(HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
         return "qna/form";
@@ -35,11 +35,10 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String post(Question question, HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/invalid";
         }
-        User user = (User) value;
+        User user = HttpSessionUtils.getSessionedUser(httpSession);
 
         question.setWriter(user);
         question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
@@ -55,26 +54,25 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = (User) value;
+        User user = HttpSessionUtils.getSessionedUser(httpSession);
 
         if (!user.match(id)) {
             return "qna/update_deny";
         }
+
         model.addAttribute("question", questionRepository.findById(id).get());
         return "qna/updateForm";
     }
 
     @PutMapping("/questions/{id}")
     public String update(@PathVariable Long id, Question modifiedQuestion, HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = (User) value;
+        User user = HttpSessionUtils.getSessionedUser(httpSession);
 
         if (!user.match(id)) {
             return "qna/update_deny";
@@ -89,23 +87,16 @@ public class QuestionController {
     @DeleteMapping("/questions/{id}")
     public String delete(@PathVariable Long id, HttpSession httpSession) {
         Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = (User) value;
+        User user = HttpSessionUtils.getSessionedUser(httpSession);
 
         if (!user.match(id)) {
             return "qna/update_deny";
         }
+
         questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
-    }
-
-    public boolean isLogin(HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
-            return false;
-        }
-        return true;
     }
 }
