@@ -15,17 +15,12 @@ import java.time.format.DateTimeFormatter;
 
 @AllArgsConstructor
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     private QuestionRepository questionRepository;
 
-    @GetMapping("/")
-    public String showQuestions(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
-        return "index";
-    }
-
-    @GetMapping("/questions/form")
+    @GetMapping("/form")
     public String questionForm(HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
@@ -33,7 +28,7 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @PostMapping("/questions")
+    @PostMapping("")
     public String post(Question question, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/invalid";
@@ -46,13 +41,13 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionRepository.findById(id).get());
         return "qna/show";
     }
 
-    @GetMapping("/questions/{id}/form")
+    @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
@@ -67,7 +62,7 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-    @PutMapping("/questions/{id}")
+    @PutMapping("/{id}")
     public String update(@PathVariable Long id, Question modifiedQuestion, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
@@ -84,9 +79,8 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/questions/{id}")
+    @DeleteMapping("/{id}")
     public String delete(@PathVariable Long id, HttpSession httpSession) {
-        Object value = httpSession.getAttribute("sessionedUser");
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }

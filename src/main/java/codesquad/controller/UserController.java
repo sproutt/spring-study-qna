@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.domain.user.User;
 import codesquad.domain.user.UserRepository;
+import codesquad.utils.HttpSessionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -75,13 +76,13 @@ public class UserController {
             model.addAttribute("mismatch", true);
             return "users/login";
         }
-        httpSession.setAttribute("sessionedUser", user);
+        httpSession.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession httpSession) {
-        httpSession.removeAttribute("sessionedUser");
+        httpSession.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 }
