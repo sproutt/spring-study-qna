@@ -38,19 +38,15 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public ModelAndView bringQuestionsList() {
-        ModelAndView modelAndView = new ModelAndView("qna/list");
-        modelAndView.addObject("questions", questionRepository
-                .findAll());
-        return modelAndView;
+    public String bringQuestionsList(Model model) {
+        model.addAttribute("questions", questionRepository.findAll());
+        return "qna/list";
     }
 
     @GetMapping("/questions/{id}")
-    public ModelAndView showQuestion(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("qna/show");
-        modelAndView.addObject("question", questionRepository.findById(id).get());
-
-        return modelAndView;
+    public String showQuestion(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "qna/show";
     }
 
     @GetMapping("/questions/{id}/updateForm")
