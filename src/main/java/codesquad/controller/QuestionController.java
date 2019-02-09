@@ -2,14 +2,16 @@ package codesquad.controller;
 
 import codesquad.model.Question;
 import codesquad.model.User;
+import codesquad.utils.OptionalProcessor;
+import codesquad.utils.SessionChecker;
 import codesquad.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
 
 @Controller
 public class QuestionController {
@@ -17,22 +19,22 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    SessionChecker sessionChecker;
+    OptionalProcessor optionalProcessor;
+
     @GetMapping("/qna/form")
     public String questionForm(HttpSession session, Model model) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        if (sessionedObject == null) {
+
+        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = (User) sessionedObject;
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", sessionChecker.loggedinUser(session));
         return "qna/form";
     }
 
     @PostMapping("/questions")
     public String quest(Question question, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User) sessionedObject;
-        question.setWriter(sessionedUser);
+        question.setWriter(sessionChecker.loggedinUser(session));
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -51,12 +53,10 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/updateForm")
     public String questionUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User) sessionedObject;
-
-        if (!sessionedUser.getName().
-                equals(questionRepository.findById(id).
-                        get().getWriter().getName())) {
+        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
+            return "redirect:/users/loginForm";
+        }
+        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
             return "/utils/authenticationError";
         }
         model.addAttribute("question", questionRepository.findById(id).get());
@@ -66,33 +66,25 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}/update")
     public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User) sessionedObject;
-        if (sessionedObject == null) {
+        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";
         }
-        if (!question.getWriter().equals(sessionedUser.getName())) {
+        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
             return "redirect:/users/login";
         }
-        Question originalQustion = questionRepository.findById(id).get();
-        originalQustion.update(question);
-        questionRepository.save(questionRepository.findById(id).get());
+        questionRepository.save(optionalProcessor.optionalToQuestion(id));
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}/delete")
     public String deleteQuestion(@PathVariable Long id, Question question, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        User sessionedUser = (User) sessionedObject;
-        if (sessionedObject == null) {
+        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";
         }
-        if (sessionedUser.getName().equals(questionRepository.
-                findById(id).get().
-                getWriter())) {
+        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
             return "redirect:/users/login";
         }
-        questionRepository.delete(questionRepository.findById(id).get());
+        questionRepository.delete(optionalProcessor.optionalToQuestion(id));
         return "redirect:/";
     }
 }
