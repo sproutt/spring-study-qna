@@ -63,10 +63,10 @@ public class QuestionController {
         }
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
         if (!user.get().getId().equals(question.get().getWriter().getId())) {
-            model.addAttribute(question);
+            model.addAttribute(question.get());
             return "/qna/showFail";
         }
-        model.addAttribute(question);
+        model.addAttribute(question.get());
         return "/qna/updateForm";
     }
 
