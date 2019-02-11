@@ -15,7 +15,7 @@ public class SessionChecker {
     UserRepository userRepository;
 
     public boolean isThisSessionedWasLoggedin(HttpSession session) {
-        if (session.getAttribute("USER_SESSION") == null) {
+        if (session.getAttribute(USER_SESSION) == null) {
             return false;
         } else {
             return true;
@@ -23,7 +23,7 @@ public class SessionChecker {
     }
 
     public User loggedinUser(HttpSession session) {
-        return (User) session.getAttribute("USER_SESSION");
+        return (User) session.getAttribute(USER_SESSION);
     }
 
 }
