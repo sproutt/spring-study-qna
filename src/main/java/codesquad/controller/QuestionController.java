@@ -50,45 +50,32 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", optionalProcessor.optionalToQuestion(id));
         return "qna/show";
     }
 
     @GetMapping("/{id}/updateForm")
     public String questionUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
-            return "redirect:/users/loginForm";
-        }
         if (!sessionChecker.loggedinUser(session)
                 .isWriterIsSame(optionalProcessor
                         .optionalToQuestion(id))) {
             return "/utils/authenticationError";
         }
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", optionalProcessor.optionalToQuestion(id));
         return "qna/updateForm";
     }
 
 
     @PutMapping("/{id}")
-    public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
-        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
-            return "redirect:/users/login";
-        }
-        if (!sessionChecker.loggedinUser(session).isWriterIsSame(optionalProcessor.optionalToQuestion(id))) {
-            return "redirect:/users/login";
-        }
-        questionRepository.save(optionalProcessor.optionalToQuestion(id));
+    public String updateQuestion(@PathVariable Long id, Question question) {
+        Question originalQuestion = optionalProcessor.optionalToQuestion(id);
+        originalQuestion.update(question);
+        questionRepository.save(originalQuestion);
         return "redirect:/";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(@PathVariable Long id, Question question, HttpSession session) {
-        if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
-            return "redirect:/users/login";
-        }
-        if (!sessionChecker.loggedinUser(session).isWriterIsSame(optionalProcessor.optionalToQuestion(id))) {
-            return "redirect:/users/login";
-        }
+    public String deleteQuestion(@PathVariable Long id) {
         questionRepository.delete(optionalProcessor.optionalToQuestion(id));
         return "redirect:/";
     }

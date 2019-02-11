@@ -80,11 +80,4 @@ public class User {
             return false;
 
     }
-
-    public boolean isPasswordIsCorrect(String password) {
-        if (this.getPassword().equals(password))
-            return true;
-        else
-            return false;
-    }
 }

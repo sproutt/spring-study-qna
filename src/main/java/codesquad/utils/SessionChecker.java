@@ -10,11 +10,12 @@ import javax.servlet.http.HttpSession;
 @Component
 public class SessionChecker {
 
+    private static final String USER_SESSION = "sessionedUser";
     @Autowired
     UserRepository userRepository;
 
     public boolean isThisSessionedWasLoggedin(HttpSession session) {
-        if (session.getAttribute("sessionedUser") == null) {
+        if (session.getAttribute("USER_SESSION") == null) {
             return false;
         } else {
             return true;
@@ -22,7 +23,7 @@ public class SessionChecker {
     }
 
     public User loggedinUser(HttpSession session) {
-        return (User) session.getAttribute("sessionedUser");
+        return (User) session.getAttribute("USER_SESSION");
     }
 
 }

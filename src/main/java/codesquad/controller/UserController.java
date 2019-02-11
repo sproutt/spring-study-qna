@@ -15,7 +15,7 @@ import javax.servlet.http.HttpSession;
 @RequestMapping("/users")
 public class UserController {
 
-    static final String USER_SESSION = "sessionedUser";
+    private static final String USER_SESSION = "sessionedUser";
 
     @Autowired
     private UserRepository userRepository;
