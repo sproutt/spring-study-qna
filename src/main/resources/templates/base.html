@@ -73,14 +73,14 @@
                 <li class="active"><a href="index.html">Posts</a></li>
                 {{^sessionedUser}}
                 <li><a href="/users/loginForm" role="button">로그인</a></li>
-                <li><a href="../users/form" role="button">회원가입</a></li>
+                <li><a href="/users/form" role="button">회원가입</a></li>
                 {{/sessionedUser}}
                 {{#sessionedUser}}
                 <li><a href="/users/logout " role="button">로그아웃</a></li>
                 <li><a href="/users/{{Id}}/form" role="button">개인정보수정</a></li>
                 {{/sessionedUser}}
-                <li><a href="qna/form">질문하기</a></li>
-                <li><a href="qna/show">질문목록</a></li>
+                <li><a href="questions/form">질문하기</a></li>
+                <li><a href="questions/">질문목록</a></li>
             </ul>
         </div>
     </div>

@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.model.Question;
-import codesquad.model.User;
 import codesquad.utils.OptionalProcessor;
 import codesquad.utils.SessionChecker;
 import codesquad.repository.QuestionRepository;
@@ -11,18 +10,22 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.NoSuchElementException;
+
 
 @Controller
+@RequestMapping("/questions")
 public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
 
-    SessionChecker sessionChecker;
-    OptionalProcessor optionalProcessor;
+    @Autowired
+    private SessionChecker sessionChecker;
 
-    @GetMapping("/qna/form")
+    @Autowired
+    private OptionalProcessor optionalProcessor;
+
+    @GetMapping("/form")
     public String questionForm(HttpSession session, Model model) {
 
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
@@ -45,13 +48,13 @@ public class QuestionController {
         return "qna/list";
     }
 
-    @GetMapping("/questions/{id}")
+    @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionRepository.findById(id).get());
         return "qna/show";
     }
 
-    @GetMapping("/questions/{id}/updateForm")
+    @GetMapping("/{id}/updateForm")
     public String questionUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/loginForm";
@@ -66,7 +69,7 @@ public class QuestionController {
     }
 
 
-    @PutMapping("/questions/{id}/update")
+    @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";
@@ -78,7 +81,7 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @DeleteMapping("/questions/{id}/delete")
+    @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, Question question, HttpSession session) {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";

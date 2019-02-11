@@ -3,9 +3,11 @@ package codesquad.utils;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 
+@Component
 public class SessionChecker {
 
     @Autowired

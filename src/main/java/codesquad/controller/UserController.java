@@ -16,11 +16,15 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     static final String USER_SESSION = "sessionedUser";
+
     @Autowired
     private UserRepository userRepository;
 
-    SessionChecker sessionChecker;
-    OptionalProcessor optionalProcessor;
+    @Autowired
+    private SessionChecker sessionChecker;
+
+    @Autowired
+    private OptionalProcessor optionalProcessor;
 
     @GetMapping("/loginForm")
     public String loginForm() {
@@ -29,7 +33,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = optionalProcessor.getUserByUserIdAndPassword(userId, password);
+        User user = optionalProcessor.getUserByUserId(userId);
         session.setAttribute(USER_SESSION, user);
         return "redirect:/users";
     }
@@ -63,7 +67,7 @@ public class UserController {
         User user = optionalProcessor.getUserById(id);
         User sessionedUser = sessionChecker.loggedinUser(session);
         if (!user.isSameUser(sessionedUser)) {
-            return "redirect:/users/login";
+            return "redirect:/users";
         }
         model.addAttribute("user", user);
         return "users/updateForm";
