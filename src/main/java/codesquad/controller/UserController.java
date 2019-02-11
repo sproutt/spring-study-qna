@@ -40,10 +40,9 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView profile(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("/users/profile");
-        mav.addObject("user", userRepository.findById(id).get());
-        return mav;
+    public String profile(Model model, @PathVariable long id) {
+        model.addAttribute("user", userRepository.findById(id).get());
+        return "/users/profile";
     }
 
 
