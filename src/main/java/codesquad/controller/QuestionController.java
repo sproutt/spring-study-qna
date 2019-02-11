@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
+@RequestMapping("/question")
 public class QuestionController {
 
     @Autowired
@@ -23,7 +24,7 @@ public class QuestionController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/qna/form")
+    @GetMapping("/form")
     public String returnQnaForm(HttpSession session){
         Optional<User> user = sessionUtil.getSessionUser(session);
         if(user==null){
@@ -32,22 +33,21 @@ public class QuestionController {
         return "/qna/form";
     }
 
-    @PostMapping("/qna/update/{id}")
-    public String qnaUpdate(Question newQuestion,@PathVariable Long id){
-        Question question = questionRepository.findById(id).get();
-        question.update(newQuestion);
-        questionRepository.save(question);
-        return "redirect:/";
+    @GetMapping("/{id}")
+    public ModelAndView show(@PathVariable long id){
+        ModelAndView mav = new ModelAndView("/qna/show");
+        mav.addObject("question",questionRepository.findById(id).get());
+        return mav;
     }
 
-    @PostMapping("/question/{userId}")
+    @PostMapping("/{userId}")
     public String createQuestion(Question question, @PathVariable String userId){
         question.setWriter(userRepository.findByUserId(userId));
         questionRepository.save(question);
         return"redirect:/";
     }
 
-    @PutMapping("/question/{id}")
+    @PutMapping("/{id}")
     public String updateQuestion(Model model, @PathVariable Long id, HttpSession session)throws Exception{
         User user = (User)session.getAttribute("user");
         if(user == null){
@@ -62,7 +62,7 @@ public class QuestionController {
         return"/qna/updateForm";
     }
 
-    @DeleteMapping("/question/{id}")
+    @DeleteMapping("/{id}")
     public String deleteQuestion(Model model, @PathVariable Long id,HttpSession session)throws Exception{
         User user = (User)session.getAttribute("user");
         if(user == null){
@@ -77,18 +77,12 @@ public class QuestionController {
         return"redirect:/";
     }
 
-    @GetMapping("/")
-    public ModelAndView list(){
-        ModelAndView mav = new ModelAndView("/index");
-        mav.addObject("questions",questionRepository.findAll());
-        return mav;
-    }
-
-    @GetMapping("/questions/{id}")
-    public ModelAndView show(@PathVariable long id){
-        ModelAndView mav = new ModelAndView("/qna/show");
-        mav.addObject("question",questionRepository.findById(id).get());
-        return mav;
+    @PostMapping("/update/{id}")
+    public String qnaUpdate(Question newQuestion,@PathVariable Long id){
+        Question question = questionRepository.findById(id).get();
+        question.update(newQuestion);
+        questionRepository.save(question);
+        return "redirect:/";
     }
 
 }
