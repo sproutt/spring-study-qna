@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 public class QuestionController {
@@ -23,8 +24,9 @@ public class QuestionController {
 
     @GetMapping("/qna/form")
     public String returnQnaForm(HttpSession session){
-        if(session == null){
-            return"redirect:/users/login";
+        Optional<User> user = (Optional<User>) session.getAttribute("user");
+        if(user==null){
+            return"redirect:/users/loginForm";
         }
         return "/qna/form";
     }

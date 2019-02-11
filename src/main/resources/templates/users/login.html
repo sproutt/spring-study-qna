@@ -1,7 +1,6 @@
 <!DOCTYPE html>
-<html lang="kr">
-{{>base}}
 
+{{#partial "content"}}
 <div class="container" id="main">
    <div class="col-md-6 col-md-offset-3">
       <div class="panel panel-default content-main">
@@ -20,10 +19,7 @@
         </div>
     </div>
 </div>
+{{/partial}}
 
-<!-- script references -->
-<script src="../js/jquery-2.2.0.min.js"></script>
-<script src="../js/bootstrap.min.js"></script>
-<script src="../js/scripts.js"></script>
-	</body>
+{{> base}}
 </html>
