@@ -67,7 +67,7 @@ public class User {
     }
 
     public boolean isWriterIsSame(Question question) {
-        if (this.getName().equals(question.getWriter()))
+        if (this.getName().equals(question.getWriter().getName()))
             return true;
         else
             return false;

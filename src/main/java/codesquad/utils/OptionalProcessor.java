@@ -21,7 +21,6 @@ public class OptionalProcessor {
     }
 
     public User getUserByUserId(String userId) {
-        System.out.println("test");
         return userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException("일치하는 회원 정보가 존재하지 않습니다."));
     }

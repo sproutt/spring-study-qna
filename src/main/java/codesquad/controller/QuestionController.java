@@ -34,11 +34,13 @@ public class QuestionController {
         return "qna/form";
     }
 
-    @PostMapping("/questions")
+    @PostMapping
     public String quest(Question question, HttpSession session) {
         question.setWriter(sessionChecker.loggedinUser(session));
+        System.out.println(question.getWriter());
+        System.out.println(question.getId());
         questionRepository.save(question);
-        return "redirect:/";
+        return "redirect:/questions/";
     }
 
     @GetMapping("/")
@@ -58,6 +60,7 @@ public class QuestionController {
         if (!sessionChecker.loggedinUser(session)
                 .isWriterIsSame(optionalProcessor
                         .optionalToQuestion(id))) {
+
             return "/utils/authenticationError";
         }
         model.addAttribute("question", optionalProcessor.optionalToQuestion(id));
