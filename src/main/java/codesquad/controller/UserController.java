@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
+import codesquad.service.UserService;
 import codesquad.utils.OptionalProcessor;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +19,11 @@ public class UserController {
     private static final String USER_SESSION = "sessionedUser";
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private SessionChecker sessionChecker;
-
-    @Autowired
-    private OptionalProcessor optionalProcessor;
-
-    @GetMapping("/loginForm")
-    public String loginForm() {
-        return "users/login";
-    }
+    UserService userService;
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = optionalProcessor.getUserByUserId(userId);
+        User user = userService.getUserByUserId(userId);
         session.setAttribute(USER_SESSION, user);
         return "redirect:/users";
     }
@@ -41,43 +31,41 @@ public class UserController {
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute(USER_SESSION);
-        return "redirect:/users ";
+        return "redirect:/users";
     }
 
     @PostMapping
     public String create(User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users/";
     }
 
-    @GetMapping("")
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "users/list";
     }
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", optionalProcessor.getUserById(id));
+        model.addAttribute("user", userService.getUserById(id));
         return "users/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User user = optionalProcessor.getUserById(id);
-        User sessionedUser = sessionChecker.loggedinUser(session);
-        if (!user.isSameUser(sessionedUser)) {
+        User userToUpdate = userService.getUserById(id);
+        User sessionedUser = (User) session.getAttribute(USER_SESSION);
+        if (!sessionedUser.isSameUser(sessionedUser)) {
             return "redirect:/users";
         }
-        model.addAttribute("user", user);
+        model.addAttribute("user", userToUpdate);
         return "users/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User user) {
-        User originalUser = optionalProcessor.getUserById(id);
-        originalUser.update(user);
-        userRepository.save(originalUser);
+        userService.update(user, id);
         return "redirect:/users";
     }
 }
