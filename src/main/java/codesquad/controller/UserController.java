@@ -1,10 +1,7 @@
 package codesquad.controller;
 
 import codesquad.model.User;
-import codesquad.repository.UserRepository;
 import codesquad.service.UserService;
-import codesquad.utils.OptionalProcessor;
-import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

@@ -6,13 +6,20 @@ import codesquad.repository.QuestionRepository;
 import codesquad.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.NoSuchElementException;
 
 @Component
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
+
+    public Iterable<Question> findAll() {
+        return questionRepository.findAll();
+    }
+
+    public Question getQuestionById(Long id) {
+        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    }
 
     public void update(Question question, User writer) {
         question.update(question, writer);
@@ -25,14 +32,6 @@ public class QuestionService {
             throw new CustomException("세션유저의 글이 아닙니다");
         }
         questionRepository.delete(questionToDelete);
-    }
-
-    public Iterable<Question> findAll() {
-        return questionRepository.findAll();
-    }
-
-    public Question getQuestionById(Long id) {
-        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     public Question getUpdatedQuestion(User sessionedUser, Long id) {

@@ -1,5 +1,7 @@
 package codesquad.model;
 
+import codesquad.utils.CustomException;
+
 import javax.persistence.*;
 
 @Entity
@@ -65,19 +67,16 @@ public class User {
         this.setEmail(updatedUser.getEmail());
         this.setPassword(updatedUser.getPassword());
     }
-
-    public boolean isWriterIsSame(Question question) {
-        if (this.getName().equals(question.getWriter().getName()))
-            return true;
-        else
+    public boolean isSamePassword(User userToUpdate){
+        if(!this.password.equals(userToUpdate.getPassword())){
             return false;
+        }
+        return true;
     }
-
     public boolean isSameUser(User comparedUser) {
         if (this.id.equals(comparedUser.getId()))
             return true;
         else
             return false;
-
     }
 }

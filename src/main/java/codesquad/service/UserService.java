@@ -2,12 +2,10 @@ package codesquad.service;
 
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
+import codesquad.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Component
 public class UserService {
@@ -25,6 +23,8 @@ public class UserService {
 
     public void update(User user, Long id) {
         User userToUpdate = getUserById(id);
+        if(!user.isSamePassword(userToUpdate))
+            throw new CustomException("비밀번호가 다릅니다");
         userToUpdate.update(user);
         userRepository.save(userToUpdate);
     }
@@ -33,7 +33,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public Iterable<User> findAll(){
+    public Iterable<User> findAll() {
         return userRepository.findAll();
     }
 

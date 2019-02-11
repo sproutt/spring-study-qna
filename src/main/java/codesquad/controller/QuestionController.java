@@ -4,9 +4,7 @@ import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.service.QuestionService;
 import codesquad.service.UserService;
-import codesquad.utils.OptionalProcessor;
 import codesquad.utils.SessionChecker;
-import codesquad.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -37,7 +35,7 @@ public class QuestionController {
     public String quest(Question question, HttpSession session) {
         User writer = SessionChecker.loggedinUser(session);
         questionService.update(question, writer);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     @GetMapping
@@ -64,13 +62,13 @@ public class QuestionController {
     public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
         User sessionedUser = SessionChecker.loggedinUser(session);
         questionService.update(question, sessionedUser);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         User sessionedUser = SessionChecker.loggedinUser(session);
         questionService.delete(sessionedUser, id);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 }
