@@ -69,7 +69,7 @@ public class UserController {
         return "users/updateForm";
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User user) {
         User originalUser = optionalProcessor.getUserById(id);
         originalUser.update(user);
