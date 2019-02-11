@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.model.user.User;
 import codesquad.model.user.UserRepository;
+import codesquad.utils.CheckUtil;
 import codesquad.utils.RepositoryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -11,9 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.PrintWriter;
 import java.util.Optional;
 
 @Controller
@@ -43,7 +42,7 @@ public class UserController {
     @GetMapping("/{id}")
     public String goToProfile(Model model, @PathVariable Long id) {
         Optional<User> user = RepositoryUtil.findUser(id, userRepository);
-        if (!user.isPresent()) {
+        if (CheckUtil.userNullChecker(user)) {
             return "redirect:/";
         }
         model.addAttribute("user", user.get());
@@ -65,10 +64,10 @@ public class UserController {
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
         Optional<User> user = RepositoryUtil.findUser(userId, userRepository);
-        if (!user.isPresent()) {
+        if (CheckUtil.userNullChecker(user)) {
             return "/users/login_failed";
         }
-        if (!user.get().getPassword().equals(password)) {
+        if (!CheckUtil.userPasswordChecker(user, password)) {
             return "/users/login_failed";
         }
         session.setAttribute("user", user.get());
@@ -82,17 +81,10 @@ public class UserController {
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(User newUser, HttpServletResponse response, @PathVariable Long id) throws Exception {
+    public String updateUser(User newUser, @PathVariable Long id) {
         Optional<User> user = RepositoryUtil.findUser(id, userRepository);
-        if (!user.isPresent()) {
+        if (CheckUtil.userNullChecker(user)) {
             return "redirect:/";
-        }
-        if (!user.get().getPassword().equals(newUser.getPassword())) {
-            response.setContentType("text/html; charset=UTF-8");
-            PrintWriter out = response.getWriter();
-            out.println("<script>alert('로그인 정보를 확인해주세요.'); history.go(-1);</script>");
-            out.flush();
-            return "/users/updateForm";
         }
         user.get().update(newUser);
         userRepository.save(user.get());

@@ -4,8 +4,10 @@ import codesquad.model.question.Question;
 import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
 import codesquad.model.user.UserRepository;
+import codesquad.utils.CheckUtil;
 import codesquad.utils.RepositoryUtil;
 import codesquad.utils.SessionUtil;
+import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String goToQnaForm(HttpSession session) {
-        if (session.getAttribute("user") == null) {
+        if (CheckUtil.sessionNullChecker("user",session)) {
             return "redirect:/users/loginForm";
         }
         return "/qna/form";
@@ -35,7 +37,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (!question.isPresent()) {
+        if (CheckUtil.questionNullChecker(question)) {
             return "redirect:/";
         }
         model.addAttribute("question", question.get());
@@ -45,7 +47,7 @@ public class QuestionController {
     @PostMapping("/{userId}")
     public String createQuestion(Question question, @PathVariable String userId) {
         Optional<User> writer = RepositoryUtil.findUser(userId, userRepository);
-        if (!writer.isPresent()) {
+        if (CheckUtil.userNullChecker(writer)) {
             return "redirect:/users/loginForm";
         }
         question.setWriter(writer.get());
@@ -56,7 +58,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session) throws Exception {
         Optional<User> user = SessionUtil.getSessionUser(session);
-        if (!user.isPresent()) {
+        if (CheckUtil.userNullChecker(user)) {
             return "redirect:/users/loginForm";
         }
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
@@ -71,11 +73,11 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) throws Exception {
         Optional<User> user = SessionUtil.getSessionUser(session);
-        if (!user.isPresent()) {
+        if (CheckUtil.userNullChecker(user)) {
             return "redirect:/users/loginForm";
         }
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (!user.get().getId().equals(question.get().getWriter().getId())) {
+        if (!CheckUtil.writerChecker(user,question)) {
             model.addAttribute(question.get());
             return "/qna/showFail";
         }

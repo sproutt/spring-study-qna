@@ -11,15 +11,15 @@ import static java.util.Optional.empty;
 
 public class RepositoryUtil {
 
-    public static Optional<User> findUser(String userId, UserRepository userRepository){
+    public static Optional<User> findUser(String userId, UserRepository userRepository) {
         return userRepository.findByUserId(userId);
     }
 
-    public static Optional<User> findUser(Long id, UserRepository userRepository){
+    public static Optional<User> findUser(Long id, UserRepository userRepository) {
         return userRepository.findById(id);
     }
 
-    public static Optional<Question> findQuestion(Long id, QuestionRepository questionRepository){
+    public static Optional<Question> findQuestion(Long id, QuestionRepository questionRepository) {
         return questionRepository.findById(id);
     }
 
