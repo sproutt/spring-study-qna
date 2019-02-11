@@ -2,6 +2,8 @@ package codesquad.controller;
 
 import codesquad.model.user.User;
 import codesquad.model.user.UserRepository;
+import codesquad.utils.CheckUtil;
+import codesquad.utils.RepositoryUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,9 +11,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -20,10 +22,8 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-
     @GetMapping("/form")
-    public String returnForm() {
-
+    public String goToForm() {
         return "/users/form";
     }
 
@@ -34,21 +34,24 @@ public class UserController {
     }
 
     @GetMapping("")
-    public String list(Model model) {
+    public String returnList(Model model) {
         model.addAttribute("users", userRepository.findAll());
         return "/users/list";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView profile(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("/users/profile");
-        mav.addObject("user", userRepository.findById(id).get());
-        return mav;
+    public String goToProfile(Model model, @PathVariable Long id) {
+        Optional<User> user = RepositoryUtil.findUser(id, userRepository);
+        if (CheckUtil.userNullChecker(user)) {
+            return "redirect:/";
+        }
+        model.addAttribute("user", user.get());
+        return "/users/profile";
     }
 
 
     @GetMapping("/loginForm")
-    public String loginForm() {
+    public String goTOLoginForm() {
         return "/users/login";
     }
 
@@ -60,28 +63,31 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return "redirect:/users/loginForm";
+        Optional<User> user = RepositoryUtil.findUser(userId, userRepository);
+        if (CheckUtil.userNullChecker(user)) {
+            return "/users/login_failed";
         }
-        if (!user.getPassword().equals(password)) {
-            return "redirect:/users/loginForm";
+        if (!CheckUtil.userPasswordChecker(user, password)) {
+            return "/users/login_failed";
         }
-        session.setAttribute("user", user);
+        session.setAttribute("user", user.get());
         return "redirect:/";
     }
 
 
     @GetMapping("/updateForm")
-    public String updateForm() {
+    public String gotoUpdateForm() {
         return "/users/updateForm";
     }
 
     @PostMapping("/update/{id}")
-    public String updateUser(User newUser, @PathVariable long id) {
-        User user = userRepository.findById(id).get();
-        user.update(newUser);
-        userRepository.save(user);
+    public String updateUser(User newUser, @PathVariable Long id) {
+        Optional<User> user = RepositoryUtil.findUser(id, userRepository);
+        if (CheckUtil.userNullChecker(user)) {
+            return "redirect:/";
+        }
+        user.get().update(newUser);
+        userRepository.save(user.get());
         return "redirect:/users/logout";
     }
 

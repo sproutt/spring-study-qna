@@ -52,7 +52,7 @@ public class Question {
     }
 
 
-    public void update(Question question){
+    public void update(Question question) {
         this.contents = question.contents;
         this.title = question.title;
     }

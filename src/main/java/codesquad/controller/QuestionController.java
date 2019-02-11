@@ -4,15 +4,20 @@ import codesquad.model.question.Question;
 import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
 import codesquad.model.user.UserRepository;
+import codesquad.utils.CheckUtil;
+import codesquad.utils.RepositoryUtil;
+import codesquad.utils.SessionUtil;
+import org.hibernate.annotations.Check;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Controller
+@RequestMapping("/question")
 public class QuestionController {
 
     @Autowired
@@ -21,71 +26,71 @@ public class QuestionController {
     @Autowired
     private UserRepository userRepository;
 
-    @GetMapping("/qna/form")
-    public String returnQnaForm(HttpSession session){
-        if(session == null){
-            return"redirect:/users/login";
+    @GetMapping("/form")
+    public String goToQnaForm(HttpSession session) {
+        if (CheckUtil.sessionNullChecker("user",session)) {
+            return "redirect:/users/loginForm";
         }
         return "/qna/form";
     }
 
-    @PostMapping("/qna/update/{id}")
-    public String qnaUpdate(Question newQuestion,@PathVariable Long id){
-        Question question = questionRepository.findById(id).get();
-        question.update(newQuestion);
+    @GetMapping("/{id}")
+    public String goToQnaShow(Model model, @PathVariable Long id) {
+        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
+        if (CheckUtil.questionNullChecker(question)) {
+            return "redirect:/";
+        }
+        model.addAttribute("question", question.get());
+        return "/qna/show";
+    }
+
+    @PostMapping("/{userId}")
+    public String createQuestion(Question question, @PathVariable String userId) {
+        Optional<User> writer = RepositoryUtil.findUser(userId, userRepository);
+        if (CheckUtil.userNullChecker(writer)) {
+            return "redirect:/users/loginForm";
+        }
+        question.setWriter(writer.get());
         questionRepository.save(question);
         return "redirect:/";
     }
 
-    @PostMapping("/question/{userId}")
-    public String createQuestion(Question question, @PathVariable String userId){
-        question.setWriter(userRepository.findByUserId(userId));
-        questionRepository.save(question);
-        return"redirect:/";
+    @PutMapping("/{id}")
+    public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session) throws Exception {
+        Optional<User> user = SessionUtil.getSessionUser(session);
+        if (CheckUtil.userNullChecker(user)) {
+            return "redirect:/users/loginForm";
+        }
+        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
+        if (!user.get().getId().equals(question.get().getWriter().getId())) {
+            model.addAttribute(question.get());
+            return "/qna/showFail";
+        }
+        model.addAttribute(question.get());
+        return "/qna/updateForm";
     }
 
-    @PutMapping("/question/update/{id}")
-    public String updateQuestion(Model model, @PathVariable Long id, HttpSession session)throws Exception{
-        User user = (User)session.getAttribute("user");
-        if(user == null){
-            return"redirect:/users/loginForm";
+    @DeleteMapping("/{id}")
+    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) throws Exception {
+        Optional<User> user = SessionUtil.getSessionUser(session);
+        if (CheckUtil.userNullChecker(user)) {
+            return "redirect:/users/loginForm";
         }
-        Question question = questionRepository.findById(id).get();
-        if(!user.getId().equals(question.getWriter().getId())){
-            model.addAttribute(question);
-            return"/qna/showFail";
-        }
-        model.addAttribute(question);
-        return"/qna/updateForm";
-    }
-
-    @DeleteMapping("/question/delete/{id}")
-    public String deleteQuestion(Model model, @PathVariable Long id,HttpSession session)throws Exception{
-        User user = (User)session.getAttribute("user");
-        if(user == null){
-            return"redirect:/users/loginForm";
-        }
-        Question question = questionRepository.findById(id).get();
-        if(!user.getId().equals(question.getWriter().getId())){
-            model.addAttribute(question);
-            return"/qna/showFail";
+        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
+        if (!CheckUtil.writerChecker(user,question)) {
+            model.addAttribute(question.get());
+            return "/qna/showFail";
         }
         questionRepository.deleteById(id);
-        return"redirect:/";
+        return "redirect:/";
     }
 
-    @GetMapping("/")
-    public ModelAndView list(){
-        ModelAndView mav = new ModelAndView("/index");
-        mav.addObject("questions",questionRepository.findAll());
-        return mav;
-    }
-
-    @GetMapping("/questions/{id}")
-    public ModelAndView show(@PathVariable long id){
-        ModelAndView mav = new ModelAndView("/qna/show");
-        mav.addObject("question",questionRepository.findById(id).get());
-        return mav;
+    @PostMapping("/update/{id}")
+    public String updateQuestion(Question newQuestion, @PathVariable Long id) {
+        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
+        question.get().update(newQuestion);
+        questionRepository.save(question.get());
+        return "redirect:/";
     }
 
 }
