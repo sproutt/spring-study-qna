@@ -1,12 +1,9 @@
 package codesquad.controller;
 
-import codesquad.domain.question.Question;
-import codesquad.domain.question.QuestionRepository;
-import codesquad.domain.user.User;
-import codesquad.exception.QuestionNotFoundException;
+import codesquad.domain.Question;
+import codesquad.domain.User;
 import codesquad.service.QuestionService;
 import codesquad.utils.HttpSessionUtils;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/questions")
@@ -77,9 +73,7 @@ public class QuestionController {
             return "qna/update_deny";
         }
 
-        Question question = questionService.findById(id);
-        question.update(modifiedQuestion);
-        questionService.save(question);
+        questionService.updateById(id, modifiedQuestion);
         return "redirect:/";
     }
 

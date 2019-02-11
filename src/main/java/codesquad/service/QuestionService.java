@@ -1,7 +1,7 @@
 package codesquad.service;
 
-import codesquad.domain.question.Question;
-import codesquad.domain.question.QuestionRepository;
+import codesquad.domain.Question;
+import codesquad.domain.QuestionRepository;
 import codesquad.exception.QuestionNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,5 +25,11 @@ public class QuestionService {
 
     public void deleteById(Long id) {
         questionRepository.delete(findById(id));
+    }
+
+    public void updateById(Long id, Question modifiedQuestion) {
+        Question question = findById(id);
+        question.update(modifiedQuestion);
+        save(question);
     }
 }

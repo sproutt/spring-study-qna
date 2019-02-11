@@ -1,6 +1,5 @@
-package codesquad.domain.question;
+package codesquad.domain;
 
-import codesquad.domain.user.User;
 import lombok.Getter;
 import lombok.Setter;
 

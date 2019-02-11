@@ -1,7 +1,7 @@
 package codesquad.service;
 
-import codesquad.domain.user.User;
-import codesquad.domain.user.UserRepository;
+import codesquad.domain.User;
+import codesquad.domain.UserRepository;
 import codesquad.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,5 +31,10 @@ public class UserService {
     public User findByUserId(String userId) {
         Optional<User> byUserId = userRepository.findByUserId(userId);
         return byUserId.orElseThrow(() -> new UserNotFoundException(userId));
+    }
+
+    public void update(User user, User modifiedUser) {
+        user.update(modifiedUser);
+        save(user);
     }
 }

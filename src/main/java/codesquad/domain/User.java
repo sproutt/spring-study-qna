@@ -1,4 +1,4 @@
-package codesquad.domain.user;
+package codesquad.domain;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,18 +1,14 @@
 package codesquad.controller;
 
-import codesquad.domain.user.User;
-import codesquad.domain.user.UserRepository;
+import codesquad.domain.User;
 import codesquad.service.UserService;
 import codesquad.utils.HttpSessionUtils;
-import codesquad.exception.UserNotFoundException;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -61,8 +57,8 @@ public class UserController {
             model.addAttribute("mismatch", true);
             return "users/updateForm";
         }
-        user.update(modifiedUser);
-        userService.save(user);
+
+        userService.update(user, modifiedUser);
         return "redirect:/users";
     }
 
