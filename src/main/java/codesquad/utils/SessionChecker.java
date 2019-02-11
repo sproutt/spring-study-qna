@@ -14,7 +14,7 @@ public class SessionChecker {
     @Autowired
     UserRepository userRepository;
 
-    public boolean isThisSessionedWasLoggedin(HttpSession session) {
+    public static boolean isThisSessionedWasLoggedin(HttpSession session) {
         if (session.getAttribute(USER_SESSION) == null) {
             return false;
         } else {
@@ -22,7 +22,7 @@ public class SessionChecker {
         }
     }
 
-    public User loggedinUser(HttpSession session) {
+    public static User loggedinUser(HttpSession session) {
         return (User) session.getAttribute(USER_SESSION);
     }
 

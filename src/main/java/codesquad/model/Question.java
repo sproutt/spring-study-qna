@@ -50,8 +50,16 @@ public class Question {
         this.contents = contents;
     }
 
-    public void update(Question updateQuestion) {
+    public void update(Question updateQuestion, User writer) {
+        this.setWriter(writer);
         this.setTitle(updateQuestion.title);
         this.setContents(updateQuestion.contents);
+    }
+
+    public boolean isEqualWriter(User user){
+        if(this.getWriter().getName().equals(user.getName())){
+            return true;
+        }else
+            return false;
     }
 }
