@@ -3,6 +3,7 @@ package codesquad.controller;
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
 import codesquad.domain.user.User;
+import codesquad.exception.QuestionNotFoundException;
 import codesquad.utils.HttpSessionUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -43,7 +45,10 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        Optional<Question> byId = questionRepository.findById(id);
+        Question question = byId.orElseThrow(() -> new QuestionNotFoundException(id));
+
+        model.addAttribute("question", question);
         return "qna/show";
     }
 
@@ -58,7 +63,10 @@ public class QuestionController {
             return "qna/update_deny";
         }
 
-        model.addAttribute("question", questionRepository.findById(id).get());
+        Optional<Question> byId = questionRepository.findById(id);
+        Question question = byId.orElseThrow(() -> new QuestionNotFoundException(id));
+
+        model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
@@ -73,7 +81,8 @@ public class QuestionController {
             return "qna/update_deny";
         }
 
-        Question question = questionRepository.findById(id).get();
+        Optional<Question> byId = questionRepository.findById(id);
+        Question question = byId.orElseThrow(() -> new QuestionNotFoundException(id));
         question.update(modifiedQuestion);
         questionRepository.save(question);
         return "redirect:/";
@@ -90,7 +99,10 @@ public class QuestionController {
             return "qna/update_deny";
         }
 
-        questionRepository.delete(questionRepository.findById(id).get());
+        Optional<Question> byId = questionRepository.findById(id);
+        Question question = byId.orElseThrow(() -> new QuestionNotFoundException(id));
+
+        questionRepository.delete(question);
         return "redirect:/";
     }
 }

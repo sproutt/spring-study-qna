@@ -3,12 +3,14 @@ package codesquad.controller;
 import codesquad.domain.user.User;
 import codesquad.domain.user.UserRepository;
 import codesquad.utils.HttpSessionUtils;
+import codesquad.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Controller
@@ -31,28 +33,31 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        Optional<User> byId = userRepository.findById(id);
+        User user = byId.orElseThrow(() -> new UserNotFoundException(id));
+
+        model.addAttribute("user", user);
         return "users/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, HttpSession httpSession, Model model) {
-        Object value = httpSession.getAttribute("sessionedUser");
-        if (value == null) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/invalid";
         }
-        User user = (User) value;
+        User user = HttpSessionUtils.getSessionedUser(httpSession);
 
         if (!user.match(id)) {
             return "users/update_deny";
         }
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", user);
         return "users/updateForm";
     }
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User modifiedUser, Model model) {
-        User user = userRepository.findById(id).get();
+        Optional<User> byId = userRepository.findById(id);
+        User user = byId.orElseThrow(() -> new UserNotFoundException(id));
 
         if (!user.match(modifiedUser.getPassword())) {
             model.addAttribute("mismatch", true);
@@ -70,9 +75,10 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession httpSession, Model model) {
-        User user = userRepository.findByUserId(userId);
+        Optional<User> byUserId = userRepository.findByUserId(userId);
+        User user = byUserId.orElseThrow(() -> new UserNotFoundException(userId));
 
-        if (user == null || !user.match(password)) {
+        if (!user.match(password)) {
             model.addAttribute("mismatch", true);
             return "users/login";
         }
