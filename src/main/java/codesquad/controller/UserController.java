@@ -2,18 +2,25 @@ package codesquad.controller;
 
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
+import codesquad.utils.OptionalProcessor;
+import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
+    static final String USER_SESSION = "sessionedUser";
     @Autowired
     private UserRepository userRepository;
+
+    SessionChecker sessionChecker;
+    OptionalProcessor optionalProcessor;
 
     @GetMapping("/loginForm")
     public String loginForm() {
@@ -22,24 +29,18 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
-            return "redirect:/users";
-        }
-        if (!password.equals(user.getPassword())) {
-            return "redirect:/users";
-        }
-        session.setAttribute("sessionedUser", user);
+        User user = optionalProcessor.getUserByUserIdAndPassword(userId, password);
+        session.setAttribute(USER_SESSION, user);
         return "redirect:/users";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(USER_SESSION);
         return "redirect:/users ";
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public String create(User user) {
         userRepository.save(user);
         return "redirect:/users/";
@@ -53,31 +54,26 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String profile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", optionalProcessor.getUserById(id));
         return "users/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        if (sessionedObject == null) {
+        User user = optionalProcessor.getUserById(id);
+        User sessionedUser = sessionChecker.loggedinUser(session);
+        if (!user.isSameUser(sessionedUser)) {
             return "redirect:/users/login";
         }
-        User sessionedUser = (User) sessionedObject;
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", user);
         return "users/updateForm";
     }
 
     @PutMapping("/{id}/update")
-    public String updateUser(@PathVariable Long id, User user, HttpSession session) {
-        Object sessionedObject = session.getAttribute("sessionedUser");
-        if (sessionedObject == null) {
-            return "redirect:/users/login";
-        }
-        User sessionedUser = (User) sessionedObject;
-        User newUser = userRepository.findById(sessionedUser.getId()).get();
-        newUser.update(user);
-        userRepository.save(userRepository.findById(id).get());
+    public String updateUser(@PathVariable Long id, User user) {
+        User originalUser = optionalProcessor.getUserById(id);
+        originalUser.update(user);
+        userRepository.save(originalUser);
         return "redirect:/users";
     }
 }

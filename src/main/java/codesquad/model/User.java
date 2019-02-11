@@ -1,9 +1,6 @@
 package codesquad.model;
 
-import codesquad.repository.QuestionRepository;
-
 import javax.persistence.*;
-import java.util.NoSuchElementException;
 
 @Entity
 public class User {
@@ -69,12 +66,24 @@ public class User {
         this.setPassword(updatedUser.getPassword());
     }
 
-    public boolean isWriterIsSame(Long id) {
-        QuestionRepository questionRepository = null;
-
-        if(this.getName().equals(questionRepository.findById(id).orElseThrow(NoSuchElementException::new))){
+    public boolean isWriterIsSame(Question question) {
+        if (this.getName().equals(question.getWriter()))
             return true;
-        }
+        else
+            return false;
+    }
+
+    public boolean isSameUser(User comparedUser) {
+        if (this.id.equals(comparedUser.getId()))
+            return true;
+        else
+            return false;
+
+    }
+
+    public boolean isPasswordIsCorrect(String password) {
+        if (this.getPassword().equals(password))
+            return true;
         else
             return false;
     }

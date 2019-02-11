@@ -56,7 +56,9 @@ public class QuestionController {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/loginForm";
         }
-        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
+        if (!sessionChecker.loggedinUser(session)
+                .isWriterIsSame(optionalProcessor
+                        .optionalToQuestion(id))) {
             return "/utils/authenticationError";
         }
         model.addAttribute("question", questionRepository.findById(id).get());
@@ -69,7 +71,7 @@ public class QuestionController {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";
         }
-        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
+        if (!sessionChecker.loggedinUser(session).isWriterIsSame(optionalProcessor.optionalToQuestion(id))) {
             return "redirect:/users/login";
         }
         questionRepository.save(optionalProcessor.optionalToQuestion(id));
@@ -81,7 +83,7 @@ public class QuestionController {
         if (!sessionChecker.isThisSessionedWasLoggedin(session)) {
             return "redirect:/users/login";
         }
-        if (!sessionChecker.loggedinUser(session).isWriterIsSame(id)) {
+        if (!sessionChecker.loggedinUser(session).isWriterIsSame(optionalProcessor.optionalToQuestion(id))) {
             return "redirect:/users/login";
         }
         questionRepository.delete(optionalProcessor.optionalToQuestion(id));

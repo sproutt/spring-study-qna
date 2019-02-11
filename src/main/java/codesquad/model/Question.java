@@ -50,7 +50,7 @@ public class Question {
         this.contents = contents;
     }
 
-    public void update(Question updateQuestion){
+    public void update(Question updateQuestion) {
         this.setTitle(updateQuestion.title);
         this.setContents(updateQuestion.contents);
     }
