@@ -26,8 +26,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String goToQnaForm(HttpSession session) {
-        Optional<User> user = SessionUtil.getSessionUser(session);
-        if (user == null) {
+        if (session.getAttribute("user") == null) {
             return "redirect:/users/loginForm";
         }
         return "/qna/form";
@@ -36,7 +35,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (question == null) {
+        if (!question.isPresent()) {
             return "redirect:/";
         }
         model.addAttribute("question", question.get());
@@ -46,7 +45,7 @@ public class QuestionController {
     @PostMapping("/{userId}")
     public String createQuestion(Question question, @PathVariable String userId) {
         Optional<User> writer = RepositoryUtil.findUser(userId, userRepository);
-        if (writer == null) {
+        if (!writer.isPresent()) {
             return "redirect:/users/loginForm";
         }
         question.setWriter(writer.get());
@@ -57,7 +56,7 @@ public class QuestionController {
     @PutMapping("/{id}")
     public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session) throws Exception {
         Optional<User> user = SessionUtil.getSessionUser(session);
-        if (user == null) {
+        if (!user.isPresent()) {
             return "redirect:/users/loginForm";
         }
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
@@ -72,7 +71,7 @@ public class QuestionController {
     @DeleteMapping("/{id}")
     public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) throws Exception {
         Optional<User> user = SessionUtil.getSessionUser(session);
-        if (user == null) {
+        if (!user.isPresent()) {
             return "redirect:/users/loginForm";
         }
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
@@ -87,9 +86,6 @@ public class QuestionController {
     @PostMapping("/update/{id}")
     public String updateQuestion(Question newQuestion, @PathVariable Long id) {
         Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (question == null) {
-           return "redirect:/";
-        }
         question.get().update(newQuestion);
         questionRepository.save(question.get());
         return "redirect:/";

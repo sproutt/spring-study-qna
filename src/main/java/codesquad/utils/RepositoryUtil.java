@@ -7,6 +7,8 @@ import codesquad.model.user.UserRepository;
 
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+
 public class RepositoryUtil {
 
     public static Optional<User> findUser(String userId, UserRepository userRepository){
