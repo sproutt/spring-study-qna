@@ -29,13 +29,13 @@
                   <div class="article-util">
                       <ul class="article-util-list">
                           <li>
-                              <form class="form-update" action="/question/update/{{id}}" method="POST">
+                              <form class="form-update" action="/question/{{id}}" method="POST">
                                   <button class="link-delete-article" type="submit">
                                       <input type="hidden" name="_method" value="PUT" />수정</button>
                               </form>
                           </li>
                           <li>
-                              <form class="form-delete" action="/question/delete/{{id}}" method="POST">
+                              <form class="form-delete" action="/question/{{id}}" method="POST">
                                   <button class="link-delete-article" type="submit">
                                       <input type="hidden" name="_method" value="DELETE" />삭제</button>
                               </form>
