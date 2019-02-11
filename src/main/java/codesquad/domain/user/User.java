@@ -17,10 +17,13 @@ public class User {
     @Column(nullable = false, unique = true)
     private String userId;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String name;
 
+    @Column(nullable = false)
     private String email;
 
     public void update(User modifiedUser) {

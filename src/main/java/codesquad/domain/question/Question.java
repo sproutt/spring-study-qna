@@ -19,8 +19,10 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private String contents;
 
     private String createdDate;
