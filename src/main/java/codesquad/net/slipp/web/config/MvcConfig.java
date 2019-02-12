@@ -1,4 +1,4 @@
-package codesquad.net.slipp.web;
+package codesquad.net.slipp.web.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
