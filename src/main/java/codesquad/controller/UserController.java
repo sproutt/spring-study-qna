@@ -1,60 +1,68 @@
 package codesquad.controller;
 
 import codesquad.model.User;
-import codesquad.repository.UserRepository;
+import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
-    @Autowired
-    private UserRepository userRepository;
+    private static final String USER_SESSION = "sessionedUser";
 
-    @PostMapping("/user/create")
-    public String create(User user) {
-        userRepository.save(user);
+    @Autowired
+    UserService userService;
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.getUserByUserId(userId);
+        session.setAttribute(USER_SESSION, user);
         return "redirect:/users";
     }
 
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute(USER_SESSION);
+        return "redirect:/users";
+    }
 
-    @GetMapping("/users")
+    @PostMapping
+    public String create(User user) {
+        userService.save(user);
+        return "redirect:/users/";
+    }
+
+    @GetMapping
     public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findAll());
         return "users/list";
     }
 
-    @GetMapping("/users/{id}")
-    public ModelAndView profile(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("users/profile");
-        modelAndView.addObject("user", userRepository
-                .findById(id).get());
-        return modelAndView;
+    @GetMapping("/{id}")
+    public String profile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.getUserById(id));
+        return "users/profile";
     }
 
-    @GetMapping("/users/{id}/form")
-    public ModelAndView updateForm(@PathVariable Long id) {
-        ModelAndView modelAndView = new ModelAndView("users/updateForm");
-        modelAndView.addObject("user", userRepository
-                .findById(id).get());
-        return modelAndView;
+    @GetMapping("/{id}/form")
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        User userToUpdate = userService.getUserById(id);
+        User sessionedUser = (User) session.getAttribute(USER_SESSION);
+        if (!sessionedUser.isSameUser(sessionedUser)) {
+            return "redirect:/users";
+        }
+        model.addAttribute("user", userToUpdate);
+        return "users/updateForm";
     }
 
-    @PutMapping("/user/{id}/update")
+    @PutMapping("/{id}")
     public String updateUser(@PathVariable Long id, User user) {
-        userRepository.findById(id).get()
-                .setName(user.getName());
-        userRepository.findById(id).get()
-                .setPassword(user.getPassword());
-        userRepository.findById(id).get()
-                .setEmail(user.getEmail());
-        userRepository.save(userRepository.findById(id).get());
+        userService.update(user, id);
         return "redirect:/users";
     }
 }

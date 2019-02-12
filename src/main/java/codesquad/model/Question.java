@@ -8,9 +8,14 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+
+    @Column(nullable = false, length = 40)
     private String title;
+
+    @Column(nullable = false, length = 40)
     private String contents;
 
     public Long getId() {
@@ -21,11 +26,11 @@ public class Question {
         this.id = id;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
@@ -43,5 +48,18 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public void update(Question updateQuestion, User writer) {
+        this.setWriter(writer);
+        this.setTitle(updateQuestion.title);
+        this.setContents(updateQuestion.contents);
+    }
+
+    public boolean isEqualWriter(User user) {
+        if (this.getWriter().getName().equals(user.getName())) {
+            return true;
+        } else
+            return false;
     }
 }
