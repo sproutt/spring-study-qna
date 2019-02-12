@@ -1,9 +1,12 @@
 package codesquad.net.slipp.web.service;
 
 
+import codesquad.net.slipp.web.domain.Question;
+import codesquad.net.slipp.web.domain.QuestionRepository;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.exception.UserNotFoundException;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,40 +21,23 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 public class QuestionServiceTest {
 
     @Autowired
-    UserRepository userRepository;
+    private UserService userService;
 
     @Autowired
-    UserService userService;
+    private QuestionRepository questionRepository;
+    @Autowired
+    private QuestionService questionService;
 
     @Test
-    public void checkIdPasswordTest(){
-        User user = new User();
-        user.setUserId("test");
-        user.setPassword("123");
-        assertThat(userService.checkIdPassword(user)).isFalse();
+    public void findByIdTest(){
+        Question question = new Question();
+        question.setWriter(userService.findByUserId("test"));
+        question.setTitle("테스트제목");
+        question.setContents("테스트본문");
+        questionRepository.save(question);
 
-        user.setPassword("1234");
-        assertThat(userService.checkIdPassword(user)).isTrue();
+        assertThat(questionService.findById(1).getTitle()).isEqualTo("테스트제목");
     }
 
-    @Test(expected = UserNotFoundException.class)
-    public void checkIdPasswordExceptionTest(){
-        User user = new User();
-        user.setUserId("testE");
-        user.setPassword("1234");
-        userService.checkIdPassword(user);
-    }
-
-    @Test
-    public void updateTest(){
-        User modelUser = userService.findById(Long.parseLong("2"));
-        User updateUser = new User();
-        updateUser.setUserId("test");
-        updateUser.setEmail("changedTest@gamil.com");
-        updateUser.setName("바뀜");
-        userService.update(modelUser,updateUser);
-
-        assertThat(userService.findByUserId("test").getEmail()).isEqualTo("changedTest@gamil.com");
-    }
 
 }

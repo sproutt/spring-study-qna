@@ -71,13 +71,10 @@ public class QuestionController {
         Question question = questionRepository.findById(id).get();
         Object value = session.getAttribute("userSession");
         if (value == null) {
-            redirectAttributes.addAttribute("errorMessage", "로그인 후 사용 가능합니다.");
-
             return "redirect:/users/login";
         }
         User userBySession = (User) value;
         if (!question.getWriter().equals(userBySession.getUserId())) {
-            redirectAttributes.addAttribute("errorMessage", "다른 사람의 글은 변경할 수 없습니다.");
             return "redirect:/questions/" + id;
         }
         question.setTitle(updatedQuestion.getTitle());
