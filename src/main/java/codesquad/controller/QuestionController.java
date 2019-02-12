@@ -4,6 +4,7 @@ import codesquad.model.question.Question;
 import codesquad.model.user.User;
 import codesquad.service.QuestionService;
 import codesquad.service.UserService;
+import codesquad.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,7 +24,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String goToQnaForm(HttpSession session) {
-        if (session == null) {
+        if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
         return "/qna/form";
@@ -46,7 +47,7 @@ public class QuestionController {
 
     @PutMapping("/{id}")
     public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session){
-        if (session == null) {
+        if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
         Question question = questionService.findById(id);
@@ -56,7 +57,7 @@ public class QuestionController {
 
     @DeleteMapping("/{id}")
     public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session){
-        if (session == null) {
+        if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
         User user = userService.findSessionUser(session);
