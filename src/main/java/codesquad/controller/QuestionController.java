@@ -24,7 +24,7 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String questionForm(HttpSession session, Model model) {
-        if (!SessionChecker.isThisSessionedWasLoggedin(session)) {
+        if (!SessionChecker.isLoggedIn(session)) {
             return "redirect:/users/loginForm";
         }
         model.addAttribute("user", SessionChecker.loggedinUser(session));

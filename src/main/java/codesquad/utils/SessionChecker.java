@@ -11,7 +11,7 @@ public class SessionChecker {
 
     private static final String USER_SESSION = "sessionedUser";
 
-    public static boolean isThisSessionedWasLoggedin(HttpSession session) {
+    public static boolean isLoggedIn(HttpSession session) {
         if (session.getAttribute(USER_SESSION) == null) {
             throw new UserNotLoginException();
         } else {
