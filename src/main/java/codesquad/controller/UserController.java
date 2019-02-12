@@ -1,7 +1,7 @@
 package codesquad.controller;
 
 import codesquad.model.user.User;
-import codesquad.model.user.UserRepository;
+import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,63 +9,53 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-
-    @GetMapping("/form")
-    public String returnForm() {
-
-        return "/users/form";
-    }
+    private UserService userService;
 
     @PostMapping("/create")
     public String createUser(User user) {
-        userRepository.save(user);
+        userService.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("")
-    public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String returnList(Model model) {
+        model.addAttribute("users", userService.findAll());
         return "/users/list";
     }
 
     @GetMapping("/{id}")
-    public ModelAndView profile(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("/users/profile");
-        mav.addObject("user",userRepository.findById(id).get());
-        return mav;
-    }
-
-    /*
-    @GetMapping("/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model) {
-        User user = new User();
-        for (int i = 0; i < users.size(); i++) {
-            User tmp = users.get(i);
-            if (userId.equals(tmp.getUserId())) {
-                user = tmp;
-            }
-        }
+    public String goToProfile(Model model, @PathVariable Long id) {
+        User user = userService.findById(id);
         model.addAttribute("user", user);
-        return "/users/updateForm";
+        return "/users/profile";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUser(User user) {
-        for (int i = 0; i < users.size(); i++) {
-            if (user.getUserId().equals(users.get(i).getUserId())) {
-                users.set(i, user);
-            }
-        }
-        return "redirect:/users";
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("user");
+        return "redirect:/";
     }
-*/
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userService.findByUserId(userId);
+        session.setAttribute("user", user);
+        return "redirect:/";
+    }
+
+    @PostMapping("/update/{id}")
+    public String updateUser(User newUser, @PathVariable Long id) {
+        User user = userService.findById(id);
+        userService.update(user,newUser);
+        return "redirect:/users/logout";
+    }
+
 }
