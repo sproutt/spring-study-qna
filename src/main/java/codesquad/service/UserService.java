@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,13 +23,11 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        Optional<User> byId = userRepository.findById(id);
-        return byId.orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User findByUserId(String userId) {
-        Optional<User> byUserId = userRepository.findByUserId(userId);
-        return byUserId.orElseThrow(() -> new UserNotFoundException(userId));
+        return userRepository.findByUserId(userId).orElseThrow(() -> new UserNotFoundException(userId));
     }
 
     public void update(User user, User modifiedUser) {

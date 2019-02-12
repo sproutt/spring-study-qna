@@ -10,8 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Controller
 @RequestMapping("/questions")
@@ -33,11 +31,7 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        question.setWriter(user);
-        question.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        questionService.save(question);
+        questionService.save(question, httpSession);
         return "redirect:/";
     }
 
