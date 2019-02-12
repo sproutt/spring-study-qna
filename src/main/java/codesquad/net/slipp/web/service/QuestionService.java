@@ -23,7 +23,9 @@ public class QuestionService {
     }
 
 
-
-
-
+    public void update(Question modelQuestion, Question updatedQuestion) {
+        modelQuestion.setTitle(updatedQuestion.getTitle());
+        modelQuestion.setContents(updatedQuestion.getContents());
+        questionRepository.save(modelQuestion);
+    }
 }

@@ -39,5 +39,21 @@ public class QuestionServiceTest {
         assertThat(questionService.findById(1).getTitle()).isEqualTo("테스트제목");
     }
 
+    @Test
+    public void updateTest(){
+        Question question = new Question();
+        question.setWriter(userService.findByUserId("test"));
+        question.setTitle("테스트제목");
+        question.setContents("테스트본문");
+        questionRepository.save(question);
+
+        Question modelQuestion = questionService.findById(1);
+        Question updatedQuestion = new Question();
+        updatedQuestion.setTitle("수정된제목");
+        updatedQuestion.setContents("수정된본문");
+
+        questionService.update(modelQuestion, updatedQuestion);
+        assertThat(questionService.findById(1).getContents()).isEqualTo("수정된본문");
+    }
 
 }

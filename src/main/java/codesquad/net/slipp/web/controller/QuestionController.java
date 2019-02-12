@@ -59,6 +59,7 @@ public class QuestionController {
     @GetMapping("/{id}/form")
     public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
+
         sessionUtil.isSessionMatch(session, question.getWriter());
         model.addAttribute("question", question);
 
