@@ -56,10 +56,10 @@ public class Question {
         this.setContents(updateQuestion.contents);
     }
 
-    public boolean isEqualWriter(User user){
-        if(this.getWriter().getName().equals(user.getName())){
+    public boolean isEqualWriter(User user) {
+        if (this.getWriter().getName().equals(user.getName())) {
             return true;
-        }else
+        } else
             return false;
     }
 }

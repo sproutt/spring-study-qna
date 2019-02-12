@@ -1,5 +1,6 @@
 package codesquad.utils;
 
+import codesquad.exception.UserNotLoginException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class SessionChecker {
 
     public static boolean isThisSessionedWasLoggedin(HttpSession session) {
         if (session.getAttribute(USER_SESSION) == null) {
-            return false;
+            throw new UserNotLoginException();
         } else {
             return true;
         }

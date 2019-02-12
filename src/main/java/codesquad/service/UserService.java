@@ -1,11 +1,11 @@
 package codesquad.service;
 
+import codesquad.exception.UserNotExistException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
 import codesquad.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.NoSuchElementException;
 
 @Component
 public class UserService {
@@ -14,16 +14,16 @@ public class UserService {
     private UserRepository userRepository;
 
     public User getUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        return userRepository.findById(id).orElseThrow(UserNotExistException::new);
     }
 
     public User getUserByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(NoSuchElementException::new);
+        return userRepository.findByUserId(userId).orElseThrow(UserNotExistException::new);
     }
 
     public void update(User user, Long id) {
         User userToUpdate = getUserById(id);
-        if(!user.isSamePassword(userToUpdate))
+        if (!user.isSamePassword(userToUpdate))
             throw new CustomException("비밀번호가 다릅니다");
         userToUpdate.update(user);
         userRepository.save(userToUpdate);
