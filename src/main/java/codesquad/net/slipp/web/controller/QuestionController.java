@@ -3,9 +3,9 @@ package codesquad.net.slipp.web.controller;
 import codesquad.net.slipp.web.domain.Question;
 import codesquad.net.slipp.web.domain.QuestionRepository;
 import codesquad.net.slipp.web.domain.User;
+import codesquad.net.slipp.web.service.QuestionService;
 import codesquad.net.slipp.web.utils.ErrorMessageUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +17,15 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
-    Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Autowired
     private QuestionRepository questionRepository;
 
     @Autowired
-    private ErrorMessageUtils errorMessageUtils;
+    private QuestionService questionService;
+
+    @Autowired
+    private SessionUtil sessionUtil;
 
     @GetMapping("")
     public String getQuestionList(Model model) {
@@ -34,12 +36,7 @@ public class QuestionController {
 
     @PostMapping("")
     public String createQuestion(Question question, HttpSession session) {
-        Object value = session.getAttribute("userSession");
-        if (value == null) {
-            return "redirect:/users/login";
-        }
-        User sessionUser = (User) value;
-        question.setWriter(sessionUser);
+        question.setWriter(sessionUtil.getSessionUser(session));
         questionRepository.save(question);
 
         return "redirect:/questions";
@@ -47,43 +44,30 @@ public class QuestionController {
 
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
-        Object value = session.getAttribute("userSession");
-        if (value == null) {
-            return "redirect:/users/login";
-        }
+        sessionUtil.isLogin(session);
+
         return "/qna/form";
     }
 
     @GetMapping("/{id}")
-    public String getQuestionFormDetail(@PathVariable long id, Model model,
-                                        @RequestParam(required = false, name = "errorMessage") String errorMessage) {
+    public String getQuestionFormDetail(@PathVariable long id, Model model){
         model.addAttribute("question", questionRepository.findById(id).get());
-        model.addAttribute("errorMessage", errorMessage);
+
         return "/qna/showDetail";
     }
 
     @GetMapping("/{id}/form")
-    public String getQuestionUpdateForm(@PathVariable long id, Model model,
-                                        HttpSession session, RedirectAttributes redirectAttributes) {
-        Question question = questionRepository.findById(id).get();
-        Object value = session.getAttribute("userSession");
-        if (value == null) {
-            redirectAttributes.addAttribute("errorMessage", errorMessageUtils.getGetNotLogin());
-            return "redirect:/users/login";
-        }
-        User userBySession = (User) value;
-        if (!question.getWriter().equals(userBySession.getUserId())) {
-            redirectAttributes.addAttribute("errorMessage", errorMessageUtils.getGetNotMatchSession());
-            return "redirect:/questions/" + id;
-        }
-        model.addAttribute("question", questionRepository.findById(id).get());
+    public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
+        Question question = questionService.findById(id);
+        sessionUtil.isSessionMatch(session, question.getWriter());
+        model.addAttribute("question", question);
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion,
-                                       HttpSession session, RedirectAttributes redirectAttributes) {
+                                       HttpSession session) {
         Question question = questionRepository.findById(id).get();
         Object value = session.getAttribute("userSession");
         if (value == null) {

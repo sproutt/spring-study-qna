@@ -27,7 +27,7 @@ public class UserRepositoryTest {
     UserRepository userRepository;
 
     @Test
-    public void di(){
+    public void dataBaseTest(){
         User user = new User();
         user.setUserId("test");
         user.setEmail("testUser@gmail.com");

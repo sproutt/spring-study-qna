@@ -13,29 +13,26 @@ import javax.servlet.http.HttpSession;
 @Component
 public class SessionUtil {
 
+    private static String SESSION_KEY = "userSession";
+
     @Autowired
     UserRepository userRepository;
-    public boolean hasSession(HttpSession session){
-        Object sessionedUser = session.getAttribute("userSession");
-        if(sessionedUser == null){
-
-            return false;
-        }
-
-        return true;
-    }
-    public User getSessionedUser(HttpSession session) {
-        if (hasSession(session)) {
+    public void isLogin(HttpSession session){
+        Object sessionUser = session.getAttribute(SESSION_KEY);
+        if(sessionUser == null){
 
             throw new SessionNotFoundException();
         }
+    }
+    public User getSessionUser(HttpSession session) {
+        isLogin(session);
 
-        return (User)session.getAttribute("userSession");
+        return (User)session.getAttribute(SESSION_KEY);
     }
 
     public void isSessionMatch(HttpSession session, User user){
-        User sessiondUser = getSessionedUser(session);
-        if(!sessiondUser.getUserId().equals(user.getUserId())){
+        User sessiondUser = getSessionUser(session);
+        if(!sessiondUser.isSameUser(user)){
 
             throw new SessionNotMatchException();
         }

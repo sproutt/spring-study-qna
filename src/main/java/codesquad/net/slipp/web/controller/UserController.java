@@ -71,7 +71,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String getUserUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        User sessionedUser = sessionUtil.getSessionedUser(session);
+        User sessionedUser = sessionUtil.getSessionUser(session);
         model.addAttribute("user", userRepository.findById(id).get());
 
         return "/user/updateForm";
@@ -79,12 +79,8 @@ public class UserController {
 
     @GetMapping("/updateForm")
     public String getUpdateForm(HttpSession session) {
-        if (!sessionUtil.hasSession(session)) {
 
-            return "redirect:/users/login";
-        }
-
-        return "redirect:/users/" + sessionUtil.getSessionedUser(session).getId() + "/form";
+        return "redirect:/users/" + sessionUtil.getSessionUser(session).getId() + "/form";
     }
 
     @PutMapping("/{id}")

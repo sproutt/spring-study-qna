@@ -16,8 +16,8 @@ public class Question {
     private String title;
     private String contents;
 
-    public String getWriter() {
-        return writer.getUserId();
+    public User getWriter() {
+        return writer;
     }
 
     public void setWriter(User writer) {
