@@ -23,30 +23,35 @@ public class UserServiceTest {
     @Autowired
     UserService userService;
 
-
     @Test
-    public void 로그인_실패_비밀번호(){
+    public void checkIdPasswordTest(){
         User user = new User();
         user.setUserId("test");
         user.setPassword("123");
-
         assertThat(userService.checkIdPassword(user)).isFalse();
-    }
 
-    @Test
-    public void 로그인_성공(){
-        User user = new User();
-        user.setUserId("test");
         user.setPassword("1234");
-
         assertThat(userService.checkIdPassword(user)).isTrue();
     }
 
     @Test(expected = UserNotFoundException.class)
-    public void 로그인_실패_아이디(){
+    public void checkIdPasswordExceptionTest(){
         User user = new User();
         user.setUserId("testE");
         user.setPassword("1234");
         userService.checkIdPassword(user);
     }
+
+    @Test
+    public void updateTest(){
+        User modelUser = userService.findById(Long.parseLong("2"));
+        User updateUser = new User();
+        updateUser.setUserId("test");
+        updateUser.setEmail("changedTest@gamil.com");
+        updateUser.setName("바뀜");
+        userService.update(modelUser,updateUser);
+
+        assertThat(userService.findByUserId("test").getEmail()).isEqualTo("changedTest@gamil.com");
+    }
+
 }

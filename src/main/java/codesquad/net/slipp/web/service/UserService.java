@@ -23,6 +23,14 @@ public class UserService {
         return modelUser.getPassword().equals(inputUser.getPassword());
     }
 
+    public User findByUserId(String userId){
+        User user = userRepository.findByUserId(userId).orElseThrow(
+                () -> new UserNotFoundException(userId)
+        );
+
+        return user;
+    }
+
     public User findById(long id){
         User user = userRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException(id)
