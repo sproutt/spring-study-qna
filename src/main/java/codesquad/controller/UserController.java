@@ -19,11 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @GetMapping("/form")
-    public String goToForm() {
-        return "/users/form";
-    }
-
     @PostMapping("/create")
     public String createUser(User user) {
         userService.save(user);
@@ -43,12 +38,6 @@ public class UserController {
         return "/users/profile";
     }
 
-
-    @GetMapping("/loginForm")
-    public String goTOLoginForm() {
-        return "/users/login";
-    }
-
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute("user");
@@ -60,12 +49,6 @@ public class UserController {
         User user = userService.findByUserId(userId);
         session.setAttribute("user", user);
         return "redirect:/";
-    }
-
-
-    @GetMapping("/updateForm")
-    public String gotoUpdateForm() {
-        return "/users/updateForm";
     }
 
     @PostMapping("/update/{id}")
