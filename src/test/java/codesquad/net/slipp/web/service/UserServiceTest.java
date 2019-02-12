@@ -4,15 +4,11 @@ package codesquad.net.slipp.web.service;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.exception.UserNotFoundException;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -34,7 +30,7 @@ public class UserServiceTest {
         user.setUserId("test");
         user.setPassword("123");
 
-        assertThat(userService.checkLogin(user)).isFalse();
+        assertThat(userService.checkIdPassword(user)).isFalse();
     }
 
     @Test
@@ -43,7 +39,7 @@ public class UserServiceTest {
         user.setUserId("test");
         user.setPassword("1234");
 
-        assertThat(userService.checkLogin(user)).isTrue();
+        assertThat(userService.checkIdPassword(user)).isTrue();
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -51,6 +47,6 @@ public class UserServiceTest {
         User user = new User();
         user.setUserId("testE");
         user.setPassword("1234");
-        userService.checkLogin(user);
+        userService.checkIdPassword(user);
     }
 }

@@ -3,14 +3,11 @@ package codesquad.net.slipp.web.controller;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.service.UserService;
-import codesquad.net.slipp.web.utils.ErrorMessageUtils;
+import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 
@@ -24,6 +21,8 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private SessionUtil sessionUtil;
 
     @GetMapping("")
     public String getUserList(Model model) {
@@ -47,7 +46,7 @@ public class UserController {
 
     @PostMapping("/login")
     public String postLogin(User user, HttpSession session) {
-        if (userService.checkLogin(user)) {
+        if (userService.checkIdPassword(user)) {
             session.setAttribute("userSession", user);
 
             return "redirect:/";
@@ -64,62 +63,41 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView getUserProfile(@PathVariable long id, Model model) {
-        ModelAndView mav = new ModelAndView("/user/list_profile");
-        mav.addObject("user", userRepository.findById(id).get());
+    public String getUserProfile(@PathVariable long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id));
 
-        return mav;
+        return "/user/list_profile";
     }
 
     @GetMapping("/{id}/form")
-    public ModelAndView getUserUpdateForm(@PathVariable long id, Model model) {
-        ModelAndView mav = new ModelAndView("/user/updateForm");
-        mav.addObject("user", userRepository.findById(id).get());
+    public String getUserUpdateForm(@PathVariable long id, Model model, HttpSession session) {
+        User sessionedUser = sessionUtil.getSessionedUser(session);
+        model.addAttribute("user", userRepository.findById(id).get());
 
-        return mav;
+        return "/user/updateForm";
     }
 
     @GetMapping("/updateForm")
     public String getUpdateForm(HttpSession session) {
-        Object value = session.getAttribute("userSession");
-        if (value == null) {
+        if (!sessionUtil.hasSession(session)) {
 
             return "redirect:/users/login";
         }
-        User sessionedUser = (User) value;
 
-        return "redirect:/users/" + sessionedUser.getId() + "/form";
+        return "redirect:/users/" + sessionUtil.getSessionedUser(session).getId() + "/form";
     }
 
     @PutMapping("/{id}")
     public String updateUser(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
-        User user = userRepository.findById(id).get();
-        Object value = session.getAttribute("userSession");
-        User sessionedUser;
-        if (value == null) {
+        sessionUtil.isSessionMatch(session, userService.findById(id));
+        if (!userService.checkIdPassword(updatedUser)) {
 
-            return "redirect:/users/login";
+            return "/user/error";
         }
-        sessionedUser = (User) value;
-        if (!isSame(sessionedUser.getUserId(), updatedUser.getUserId())) {
+        User modelUser = userService.findById(id);
+        updatedUser.setPassword(modifiedPassword);
+        userService.update(modelUser, updatedUser);
 
-            return "redirect:/users/" + id + "/form";
-        }
-        if (isSame(updatedUser.getPassword(), user.getPassword())) {
-            user.setPassword(modifiedPassword);
-            user.setName(updatedUser.getName());
-            user.setEmail(updatedUser.getEmail());
-            userRepository.save(user);
-
-            return "redirect:/users";
-        }
-
-        return "redirect:/users/" + id + "/form";
+        return "redirect:/users";
     }
-
-    public boolean isSame(String a, String b) {
-
-        return a.equals(b);
-    }
-
 }

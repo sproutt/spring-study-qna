@@ -1,9 +1,11 @@
 package codesquad.net.slipp.web.exception;
 
 public class UserNotFoundException extends RuntimeException {
-    private static final int ERR_CODE = 100;
 
-    public UserNotFoundException(String userId){
-        super("ERR_CORD : " + ERR_CODE+", USER_ID :"+ userId );
+    public UserNotFoundException(long id) {
+        super("{ ERROR_CODE : " + 100 + ", PK : " + id + " }");
+    }
+    public UserNotFoundException(String userId) {
+        super("{ ERROR_CODE : " + 101 + ", USER_ID : " + userId + " }");
     }
 }
