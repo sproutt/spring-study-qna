@@ -1,4 +1,4 @@
-package config;
+package codesquad.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
