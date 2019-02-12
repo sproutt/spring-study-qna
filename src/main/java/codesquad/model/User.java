@@ -1,7 +1,5 @@
 package codesquad.model;
 
-import codesquad.utils.CustomException;
-
 import javax.persistence.*;
 
 @Entity

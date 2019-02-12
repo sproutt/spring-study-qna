@@ -1,9 +1,9 @@
 package codesquad.service;
 
+import codesquad.exception.UserNotEqualException;
 import codesquad.exception.UserNotExistException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
-import codesquad.utils.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +24,7 @@ public class UserService {
     public void update(User user, Long id) {
         User userToUpdate = getUserById(id);
         if (!user.isSamePassword(userToUpdate))
-            throw new CustomException("비밀번호가 다릅니다");
+            throw new UserNotEqualException();
         userToUpdate.update(user);
         userRepository.save(userToUpdate);
     }
