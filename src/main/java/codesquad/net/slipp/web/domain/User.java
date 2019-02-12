@@ -75,7 +75,7 @@ public class User {
                 '}';
     }
 
-    public boolean isSameUser(User user){
+    public boolean isSameUser(User user) {
 
         return this.getUserId() == user.getUserId();
     }

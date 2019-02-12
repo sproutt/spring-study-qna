@@ -15,7 +15,7 @@ public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
 
-    public Question findById(long id){
+    public Question findById(long id) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException(id)
         );

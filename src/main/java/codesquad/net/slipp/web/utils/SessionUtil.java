@@ -17,22 +17,24 @@ public class SessionUtil {
 
     @Autowired
     UserRepository userRepository;
-    public void isLogin(HttpSession session){
+
+    public void isLogin(HttpSession session) {
         Object sessionUser = session.getAttribute(SESSION_KEY);
-        if(sessionUser == null){
+        if (sessionUser == null) {
 
             throw new SessionNotFoundException();
         }
     }
+
     public User getSessionUser(HttpSession session) {
         isLogin(session);
 
-        return (User)session.getAttribute(SESSION_KEY);
+        return (User) session.getAttribute(SESSION_KEY);
     }
 
-    public void isSessionMatch(HttpSession session, User user){
+    public void isSessionMatch(HttpSession session, User user) {
         User sessiondUser = getSessionUser(session);
-        if(!sessiondUser.isSameUser(user)){
+        if (!sessiondUser.isSameUser(user)) {
 
             throw new SessionNotMatchException();
         }

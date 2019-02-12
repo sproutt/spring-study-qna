@@ -6,8 +6,6 @@ import codesquad.net.slipp.web.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
-
 @Component
 public class UserService {
 
@@ -23,7 +21,7 @@ public class UserService {
         return modelUser.getPassword().equals(inputUser.getPassword());
     }
 
-    public User findByUserId(String userId){
+    public User findByUserId(String userId) {
         User user = userRepository.findByUserId(userId).orElseThrow(
                 () -> new UserNotFoundException(userId)
         );
@@ -31,7 +29,7 @@ public class UserService {
         return user;
     }
 
-    public User findById(long id){
+    public User findById(long id) {
         User user = userRepository.findById(id).orElseThrow(
                 () -> new UserNotFoundException(id)
         );
@@ -39,14 +37,11 @@ public class UserService {
         return user;
     }
 
-    public void update(User modelUser, User updateUser){
+    public void update(User modelUser, User updateUser) {
         modelUser.setName(updateUser.getName());
         modelUser.setEmail(updateUser.getEmail());
         userRepository.save(modelUser);
     }
-
-
-
 
 
 }
