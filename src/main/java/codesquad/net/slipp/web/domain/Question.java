@@ -13,7 +13,10 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
     private String title;
+
+    @Column(columnDefinition = "BLOB")
     private String contents;
 
     public User getWriter() {
