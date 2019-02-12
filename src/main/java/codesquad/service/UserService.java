@@ -1,12 +1,12 @@
 package codesquad.service;
 
-import codesquad.exception.WrongUserException;
+import codesquad.exception.NullUserException;
 import codesquad.model.user.User;
 import codesquad.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import javax.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -19,11 +19,15 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new WrongUserException(id));
+        return userRepository.findById(id).orElseThrow(() -> new NullUserException(id));
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() -> new WrongUserException(userId));
+        return userRepository.findByUserId(userId).orElseThrow(() -> new NullUserException(userId));
+    }
+
+    public User findSessionUser(HttpSession session){
+        return (User)session.getAttribute("user");
     }
 
     public void update(User user, User newUser) {

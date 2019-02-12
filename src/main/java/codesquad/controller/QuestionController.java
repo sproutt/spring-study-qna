@@ -1,31 +1,29 @@
 package codesquad.controller;
 
 import codesquad.model.question.Question;
-import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
-import codesquad.model.user.UserRepository;
-import codesquad.utils.CheckUtil;
+import codesquad.service.QuestionService;
+import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @GetMapping("/form")
     public String goToQnaForm(HttpSession session) {
-        if (CheckUtil.sessionNullChecker("user",session)) {
+        if (session == null) {
             return "redirect:/users/loginForm";
         }
         return "/qna/form";
@@ -33,60 +31,42 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
-        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (CheckUtil.questionNullChecker(question)) {
-            return "redirect:/";
-        }
-        model.addAttribute("question", question.get());
+        Question question = questionService.findById(id);
+        model.addAttribute("question", question);
         return "/qna/show";
     }
 
     @PostMapping("/{userId}")
     public String createQuestion(Question question, @PathVariable String userId) {
-        Optional<User> writer = RepositoryUtil.findUser(userId, userRepository);
-        if (CheckUtil.userNullChecker(writer)) {
-            return "redirect:/users/loginForm";
-        }
-        question.setWriter(writer.get());
-        questionRepository.save(question);
+        User writer = userService.findByUserId(userId);
+        question.setWriter(writer);
+        questionService.save(question);
         return "redirect:/";
     }
 
     @PutMapping("/{id}")
-    public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session) throws Exception {
-        Optional<User> user = SessionUtil.getSessionUser(session);
-        if (CheckUtil.userNullChecker(user)) {
+    public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session){
+        if (session == null) {
             return "redirect:/users/loginForm";
         }
-        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (!user.get().getId().equals(question.get().getWriter().getId())) {
-            model.addAttribute(question.get());
-            return "/qna/showFail";
-        }
-        model.addAttribute(question.get());
+        Question question = questionService.findById(id);
+        model.addAttribute("question",question);
         return "/qna/updateForm";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) throws Exception {
-        Optional<User> user = SessionUtil.getSessionUser(session);
-        if (CheckUtil.userNullChecker(user)) {
+    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session){
+        if (session == null) {
             return "redirect:/users/loginForm";
         }
-        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        if (!CheckUtil.writerChecker(user,question)) {
-            model.addAttribute(question.get());
-            return "/qna/showFail";
-        }
-        questionRepository.deleteById(id);
+        User user = userService.findSessionUser(session);
+        questionService.delete(id,user);
         return "redirect:/";
     }
 
     @PostMapping("/update/{id}")
     public String updateQuestion(Question newQuestion, @PathVariable Long id) {
-        Optional<Question> question = RepositoryUtil.findQuestion(id, questionRepository);
-        question.get().update(newQuestion);
-        questionRepository.save(question.get());
+        questionService.update(id,newQuestion);
         return "redirect:/";
     }
 
