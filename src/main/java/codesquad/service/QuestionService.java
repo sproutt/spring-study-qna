@@ -33,14 +33,19 @@ public class QuestionService {
 
     public void delete(Long id, User user){
         Question question = findById(id);
-        if(!questionUtils.isWriter(question,user)) {
-            throw new WrongUserException(id);
-        }
+        isAuthority(question,user);
         questionRepository.deleteById(id);
     }
 
     public void save(Question question){
         questionRepository.save(question);
+    }
+
+    public boolean isAuthority(Question question,User user){
+        if(!questionUtils.isWriter(question,user)){
+            throw new WrongUserException(user.getId());
+        }
+        return true;
     }
 
 }

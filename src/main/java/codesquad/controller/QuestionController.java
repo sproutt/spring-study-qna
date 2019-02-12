@@ -51,6 +51,8 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
         Question question = questionService.findById(id);
+        User user = userService.findSessionUser(session);
+        questionService.isAuthority(question,user);
         model.addAttribute("question",question);
         return "/qna/updateForm";
     }
