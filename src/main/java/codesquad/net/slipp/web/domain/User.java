@@ -75,9 +75,14 @@ public class User {
                 '}';
     }
 
-    public boolean isSameUser(User user) {
+    public boolean match(User user) {
 
         return this.getUserId() == user.getUserId();
+    }
+
+    public boolean match(String password){
+
+        return this.password.equals(password);
     }
 
     public void update(User modifiedUser){

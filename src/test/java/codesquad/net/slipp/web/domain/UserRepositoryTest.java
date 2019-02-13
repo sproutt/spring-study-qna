@@ -28,13 +28,6 @@ public class UserRepositoryTest {
 
     @Test
     public void dataBaseTest(){
-        User user = new User();
-        user.setUserId("test");
-        user.setEmail("testUser@gmail.com");
-        user.setPassword("1234");
-
-        User newUser = userRepository.save(user);
-        assertThat(newUser).isNotNull();
 
         Optional<User> existingUser = userRepository.findByUserId("test");
         assertThat(existingUser).isNotEmpty();

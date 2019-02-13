@@ -18,7 +18,7 @@ public class UserService {
                 () -> new UserNotFoundException(userId)
         );
 
-        return modelUser.getPassword().equals(user.getPassword());
+        return modelUser.match(user.getPassword());
     }
 
     public User findByUserId(String userId) {
@@ -44,7 +44,7 @@ public class UserService {
 
     public void update(User modelUser, User updateUser, String modifiedPassword) {
         updateUser.setPassword(modifiedPassword);
-        modelUser.update(modelUser);
+        modelUser.update(updateUser);
         save(modelUser);
     }
 

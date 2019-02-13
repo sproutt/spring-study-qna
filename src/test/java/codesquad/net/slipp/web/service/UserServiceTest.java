@@ -45,11 +45,12 @@ public class UserServiceTest {
     @Test
     public void updateTest(){
         User modelUser = userService.findById(Long.parseLong("2"));
-        User updateUser = new User();
-        updateUser.setUserId("test");
-        updateUser.setEmail("changedTest@gamil.com");
-        updateUser.setName("바뀜");
-        userService.update(modelUser,updateUser);
+        User modifiedUser = new User();
+        modifiedUser.setUserId("test");
+        modifiedUser.setEmail("changedTest@gamil.com");
+        modifiedUser.setName("바뀜");
+        modifiedUser.setPassword("1234");
+        userService.update(modelUser, modifiedUser, "1232");
 
         assertThat(userService.findByUserId("test").getEmail()).isEqualTo("changedTest@gamil.com");
     }

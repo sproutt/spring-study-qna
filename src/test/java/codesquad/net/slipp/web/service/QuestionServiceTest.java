@@ -24,36 +24,34 @@ public class QuestionServiceTest {
     private UserService userService;
 
     @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
     private QuestionService questionService;
 
     @Test
     public void findByIdTest(){
         Question question = new Question();
         question.setWriter(userService.findByUserId("test"));
-        question.setTitle("테스트제목");
-        question.setContents("테스트본문");
-        questionRepository.save(question);
+        question.setTitle("testTitle");
+        question.setContents("testContent");
+        questionService.save(question);
 
-        assertThat(questionService.findById(1).getTitle()).isEqualTo("테스트제목");
+        assertThat(questionService.findById(1).getTitle()).isEqualTo("testTitle");
     }
 
     @Test
     public void updateTest(){
         Question question = new Question();
         question.setWriter(userService.findByUserId("test"));
-        question.setTitle("테스트제목");
-        question.setContents("테스트본문");
-        questionRepository.save(question);
+        question.setTitle("testTitle");
+        question.setContents("testContent");
+        questionService.save(question);
 
         Question modelQuestion = questionService.findById(1);
         Question updatedQuestion = new Question();
-        updatedQuestion.setTitle("수정된제목");
-        updatedQuestion.setContents("수정된본문");
+        updatedQuestion.setTitle("modifiedTitle");
+        updatedQuestion.setContents("modifiedContent");
 
         questionService.update(modelQuestion, updatedQuestion);
-        assertThat(questionService.findById(1).getContents()).isEqualTo("수정된본문");
+        assertThat(questionService.findById(1).getContents()).isEqualTo("modifiedContent");
     }
 
 }
