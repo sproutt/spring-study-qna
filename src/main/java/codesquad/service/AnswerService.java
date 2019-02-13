@@ -3,7 +3,6 @@ package codesquad.service;
 import codesquad.domain.Answer;
 import codesquad.domain.AnswerRepository;
 import codesquad.domain.Question;
-import codesquad.domain.User;
 import codesquad.exception.AnswerNotFoundException;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -37,9 +37,9 @@ public class AnswerService {
         Question question = questionService.findById(questionId);
 
         for (Answer answer : answers) {
-        question.removeAnswer(answer);
-        answer.setDeleted(true);
-        answerRepository.save(answer);
+            question.removeAnswer(answer);
+            answer.setDeleted(true);
+            answerRepository.save(answer);
         }
     }
 
@@ -51,7 +51,7 @@ public class AnswerService {
     }
 
     private List<Answer> findByQuestionId(Long questionId) {
-        return answerRepository.findByQuestionId(questionId).orElseThrow(() -> new AnswerNotFoundException(questionId));
+        return answerRepository.findByQuestionId(questionId).orElse(new ArrayList<>());
     }
 
     public Answer findById(Long id) {

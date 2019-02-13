@@ -19,7 +19,7 @@ public class Answer {
     private Question question;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_writer"))
     private User writer;
 
     private String contents;

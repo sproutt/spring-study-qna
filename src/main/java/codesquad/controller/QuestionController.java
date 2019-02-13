@@ -37,6 +37,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.findById(id));
+        model.addAttribute("count", questionService.getAnswerCount(id));
         return "qna/show";
     }
 
@@ -74,11 +75,7 @@ public class QuestionController {
         if (!questionService.match(id, httpSession)) {
             return "qna/deny";
         }
-        /*TODO
-        2. 답변이 없는 경우 삭제가능. -> 답변이 있다면 -> 답변자와 질문자가 같지 않다면 예외 발생.
-                                              -> 답변자와 질문자가 같다면 삭제처리.
-        3. 답변이 있으면 답변자와 질문자가 같으면 삭제가능.
-        */
+
         questionService.delete(id);
         return "redirect:/";
     }

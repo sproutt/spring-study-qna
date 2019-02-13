@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.domain.Answer;
-import codesquad.domain.User;
 import codesquad.service.AnswerService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class AnswerController {
 
     @PostMapping("/{questionId}/answers")
     public String register(@PathVariable Long questionId, Answer answer, HttpSession httpSession) {
-        if(!HttpSessionUtils.isLogin(httpSession)) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
         answerService.register(questionId, answer, httpSession);

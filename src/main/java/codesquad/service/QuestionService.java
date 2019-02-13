@@ -1,9 +1,11 @@
 package codesquad.service;
 
+import codesquad.domain.Answer;
 import codesquad.domain.Question;
 import codesquad.domain.QuestionRepository;
 import codesquad.domain.User;
 import codesquad.exception.QuestionNotFoundException;
+import codesquad.exception.WriterNotEqualException;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 @Service
 public class QuestionService {
@@ -35,11 +38,13 @@ public class QuestionService {
 
     public void delete(Long id) {
         Question question = this.findById(id);
+        if (this.getAnswerCount(id) != 0) {
+            checkWriter(question);
+        }
         question.setDeleted(true);
         answerService.delete(id);
 
-        questionRepository.save(this.findById(id));
-
+        questionRepository.save(question);
     }
 
     public void update(Long id, Question modifiedQuestion) {
@@ -50,5 +55,25 @@ public class QuestionService {
 
     public boolean match(Long id, HttpSession httpSession) {
         return HttpSessionUtils.getSessionedUser(httpSession).equals(this.findById(id).getWriter());
+    }
+
+    public int getAnswerCount(Long id) {
+        return this.findById(id).getAnswers().size();
+    }
+
+    public boolean isSameWriter(Question question, List<Answer> answers) {
+        User writer = question.getWriter();
+        for (Answer answer : answers) {
+            if (!writer.equals(answer.getWriter())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void checkWriter(Question question) {
+        if (!isSameWriter(question, question.getAnswers())) {
+            throw new WriterNotEqualException();
+        }
     }
 }

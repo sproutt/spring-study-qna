@@ -17,8 +17,11 @@ public class Question {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_to_writer"))
     private User writer;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
 
     @Column(nullable = false)
     private String title;
@@ -29,9 +32,6 @@ public class Question {
     private String createdDate;
 
     private boolean deleted = false;
-
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
 
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
