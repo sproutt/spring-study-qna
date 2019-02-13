@@ -6,8 +6,11 @@ import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.exception.QuestionNotFoundException;
 import codesquad.net.slipp.web.exception.UserNotFoundException;
+import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import javax.servlet.http.HttpSession;
 
 @Component
 public class QuestionService {
@@ -23,9 +26,8 @@ public class QuestionService {
     }
 
 
-    public void update(Question modelQuestion, Question updatedQuestion) {
-        modelQuestion.setTitle(updatedQuestion.getTitle());
-        modelQuestion.setContents(updatedQuestion.getContents());
+    public void update(Question modelQuestion, Question modifiedQuestion) {
+        modelQuestion.update(modifiedQuestion);
         questionRepository.save(modelQuestion);
     }
 
@@ -37,5 +39,16 @@ public class QuestionService {
     public Question save(Question question) {
 
         return questionRepository.save(question);
+    }
+
+    public void deleteById(long id) {
+
+        questionRepository.deleteById(id);
+    }
+
+    public Question isSessionMatch(HttpSession session, long id) {
+        SessionUtil.isSessionMatch(session, findById(id).getWriter());
+
+        return findById(id);
     }
 }

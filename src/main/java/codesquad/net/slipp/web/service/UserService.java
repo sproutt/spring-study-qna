@@ -12,13 +12,13 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public boolean checkIdPassword(User inputUser) {
-        String inputUserId = inputUser.getUserId();
-        User modelUser = userRepository.findByUserId(inputUserId).orElseThrow(
-                () -> new UserNotFoundException(inputUserId)
+    public boolean checkIdPassword(User user) {
+        String userId = user.getUserId();
+        User modelUser = userRepository.findByUserId(userId).orElseThrow(
+                () -> new UserNotFoundException(userId)
         );
 
-        return modelUser.getPassword().equals(inputUser.getPassword());
+        return modelUser.getPassword().equals(user.getPassword());
     }
 
     public User findByUserId(String userId) {
@@ -37,11 +37,19 @@ public class UserService {
         return user;
     }
 
-    public void update(User modelUser, User updateUser) {
-        modelUser.setName(updateUser.getName());
-        modelUser.setEmail(updateUser.getEmail());
-        userRepository.save(modelUser);
+    public User save(User user) {
+
+        return userRepository.save(user);
     }
 
+    public void update(User modelUser, User updateUser, String modifiedPassword) {
+        updateUser.setPassword(modifiedPassword);
+        modelUser.update(modelUser);
+        save(modelUser);
+    }
 
+    public Iterable<User> findAll() {
+
+        return userRepository.findAll();
+    }
 }

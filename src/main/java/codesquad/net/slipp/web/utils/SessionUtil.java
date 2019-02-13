@@ -28,12 +28,12 @@ public class SessionUtil {
         return (User) session.getAttribute(SESSION_KEY);
     }
 
-    public static User isSessionMatch(HttpSession session, User user) {
+    public static boolean isSessionMatch(HttpSession session, User user) {
         User sessiondUser = getSessionUser(session);
         if (!sessiondUser.isSameUser(user)) {
 
             throw new SessionNotMatchException();
         }
-        return sessiondUser;
+        return true;
     }
 }

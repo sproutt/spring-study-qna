@@ -58,4 +58,10 @@ public class Question {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public void update(Question modifiedQuestion){
+        this.title = modifiedQuestion.title;
+        this.contents= modifiedQuestion.contents;
+
+    }
 }

@@ -18,12 +18,8 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @Autowired
-    private QuestionRepository questionRepository;
-
     @GetMapping("")
     public String getQuestionList(Model model) {
-        Iterable<Question> all = questionService.findAll();
         model.addAttribute("questions", questionService.findAll());
 
         return "/qna/show";
@@ -53,27 +49,21 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        Question question = questionService.findById(id);
-
-        SessionUtil.isSessionMatch(session, question.getWriter());
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionService.isSessionMatch(session, id));
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion, HttpSession session) {
-        Question question = questionService.findById(id);
-
-        SessionUtil.isSessionMatch(session, question.getWriter());
-        questionService.update(question, updatedQuestion);
+        questionService.update(questionService.isSessionMatch(session, id), updatedQuestion);
 
         return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
     public String get(@PathVariable long id) {
-        questionRepository.deleteById(id);
+        questionService.deleteById(id);
 
         return "redirect:/questions";
     }
