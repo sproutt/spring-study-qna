@@ -24,6 +24,7 @@ public class AnswerController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
+
         answerService.register(questionId, answer, httpSession);
         return "redirect:/questions/" + questionId;
     }
@@ -33,7 +34,6 @@ public class AnswerController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-
         if (!answerService.match(id, httpSession)) {
             return "qna/deny";
         }
@@ -41,5 +41,4 @@ public class AnswerController {
         answerService.delete(questionId, id);
         return "redirect:/questions/" + questionId;
     }
-
 }

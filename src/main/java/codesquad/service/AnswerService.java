@@ -26,9 +26,7 @@ public class AnswerService {
     public Answer register(Long questionId, Answer answer, HttpSession httpSession) {
         answer.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         answer.setWriter(HttpSessionUtils.getSessionedUser(httpSession));
-
         questionService.findById(questionId).addAnswer(answer);
-
         return answerRepository.save(answer);
     }
 
