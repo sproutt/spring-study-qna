@@ -3,10 +3,10 @@ package codesquad.net.slipp.web.exception;
 public class UserNotFoundException extends RuntimeException {
 
     public UserNotFoundException(long id) {
-        super("{ ERROR_CODE : " + 100 + ", PK : " + id + " }");
+        super("ERROR : "  + id + "번째 유저가 존재하지 않습니다. ");
     }
 
     public UserNotFoundException(String userId) {
-        super("{ ERROR_CODE : " + 101 + ", USER_ID : " + userId + " }");
+        super("ERROR : " + userId + "라는 유저가 존재하지 않습니다." );
     }
 }

@@ -28,4 +28,14 @@ public class QuestionService {
         modelQuestion.setContents(updatedQuestion.getContents());
         questionRepository.save(modelQuestion);
     }
+
+    public Iterable<Question> findAll() {
+
+        return questionRepository.findAll();
+    }
+
+    public Question save(Question question) {
+
+        return questionRepository.save(question);
+    }
 }

@@ -16,39 +16,37 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     @Autowired
-    private QuestionRepository questionRepository;
-
-    @Autowired
     private QuestionService questionService;
 
     @Autowired
-    private SessionUtil sessionUtil;
+    private QuestionRepository questionRepository;
 
     @GetMapping("")
     public String getQuestionList(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        Iterable<Question> all = questionService.findAll();
+        model.addAttribute("questions", questionService.findAll());
 
         return "/qna/show";
     }
 
     @PostMapping("")
     public String createQuestion(Question question, HttpSession session) {
-        question.setWriter(sessionUtil.getSessionUser(session));
-        questionRepository.save(question);
+        question.setWriter(SessionUtil.getSessionUser(session));
+        questionService.save(question);
 
         return "redirect:/questions";
     }
 
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
-        sessionUtil.isLogin(session);
+        SessionUtil.isLogin(session);
 
         return "/qna/form";
     }
 
     @GetMapping("/{id}")
-    public String getQuestionFormDetail(@PathVariable long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+    public String QuestionFormDetail(@PathVariable long id, Model model) {
+        model.addAttribute("question", questionService.findById(id));
 
         return "/qna/showDetail";
     }
@@ -57,7 +55,7 @@ public class QuestionController {
     public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
         Question question = questionService.findById(id);
 
-        sessionUtil.isSessionMatch(session, question.getWriter());
+        SessionUtil.isSessionMatch(session, question.getWriter());
         model.addAttribute("question", question);
 
         return "/qna/updateForm";
@@ -67,13 +65,13 @@ public class QuestionController {
     public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion, HttpSession session) {
         Question question = questionService.findById(id);
 
-        sessionUtil.isSessionMatch(session, question.getWriter());
+        SessionUtil.isSessionMatch(session, question.getWriter());
         questionService.update(question, updatedQuestion);
 
         return "redirect:/questions";
     }
 
-    @DeleteMapping(value = "/{id}")
+    @DeleteMapping("/{id}")
     public String get(@PathVariable long id) {
         questionRepository.deleteById(id);
 

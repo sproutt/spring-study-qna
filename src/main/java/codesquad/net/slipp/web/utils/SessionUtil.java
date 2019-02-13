@@ -10,15 +10,11 @@ import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
 
-@Component
 public class SessionUtil {
 
     private static String SESSION_KEY = "userSession";
 
-    @Autowired
-    UserRepository userRepository;
-
-    public void isLogin(HttpSession session) {
+    public static void isLogin(HttpSession session) {
         Object sessionUser = session.getAttribute(SESSION_KEY);
         if (sessionUser == null) {
 
@@ -26,17 +22,18 @@ public class SessionUtil {
         }
     }
 
-    public User getSessionUser(HttpSession session) {
+    public static User getSessionUser(HttpSession session) {
         isLogin(session);
 
         return (User) session.getAttribute(SESSION_KEY);
     }
 
-    public void isSessionMatch(HttpSession session, User user) {
+    public static User isSessionMatch(HttpSession session, User user) {
         User sessiondUser = getSessionUser(session);
         if (!sessiondUser.isSameUser(user)) {
 
             throw new SessionNotMatchException();
         }
+        return sessiondUser;
     }
 }

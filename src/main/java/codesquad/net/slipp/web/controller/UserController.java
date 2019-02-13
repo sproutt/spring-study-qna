@@ -21,31 +21,28 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SessionUtil sessionUtil;
-
     @GetMapping("")
-    public String getUserList(Model model) {
+    public String userList(Model model) {
         model.addAttribute("users", userRepository.findAll());
 
         return "/user/list";
     }
 
     @PostMapping("")
-    public String createUser(User user, Model model) {
+    public String create(User user, Model model) {
         userRepository.save(user);
 
         return "redirect:/users";
     }
 
     @GetMapping("/login")
-    public String getLogin(Model model) {
+    public String loginForm(Model model) {
 
         return "/user/login";
     }
 
     @PostMapping("/login")
-    public String postLogin(User user, HttpSession session) {
+    public String login(User user, HttpSession session) {
         if (userService.checkIdPassword(user)) {
             session.setAttribute("userSession", user);
 
@@ -63,29 +60,29 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String getUserProfile(@PathVariable long id, Model model) {
+    public String userProfile(@PathVariable long id, Model model) {
         model.addAttribute("user", userRepository.findById(id));
 
         return "/user/list_profile";
     }
 
     @GetMapping("/{id}/form")
-    public String getUserUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        User sessionedUser = sessionUtil.getSessionUser(session);
-        model.addAttribute("user", userRepository.findById(id).get());
+    public String userUpdateForm(@PathVariable long id, Model model, HttpSession session) {
+        User sessionedUser = SessionUtil.getSessionUser(session);
+        model.addAttribute("user", userService.findById(id));
 
         return "/user/updateForm";
     }
 
     @GetMapping("/updateForm")
-    public String getUpdateForm(HttpSession session) {
+    public String updateForm(HttpSession session) {
 
-        return "redirect:/users/" + sessionUtil.getSessionUser(session).getId() + "/form";
+        return "redirect:/users/" + SessionUtil.getSessionUser(session).getId() + "/form";
     }
 
     @PutMapping("/{id}")
-    public String updateUser(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
-        sessionUtil.isSessionMatch(session, userService.findById(id));
+    public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
+        SessionUtil.isSessionMatch(session, userService.findById(id));
         if (!userService.checkIdPassword(updatedUser)) {
 
             return "/user/error";

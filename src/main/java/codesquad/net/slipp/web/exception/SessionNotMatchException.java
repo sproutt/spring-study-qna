@@ -7,6 +7,6 @@ import javax.servlet.http.HttpSession;
 public class SessionNotMatchException extends RuntimeException {
 
     public SessionNotMatchException() {
-        super("{ " + "ERROR_CODE : " + 111 + " }");
+        super("ERROR : 세션 권한이 없습니다.");
     }
 }
