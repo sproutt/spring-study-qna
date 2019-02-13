@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -26,8 +28,23 @@ public class Question {
 
     private String createdDate;
 
+    private boolean deleted = false;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
+
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
         this.contents = modifiedQuestion.contents;
+    }
+
+    public void addAnswer(Answer answer) {
+        this.getAnswers().add(answer);
+        answer.setQuestion(this);
+    }
+
+    public void removeAnswer(Answer answer) {
+        this.getAnswers().remove(answer);
+        answer.setQuestion(null);
     }
 }

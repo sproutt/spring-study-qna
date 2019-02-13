@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.domain.Question;
-import codesquad.domain.User;
 import codesquad.service.QuestionService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +45,8 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
 
         model.addAttribute("question", questionService.findById(id));
@@ -61,13 +58,11 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
 
-        questionService.updateById(id, modifiedQuestion);
+        questionService.update(id, modifiedQuestion);
         return "redirect:/";
     }
 
@@ -76,13 +71,15 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
-
-        questionService.deleteById(id);
+        /*TODO
+        2. 답변이 없는 경우 삭제가능. -> 답변이 있다면 -> 답변자와 질문자가 같지 않다면 예외 발생.
+                                              -> 답변자와 질문자가 같다면 삭제처리.
+        3. 답변이 있으면 답변자와 질문자가 같으면 삭제가능.
+        */
+        questionService.delete(id);
         return "redirect:/";
     }
 }

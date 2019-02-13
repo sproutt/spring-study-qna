@@ -18,6 +18,9 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private AnswerService answerService;
+
     public Question save(Question question, HttpSession httpSession) {
         User user = HttpSessionUtils.getSessionedUser(httpSession);
 
@@ -30,13 +33,22 @@ public class QuestionService {
         return questionRepository.findById(id).orElseThrow(() -> new QuestionNotFoundException(id));
     }
 
-    public void deleteById(Long id) {
-        questionRepository.delete(findById(id));
+    public void delete(Long id) {
+        Question question = this.findById(id);
+        question.setDeleted(true);
+        answerService.delete(id);
+
+        questionRepository.save(this.findById(id));
+
     }
 
-    public void updateById(Long id, Question modifiedQuestion) {
-        Question question = findById(id);
+    public void update(Long id, Question modifiedQuestion) {
+        Question question = this.findById(id);
         question.update(modifiedQuestion);
         questionRepository.save(question);
+    }
+
+    public boolean match(Long id, HttpSession httpSession) {
+        return HttpSessionUtils.getSessionedUser(httpSession).equals(this.findById(id).getWriter());
     }
 }

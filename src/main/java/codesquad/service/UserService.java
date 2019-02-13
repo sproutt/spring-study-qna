@@ -32,6 +32,6 @@ public class UserService {
 
     public void update(User user, User modifiedUser) {
         user.update(modifiedUser);
-        save(user);
+        this.save(user);
     }
 }
