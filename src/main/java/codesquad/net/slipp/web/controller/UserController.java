@@ -88,7 +88,7 @@ public class UserController {
 
             return "/user/error";
         }
-        userService.update(userService.findById(id), updatedUser , modifiedPassword);
+        userService.update(userService.findById(id), updatedUser, modifiedPassword);
 
         return "redirect:/users";
     }

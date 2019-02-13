@@ -80,12 +80,12 @@ public class User {
         return this.getUserId() == user.getUserId();
     }
 
-    public boolean match(String password){
+    public boolean match(String password) {
 
         return this.password.equals(password);
     }
 
-    public void update(User modifiedUser){
+    public void update(User modifiedUser) {
         this.password = modifiedUser.password;
         this.name = modifiedUser.name;
         this.email = modifiedUser.email;

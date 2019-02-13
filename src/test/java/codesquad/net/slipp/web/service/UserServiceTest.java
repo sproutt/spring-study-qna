@@ -24,7 +24,7 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
-    public void checkIdPasswordTest(){
+    public void checkIdPasswordTest() {
         User user = new User();
         user.setUserId("test");
         user.setPassword("123");
@@ -35,7 +35,7 @@ public class UserServiceTest {
     }
 
     @Test(expected = UserNotFoundException.class)
-    public void checkIdPasswordExceptionTest(){
+    public void checkIdPasswordExceptionTest() {
         User user = new User();
         user.setUserId("testE");
         user.setPassword("1234");
@@ -43,7 +43,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateTest(){
+    public void updateTest() {
         User modelUser = userService.findById(Long.parseLong("2"));
         User modifiedUser = new User();
         modifiedUser.setUserId("test");

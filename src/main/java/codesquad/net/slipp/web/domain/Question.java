@@ -59,9 +59,9 @@ public class Question {
         this.id = id;
     }
 
-    public void update(Question modifiedQuestion){
+    public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
-        this.contents= modifiedQuestion.contents;
+        this.contents = modifiedQuestion.contents;
 
     }
 }
