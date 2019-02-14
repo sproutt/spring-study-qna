@@ -1,9 +1,11 @@
 package codesquad.controller;
 
+import codesquad.exception.UserNotEqualException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.repository.AnswerRepository;
+import codesquad.service.AnswerService;
 import codesquad.service.QuestionService;
 import codesquad.service.UserService;
 import codesquad.utils.SessionChecker;
@@ -21,28 +23,22 @@ public class AnswerController {
     QuestionService questionService;
 
     @Autowired
-    UserService userService;
+    AnswerService answerService;
 
-    @Autowired
-    AnswerRepository answerRepository;
     @PostMapping
     public String create(HttpSession session, @PathVariable Long questionId, String contents) {
         if (!SessionChecker.isLoggedIn(session)) {
             return "redirect:/users/login";
         }
-        Question question = questionService.getQuestionById(questionId);
-        User user = SessionChecker.loggedinUser(session);
-
-        answerRepository.save(new Answer(question, user, contents));
-        return String.format("redirect:/questions/%d", questionId);
+        answerService.create(session, questionId, contents);
+        return "redirect:/questions/{questionId}";
     }
+
     @DeleteMapping("/{id}")
-    public String delete(HttpSession session, @PathVariable Long questionId){
-        User loginedUser = SessionChecker.loggedinUser(session);
-        Answer answer =
-        if(loginedUser.isSameUser())
+    public String delete(HttpSession session, @PathVariable Long id) {
+        answerService.delete(session, id);
+        return "redirect:/questions/{questionId}";
     }
-
 
 
 }
