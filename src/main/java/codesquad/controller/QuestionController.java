@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.domain.Question;
-import codesquad.domain.User;
 import codesquad.service.QuestionService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,10 +45,8 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
 
         model.addAttribute("question", questionService.findById(id));
@@ -61,13 +58,11 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
 
-        questionService.updateById(id, modifiedQuestion);
+        questionService.update(id, modifiedQuestion);
         return "redirect:/";
     }
 
@@ -76,13 +71,11 @@ public class QuestionController {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
         }
-        User user = HttpSessionUtils.getSessionedUser(httpSession);
-
-        if (!user.match(id)) {
-            return "qna/update_deny";
+        if (!questionService.match(id, httpSession)) {
+            return "qna/deny";
         }
 
-        questionService.deleteById(id);
+        questionService.delete(id);
         return "redirect:/";
     }
 }
