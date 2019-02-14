@@ -7,11 +7,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @Configuration
 public class MvcConfig extends WebMvcConfigurerAdapter {
-
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        registry.addViewController("/users/login").setViewName("users/login");
+        registry.addViewController("/users/login").setViewName("user/login");
         registry.addViewController("/users/form").setViewName("users/form");
     }
 }

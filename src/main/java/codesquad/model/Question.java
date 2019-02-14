@@ -1,6 +1,7 @@
 package codesquad.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -11,6 +12,9 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
 
     @Column(nullable = false, length = 40)
     private String title;
@@ -61,5 +65,9 @@ public class Question {
             return true;
         } else
             return false;
+    }
+
+    public void addAnswer(Answer answer){
+        this.answers.add(answer);
     }
 }
