@@ -30,6 +30,14 @@ public class Question {
         return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
+
     @Column(nullable = false, length = 40)
     private String title;
 

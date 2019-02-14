@@ -19,14 +19,15 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
+    private boolean isDeleted = false;
     @Lob
     private String contents;
+
+    private LocalDateTime createDate = LocalDateTime.now();
 
     public Answer() {
 
     }
-
-    private LocalDateTime createDate = LocalDateTime.now();
 
     public Answer(Question question, User writer, String contents) {
         this.question = question;
@@ -35,7 +36,13 @@ public class Answer {
         this.createDate = LocalDateTime.now();
     }
 
-    private boolean deleted = false;
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 
     public String getFormattedCreateDate() {
         if (createDate == null) {
@@ -83,6 +90,7 @@ public class Answer {
     public void setCreateDate(LocalDateTime createDate) {
         this.createDate = createDate;
     }
+
 
     @Override
     public boolean equals(Object o) {

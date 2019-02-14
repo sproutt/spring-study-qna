@@ -21,22 +21,23 @@ public class AnswerService {
     @Autowired
     QuestionService questionService;
 
-    public Answer getAnswerById(Long id){
+    public Answer getAnswerById(Long id) {
         return answerRepository.findById(id).orElseThrow(AnswerNotExistException::new);
     }
 
-    public void create(HttpSession session, Long questionId, String contents){
+    public void create(HttpSession session, Long questionId, String contents) {
         User sessionUser = SessionChecker.loggedinUser(session);
         Question question = questionService.getQuestionById(questionId);
         Answer answer = new Answer(question, sessionUser, contents);
         answerRepository.save(answer);
     }
-    public void delete(HttpSession session, Long id){
+
+    public void delete(HttpSession session, Long questionId, Long id) {
         User sessionUser = SessionChecker.loggedinUser(session);
         Answer answer = getAnswerById(id);
         if(!sessionUser.isSameUser(answer.getWriter())){
             throw new UserNotEqualException();
         }
-        answerRepository.delete(answer);
+        answer.setDeleted(true);
     }
 }

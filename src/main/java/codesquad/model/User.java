@@ -65,12 +65,14 @@ public class User {
         this.setEmail(updatedUser.getEmail());
         this.setPassword(updatedUser.getPassword());
     }
-    public boolean isSamePassword(User userToUpdate){
-        if(!this.password.equals(userToUpdate.getPassword())){
+
+    public boolean isSamePassword(User userToUpdate) {
+        if (!this.password.equals(userToUpdate.getPassword())) {
             return false;
         }
         return true;
     }
+
     public boolean isSameUser(User comparedUser) {
         if (this.id.equals(comparedUser.getId()))
             return true;
