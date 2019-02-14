@@ -3,7 +3,9 @@ package codesquad.service;
 import codesquad.domain.Answer;
 import codesquad.domain.AnswerRepository;
 import codesquad.domain.Question;
+import codesquad.domain.QuestionRepository;
 import codesquad.exception.AnswerNotFoundException;
+import codesquad.exception.QuestionNotFoundException;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,8 +13,6 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class AnswerService {
@@ -21,35 +21,24 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     @Autowired
-    private QuestionService questionService;
+    private QuestionRepository questionRepository;
 
     public Answer register(Long questionId, Answer answer, HttpSession httpSession) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
+
+        question.addAnswer(answer);
         answer.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         answer.setWriter(HttpSessionUtils.getSessionedUser(httpSession));
-        questionService.findById(questionId).addAnswer(answer);
         return answerRepository.save(answer);
-    }
-
-    public void delete(Long questionId) {
-        List<Answer> answers = this.findByQuestionId(questionId);
-        Question question = questionService.findById(questionId);
-
-        for (Answer answer : answers) {
-            question.removeAnswer(answer);
-            answer.setDeleted(true);
-            answerRepository.save(answer);
-        }
     }
 
     public void delete(Long questionId, Long id) {
         Answer answer = this.findById(id);
-        questionService.findById(questionId).removeAnswer(answer);
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
+
+        question.removeAnswer(answer);
         answer.setDeleted(true);
         answerRepository.save(answer);
-    }
-
-    private List<Answer> findByQuestionId(Long questionId) {
-        return answerRepository.findByQuestionId(questionId).orElse(new ArrayList<>());
     }
 
     public Answer findById(Long id) {
