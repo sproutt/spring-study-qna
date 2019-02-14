@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Service
 public class AnswerService {
@@ -27,7 +25,6 @@ public class AnswerService {
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
 
         question.addAnswer(answer);
-        answer.setCreatedDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
         answer.setWriter(HttpSessionUtils.getSessionedUser(httpSession));
         return answerRepository.save(answer);
     }

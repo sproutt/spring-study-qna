@@ -4,6 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,9 +31,16 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private String createdDate;
+    private LocalDateTime creatDate = LocalDateTime.now();
 
     private boolean deleted = false;
+
+    public String getFormattedCreatDate() {
+        if (creatDate == null) {
+            return "";
+        }
+        return creatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
 
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
