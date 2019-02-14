@@ -9,14 +9,16 @@ import javax.servlet.http.HttpSession;
 
 public class SessionUtil {
 
-    private static String SESSION_KEY = "userSession";
+    private static final String SESSION_KEY = "userSession";
 
-    public static void isLogin(HttpSession session) {
+    public static boolean isLogin(HttpSession session) {
         Object sessionUser = session.getAttribute(SESSION_KEY);
         if (sessionUser == null) {
 
             throw new SessionNotFoundException();
         }
+        
+        return true;
     }
 
     public static User getSessionUser(HttpSession session) {

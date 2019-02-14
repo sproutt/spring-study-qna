@@ -16,9 +16,6 @@ import javax.servlet.http.HttpSession;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
     private UserService userService;
 
     @GetMapping("")
@@ -62,7 +59,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String userProfile(@PathVariable long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id));
+        model.addAttribute("user", userService.findById(id));
 
         return "/user/list_profile";
     }

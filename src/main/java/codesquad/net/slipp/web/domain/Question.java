@@ -17,7 +17,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @Getter
+    @Getter @Setter
     private User writer;
 
     @Column(nullable = false, columnDefinition = "VARCHAR(50)")

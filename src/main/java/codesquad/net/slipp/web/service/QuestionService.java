@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class QuestionService {
 
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     public Question findById(long id) {
         Question question = questionRepository.findById(id).orElseThrow(
@@ -37,6 +37,12 @@ public class QuestionService {
     }
 
     public Question save(Question question) {
+
+        return questionRepository.save(question);
+    }
+
+    public Question save(Question question, User user) {
+        question.setWriter(user);
 
         return questionRepository.save(question);
     }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     public boolean checkIdPassword(User user) {
         String userId = user.getUserId();
