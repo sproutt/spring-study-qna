@@ -16,7 +16,7 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @PostMapping()
+    @PostMapping("")
     public String create(User user) {
         users.add(user);
         return "redirect:/users";
@@ -41,7 +41,7 @@ public class UserController {
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
 
-        users.stream().filter(user -> user.getUserId().equals(userId)).forEach(model::addAttribute);
+        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> model.addAttribute("user", user));
 
         return "users/profile";
     }
