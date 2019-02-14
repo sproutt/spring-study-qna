@@ -20,7 +20,6 @@ public class UserController {
 
     @GetMapping("")
     public String userList(Model model) {
-        Iterable<User> users = userService.findAll();
         model.addAttribute("users", userService.findAll());
 
         return "/user/list";
@@ -66,8 +65,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String userUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        SessionUtil.isSessionMatch(session, userService.findById(id));
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", SessionUtil.getAuthUser(session, userService.findById(id)));
 
         return "/user/updateForm";
     }
@@ -80,12 +78,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
-        SessionUtil.isSessionMatch(session, userService.findById(id));
+        SessionUtil.getAuthUser(session, userService.findById(id));
         if (!userService.checkIdPassword(updatedUser)) {
 
             return "/user/error";
         }
-        userService.update(userService.findById(id), updatedUser, modifiedPassword);
+        userService.update(SessionUtil.getAuthUser(session, userService.findById(id)),
+                updatedUser, modifiedPassword);
 
         return "redirect:/users";
     }

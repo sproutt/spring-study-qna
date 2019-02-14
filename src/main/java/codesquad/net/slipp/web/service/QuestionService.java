@@ -22,6 +22,7 @@ public class QuestionService {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException(id)
         );
+
         return question;
     }
 

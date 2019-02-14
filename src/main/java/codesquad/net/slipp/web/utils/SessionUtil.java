@@ -12,27 +12,36 @@ public class SessionUtil {
     private static final String SESSION_KEY = "userSession";
 
     public static boolean isLogin(HttpSession session) {
-        Object sessionUser = session.getAttribute(SESSION_KEY);
-        if (sessionUser == null) {
+        if (session.getAttribute(SESSION_KEY) == null) {
 
-            throw new SessionNotFoundException();
+            return false;
         }
-        
+
         return true;
     }
 
     public static User getSessionUser(HttpSession session) {
-        isLogin(session);
+        if(isLogin(session)){
+            throw new SessionNotFoundException();
+        }
 
         return (User) session.getAttribute(SESSION_KEY);
     }
 
     public static boolean isSessionMatch(HttpSession session, User user) {
-        User sessiondUser = getSessionUser(session);
-        if (!sessiondUser.match(user)) {
+        if (!getSessionUser(session).match(user)) {
 
+            return false;
+        }
+
+        return true;
+    }
+
+    public static User getAuthUser(HttpSession session, User user){
+        if(isSessionMatch(session, user)){
             throw new SessionNotMatchException();
         }
-        return true;
+
+        return getSessionUser(session);
     }
 }
