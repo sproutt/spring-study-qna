@@ -34,7 +34,7 @@ public class QuestionService {
     public void delete(Long id) {
         Question question = this.findById(id);
 
-        if (this.getAnswerCount(id) != 0) {
+        if (question.getAnswersCount() != 0) {
             checkWriter(question);
         }
 
@@ -60,10 +60,6 @@ public class QuestionService {
 
     public boolean match(Long id, HttpSession httpSession) {
         return HttpSessionUtils.getSessionedUser(httpSession).equals(this.findById(id).getWriter());
-    }
-
-    public int getAnswerCount(Long id) {
-        return this.findById(id).getAnswers().size();
     }
 
     public boolean isSameWriter(Question question, List<Answer> answers) {

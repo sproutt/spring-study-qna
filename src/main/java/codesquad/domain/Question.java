@@ -43,6 +43,10 @@ public class Question {
         return creatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
+    public int getAnswersCount() {
+        return answers.size();
+    }
+
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
         this.contents = modifiedQuestion.contents;

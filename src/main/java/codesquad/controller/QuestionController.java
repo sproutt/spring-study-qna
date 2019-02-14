@@ -37,7 +37,6 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionService.findById(id));
-        model.addAttribute("count", questionService.getAnswerCount(id));
         return "qna/show";
     }
 
