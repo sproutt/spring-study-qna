@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/questions")
+@RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
 
-    @PostMapping("/{questionId}/answers")
+    @PostMapping("")
     public String register(@PathVariable Long questionId, Answer answer, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";
@@ -29,7 +29,7 @@ public class AnswerController {
         return "redirect:/questions/" + questionId;
     }
 
-    @DeleteMapping("/{questionId}/answers/{id}")
+    @DeleteMapping("")
     public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
             return "users/login";

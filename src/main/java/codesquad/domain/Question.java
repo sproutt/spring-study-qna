@@ -28,6 +28,7 @@ public class Question {
     @Column(nullable = false)
     private String title;
 
+    @Lob
     @Column(nullable = false)
     private String contents;
 
