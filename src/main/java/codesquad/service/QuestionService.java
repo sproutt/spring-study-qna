@@ -5,6 +5,7 @@ import codesquad.exception.UserNotEqualException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
+import codesquad.repository.AnswerRepository;
 import codesquad.repository.QuestionRepository;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Autowired
+    AnswerRepository answerRepository;
     public Iterable<Question> findAll() {
         return questionRepository.findAll();
     }

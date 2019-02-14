@@ -13,7 +13,7 @@ public class SessionChecker {
 
     public static boolean isLoggedIn(HttpSession session) {
         if (session.getAttribute(USER_SESSION) == null) {
-            throw new UserNotLoginException();
+            return false;
         } else {
             return true;
         }

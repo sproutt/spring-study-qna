@@ -31,6 +31,11 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "/users/login";
+    }
+
     @PostMapping
     public String create(User user) {
         userService.save(user);
