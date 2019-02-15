@@ -39,9 +39,9 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(User user, HttpSession session) {
-        if (userService.checkIdPassword(user)) {
-            session.setAttribute("userSession", user);
+    public String login(String userId, String password, HttpSession session) {
+        if (userService.checkIdPassword(userId, password)) {
+            session.setAttribute("userSession", userService.findByUserId(userId));
 
             return "redirect:/";
         }
@@ -73,7 +73,7 @@ public class UserController {
     @GetMapping("/updateForm")
     public String updateForm(HttpSession session) {
 
-        return "redirect:/users/" + SessionUtil.getSessionUser(session).getId() + "/form";
+        return "redirect:/users/" + SessionUtil.getSessionUserId(session) + "/form";
     }
 
     @PutMapping("/{id}")

@@ -49,7 +49,6 @@ public class QuestionService {
     }
 
     public void deleteById(long id) {
-
         questionRepository.deleteById(id);
     }
 

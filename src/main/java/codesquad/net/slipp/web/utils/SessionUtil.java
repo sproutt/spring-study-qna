@@ -4,6 +4,7 @@ package codesquad.net.slipp.web.utils;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotMatchException;
+import codesquad.net.slipp.web.service.UserService;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,11 +22,16 @@ public class SessionUtil {
     }
 
     public static User getSessionUser(HttpSession session) {
-        if(isLogin(session)){
+        if(!isLogin(session)){
             throw new SessionNotFoundException();
         }
 
         return (User) session.getAttribute(SESSION_KEY);
+    }
+
+    public static Long getSessionUserId(HttpSession session) {
+
+        return getSessionUser(session).getId();
     }
 
     public static boolean isSessionMatch(HttpSession session, User user) {

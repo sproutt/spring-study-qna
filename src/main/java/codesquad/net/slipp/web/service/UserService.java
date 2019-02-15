@@ -21,6 +21,14 @@ public class UserService {
         return modelUser.match(user.getPassword());
     }
 
+    public boolean checkIdPassword(String userId, String password) {
+        User modelUser = userRepository.findByUserId(userId).orElseThrow(
+                () -> new UserNotFoundException(userId)
+        );
+
+        return modelUser.match(password);
+    }
+
     public User findByUserId(String userId) {
         User user = userRepository.findByUserId(userId).orElseThrow(
                 () -> new UserNotFoundException(userId)

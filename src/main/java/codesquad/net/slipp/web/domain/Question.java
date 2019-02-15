@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -20,17 +21,24 @@ public class Question {
     @Getter @Setter
     private User writer;
 
+    @OneToMany(mappedBy = "question")
+    @Getter @Setter
+    private List<Answer> answers;
+
     @Column(nullable = false, columnDefinition = "VARCHAR(50)")
     @Getter @Setter
     private String title;
 
-    @Column(columnDefinition = "BLOB")
+    @Column(columnDefinition = "LONGTEXT")
     @Getter @Setter
     private String contents;
 
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
         this.contents = modifiedQuestion.contents;
+    }
 
+    public int getSize(){
+        return answers.size();
     }
 }
