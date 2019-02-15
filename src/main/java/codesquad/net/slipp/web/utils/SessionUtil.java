@@ -1,6 +1,7 @@
 package codesquad.net.slipp.web.utils;
 
 
+import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotMatchException;
@@ -49,5 +50,11 @@ public class SessionUtil {
         }
 
         return getSessionUser(session);
+    }
+
+    public static void checkAuth(HttpSession session, User user){
+        if(isSessionMatch(session, user)){
+            throw new SessionNotMatchException();
+        }
     }
 }

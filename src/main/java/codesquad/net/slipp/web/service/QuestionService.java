@@ -19,6 +19,9 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @Autowired
+    private AnswerService answerService;
+
     public Question findById(long id) {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException(id)
@@ -70,9 +73,11 @@ public class QuestionService {
 
             throw new SessionNotMatchException();
         }
-        this.findById(id).setDeleted(true);
-        this.findById(id).getAnswers().stream().forEach(
-                answer -> answer.setDeleted(true)
+        Question question = this.findById(id);
+        question.setDeleted(true);
+        question.getAnswers().stream().forEach(
+                answer -> answerService.delete(answer)
                 );
+        questionRepository.save(question);
     }
 }
