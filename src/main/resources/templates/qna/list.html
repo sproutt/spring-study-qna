@@ -13,16 +13,16 @@
                     <div class="wrap">
                         <div class="main">
                             <strong class="subject">
-                                <a href="qna/show.html">{{title}}</a>
+                                <a href="/questions/{{@index}}">{{title}}</a>
                             </strong>
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{time}}</span>
-                                <a href="/users/profile.html" class="author">{{writer}}</a>
+                                <a href="/users/{{writer}}" class="author">{{writer}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
-                                <span class="point">8</span>
+                                <span class="point">{{@index}}</span>
                             </div>
                         </div>
                     </div>
@@ -78,7 +78,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>
@@ -120,7 +120,7 @@
       <div class="modal-footer">
           <div class="col-md-12">
           <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>  
+      </div>
       </div>
   </div>
   </div>
