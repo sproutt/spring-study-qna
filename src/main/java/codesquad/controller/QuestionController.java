@@ -1,6 +1,6 @@
-package codesquad.Controller;
+package codesquad.controller;
 
-import codesquad.Model.Question;
+import codesquad.model.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,12 +12,7 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-    List<Question> questions = new ArrayList<>();
-
-    @GetMapping("/qna/form")
-    public String form() {
-        return "/qna/form";
-    }
+    public List<Question> questions = new ArrayList<>();
 
     @PostMapping("/questions")
     public String questions(Question question) {

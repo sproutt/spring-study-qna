@@ -1,4 +1,4 @@
-package codesquad.Model;
+package codesquad.model;
 
 import lombok.Getter;
 import lombok.Setter;

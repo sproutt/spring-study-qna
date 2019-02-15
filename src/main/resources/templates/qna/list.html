@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr">
 
-{{> base}}
-
-
+{{#partial "contents"}}
 <div class="container" id="main">
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
@@ -43,7 +41,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a href="/qna/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                    <a href="/questions/form" class="btn btn-primary pull-right" role="button">질문하기</a>
                 </div>
             </div>
         </div>
@@ -119,14 +117,18 @@
       </div>
       <div class="modal-footer">
           <div class="col-md-12">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
-      </div>
-      </div>
-  </div>
-  </div>
+    <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
+</div>
+</div>
+</div>
+</div>
 </div>
 -->
 
 <!-- script references -->
 </body>
+{{/partial}}
+
+{{> base}}
+
 </html>

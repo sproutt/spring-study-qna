@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html lang="kr">
 
-{{> base}}
-
-<body>
+{{#partial "contents"}}
 <div class="container" id="main">
     {{#user}}
     <div class="col-md-6 col-md-offset-3">
@@ -33,4 +31,7 @@
     {{/user}}
 </div>
 </body>
+{{/partial}}
+
+{{> base}}
 </html>

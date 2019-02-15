@@ -1,8 +1,10 @@
-package codesquad.Model;
+package codesquad.model;
 
-import codesquad.utils.Date;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
 public class Question {
@@ -12,6 +14,6 @@ public class Question {
     private String time;
 
     public Question() {
-        this.time = Date.getCurrentTime();
+        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
 }

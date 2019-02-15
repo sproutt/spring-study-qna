@@ -1,6 +1,6 @@
-package codesquad.Controller;
+package codesquad.controller;
 
-import codesquad.Model.User;
+import codesquad.model.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,10 +22,6 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/form")
-    public String form() {
-        return "/users/form";
-    }
 
     @GetMapping("")
     public String list(Model model) {
@@ -33,28 +29,28 @@ public class UserController {
         return "/users/list";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "/users/login";
-    }
 
     @GetMapping("/{userId}")
     public String profile(@PathVariable String userId, Model model) {
-
-        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> model.addAttribute("user", user));
+        users.stream().filter(user -> user.isSameUser(userId))
+                .forEach(user -> model.addAttribute("user", user));
 
         return "users/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String modifyProfile(@PathVariable String userId, Model model) {
-        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> model.addAttribute("user", user));
+        users.stream().filter(user -> user.isSameUser(userId))
+                .forEach(user -> model.addAttribute("user", user));
+
         return "/user/updateForm";
     }
 
     @PostMapping("/{userId}/update")
     public String updateForm(@PathVariable String userId, User updatedUser) {
-        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> users.set(users.indexOf(user), updatedUser));
+        users.stream().filter(user -> user.isSameUser(userId))
+                .forEach(user -> users.set(users.indexOf(user), updatedUser));
+
         return "redirect:/users";
     }
 }
