@@ -30,12 +30,10 @@ public class QuestionService {
         return question;
     }
 
-    public Question getAuthedQuestion(HttpSession session, long id){
-        if(!this.isSessionMatch(session, id)){
+    public Question getAuthedQuestion(HttpSession session, long id) {
+        if (!this.isSessionMatch(session, id)) {
             throw new SessionNotMatchException();
-        }
-
-        else return this.findById(id);
+        } else return this.findById(id);
     }
 
     public void update(Question modelQuestion, Question modifiedQuestion) {
@@ -60,7 +58,7 @@ public class QuestionService {
     }
 
     public boolean isSessionMatch(HttpSession session, long id) {
-        if(!SessionUtil.isSessionMatch(session, findById(id).getWriter())){
+        if (!SessionUtil.isSessionMatch(session, findById(id).getWriter())) {
 
             return false;
         }
@@ -69,7 +67,7 @@ public class QuestionService {
     }
 
     public void delete(HttpSession session, long id) {
-        if(!isSessionMatch(session, id)){
+        if (!isSessionMatch(session, id)) {
 
             throw new SessionNotMatchException();
         }
@@ -77,7 +75,7 @@ public class QuestionService {
         question.setDeleted(true);
         question.getAnswers().stream().forEach(
                 answer -> answerService.delete(answer)
-                );
+        );
         questionRepository.save(question);
     }
 }

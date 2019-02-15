@@ -34,9 +34,16 @@ public class AnswerService {
         this.delete(id);
     }
 
-    public Answer delete(Long id){
+    public Answer delete(Long id) {
         Answer answer = this.findById(id);
         answer.setDeleted(true);
+
+        return answer;
+    }
+
+    public Answer delete(Answer answer) {
+        answer.setDeleted(true);
+
         return answer;
     }
 
