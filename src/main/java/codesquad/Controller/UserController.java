@@ -45,4 +45,16 @@ public class UserController {
 
         return "users/profile";
     }
+
+    @GetMapping("/{userId}/form")
+    public String modifyProfile(@PathVariable String userId, Model model) {
+        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> model.addAttribute("user", user));
+        return "/user/updateForm";
+    }
+
+    @PostMapping("/{userId}/update")
+    public String updateForm(@PathVariable String userId, User updatedUser) {
+        users.stream().filter(user -> user.isSameUser(userId)).forEach(user -> users.set(users.indexOf(user), updatedUser));
+        return "redirect:/users";
+    }
 }
