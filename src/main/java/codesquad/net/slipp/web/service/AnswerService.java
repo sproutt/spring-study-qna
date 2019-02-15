@@ -5,6 +5,7 @@ import codesquad.net.slipp.web.domain.AnswerRepository;
 import codesquad.net.slipp.web.domain.Question;
 import codesquad.net.slipp.web.exception.AnswerNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
+import codesquad.net.slipp.web.exception.SessionNotMatchException;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -30,7 +31,7 @@ public class AnswerService {
 
     public void delete(HttpSession session, long id) {
         if(!SessionUtil.isSessionMatch(session, this.findById(id).getWriter())){
-            throw new SessionNotFoundException();
+            throw new SessionNotMatchException();
         }
         answerRepository.delete(findById(id));
     }

@@ -3,10 +3,7 @@ package codesquad.net.slipp.web.domain;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class User {
@@ -16,19 +13,23 @@ public class User {
     @Getter
     private Long id;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(30)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String userId;
 
-    @Column(nullable = false, columnDefinition = "CHAR(64)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String password;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(10)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String name;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String email;
 

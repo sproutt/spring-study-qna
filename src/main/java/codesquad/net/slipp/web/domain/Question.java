@@ -25,13 +25,18 @@ public class Question {
     @Getter @Setter
     private List<Answer> answers;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String title;
 
-    @Column(columnDefinition = "LONGTEXT")
+    @Lob
     @Getter @Setter
     private String contents;
+
+    @Column(nullable = false)
+    @Getter @Setter
+    private Boolean deleted = false;
 
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;

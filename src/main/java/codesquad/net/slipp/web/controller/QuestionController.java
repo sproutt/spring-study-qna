@@ -24,7 +24,7 @@ public class QuestionController {
     public String getQuestionList(Model model) {
         model.addAttribute("questions", questionService.findAll());
 
-        return "/qna/show";
+        return "redirect:/";
     }
 
     @PostMapping("")
@@ -52,21 +52,21 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("question", questionService.isSessionMatch(session, id));
+        model.addAttribute("question", questionService.getAuthedQuestion(session, id));
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion, HttpSession session) {
-        questionService.update(questionService.isSessionMatch(session, id), updatedQuestion);
+        questionService.update(questionService.getAuthedQuestion(session, id), updatedQuestion);
 
         return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable long id) {
-        questionService.deleteById(id);
+    public String delete(@PathVariable long id, HttpSession session) {
+        questionService.delete(session, id);
 
         return "redirect:/questions";
     }

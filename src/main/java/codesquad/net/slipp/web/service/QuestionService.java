@@ -5,6 +5,7 @@ import codesquad.net.slipp.web.domain.QuestionRepository;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.exception.QuestionNotFoundException;
+import codesquad.net.slipp.web.exception.SessionNotMatchException;
 import codesquad.net.slipp.web.exception.UserNotFoundException;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,13 @@ public class QuestionService {
         return question;
     }
 
+    public Question getAuthedQuestion(HttpSession session, long id){
+        if(!this.isSessionMatch(session, id)){
+            throw new SessionNotMatchException();
+        }
+
+        else return this.findById(id);
+    }
 
     public void update(Question modelQuestion, Question modifiedQuestion) {
         modelQuestion.update(modifiedQuestion);
@@ -48,13 +56,23 @@ public class QuestionService {
         return questionRepository.save(question);
     }
 
-    public void deleteById(long id) {
-        questionRepository.deleteById(id);
+    public boolean isSessionMatch(HttpSession session, long id) {
+        if(!SessionUtil.isSessionMatch(session, findById(id).getWriter())){
+
+            return false;
+        }
+
+        return true;
     }
 
-    public Question isSessionMatch(HttpSession session, long id) {
-        SessionUtil.isSessionMatch(session, findById(id).getWriter());
+    public void delete(HttpSession session, long id) {
+        if(!isSessionMatch(session, id)){
 
-        return findById(id);
+            throw new SessionNotMatchException();
+        }
+        this.findById(id).setDeleted(true);
+        this.findById(id).getAnswers().stream().forEach(
+                answer -> answer.setDeleted(true)
+                );
     }
 }

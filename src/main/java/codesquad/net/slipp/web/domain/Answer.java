@@ -23,9 +23,14 @@ public class Answer {
     @Getter @Setter
     private User writer;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(200)")
+    @Column(nullable = false)
+    @Lob
     @Getter @Setter
     private String content;
+
+    @Column(nullable = false)
+    @Getter @Setter
+    private Boolean deleted = false;
 
     public boolean match(Answer answer) {
         return this.id == answer.id;
