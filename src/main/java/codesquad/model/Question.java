@@ -3,7 +3,7 @@ package codesquad.model;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Getter @Setter
@@ -14,6 +14,6 @@ public class Question {
     private String time;
 
     public Question() {
-        this.time = LocalTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        this.time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
 }
