@@ -22,6 +22,10 @@ public class AnswerController {
 
     @PostMapping
     public String create(@PathVariable long questionId, HttpSession session, Answer answer) {
+        if(!SessionUtil.isLogin(session)){
+
+            return "redirect:/users/login";
+        }
         answerService.save(session, answer, questionId);
 
         return "redirect:/questions/{questionId}";

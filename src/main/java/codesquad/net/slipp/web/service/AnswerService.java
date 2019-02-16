@@ -19,9 +19,6 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     @Autowired
-    private UserService userService;
-
-    @Autowired
     private QuestionService questionService;
 
     public void save(HttpSession session, Answer answer, long questionId) {
@@ -31,27 +28,13 @@ public class AnswerService {
 
     public void delete(HttpSession session, long id) {
         SessionUtil.checkAuth(session, this.findById(id).getWriter());
-        this.delete(id);
-    }
-
-    public Answer delete(Long id) {
         Answer answer = this.findById(id);
         answer.setDeleted(true);
-
-        return answer;
-    }
-
-    public Answer delete(Answer answer) {
-        answer.setDeleted(true);
-
-        return answer;
     }
 
     public Answer findById(long id) {
 
-        return answerRepository.findById(id).orElseThrow(
-                () -> new AnswerNotFoundException(id)
-        );
+        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
 

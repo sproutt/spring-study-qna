@@ -25,8 +25,7 @@ public class Question {
     @Getter @Setter
     private List<Answer> answers;
 
-    @Column(nullable = false)
-    @Lob
+    @Column(nullable = false, length = 200)
     @Getter @Setter
     private String title;
 
