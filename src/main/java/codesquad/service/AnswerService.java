@@ -6,7 +6,6 @@ import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.repository.AnswerRepository;
-import codesquad.result.AnswerResult;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -4,7 +4,7 @@ public class AnswerDto {
 
     private String contents;
 
-    public AnswerDto(){
+    public AnswerDto() {
 
     }
 
