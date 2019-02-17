@@ -1,8 +1,10 @@
 package codesquad.model.question;
 
+import codesquad.model.answer.Answer;
 import codesquad.model.user.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,6 +20,9 @@ public class Question {
     private String title;
     private String contents;
 
+    @OneToMany(mappedBy="question")
+    private List<Answer> answers;
+
     public Long getId() {
         return id;
     }
@@ -25,7 +30,6 @@ public class Question {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public User getWriter() {
         return writer;
@@ -51,6 +55,17 @@ public class Question {
         this.contents = contents;
     }
 
+    public void addAnswer(Answer answer){
+        answers.add(answer);
+    }
+
+    public List<Answer> getAnswers(){
+        return this.answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
 
     public void update(Question question) {
         this.contents = question.contents;

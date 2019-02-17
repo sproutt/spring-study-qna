@@ -73,4 +73,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @PostMapping("/{questionId}/answers/{id}")
+    public String addAnswer(@PathVariable Long questionId,@PathVariable Long id){
+
+        return "redirect:/question/"+questionId;
+    }
+
 }
