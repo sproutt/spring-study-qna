@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
+@RestController
 @RequestMapping("/api/questions/{questionId}/answers")
 public class ApiAnswerController {
     @Autowired
