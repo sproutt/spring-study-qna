@@ -57,7 +57,6 @@ public class QuestionController {
         return "qna/updateForm";
     }
 
-
     @PutMapping("/{id}")
     public String updateQuestion(@PathVariable Long id, Question question, HttpSession session) {
         User sessionedUser = SessionChecker.loggedinUser(session);
