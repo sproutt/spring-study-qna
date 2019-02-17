@@ -5,6 +5,7 @@ import codesquad.exception.UserNotLoginException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
+import codesquad.result.AnswerResult;
 import codesquad.service.AnswerService;
 import codesquad.service.QuestionService;
 import codesquad.utils.SessionChecker;
@@ -24,7 +25,7 @@ public class ApiAnswerController {
     private AnswerService answerService;
 
     @PostMapping
-    public String create(@PathVariable Long questionId, AnswerDto answerDto, HttpSession session) {
+    public Answer create(@PathVariable Long questionId, AnswerDto answerDto, HttpSession session) {
         if (!SessionChecker.isLoggedIn(session)) {
             throw new UserNotLoginException();
         }
@@ -32,16 +33,18 @@ public class ApiAnswerController {
         Question question = questionService.getQuestionById(questionId);
         Answer answer = new Answer(question, writer, answerDto.getContents());
         question.addAnswer(answer);
-        answerService.save(answer);
-        return "redirect:/questions/{questionId}";
+        return answerService.save(answer);
+
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session){
-        if(SessionChecker.isLoggedIn(session)){
+    public AnswerResult delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        if (SessionChecker.isLoggedIn(session)) {
             throw new UserNotLoginException();
         }
-        answerService.delete(session, questionId, id);
-        return "redirect:/questions/{questionId}";
+        if (!answerService.delete(session, questionId, id)) {
+            return AnswerResult.fail(id);
+        }
+        return AnswerResult.ok(id);
     }
 }

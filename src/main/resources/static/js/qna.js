@@ -29,14 +29,14 @@ function registerAnswerHandler(evt) {
         url: '/api/questions/1/answers',
         method: 'POST',
         contentType: 'application/json',
-        headers: { 'content-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         body: JSON.stringify({content}),
         callback: appendAnswer
     })
 }
 
 function deleteAnswerHandler(evt) {
-    if(evt.target.className !== "answer-delete") return;
+    if (evt.target.className !== "answer-delete") return;
     evt.preventDefault();
     const url = evt.target.href;
     const id = url.replace(/.+\/(\d+)$/, "$1");
@@ -44,7 +44,7 @@ function deleteAnswerHandler(evt) {
     fetchManager({
         url,
         method: 'DELETE',
-        headers: { 'content-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         body: JSON.stringify({id}),
         callback: deleteAnswer
     })
