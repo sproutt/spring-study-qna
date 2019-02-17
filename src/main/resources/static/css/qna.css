@@ -1,0 +1,101 @@
+ul,
+section,
+div,
+p,
+h1,
+h2,
+h3,
+h4,
+form,
+nav,
+article,
+header {
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    list-style: none;
+}
+
+header {
+    text-align: center;
+    margin: 80px auto;
+}
+
+.main {
+    margin: 0px auto;
+    margin: 10%;
+}
+
+.line {
+    margin: 5% auto;
+    background-color: #436383;
+    height: 1px;
+}
+
+.question {
+    /* margin-bottom:5%; */
+    /* padding: 5%; */
+}
+
+.question-title {
+    margin-bottom: 3%;
+}
+
+.question-content {
+    background-color: #f6f9fa;
+    padding: 5%;
+}
+
+.answers {
+}
+
+.answer {
+    background-color: #f7f9fa;
+    padding: 3%;
+    overflow: auto;
+    font-size: 1em;
+    margin-bottom: 1%;
+}
+
+.answer-content {
+}
+
+.answer-metainfo {
+    float: right;
+    font-size: 0.8em;
+    color: #18304b;
+    overflow: hidden;
+}
+
+.answers-title {
+    font-size: 1.17em;
+    font-weight: bold;
+    margin-bottom: 5%;
+}
+
+.answer-form {
+    margin-top: 5%;
+}
+
+.form-control {
+    width: 96%;
+    padding: 2%;
+    font-size: 1em;
+}
+
+.answer-form input.btn {
+    font-size: 1em;
+    width: 100px;
+    height: 40px;
+    background-color: #436383;
+    color: #fff;
+    border-radius: 0.2em;
+    margin-top: 5%;
+}
+
+.answer-util {
+    color: #18304b;
+    margin-top: 10%;
+}

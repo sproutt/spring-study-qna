@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
-import java.util.stream.Stream;
 
 @Component
 public class AnswerService {
@@ -26,6 +25,10 @@ public class AnswerService {
         return answerRepository.findById(id).orElseThrow(AnswerNotExistException::new);
     }
 
+    public void save(Answer answer) {
+        answerRepository.save(answer);
+    }
+
     public void create(HttpSession session, Long questionId, String contents) {
         User sessionUser = SessionChecker.loggedinUser(session);
         Question question = questionService.getQuestionById(questionId);
@@ -36,9 +39,10 @@ public class AnswerService {
     public void delete(HttpSession session, Long questionId, Long id) {
         User sessionUser = SessionChecker.loggedinUser(session);
         Answer answer = getAnswerById(id);
-        if(!sessionUser.isSameUser(answer.getWriter())){
+        if (!sessionUser.isSameUser(answer.getWriter())) {
             throw new UserNotEqualException();
         }
         answer.setDeleted(true);
+        answerRepository.save(answer);
     }
 }

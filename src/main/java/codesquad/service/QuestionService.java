@@ -49,10 +49,14 @@ public class QuestionService {
                         .isSameUser(questionToDelete.getWriter()))) {
             isDeleted = true;
         }
+        System.out.println("*@*#$*@#*$*@#" + isDeleted);
+        System.out.println("*@*#$*@#*$*@#" + questionToDelete.getDeleted());
         if (isDeleted) {
             questionToDelete.getAnswers().stream()
                     .forEach(answer -> answer.setDeleted(true));
-            questionToDelete.setDeleted(true);
+            questionToDelete.setDeleted();
+            questionRepository.save(questionToDelete);
+            System.out.println("*@*#$*@#*$*@#" + questionToDelete.getDeleted());
         } else {
             throw new CannotDeleteQuestionException();
         }

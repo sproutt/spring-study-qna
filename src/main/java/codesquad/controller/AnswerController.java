@@ -29,7 +29,7 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(HttpSession session,@PathVariable Long questionId, @PathVariable Long id) {
+    public String delete(HttpSession session, @PathVariable Long questionId, @PathVariable Long id) {
         answerService.delete(session, questionId, id);
         return "redirect:/questions/{questionId}";
     }

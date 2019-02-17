@@ -16,6 +16,7 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions")
 public class QuestionController {
+
     @Autowired
     UserService userService;
 

@@ -1,5 +1,7 @@
 package codesquad.model;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,7 +23,9 @@ public class Question {
 
     private LocalDateTime createDate = LocalDateTime.now();
 
-    private boolean deleted = false;
+    @Column()
+    @ColumnDefault(value = "false")
+    private boolean deleted;
 
     public String getFormattedCreateDate() {
         if (createDate == null) {
@@ -34,8 +38,8 @@ public class Question {
         return deleted;
     }
 
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
+    public void setDeleted() {
+        this.deleted = true;
     }
 
     @Column(nullable = false, length = 40)
@@ -107,5 +111,9 @@ public class Question {
 
     public void setAnswers(List<Answer> answers) {
         this.answers = answers;
+    }
+
+    public boolean getDeleted() {
+        return isDeleted();
     }
 }

@@ -1,5 +1,8 @@
 package codesquad.model;
 
+import codesquad.dto.AnswerDto;
+import org.hibernate.annotations.ColumnDefault;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -19,7 +22,10 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
-    private boolean isDeleted = false;
+    @Column()
+    @ColumnDefault(value = "false")
+    private boolean deleted;
+
     @Lob
     private String contents;
 
@@ -36,12 +42,19 @@ public class Answer {
         this.createDate = LocalDateTime.now();
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public Answer(Question question, User writer, AnswerDto answerDto) {
+        this.question = question;
+        this.writer = writer;
+        this.contents = answerDto.getContents();
+        this.createDate = LocalDateTime.now();
+    }
+
+    public boolean getDeleted() {
+        return deleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.deleted = deleted;
     }
 
     public String getFormattedCreateDate() {
