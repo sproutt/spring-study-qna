@@ -3,7 +3,15 @@ package codesquad.domain;
 import codesquad.exception.AnswerFailureException;
 import codesquad.util.DateUtil;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import java.util.Date;
 import java.util.Objects;
 
