@@ -1,9 +1,6 @@
 package codesquad.net.slipp.web.controller;
 
-import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.domain.Question;
-import codesquad.net.slipp.web.domain.QuestionRepository;
-import codesquad.net.slipp.web.service.AnswerService;
 import codesquad.net.slipp.web.service.QuestionService;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +34,7 @@ public class QuestionController {
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
         if (!SessionUtil.isLogin(session)) {
+
             return "redirect:/users/login";
         }
 

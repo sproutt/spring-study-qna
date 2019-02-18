@@ -1,8 +1,6 @@
 package codesquad.net.slipp.web.controller;
 
-import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.service.AnswerService;
-import codesquad.net.slipp.web.service.QuestionService;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

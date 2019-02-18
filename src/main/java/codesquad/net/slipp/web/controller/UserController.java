@@ -1,7 +1,6 @@
 package codesquad.net.slipp.web.controller;
 
 import codesquad.net.slipp.web.domain.User;
-import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.service.UserService;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,10 +69,11 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @GetMapping("/updateForm")
     public String updateForm(HttpSession session) {
 
-        return new StringBuffer("redirect:/users/").append(SessionUtil.getSessionUserId(session)).append("/form").toString();
+        return new StringBuffer("redirect:/users/").
+                append(SessionUtil.getSessionUserId(session)).
+                append("/form").toString();
 }
 
     @PutMapping("/{id}")
