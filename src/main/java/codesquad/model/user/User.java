@@ -1,6 +1,9 @@
 package codesquad.model.user;
 
+import codesquad.model.answer.Answer;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -14,6 +17,17 @@ public class User {
     private String password;
     private String name;
     private String email;
+
+    @OneToMany(mappedBy="question")
+    private List<Answer> answers;
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
 
     public Long getId() {
         return id;

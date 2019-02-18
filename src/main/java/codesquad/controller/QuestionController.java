@@ -1,7 +1,9 @@
 package codesquad.controller;
 
+import codesquad.model.answer.Answer;
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
+import codesquad.service.AnswerService;
 import codesquad.service.QuestionService;
 import codesquad.service.UserService;
 import codesquad.utils.SessionUtil;
@@ -15,6 +17,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/question")
 public class QuestionController {
+
+    @Autowired
+    private AnswerService answerService;
 
     @Autowired
     private QuestionService questionService;
@@ -32,8 +37,8 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
-        Question question = questionService.findById(id);
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionService.findById(id));;
+        model.addAttribute("answer", questionService.getAnswer(id));
         return "/qna/show";
     }
 
@@ -73,10 +78,27 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PostMapping("/{questionId}/answers/{id}")
-    public String addAnswer(@PathVariable Long questionId,@PathVariable Long id){
+    @PostMapping("/{id}/answer")
+    public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session){
+        User user = userService.findSessionUser(session);
+        if(user == null){
+            return "redirect:/users/loginForm";
+        }
+        answer.setWriter(user);
+        answer.setQuestion(questionService.findById(id));
+        answer.setId(null);
+        answerService.save(answer);
+        return "redirect:/question/"+id.toString();
+    }
 
-        return "redirect:/question/"+questionId;
+    @DeleteMapping("/{id}/answer/{answerId}")
+    public String deleteAnswer(@PathVariable Long id,@PathVariable Long answerId, HttpSession session){
+        User user = userService.findSessionUser(session);
+        if(user == null){
+            return "redirect:/users/loginForm";
+        }
+        answerService.delete(answerId,user);
+        return "redirect:/question/"+id.toString();
     }
 
 }

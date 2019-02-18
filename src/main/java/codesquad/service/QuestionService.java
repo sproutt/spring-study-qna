@@ -2,12 +2,16 @@ package codesquad.service;
 
 import codesquad.exception.NullQuestionException;
 import codesquad.exception.WrongUserException;
+import codesquad.model.answer.Answer;
+import codesquad.model.answer.AnswerRepository;
 import codesquad.model.question.Question;
 import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
 import codesquad.utils.QuestionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class QuestionService {
@@ -46,6 +50,11 @@ public class QuestionService {
             throw new WrongUserException(user.getId());
         }
         return true;
+    }
+
+    public List<Answer> getAnswer(Long id){
+        Question question = questionRepository.findById(id).get();
+        return question.getAnswers();
     }
 
 }
