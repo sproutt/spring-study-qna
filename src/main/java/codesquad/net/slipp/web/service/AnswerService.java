@@ -3,14 +3,11 @@ package codesquad.net.slipp.web.service;
 import codesquad.net.slipp.web.domain.*;
 import codesquad.net.slipp.web.exception.AnswerNotFoundException;
 import codesquad.net.slipp.web.exception.QuestionNotFoundException;
-import codesquad.net.slipp.web.exception.SessionNotFoundException;
-import codesquad.net.slipp.web.exception.SessionNotMatchException;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Component
 public class AnswerService {

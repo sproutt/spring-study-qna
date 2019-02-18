@@ -74,7 +74,7 @@ public class QuestionService {
         Question question = this.findById(id);
         question.setDeleted(true);
         question.getAnswers().stream().forEach(
-                answer -> answerService.delete(answer)
+                answer -> answer.setDeleted(true)
         );
         questionRepository.save(question);
     }
