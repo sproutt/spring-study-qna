@@ -18,10 +18,10 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public Answer save(HttpSession session, String content, long questionId) {
+    public void save(HttpSession session, String content, long questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(()-> new QuestionNotFoundException(questionId));
         Answer answer = new Answer(question, SessionUtil.getSessionUser(session), content);
-        return answerRepository.save(answer);
+        answerRepository.save(answer);
     }
 
     public void delete(HttpSession session, long id) {
