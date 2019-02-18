@@ -27,15 +27,21 @@ public class Answer {
     @Lob
     private String contents;
 
-    private LocalDateTime creatDate = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
 
     private boolean deleted = false;
 
-    public String getFormattedCreatDate() {
-        if (creatDate == null) {
+    public Answer(){}
+
+    public Answer(String contents) {
+        this.contents = contents;
+    }
+
+    public String getFormattedCreateDate() {
+        if (createDate == null) {
             return "";
         }
-        return creatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
 }

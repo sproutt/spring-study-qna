@@ -19,6 +19,7 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
+    /*
     @PostMapping("")
     public String register(@PathVariable Long questionId, Answer answer, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
@@ -28,7 +29,7 @@ public class AnswerController {
         answerService.register(questionId, answer, httpSession);
         return "redirect:/questions/" + questionId;
     }
-
+*/
     @DeleteMapping("")
     public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession)) {
