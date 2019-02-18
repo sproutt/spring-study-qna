@@ -1,7 +1,9 @@
 package codesquad.net.slipp.web.controller;
 
+import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.domain.Question;
 import codesquad.net.slipp.web.domain.QuestionRepository;
+import codesquad.net.slipp.web.service.AnswerService;
 import codesquad.net.slipp.web.service.QuestionService;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,15 +29,16 @@ public class QuestionController {
 
     @PostMapping("")
     public String createQuestion(Question question, HttpSession session) {
-        question.setWriter(SessionUtil.getSessionUser(session));
-        questionService.save(question);
+        questionService.save(question, SessionUtil.getSessionUser(session));
 
         return "redirect:/questions";
     }
 
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
-        SessionUtil.isLogin(session);
+        if (!SessionUtil.isLogin(session)) {
+            return "redirect:/users/login";
+        }
 
         return "/qna/form";
     }
@@ -49,21 +52,21 @@ public class QuestionController {
 
     @GetMapping("/{id}/form")
     public String getQuestionUpdateForm(@PathVariable long id, Model model, HttpSession session) {
-        model.addAttribute("question", questionService.isSessionMatch(session, id));
+        model.addAttribute("question", questionService.getAuthedQuestion(session, id));
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/{id}")
     public String updateQuestionDetail(@PathVariable long id, Question updatedQuestion, HttpSession session) {
-        questionService.update(questionService.isSessionMatch(session, id), updatedQuestion);
+        questionService.update(questionService.getAuthedQuestion(session, id), updatedQuestion);
 
         return "redirect:/questions";
     }
 
     @DeleteMapping("/{id}")
-    public String get(@PathVariable long id) {
-        questionService.deleteById(id);
+    public String delete(@PathVariable long id, HttpSession session) {
+        questionService.delete(session, id);
 
         return "redirect:/questions";
     }

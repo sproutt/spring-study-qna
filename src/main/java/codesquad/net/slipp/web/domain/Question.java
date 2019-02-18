@@ -1,8 +1,14 @@
 package codesquad.net.slipp.web.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Question {
 
     @Id
@@ -13,55 +19,24 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    @Column(nullable = false, columnDefinition = "VARCHAR(50)")
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
+
+    @Column(nullable = false, length = 200)
     private String title;
 
-    @Column(columnDefinition = "BLOB")
+    @Lob
     private String contents;
 
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public String toString() {
-        return "Question{" +
-                "writer : " + writer +
-                ", title : " + title +
-                ", contents :" + contents +
-                " }";
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @Column(nullable = false)
+    private Boolean deleted = false;
 
     public void update(Question modifiedQuestion) {
         this.title = modifiedQuestion.title;
         this.contents = modifiedQuestion.contents;
+    }
 
+    public int getSize(){
+        return answers.size();
     }
 }

@@ -1,36 +1,60 @@
 package codesquad.net.slipp.web.utils;
 
 
+import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotMatchException;
+import codesquad.net.slipp.web.service.UserService;
 
 import javax.servlet.http.HttpSession;
 
 public class SessionUtil {
 
-    private static String SESSION_KEY = "userSession";
+    private static final String SESSION_KEY = "userSession";
 
-    public static void isLogin(HttpSession session) {
-        Object sessionUser = session.getAttribute(SESSION_KEY);
-        if (sessionUser == null) {
+    public static boolean isLogin(HttpSession session) {
+        if (session.getAttribute(SESSION_KEY) == null) {
 
-            throw new SessionNotFoundException();
+            return false;
         }
+
+        return true;
     }
 
     public static User getSessionUser(HttpSession session) {
-        isLogin(session);
+        if(!isLogin(session)){
+            throw new SessionNotFoundException();
+        }
 
         return (User) session.getAttribute(SESSION_KEY);
     }
 
-    public static boolean isSessionMatch(HttpSession session, User user) {
-        User sessiondUser = getSessionUser(session);
-        if (!sessiondUser.match(user)) {
+    public static Long getSessionUserId(HttpSession session) {
 
+        return getSessionUser(session).getId();
+    }
+
+    public static boolean isSessionMatch(HttpSession session, User user) {
+        if (!getSessionUser(session).match(user)) {
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public static User getAuthUser(HttpSession session, User user){
+        if(isSessionMatch(session, user)){
             throw new SessionNotMatchException();
         }
-        return true;
+
+        return getSessionUser(session);
+    }
+
+    public static void checkAuth(HttpSession session, User user){
+        if(isSessionMatch(session, user)){
+            throw new SessionNotMatchException();
+        }
     }
 }

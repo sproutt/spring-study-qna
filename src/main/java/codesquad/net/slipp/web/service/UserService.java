@@ -3,6 +3,7 @@ package codesquad.net.slipp.web.service;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.exception.UserNotFoundException;
+import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class UserService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     public boolean checkIdPassword(User user) {
         String userId = user.getUserId();
@@ -19,6 +20,14 @@ public class UserService {
         );
 
         return modelUser.match(user.getPassword());
+    }
+
+    public boolean checkIdPassword(String userId, String password) {
+        User modelUser = userRepository.findByUserId(userId).orElseThrow(
+                () -> new UserNotFoundException(userId)
+        );
+
+        return modelUser.match(password);
     }
 
     public User findByUserId(String userId) {
