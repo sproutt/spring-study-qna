@@ -9,6 +9,6 @@ public class EntranceController {
     @GetMapping
     public String getEntrance() {
 
-        return "/qna/show";
+        return "redirect:/questions";
     }
 }

@@ -6,31 +6,26 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 public class User {
 
     @Id
     @GeneratedValue
-    @Getter
     private Long id;
 
     @Column(nullable = false)
-    @Lob
-    @Getter @Setter
     private String userId;
 
     @Column(nullable = false)
-    @Lob
-    @Getter @Setter
     private String password;
 
     @Column(nullable = false)
     @Lob
-    @Getter @Setter
     private String name;
 
     @Column(nullable = false)
     @Lob
-    @Getter @Setter
     private String email;
 
     public boolean match(User user) {

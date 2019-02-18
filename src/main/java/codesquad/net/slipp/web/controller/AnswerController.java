@@ -21,12 +21,12 @@ public class AnswerController {
     private AnswerService answerService;
 
     @PostMapping
-    public String create(@PathVariable long questionId, HttpSession session, Answer answer) {
+    public String create(@PathVariable long questionId, HttpSession session, String content) {
         if(!SessionUtil.isLogin(session)){
 
             return "redirect:/users/login";
         }
-        answerService.save(session, answer, questionId);
+        answerService.save(session, content, questionId);
 
         return "redirect:/questions/{questionId}";
     }

@@ -24,7 +24,7 @@ public class QuestionController {
     public String getQuestionList(Model model) {
         model.addAttribute("questions", questionService.findAll());
 
-        return "redirect:/";
+        return "/qna/show";
     }
 
     @PostMapping("")

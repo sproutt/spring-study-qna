@@ -1,9 +1,8 @@
 package codesquad.net.slipp.web.service;
 
-import codesquad.net.slipp.web.domain.Answer;
-import codesquad.net.slipp.web.domain.AnswerRepository;
-import codesquad.net.slipp.web.domain.Question;
+import codesquad.net.slipp.web.domain.*;
 import codesquad.net.slipp.web.exception.AnswerNotFoundException;
+import codesquad.net.slipp.web.exception.QuestionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotMatchException;
 import codesquad.net.slipp.web.utils.SessionUtil;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpSession;
+import java.util.Optional;
 
 @Component
 public class AnswerService {
@@ -19,15 +19,16 @@ public class AnswerService {
     private AnswerRepository answerRepository;
 
     @Autowired
-    private QuestionService questionService;
+    private QuestionRepository questionRepository;
 
-    public void save(HttpSession session, Answer answer, long questionId) {
-        answer.setInfo(questionService.findById(questionId), SessionUtil.getSessionUser(session));
+    public void save(HttpSession session, String content, long questionId) {
+        Question question = questionRepository.findById(questionId).orElseThrow(()-> new QuestionNotFoundException(questionId));
+        Answer answer = new Answer(question, SessionUtil.getSessionUser(session), content);
         answerRepository.save(answer);
     }
 
     public void delete(HttpSession session, long id) {
-        SessionUtil.checkAuth(session, this.findById(id).getWriter());
+        SessionUtil.checkAuth(session, getWriter(id));
         Answer answer = this.findById(id);
         answer.setDeleted(true);
     }
@@ -37,5 +38,8 @@ public class AnswerService {
         return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
+    public User getWriter(long id){
+        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id)).getWriter();
+    }
 
 }

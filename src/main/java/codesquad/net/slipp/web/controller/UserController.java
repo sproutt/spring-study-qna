@@ -73,12 +73,11 @@ public class UserController {
     @GetMapping("/updateForm")
     public String updateForm(HttpSession session) {
 
-        return "redirect:/users/" + SessionUtil.getSessionUserId(session) + "/form";
-    }
+        return new StringBuffer("redirect:/users/").append(SessionUtil.getSessionUserId(session)).append("/form").toString();
+}
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
-        SessionUtil.getAuthUser(session, userService.findById(id));
         if (!userService.checkIdPassword(updatedUser)) {
 
             return "/user/error";
