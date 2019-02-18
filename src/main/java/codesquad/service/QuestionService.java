@@ -50,13 +50,13 @@ public class QuestionService {
             isDeleted = true;
         }
         System.out.println("*@*#$*@#*$*@#" + isDeleted);
-        System.out.println("*@*#$*@#*$*@#" + questionToDelete.getDeleted());
+        System.out.println("*@*#$*@#*$*@#" + questionToDelete.isDeleted());
         if (isDeleted) {
             questionToDelete.getAnswers().stream()
                     .forEach(answer -> answer.setDeleted(true));
-            questionToDelete.setDeleted();
+            questionToDelete.setDeleted(true);
             questionRepository.save(questionToDelete);
-            System.out.println("*@*#$*@#*$*@#" + questionToDelete.getDeleted());
+            System.out.println("*@*#$*@#*$*@#" + questionToDelete.isDeleted());
         } else {
             throw new CannotDeleteQuestionException();
         }

@@ -45,7 +45,7 @@ public class AnswerService {
         }
         answer.setDeleted(true);
         answerRepository.save(answer);
-        return getAnswerById(id).getDeleted();
+        return getAnswerById(id).isDeleted();
     }
 
 }
