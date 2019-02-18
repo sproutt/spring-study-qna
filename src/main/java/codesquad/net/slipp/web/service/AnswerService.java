@@ -36,7 +36,7 @@ public class AnswerService {
     }
 
     public User getWriter(long id){
-        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id)).getWriter();
+        return answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
 }
