@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
+@RestController
 @RequestMapping("/api")
 public class ApiAnswerController {
 
