@@ -1,37 +1,60 @@
 package codesquad.controller;
 
 import codesquad.model.Question;
+import codesquad.repository.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class QuestionController {
-    public List<Question> questions = new ArrayList<>();
+
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
     public String questions(Question question) {
         question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "/qna/list";
     }
 
-    @GetMapping("/questions/{index}")
-    public String accessQuestion(@PathVariable int index, Model model) {
-        model.addAttribute("question", questions.get(index));
+    @GetMapping("/questions/{id}")
+    public String accessQuestion(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
         return "/qna/show";
+    }
+
+    @GetMapping("/questions/{id}/form")
+    public String modifyQuestion(@PathVariable Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
+
+        return "/qna/updateForm";
+    }
+
+    @PutMapping("/questions/{id}/update")
+    public String updateQuestion(@PathVariable Long id, Question updatedQuestion) {
+        Question question = questionRepository.findById(id).get();
+        question.update(updatedQuestion);
+        question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
+        questionRepository.save(question);
+
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/questions/{id}/delete")
+    public String deleteQuestion(@PathVariable Long id) {
+        questionRepository.delete(questionRepository.findById(id).get());
+        return "redirect:/";
     }
 }

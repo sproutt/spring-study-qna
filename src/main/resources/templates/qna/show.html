@@ -30,10 +30,10 @@
                     <div class="article-util">
                         <ul class="article-util-list">
                             <li>
-                                <a class="link-modify-article" href="/qna/form">수정</a>
+                                <a class="link-modify-article" href="/questions/{{id}}/form">수정</a>
                             </li>
                             <li>
-                                <form class="form-delete" action="/questions/423" method="POST">
+                                <form class="form-delete" action="/questions/{{id}}/delete" method="POST">
                                     <input type="hidden" name="_method" value="DELETE">
                                     <button class="link-delete-article" type="submit">삭제</button>
                                 </form>
@@ -74,8 +74,7 @@
                                                href="/questions/413/answers/1405/form">수정</a>
                                         </li>
                                         <li>
-                                            <form class="delete-answer-form" action="/questions/413/answers/1405"
-                                                  method="POST">
+                                            <form class="delete-answer-form" action="/questions/413/answers/1405" method="POST">
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="delete-answer-button">삭제</button>
                                             </form>

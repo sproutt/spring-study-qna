@@ -1,55 +1,54 @@
 package codesquad.controller;
 
 import codesquad.model.User;
+import codesquad.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
-    private List<User> users = new ArrayList<>();
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping("")
     public String create(User user) {
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
 
     @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "/users/list";
     }
 
 
-    @GetMapping("/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        users.stream().filter(user -> user.isSameUser(userId))
-                .forEach(user -> model.addAttribute("user", user));
+    @GetMapping("/{id}")
+    public ModelAndView profile(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("users/profile");
+        modelAndView.addObject("user", userRepository.findById(id).get());
 
-        return "users/profile";
+        return modelAndView;
     }
 
-    @GetMapping("/{userId}/form")
-    public String modifyProfile(@PathVariable String userId, Model model) {
-        users.stream().filter(user -> user.isSameUser(userId))
-                .forEach(user -> model.addAttribute("user", user));
+    @GetMapping("/{id}/form")
+    public String modifyProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).get());
 
         return "/user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateForm(@PathVariable String userId, User updatedUser) {
-        users.stream().filter(user -> user.isSameUser(userId))
-                .forEach(user -> users.set(users.indexOf(user), updatedUser));
+    @PutMapping("/{id}/update")
+    public String updateForm(@PathVariable Long id, User updatedUser) {
+        User user = userRepository.findById(id).get();
+        user.update(updatedUser);
+        userRepository.save(user);
 
         return "redirect:/users";
     }
