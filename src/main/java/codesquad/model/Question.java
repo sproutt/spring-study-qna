@@ -1,5 +1,7 @@
 package codesquad.model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -8,6 +10,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
+@Getter
+@Setter
 public class Question {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,20 +31,6 @@ public class Question {
     @ColumnDefault(value = "false")
     private boolean deleted;
 
-    public String getFormattedCreateDate() {
-        if (createDate == null) {
-            return "";
-        }
-        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted() {
-        this.deleted = true;
-    }
 
     @Column(nullable = false, length = 40)
     private String title;
@@ -48,36 +38,11 @@ public class Question {
     @Lob
     private String contents;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
+    public String getFormattedCreateDate() {
+        if (createDate == null) {
+            return "";
+        }
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public void update(Question updateQuestion, User writer) {
@@ -97,23 +62,4 @@ public class Question {
         this.answers.add(answer);
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public boolean getDeleted() {
-        return isDeleted();
-    }
 }

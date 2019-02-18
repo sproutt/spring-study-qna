@@ -1,6 +1,8 @@
 package codesquad.model;
 
 import codesquad.dto.AnswerDto;
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -9,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 @Entity
+@Getter
+@Setter
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,61 +53,12 @@ public class Answer {
         this.createDate = LocalDateTime.now();
     }
 
-    public boolean getDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
-    }
-
     public String getFormattedCreateDate() {
         if (createDate == null) {
             return "";
         }
         return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(LocalDateTime createDate) {
-        this.createDate = createDate;
-    }
-
 
     @Override
     public boolean equals(Object o) {
