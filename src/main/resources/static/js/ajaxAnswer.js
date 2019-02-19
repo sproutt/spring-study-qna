@@ -94,6 +94,8 @@ function deleteAnswerHandler(event){
     })
 }
 function deleteAnswer({a}){
-    console.log("삭제");
-    console.log(a);
+    const query = `.article[id="answer-"${answerid}]`;
+    console.log(query);
+    const target = $(query);
+    target.parentNode.removeChild(target);
 }
