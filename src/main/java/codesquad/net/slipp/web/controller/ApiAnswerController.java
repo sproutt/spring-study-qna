@@ -1,11 +1,9 @@
 package codesquad.net.slipp.web.controller;
 
-import codesquad.net.slipp.web.domain.*;
+import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.dto.AnswerDto;
 import codesquad.net.slipp.web.result.Result;
 import codesquad.net.slipp.web.service.AnswerService;
-import codesquad.net.slipp.web.service.QuestionService;
-import codesquad.net.slipp.web.utils.SessionUtil;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
