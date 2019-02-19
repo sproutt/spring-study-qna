@@ -43,7 +43,7 @@ public class SessionUtil {
     }
 
     public static User getAuthUser(HttpSession session, User user){
-        if(isSessionMatch(session, user)){
+        if(!isSessionMatch(session, user)){
             throw new SessionNotMatchException();
         }
 
@@ -51,7 +51,7 @@ public class SessionUtil {
     }
 
     public static void checkAuth(HttpSession session, User user){
-        if(isSessionMatch(session, user)){
+        if(!isSessionMatch(session, user)){
             throw new SessionNotMatchException();
         }
     }

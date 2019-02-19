@@ -10,7 +10,7 @@ public interface AnswerRepository extends CrudRepository<Answer, Long> {
 
     List<Answer> findByQuestionId(long questionId);
 
-    @Query("Select answer from Answer answer where answer.id = ?1")
+    @Query("Select writer from Answer answer where answer.id = ?1")
     Optional<User> findWriterById(long id);
 }
 

@@ -1,0 +1,99 @@
+const $ = function (selector) {
+    return document.querySelector(selector);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    initEvents();
+})
+
+function initEvents() {
+    $(".qna-comment-slipp-articles").addEventListener("click", event => {
+        if(event.target.className==="delete-answer-button"){
+
+            console.log("삭제시작");
+            deleteAnswerHandler(event);
+        }
+        if(event.target.className==="btn btn-success pull-right"){
+            console.log("등록시작");
+
+            registerAnswerHandler(event);
+        }
+        return;
+    });
+}
+
+function fetchManager({url, method, body, headers, callback}) {
+    fetch(url, {method, body, headers, credentials: "same-origin"})
+        .then((response) => {
+            var data = response.json();
+            console.log(data);
+            return data
+        }).then((result) => {
+        callback(result)
+    })
+}
+
+function registerAnswerHandler(event) {
+    event.preventDefault();
+    textbox = $(".submit-write textarea");
+    const contents = textbox.value;
+    textbox.value = "";
+    let url = $(".submit-write").getAttribute("action");
+    fetchManager({
+        url,
+        method: 'POST',
+        headers: {'content-type': 'application/json'},
+        body: JSON.stringify({contents}),
+        callback: appendAnswer
+    })
+}
+
+
+function appendAnswer({id, question, writer, contents, createYearToSecond}) {
+    const html = `
+        <article class="article">
+            <div class="article-header">
+                <div class="article-header-thumb">
+                    <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
+                </div>
+                <div class="article-header-text">
+                    <a href="#" class="article-author-name">${writer.name}</a>
+                    <div class="article-header-time">${createYearToSecond}</div>
+                </div>
+            </div>
+            <div class="article-doc comment-doc">
+                <p>${contents}</p>
+            </div>
+            <div class="article-util">
+            <ul class="article-util-list">
+                <li>
+                    <a class="link-modify-article" href="/api/questions/${question.id}/answers/${id}">수정</a>
+                </li>
+                <li>
+                    <form class="delete-answer-form" action="/api/questions/${question.id}/answers/${id}" method="POST">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button type="submit" class="delete-answer-button">삭제</button>
+                    </form>
+                </li>
+            </ul>
+            </div>
+        </article> `
+
+    $(".qna-comment-count strong").innerText = `${question.size}`;
+    $(".qna-comment-slipp-articles").insertAdjacentHTML("afterbegin", html);
+}
+
+function deleteAnswerHandler(event){
+    event.preventDefault();
+    let url = $(".delete-answer-button").parentElement.getAttribute("action");
+    fetchManager({
+        url,
+        method: 'DELETE',
+        headers: {'content-type': 'application/json'},
+        callback: deleteAnswer
+    })
+}
+function deleteAnswer({a}){
+    console.log("삭제");
+    console.log(a);
+}

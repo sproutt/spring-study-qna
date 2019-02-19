@@ -1,9 +1,12 @@
 package codesquad.net.slipp.web.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
@@ -24,19 +27,28 @@ public class Answer {
 
     @Column(nullable = false)
     @Lob
-    private String content;
+    private String contents;
 
     @Column(nullable = false)
     private Boolean deleted = false;
 
-    public Answer(Question question, User writer, String content) {
+    @Column(nullable = false)
+    private LocalDateTime createTime = LocalDateTime.now();
+
+    public Answer(){
+
+    }
+    public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
-        this.content = content;
+        this.contents = contents;
     }
 
     public boolean match(Answer answer) {
         return this.id == answer.id;
     }
 
+    public String getCreateYearToSecond(){
+        return createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
 }

@@ -20,6 +20,13 @@ public class ApiAnswerController {
     @PostMapping("/questions/{questionId}/answers")
     public Answer create(@PathVariable long questionId, @RequestBody AnswerDto answerDto, HttpSession session){
 
-        return answerService.save(session, answerDto.getContent(), questionId);
+        return answerService.save(session, answerDto.getContents(), questionId);
+    }
+
+    @DeleteMapping("/questions/{questionId}/answers/{answerId}")
+    public String deleteAnswer(@PathVariable long questionId , @PathVariable long answerId, HttpSession session){
+
+        answerService.delete(session,answerId);
+        return "{a : 성공?}";
     }
 }

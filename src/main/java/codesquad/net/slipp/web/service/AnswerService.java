@@ -18,17 +18,19 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public Answer save(HttpSession session, String content, long questionId) {
+    public Answer save(HttpSession session, String contents, long questionId) {
         Question question = questionRepository.findById(questionId).orElseThrow(()-> new QuestionNotFoundException(questionId));
-        Answer answer = new Answer(question, SessionUtil.getSessionUser(session), content);
-        answerRepository.save(answer);
-        return answer;
+        Answer answer = new Answer(question, SessionUtil.getSessionUser(session), contents);
+
+        return answerRepository.save(answer);
     }
 
     public void delete(HttpSession session, long id) {
-        SessionUtil.checkAuth(session, getWriter(id));
+        SessionUtil.checkAuth(session, this.getWriter(id));
         Answer answer = this.findById(id);
         answer.setDeleted(true);
+        answerRepository.save(answer);
+        System.out.println("삭제성공");
     }
 
     public Answer findById(long id) {
@@ -37,6 +39,8 @@ public class AnswerService {
     }
 
     public User getWriter(long id){
+        System.out.println(answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id)));
+
         return answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 

@@ -50,6 +50,9 @@
                         <div class="qna-comment-slipp-articles">
 
                             {{#question.answers}}
+                            {{#deleted}}
+                            {{/deleted}}
+                            {{^deleted}}
                             <article class="article" id="answer-1406">
                                 <div class="article-header">
                                     <div class="article-header-thumb">
@@ -59,12 +62,12 @@
                                     <div class="article-header-text">
                                         <a href="/users/1/자바지기" class="article-author-name">{{writer.userId}}</a>
                                         <a href="#answer-1434" class="article-header-time" title="퍼머링크">
-                                            2016-01-12 14:06
+                                            {{createYearToSecond}}
                                         </a>
                                     </div>
                                 </div>
                                 <div class="article-doc comment-doc">
-                                    <p>{{content}}</p>
+                                    <p>{{contents}}</p>
                                 </div>
                                 <div class="article-util">
                                     <ul class="article-util-list">
@@ -73,7 +76,7 @@
                                                href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
                                         </li>
                                         <li>
-                                            <form class="form-delete" action="/questions/{{question.id}}/answers/{{id}}"
+                                            <form class="form-delete" action="/api/questions/{{question.id}}/answers/{{id}}"
                                                   method="POST">
                                                 <input type="hidden" name="_method" value="DELETE">
                                                 <button type="submit" class="delete-answer-button">삭제</button>
@@ -82,11 +85,12 @@
                                     </ul>
                                 </div>
                             </article>
+                            {{/deleted}}
                             {{/question.answers}}
 
-                            <form class="submit-write" method="post" action="{{question.id}}/answers">
+                            <form class="submit-write" method="post" action="/api/questions/{{question.id}}/answers">
                                 <div class="form-group" style="padding:14px;">
-                                    <textarea class="form-control" name="content" placeholder="Update your status"></textarea>
+                                    <textarea class="form-control" name="contents" placeholder="Update your status"></textarea>
                                 </div>
                                 <button class="btn btn-success pull-right" type="submit">답변하기</button>
                                 <div class="clearfix"/>
@@ -129,7 +133,7 @@
         </div>
     </article>
 </script>
-<script type="text/javascript" src="js/ajaxAnswer.js"></script>
+<script type="text/javascript" src="/js/ajaxAnswer.js"></script>
 
 <!-- script references -->
 {{> base/footer}}
