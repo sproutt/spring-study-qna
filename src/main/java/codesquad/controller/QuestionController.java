@@ -49,7 +49,7 @@ public class QuestionController {
         question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
         questionRepository.save(question);
 
-        return "redirect:/";
+        return "redirect:/questions/{id}";
     }
 
     @DeleteMapping("/questions/{id}/delete")
