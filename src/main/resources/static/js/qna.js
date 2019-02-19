@@ -6,15 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
     initEvents();
 })
 
-/*
-function initEvents() {
-    const answerBtn = $(".submit-write .btn");
-    if(answerBtn === null) {
-        return;
-    }
-    answerBtn.addEventListener("click", registerAnswerHandler);
-}
-*/
 function initEvents() {
     const answerBtn = $(".submit-write .btn");
     const answer = $(".qna-comment-slipp-articles");
@@ -22,8 +13,8 @@ function initEvents() {
     answer.addEventListener("click", deleteAnswerHandler);
 }
 
-function fetchManager({ url, method, body, headers, callback }) {
-    fetch(url, {method,body,headers,credentials: "same-origin"})
+function fetchManager({url, method, body, headers, callback}) {
+    fetch(url, {method, body, headers, credentials: "same-origin"})
         .then((response) => {
             return response.json()
         }).then((result) => {
@@ -40,7 +31,7 @@ function registerAnswerHandler(evt) {
     fetchManager({
         url,
         method: 'POST',
-        headers: { 'content-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         body: JSON.stringify({contents}),
         callback: appendAnswer
     })
@@ -49,7 +40,7 @@ function registerAnswerHandler(evt) {
 
 function appendAnswer({id, contents, question, writer, formattedCreateDate}) {
     const answerHtml = `
-        <article class="article" id="${id}">
+        <article class="answer" data-id="${id}">
             <div class="article-header">
                 <div class="article-header-thumb">
                     <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -78,30 +69,28 @@ function appendAnswer({id, contents, question, writer, formattedCreateDate}) {
         </article> `
 
 
-    $(".qna-comment-count strong").innerText=`${question.answersCount}`;
+    $(".qna-comment-count strong").innerText = `${question.answersCount}`;
     $(".qna-comment-slipp-articles").insertAdjacentHTML("beforeend", answerHtml);
 }
 
-function deleteAnswer({answerId}) {
-    const selector = `.article[id='${answerId}']`;
+function deleteAnswer(answerId) {
+    const selector = ".answer[data-id='" + answerId + "']";
     const target = $(selector);
     target.parentNode.removeChild(target);
 
     const count = parseInt($(".qna-comment-count strong").innerText) - 1;
-    $(".qna-comment-count strong").innerText=count;
+    $(".qna-comment-count strong").innerText = count;
 }
 
 function deleteAnswerHandler(evt) {
-    if(evt.target.className !== "delete-answer-button") return;
+    if (evt.target.className !== "delete-answer-button") return;
     evt.preventDefault();
     const url = '/api' + evt.target.name;
-    const id = url.replace(/.+\/(\d+)$/, "$1");
 
     fetchManager({
         url,
         method: 'DELETE',
-        headers: { 'content-type': 'application/json'},
-        body: JSON.stringify({id}),
+        headers: {'content-type': 'application/json'},
         callback: deleteAnswer
     })
 }

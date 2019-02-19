@@ -25,12 +25,12 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("{id}")
-    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession httpSession) {
+    public Long delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession httpSession) {
         if (!HttpSessionUtils.isLogin(httpSession) && !answerService.match(id, httpSession)) {
             return null;
         }
 
         answerService.delete(questionId, id);
-        return "{\"answerId\":\"" + id +"\"}";
+        return id;
     }
 }
