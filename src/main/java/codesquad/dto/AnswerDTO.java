@@ -1,10 +1,10 @@
 package codesquad.dto;
 
-public class AnswerDto {
+public class AnswerDTO {
 
     private String contents;
 
-    public AnswerDto() {
+    public AnswerDTO() {
 
     }
 

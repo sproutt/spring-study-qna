@@ -1,6 +1,6 @@
 package codesquad.model;
 
-import codesquad.dto.AnswerDto;
+import codesquad.dto.AnswerDTO;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
@@ -46,7 +46,7 @@ public class Answer {
         this.createDate = LocalDateTime.now();
     }
 
-    public Answer(Question question, User writer, AnswerDto answerDto) {
+    public Answer(Question question, User writer, AnswerDTO answerDto) {
         this.question = question;
         this.writer = writer;
         this.contents = answerDto.getContents();

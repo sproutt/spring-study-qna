@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import codesquad.dto.AnswerDto;
+import codesquad.dto.AnswerDTO;
 import codesquad.exception.UserNotLoginException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
@@ -24,13 +24,13 @@ public class ApiAnswerController {
     private AnswerService answerService;
 
     @PostMapping
-    public Answer create(@PathVariable Long questionId, AnswerDto answerDto, HttpSession session) {
+    public Answer create(@PathVariable Long questionId, AnswerDTO answerDTO, HttpSession session) {
         if (!SessionChecker.isLoggedIn(session)) {
             throw new UserNotLoginException();
         }
         User writer = SessionChecker.loggedinUser(session);
         Question question = questionService.getQuestionById(questionId);
-        Answer answer = new Answer(question, writer, answerDto.getContents());
+        Answer answer = new Answer(question, writer, answerDTO.getContents());
         question.addAnswer(answer);
         return answerService.save(answer);
 
