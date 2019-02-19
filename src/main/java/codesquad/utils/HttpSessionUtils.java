@@ -8,7 +8,6 @@ public class HttpSessionUtils {
     private static final String USER_SESSION_KEY = "sessionedUser";
 
     public static boolean isSessionedUser(HttpSession session) {
-
         if (session.getAttribute(USER_SESSION_KEY) == null) {
             return false;
         }
@@ -20,15 +19,15 @@ public class HttpSessionUtils {
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
 
-    public static String checkSession(Long id, HttpSession session) {
-        if (HttpSessionUtils.isSessionedUser(session)) {
-            return "/users/loginForm";
+    public static boolean checkSessionUser(Long id, HttpSession session) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
+            return false;
         }
 
-        if (!getSessionedUser(session).isSameUser(id)) {
-            throw new IllegalStateException("wrong access!");
+        if (!HttpSessionUtils.getSessionedUser(session).isSameUser(id)) {
+            throw new IllegalStateException("Wrong access!");
         }
 
-        return "";
+        return true;
     }
 }
