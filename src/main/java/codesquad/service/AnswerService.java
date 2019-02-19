@@ -52,7 +52,7 @@ public class AnswerService {
         Question question = getQuestionById(questionId);
         Answer answer = new Answer(question, writer, answerDTO.getContents());
         question.addAnswer(answer);
-        RestResponse.success(questionId);
+        answerRepository.save(answer);
     }
 
     public boolean delete(HttpSession session, Long questionId, Long id) {

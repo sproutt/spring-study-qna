@@ -36,24 +36,24 @@ public class QuestionService {
     }
 
     public void delete(User sessionedUser, Long id) {
-        Question questionToDelete = getQuestionById(id);
+        Question question = getQuestionById(id);
         boolean isDeleted = false;
-        if (questionToDelete.getAnswers().size() == 0) {
+        if (question.getAnswers().size() == 0) {
             isDeleted = true;
         }
-        if (questionToDelete.isEqualWriter(sessionedUser)) {
+        if (question.isEqualWriter(sessionedUser)) {
             isDeleted = true;
         }
-        if (questionToDelete.getAnswers().stream()
+        if (question.getAnswers().stream()
                 .allMatch(answer -> answer.getWriter()
-                        .isSameUser(questionToDelete.getWriter()))) {
+                        .isSameUser(question.getWriter()))) {
             isDeleted = true;
         }
         if (isDeleted) {
-            questionToDelete.getAnswers().stream()
+            question.getAnswers().stream()
                     .forEach(answer -> answer.setDeleted(true));
-            questionToDelete.setDeleted(true);
-            questionRepository.save(questionToDelete);
+            question.setDeleted(true);
+            questionRepository.save(question);
         } else {
             throw new CannotDeleteQuestionException();
         }
