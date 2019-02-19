@@ -16,11 +16,21 @@ public class ApiAnswerController {
     private AnswerService answerService;
 
     @PostMapping("")
-    public Answer create(@PathVariable Long questionId, Answer answer, HttpSession session) {
+    public Answer create(@PathVariable Long questionId, @RequestBody Answer answer, HttpSession session) {
         if (!HttpSessionUtils.isLogin(session)) {
             return null;
         }
 
         return answerService.register(questionId, answer, session);
+    }
+
+    @DeleteMapping("{id}")
+    public String delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLogin(httpSession) && !answerService.match(id, httpSession)) {
+            return null;
+        }
+
+        answerService.delete(questionId, id);
+        return "{\"answerId\":\"" + id +"\"}";
     }
 }

@@ -31,12 +31,6 @@ public class Answer {
 
     private boolean deleted = false;
 
-    public Answer(){}
-
-    public Answer(String contents) {
-        this.contents = contents;
-    }
-
     public String getFormattedCreateDate() {
         if (createDate == null) {
             return "";

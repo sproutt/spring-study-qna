@@ -1,5 +1,6 @@
 package codesquad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Question {
     private User writer;
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     @Column(nullable = false)
@@ -61,4 +63,5 @@ public class Question {
         this.getAnswers().remove(answer);
         answer.setQuestion(null);
     }
+
 }
