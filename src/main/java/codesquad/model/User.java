@@ -33,4 +33,13 @@ public class User {
         this.name = updatedUser.getName();
         this.email = updatedUser.getEmail();
     }
+
+    public boolean isCorrectPassword(String password) {
+
+        if (this.password.equals(password)) {
+            return true;
+        }
+
+        return false;
+    }
 }
