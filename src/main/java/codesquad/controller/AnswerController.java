@@ -14,9 +14,6 @@ import javax.servlet.http.HttpSession;
 public class AnswerController {
 
     @Autowired
-    QuestionService questionService;
-
-    @Autowired
     AnswerService answerService;
 
     @PostMapping
