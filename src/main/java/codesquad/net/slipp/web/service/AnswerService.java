@@ -30,7 +30,6 @@ public class AnswerService {
         Answer answer = this.findById(id);
         answer.setDeleted(true);
         answerRepository.save(answer);
-        System.out.println("삭제성공");
     }
 
     public Answer findById(long id) {
