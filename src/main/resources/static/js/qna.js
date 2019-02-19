@@ -47,7 +47,6 @@ function registerAnswerHandler(evt) {
         url: '/api/questions/' + questionId + '/answers',
         method: 'POST',
         headers: {'content-type': 'application/json'},
-        body: JSON.stringify({contents}),
         callback: appendAnswer
     })
 
