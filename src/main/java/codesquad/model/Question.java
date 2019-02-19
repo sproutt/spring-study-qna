@@ -62,4 +62,17 @@ public class Question {
         this.answers.add(answer);
     }
 
+    public boolean isAllSameUser() {
+        if (this.getAnswers().stream()
+                .allMatch(answer -> answer.getWriter()
+                        .isSameUser(this.getWriter()))) {
+            return true;
+        } else
+            return false;
+    }
+    public void setDeletedAnswer(){
+        this.getAnswers().stream()
+                .forEach(answer->answer.setDeleted(true));
+        this.setDeleted(true);
+    }
 }

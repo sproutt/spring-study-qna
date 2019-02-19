@@ -3,16 +3,13 @@ package codesquad.service;
 import codesquad.exception.CannotDeleteQuestionException;
 import codesquad.exception.QuestionNotExistException;
 import codesquad.exception.UserNotEqualException;
-import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.repository.AnswerRepository;
 import codesquad.repository.QuestionRepository;
-import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
 
 @Service
 public class QuestionService {
@@ -44,15 +41,11 @@ public class QuestionService {
         if (question.isEqualWriter(sessionedUser)) {
             isDeleted = true;
         }
-        if (question.getAnswers().stream()
-                .allMatch(answer -> answer.getWriter()
-                        .isSameUser(question.getWriter()))) {
+        if (question.isAllSameUser()) {
             isDeleted = true;
         }
         if (isDeleted) {
-            question.getAnswers().stream()
-                    .forEach(answer -> answer.setDeleted(true));
-            question.setDeleted(true);
+            question.setDeletedAnswer();
             questionRepository.save(question);
         } else {
             throw new CannotDeleteQuestionException();
@@ -65,12 +58,5 @@ public class QuestionService {
             throw new UserNotEqualException();
         }
         return questionToUpdate;
-    }
-
-    public void addAnswer(Long questionId, HttpSession session, String contents) {
-        Question question = getQuestionById(questionId);
-        User writer = SessionChecker.loggedinUser(session);
-        question.addAnswer(new Answer(question, writer, contents));
-        questionRepository.save(question);
     }
 }

@@ -1,6 +1,5 @@
 package codesquad.service;
 
-import codesquad.common.RestResponse;
 import codesquad.dto.AnswerDTO;
 import codesquad.exception.AnswerNotExistException;
 import codesquad.exception.QuestionNotExistException;
@@ -31,11 +30,6 @@ public class AnswerService {
 
     public Question getQuestionById(Long questionId) {
         return questionRepository.findById(questionId).orElseThrow(QuestionNotExistException::new);
-    }
-
-    public Answer save(Answer answer) {
-        answerRepository.save(answer);
-        return answer;
     }
 
     public void create(HttpSession session, Long questionId, String contents) {

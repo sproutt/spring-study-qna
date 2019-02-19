@@ -40,12 +40,13 @@ public class Answer {
 
     }
 
-    public Answer(Long questionId, User writer, String contents){
+    public Answer(Long questionId, User writer, String contents) {
 
         this.writer = writer;
         this.contents = contents;
         this.createDate = LocalDateTime.now();
     }
+
     public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
