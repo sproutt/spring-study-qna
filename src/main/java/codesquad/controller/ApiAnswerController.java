@@ -5,7 +5,7 @@ import codesquad.exception.UserNotLoginException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
-import codesquad.result.AnswerResult;
+import codesquad.common.RestResponse;
 import codesquad.service.AnswerService;
 import codesquad.service.QuestionService;
 import codesquad.utils.SessionChecker;
@@ -37,13 +37,13 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public AnswerResult delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+    public RestResponse delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
         if (SessionChecker.isLoggedIn(session)) {
             throw new UserNotLoginException();
         }
         if (!answerService.delete(session, questionId, id)) {
-            return AnswerResult.fail(id);
+            return RestResponse.fail(id);
         }
-        return AnswerResult.ok(id);
+        return RestResponse.ok(id);
     }
 }
