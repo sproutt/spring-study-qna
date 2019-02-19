@@ -16,7 +16,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
     @Column(nullable = false)
@@ -37,6 +37,14 @@ public class User {
     public boolean isCorrectPassword(String password) {
 
         if (this.password.equals(password)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public boolean isSameUser(Long id) {
+        if (this.id.equals(id)) {
             return true;
         }
 
