@@ -29,7 +29,6 @@ public class User {
     private String email;
 
     public void update(User updatedUser) {
-        this.password = updatedUser.getPassword();
         this.name = updatedUser.getName();
         this.email = updatedUser.getEmail();
     }

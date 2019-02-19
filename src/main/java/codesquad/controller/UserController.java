@@ -55,7 +55,11 @@ public class UserController {
             return "/users/loginForm";
         }
 
-        User sessionedUser = HttpSessionUtils.getSessionedUser(session);
+        User sessionedUser = (User)HttpSessionUtils.getSessionedUser(session);
+
+        if (!sessionedUser.isCorrectPassword(updatedUser.getPassword())) {
+            return "redirect:/users/{id}/form";
+        }
 
         sessionedUser.update(updatedUser);
         userRepository.save(sessionedUser);
