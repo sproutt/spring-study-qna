@@ -8,16 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initEvents() {
     $(".qna-comment-slipp-articles").addEventListener("click", event => {
-        if(event.target.className==="delete-answer-button"){
-
-            console.log("삭제시작");
+        if (event.target.className === "delete-answer-button") {
             deleteAnswerHandler(event);
         }
-        if(event.target.className==="btn btn-success pull-right"){
-            console.log("등록시작");
-
+        if (event.target.className === "btn btn-success pull-right") {
             registerAnswerHandler(event);
         }
+
         return;
     });
 }
@@ -25,9 +22,8 @@ function initEvents() {
 function fetchManager({url, method, body, headers, callback}) {
     fetch(url, {method, body, headers, credentials: "same-origin"})
         .then((response) => {
-            var data = response.json();
-            console.log(data);
-            return data
+
+            return response.json();
         }).then((result) => {
         callback(result)
     })
@@ -35,10 +31,13 @@ function fetchManager({url, method, body, headers, callback}) {
 
 function registerAnswerHandler(event) {
     event.preventDefault();
+
     textbox = $(".submit-write textarea");
     const contents = textbox.value;
     textbox.value = "";
+
     let url = $(".submit-write").getAttribute("action");
+
     fetchManager({
         url,
         method: 'POST',
@@ -50,6 +49,13 @@ function registerAnswerHandler(event) {
 
 
 function appendAnswer({result, data}) {
+
+    if (`${result}` === "fail") {
+        console.log(data);
+
+        return;
+    }
+
     const html = `
         <article class="article" id="answer-${data.id}">
             <div class="article-header">
@@ -83,9 +89,10 @@ function appendAnswer({result, data}) {
     $(".qna-comment-slipp-articles").insertAdjacentHTML("afterbegin", html);
 }
 
-function deleteAnswerHandler(event){
+function deleteAnswerHandler(event) {
     event.preventDefault();
     let url = $(".delete-answer-button").parentElement.getAttribute("action");
+
     fetchManager({
         url,
         method: 'DELETE',
@@ -93,9 +100,16 @@ function deleteAnswerHandler(event){
         callback: deleteAnswer
     })
 }
-function deleteAnswer({result, data}){
-    const query = `.article[id="answer-${data}"]`;
-    console.log(query);
+
+function deleteAnswer({result, data}) {
+    if (`${result}` === "fail") {
+        console.log(data);
+        return;
+    }
+
+    $(".qna-comment-count strong").innerText = `${data.question.size}`;
+
+    const query = `.article[id="answer-${data.id}"]`;
     const target = $(query);
     target.parentNode.removeChild(target);
 }

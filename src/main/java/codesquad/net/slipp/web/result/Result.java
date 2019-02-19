@@ -5,14 +5,15 @@ import org.json.simple.JSONObject;
 
 public class Result {
 
-    public static JSONObject ok(Answer answer){
+    public static JSONObject ok(Answer answer) {
         JSONObject json = new JSONObject();
         json.put("result", "ok");
         json.put("data", answer);
 
         return json;
     }
-    public static JSONObject ok(Long answerId){
+
+    public static JSONObject ok(Long answerId) {
         JSONObject json = new JSONObject();
         json.put("result", "ok");
         json.put("data", answerId);
@@ -20,7 +21,7 @@ public class Result {
         return json;
     }
 
-    public static JSONObject fail(String errorMessage){
+    public static JSONObject fail(String errorMessage) {
         JSONObject json = new JSONObject();
         json.put("result", "fail");
         json.put("data", errorMessage);

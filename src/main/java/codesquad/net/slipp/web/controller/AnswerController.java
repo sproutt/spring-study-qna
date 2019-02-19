@@ -20,7 +20,7 @@ public class AnswerController {
 
     @PostMapping
     public String create(@PathVariable long questionId, HttpSession session, String content) {
-        if(!SessionUtil.isLogin(session)){
+        if (!SessionUtil.isLogin(session)) {
 
             return "redirect:/users/login";
         }

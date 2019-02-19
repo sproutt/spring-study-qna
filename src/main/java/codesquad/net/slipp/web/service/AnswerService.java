@@ -25,11 +25,12 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(HttpSession session, long id) {
+    public Answer delete(HttpSession session, long id) {
         SessionUtil.checkAuth(session, this.getWriter(id));
         Answer answer = this.findById(id);
         answer.setDeleted(true);
-        answerRepository.save(answer);
+
+        return answerRepository.save(answer);
     }
 
     public Answer findById(long id) {

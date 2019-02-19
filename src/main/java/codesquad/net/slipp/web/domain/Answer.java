@@ -35,9 +35,10 @@ public class Answer {
     @Column(nullable = false)
     private LocalDateTime createTime = LocalDateTime.now();
 
-    public Answer(){
+    public Answer() {
 
     }
+
     public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
@@ -48,7 +49,7 @@ public class Answer {
         return this.id == answer.id;
     }
 
-    public String getCreateYearToSecond(){
+    public String getCreateYearToSecond() {
         return createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }

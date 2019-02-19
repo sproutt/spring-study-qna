@@ -20,11 +20,11 @@ public class ApiAnswerController {
     private AnswerService answerService;
 
     @PostMapping("/questions/{questionId}/answers")
-    public JSONObject create(@PathVariable long questionId, @RequestBody AnswerDto answerDto, HttpSession session){
+    public JSONObject create(@PathVariable long questionId, @RequestBody AnswerDto answerDto, HttpSession session) {
         Answer answer;
-        try{
-             answer = answerService.save(session, answerDto.getContents(), questionId);
-        }catch (Exception e){
+        try {
+            answer = answerService.save(session, answerDto.getContents(), questionId);
+        } catch (Exception e) {
 
             return Result.fail(e.getMessage());
         }
@@ -33,14 +33,15 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/questions/{questionId}/answers/{answerId}")
-    public JSONObject deleteAnswer(@PathVariable long questionId , @PathVariable long answerId, HttpSession session){
-        try{
-            answerService.delete(session,answerId);
-        }catch (Exception e){
+    public JSONObject deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+        Answer answer;
+        try {
+            answer = answerService.delete(session, answerId);
+        } catch (Exception e) {
 
             return Result.fail(e.getMessage());
         }
 
-        return Result.ok(answerId);
+        return Result.ok(answer);
     }
 }

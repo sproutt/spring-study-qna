@@ -44,8 +44,12 @@ public class Question {
         this.contents = modifiedQuestion.contents;
     }
 
-    public int getSize(){
-        return answers.size();
+    public int getSize() {
+
+        return answers.stream()
+                .filter(answer -> !answer.getDeleted())
+                .collect(Collectors.toList())
+                .size();
     }
 
 }
