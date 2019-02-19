@@ -1,18 +1,14 @@
 package codesquad.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class AnswerDTO {
 
     private String contents;
 
     public AnswerDTO() {
-
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
     }
 }

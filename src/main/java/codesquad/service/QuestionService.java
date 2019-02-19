@@ -10,11 +10,11 @@ import codesquad.repository.AnswerRepository;
 import codesquad.repository.QuestionRepository;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 
-@Component
+@Service
 public class QuestionService {
     @Autowired
     QuestionRepository questionRepository;

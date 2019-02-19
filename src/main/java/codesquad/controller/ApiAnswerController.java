@@ -2,12 +2,9 @@ package codesquad.controller;
 
 import codesquad.dto.AnswerDTO;
 import codesquad.exception.UserNotLoginException;
-import codesquad.model.Answer;
-import codesquad.model.Question;
-import codesquad.model.User;
 import codesquad.common.RestResponse;
 import codesquad.service.AnswerService;
-import codesquad.service.QuestionService;
+import codesquad.service.ApiAnswerService;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,23 +14,14 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping("/api/questions/{questionId}/answers")
 public class ApiAnswerController {
-    @Autowired
-    private QuestionService questionService;
 
     @Autowired
     private AnswerService answerService;
 
     @PostMapping
-    public Answer create(@PathVariable Long questionId, AnswerDTO answerDTO, HttpSession session) {
-        if (!SessionChecker.isLoggedIn(session)) {
-            throw new UserNotLoginException();
-        }
-        User writer = SessionChecker.loggedinUser(session);
-        Question question = questionService.getQuestionById(questionId);
-        Answer answer = new Answer(question, writer, answerDTO.getContents());
-        question.addAnswer(answer);
-        return answerService.save(answer);
-
+    public RestResponse create(@PathVariable Long questionId, AnswerDTO answerDTO, HttpSession session) {
+        answerService.create(session, questionId, answerDTO);
+        return RestResponse.success(questionId);
     }
 
     @DeleteMapping("/{id}")
@@ -42,8 +30,8 @@ public class ApiAnswerController {
             throw new UserNotLoginException();
         }
         if (!answerService.delete(session, questionId, id)) {
-            return RestResponse.fail(id);
+            return RestResponse.fail(questionId, id);
         }
-        return RestResponse.ok(id);
+        return RestResponse.ok(questionId, id);
     }
 }

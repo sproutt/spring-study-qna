@@ -18,9 +18,6 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     @Autowired
-    UserService userService;
-
-    @Autowired
     QuestionService questionService;
 
     @GetMapping("/form")

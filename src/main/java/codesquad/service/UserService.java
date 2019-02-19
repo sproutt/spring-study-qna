@@ -5,9 +5,9 @@ import codesquad.exception.UserNotExistException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class UserService {
 
     @Autowired

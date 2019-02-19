@@ -14,6 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 public class Answer {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,6 +40,12 @@ public class Answer {
 
     }
 
+    public Answer(Long questionId, User writer, String contents){
+
+        this.writer = writer;
+        this.contents = contents;
+        this.createDate = LocalDateTime.now();
+    }
     public Answer(Question question, User writer, String contents) {
         this.question = question;
         this.writer = writer;
