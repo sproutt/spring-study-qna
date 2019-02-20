@@ -24,7 +24,7 @@ public class QuestionService {
         return questionRepository.findById(id).orElseThrow(() -> new NullQuestionException(id));
     }
 
-    public Iterable<Question> findAll() {
+    public List<Question> findAll() {
         return questionRepository.findAll();
     }
 

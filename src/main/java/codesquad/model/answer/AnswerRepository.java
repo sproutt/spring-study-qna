@@ -1,9 +1,6 @@
 package codesquad.model.answer;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.Optional;
-
-public interface AnswerRepository extends CrudRepository<Answer, Long> {
-    Iterable<Answer> findByQuestionId(Long id);
+public interface AnswerRepository extends JpaRepository<Answer, Long> {
 }
