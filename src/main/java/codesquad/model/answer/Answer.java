@@ -56,8 +56,8 @@ public class Answer {
         this.content = content;
     }
 
-    public boolean isWriter(User user){
-        if(writer.getId().equals(user.getId())){
+    public boolean isWriter(User user) {
+        if (writer.getId().equals(user.getId())) {
             return true;
         }
         return false;

@@ -26,8 +26,8 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(() -> new NullUserException(userId));
     }
 
-    public User findSessionUser(HttpSession session){
-        return (User)session.getAttribute("user");
+    public User findSessionUser(HttpSession session) {
+        return (User) session.getAttribute("user");
     }
 
     public void update(User user, User newUser) {

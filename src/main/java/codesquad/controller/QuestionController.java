@@ -37,7 +37,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
-        model.addAttribute("question", questionService.findById(id));;
+        model.addAttribute("question", questionService.findById(id));
         model.addAttribute("answers", questionService.getAnswer(id));
         return "/qna/show";
     }
@@ -51,51 +51,51 @@ public class QuestionController {
     }
 
     @PutMapping("/{id}")
-    public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session){
+    public String gotoUpdateForm(Model model, @PathVariable Long id, HttpSession session) {
         if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
         Question question = questionService.findById(id);
         User user = userService.findSessionUser(session);
-        questionService.isAuthority(question,user);
-        model.addAttribute("question",question);
+        questionService.isAuthority(question, user);
+        model.addAttribute("question", question);
         return "/qna/updateForm";
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session){
+    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) {
         if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
         User user = userService.findSessionUser(session);
-        questionService.delete(id,user);
+        questionService.delete(id, user);
         return "redirect:/";
     }
 
     @PostMapping("/update/{id}")
     public String updateQuestion(Question newQuestion, @PathVariable Long id) {
-        questionService.update(id,newQuestion);
+        questionService.update(id, newQuestion);
         return "redirect:/";
     }
 
     @PostMapping("/{id}/answer")
-    public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session){
+    public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session) {
         User user = userService.findSessionUser(session);
-        if(user == null){
+        if (user == null) {
             return "redirect:/users/loginForm";
         }
-        answerService.save(user,answer,id);
-        return "redirect:/question/"+id.toString();
+        answerService.save(user, answer, id);
+        return "redirect:/question/" + id.toString();
     }
 
     @DeleteMapping("/{id}/answer/{answerId}")
-    public String deleteAnswer(@PathVariable Long id,@PathVariable Long answerId, HttpSession session){
+    public String deleteAnswer(@PathVariable Long id, @PathVariable Long answerId, HttpSession session) {
         User user = userService.findSessionUser(session);
-        if(user == null){
+        if (user == null) {
             return "redirect:/users/loginForm";
         }
-        answerService.delete(answerId,user);
-        return "redirect:/question/"+id.toString();
+        answerService.delete(answerId, user);
+        return "redirect:/question/" + id.toString();
     }
 
 }

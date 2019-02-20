@@ -18,7 +18,7 @@ public class User {
     private String name;
     private String email;
 
-    @OneToMany(mappedBy="question")
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
     public List<Answer> getAnswers() {

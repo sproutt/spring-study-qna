@@ -20,38 +20,38 @@ public class QuestionService {
 
     QuestionUtils questionUtils = new QuestionUtils();
 
-    public Question findById(Long id){
+    public Question findById(Long id) {
         return questionRepository.findById(id).orElseThrow(() -> new NullQuestionException(id));
     }
 
-    public Iterable<Question> findAll(){
+    public Iterable<Question> findAll() {
         return questionRepository.findAll();
     }
 
-    public void update(Long id, Question newQuestion){
+    public void update(Long id, Question newQuestion) {
         Question question = findById(id);
         question.update(newQuestion);
         questionRepository.save(question);
     }
 
-    public void delete(Long id, User user){
+    public void delete(Long id, User user) {
         Question question = findById(id);
-        isAuthority(question,user);
+        isAuthority(question, user);
         questionRepository.deleteById(id);
     }
 
-    public void save(Question question){
+    public void save(Question question) {
         questionRepository.save(question);
     }
 
-    public boolean isAuthority(Question question,User user){
-        if(!questionUtils.isWriter(question,user)){
+    public boolean isAuthority(Question question, User user) {
+        if (!questionUtils.isWriter(question, user)) {
             throw new WrongUserException(user.getId());
         }
         return true;
     }
 
-    public List<Answer> getAnswer(Long id){
+    public List<Answer> getAnswer(Long id) {
         Question question = findById(id);
         return question.getAnswers();
     }

@@ -54,7 +54,7 @@ public class UserController {
     @PostMapping("/update/{id}")
     public String updateUser(User newUser, @PathVariable Long id) {
         User user = userService.findById(id);
-        userService.update(user,newUser);
+        userService.update(user, newUser);
         return "redirect:/users/logout";
     }
 
