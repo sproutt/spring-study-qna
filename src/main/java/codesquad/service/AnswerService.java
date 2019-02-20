@@ -22,6 +22,9 @@ public class AnswerService {
     private QuestionRepository questionRepository;
 
     public Answer register(Long questionId, Answer answer, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
+            return null;
+        }
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
 
         question.addAnswer(answer);
@@ -29,13 +32,17 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(Long questionId, Long id) {
+    public Long delete(Long questionId, Long id, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLogin(httpSession) || !this.match(id, httpSession)) {
+            return null;
+        }
         Answer answer = this.findById(id);
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
 
         question.removeAnswer(answer);
         answer.setDeleted(true);
         answerRepository.save(answer);
+        return id;
     }
 
     public Answer findById(Long id) {
