@@ -56,4 +56,9 @@ public class QuestionService {
         return question.getAnswers();
     }
 
+    public int getAnswerSize(Long id){
+        List<Answer> answers = getAnswer(id);
+        return answers.size();
+    }
+
 }

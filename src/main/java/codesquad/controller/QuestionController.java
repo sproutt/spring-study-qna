@@ -38,6 +38,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
         model.addAttribute("question", questionService.findById(id));
+        model.addAttribute("answerSize", questionService.getAnswerSize(id));
         model.addAttribute("answers", questionService.getAnswer(id));
         return "/qna/show";
     }
