@@ -38,7 +38,7 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
         model.addAttribute("question", questionService.findById(id));;
-        model.addAttribute("answer", questionService.getAnswer(id));
+        model.addAttribute("answers", questionService.getAnswer(id));
         return "/qna/show";
     }
 
@@ -84,10 +84,7 @@ public class QuestionController {
         if(user == null){
             return "redirect:/users/loginForm";
         }
-        answer.setWriter(user);
-        answer.setQuestion(questionService.findById(id));
-        answer.setId(null);
-        answerService.save(answer);
+        answerService.save(user,answer,id);
         return "redirect:/question/"+id.toString();
     }
 

@@ -3,7 +3,6 @@ package codesquad.service;
 import codesquad.exception.NullQuestionException;
 import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
-import codesquad.model.answer.AnswerRepository;
 import codesquad.model.question.Question;
 import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
