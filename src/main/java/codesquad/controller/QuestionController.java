@@ -19,7 +19,8 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
-    public String questions(Question question) {
+    public String questions(Question question, HttpSession session) {
+        question.setWriter(HttpSessionUtils.getSessionedUser(session));
         question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
         questionRepository.save(question);
         return "redirect:/";

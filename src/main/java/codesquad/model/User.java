@@ -11,7 +11,6 @@ import javax.persistence.*;
 @Setter
 @ToString
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,19 +33,10 @@ public class User {
     }
 
     public boolean isCorrectPassword(String password) {
-
-        if (this.password.equals(password)) {
-            return true;
-        }
-
-        return false;
+        return this.password.equals(password);
     }
 
     public boolean isSameUser(Long id) {
-        if (this.id.equals(id)) {
-            return true;
-        }
-
-        return false;
+        return this.id.equals(id);
     }
 }

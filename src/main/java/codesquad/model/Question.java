@@ -14,9 +14,6 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
-
     @Column(nullable = false, length = 50)
     private String title;
 
@@ -25,6 +22,10 @@ public class Question {
 
     @Column(nullable = false)
     private String time;
+
+    @ManyToOne
+    @JoinColumn(name = "USER_ID", nullable = false)
+    private User writer;
 
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.getTitle();
