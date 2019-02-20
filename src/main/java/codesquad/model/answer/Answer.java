@@ -56,4 +56,11 @@ public class Answer {
         this.content = content;
     }
 
+    public boolean isWriter(User user){
+        if(writer.equals(user)){
+            return true;
+        }
+        return false;
+    }
+
 }

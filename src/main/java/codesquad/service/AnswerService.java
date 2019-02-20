@@ -21,7 +21,7 @@ public class AnswerService {
 
     public void delete(Long id, User user){
         Answer answer = answerRepository.findById(id).get();
-        if(!answer.getWriter().getId().equals(user.getId())) {
+        if(!answer.isWriter(user)) {
            throw new WrongUserException(user.getId());
         }
         answerRepository.delete(answer);
