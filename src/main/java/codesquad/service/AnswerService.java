@@ -1,5 +1,6 @@
 package codesquad.service;
 
+import codesquad.exception.NullUserException;
 import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.answer.AnswerRepository;
@@ -19,8 +20,12 @@ public class AnswerService {
     @Autowired
     QuestionService questionService;
 
+    public Answer findById(Long id){
+        return answerRepository.findById(id).orElseThrow(() ->new NullUserException(id));
+    }
+
     public void delete(Long id, User user){
-        Answer answer = answerRepository.findById(id).get();
+        Answer answer = findById(id);
         if(!answer.isWriter(user)) {
            throw new WrongUserException(user.getId());
         }

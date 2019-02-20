@@ -52,7 +52,7 @@ public class QuestionService {
     }
 
     public List<Answer> getAnswer(Long id){
-        Question question = questionRepository.findById(id).get();
+        Question question = findById(id);
         return question.getAnswers();
     }
 
