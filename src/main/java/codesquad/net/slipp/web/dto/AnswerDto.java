@@ -1,20 +1,16 @@
 package codesquad.net.slipp.web.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class AnswerDto {
 
     private String contents;
-
-    public AnswerDto(){
-
-    }
-
-    public AnswerDto(String contents){
-        this.contents=contents;
-    }
 
 }

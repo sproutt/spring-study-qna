@@ -1,6 +1,7 @@
 package codesquad.net.slipp.web.domain;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
@@ -10,6 +11,7 @@ import java.time.format.DateTimeFormatter;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Answer {
 
     @Id
@@ -33,10 +35,6 @@ public class Answer {
 
     @Column(nullable = false)
     private LocalDateTime createTime = LocalDateTime.now();
-
-    public Answer() {
-
-    }
 
     public Answer(Question question, User writer, String contents) {
         this.question = question;
