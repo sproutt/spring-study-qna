@@ -24,7 +24,7 @@ public class Question {
     private String time;
 
     @ManyToOne
-    @JoinColumn(name = "USER_ID", nullable = false)
+    @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     public void update(Question updatedQuestion) {

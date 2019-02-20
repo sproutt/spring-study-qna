@@ -1,7 +1,7 @@
 package codesquad.controller;
 
 import codesquad.model.Question;
-import codesquad.repository.QuestionRepository;
+import codesquad.service.QuestionService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,26 +9,24 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @Controller
 public class QuestionController {
 
     @Autowired
-    private QuestionRepository questionRepository;
+    private QuestionService questionService;
 
     @PostMapping("/questions")
     public String questions(Question question, HttpSession session) {
-        question.setWriter(HttpSessionUtils.getSessionedUser(session));
-        question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
-        questionRepository.save(question);
+        questionService.saveQuestion(question, session);
+
         return "redirect:/";
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("questions", questionRepository.findAll());
+        model.addAttribute("questions", questionService.findQuestions());
+
         return "/qna/list";
     }
 
@@ -37,7 +35,6 @@ public class QuestionController {
         if (!HttpSessionUtils.isSessionedUser(session)) {
             return "/users/loginForm";
         }
-
         model.addAttribute("user", HttpSessionUtils.getSessionedUser(session));
 
         return "/qna/form";
@@ -45,7 +42,8 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String accessQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", questionService.findById(id));
+
         return "/qna/show";
     }
 
@@ -54,31 +52,26 @@ public class QuestionController {
         if (!HttpSessionUtils.checkSessionUser(id, session)) {
             return "/users/loginForm";
         }
-
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", questionService.findById(id));
 
         return "/qna/updateForm";
     }
 
-
-
-    @PutMapping("/questions/{id}/update")
+    @PutMapping("/questions/{id}")
     public String updateQuestion(@PathVariable Long id, Question updatedQuestion) {
-        Question question = questionRepository.findById(id).get();
-        question.update(updatedQuestion);
-        question.setTime(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm")));
-        questionRepository.save(question);
+        Question question = questionService.findById(id);
+        questionService.updateQuestion(question, updatedQuestion);
 
         return "redirect:/questions/{id}";
     }
 
-    @DeleteMapping("/questions/{id}/delete")
+    @DeleteMapping("/questions/{id}")
     public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         if (!HttpSessionUtils.checkSessionUser(id, session)) {
             return "/users/loginForm";
         }
+        questionService.deleteQuestion(id);
 
-        questionRepository.delete(questionRepository.findById(id).get());
         return "redirect:/";
     }
 }
