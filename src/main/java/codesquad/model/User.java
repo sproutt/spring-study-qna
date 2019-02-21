@@ -3,6 +3,7 @@ package codesquad.model;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
 import javax.persistence.*;
 
 
@@ -11,21 +12,32 @@ import javax.persistence.*;
 @Setter
 @ToString
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
+    @Column(nullable = false, length = 20, unique = true)
     private String userId;
 
+    @Column(nullable = false)
     private String password;
+
+    @Column(nullable = false, length = 20)
     private String name;
+
+    @Column
     private String email;
 
     public void update(User updatedUser) {
-        this.password = updatedUser.getPassword();
         this.name = updatedUser.getName();
         this.email = updatedUser.getEmail();
+    }
+
+    public boolean isCorrectPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public boolean isSameUser(Long id) {
+        return this.id.equals(id);
     }
 }
