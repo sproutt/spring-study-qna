@@ -5,7 +5,9 @@ import codesquad.domain.AnswerRepository;
 import codesquad.domain.Question;
 import codesquad.domain.QuestionRepository;
 import codesquad.exception.AnswerNotFoundException;
+import codesquad.exception.PermissionRestrictException;
 import codesquad.exception.QuestionNotFoundException;
+import codesquad.exception.UserNotLoggedInException;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,9 @@ public class AnswerService {
     private QuestionRepository questionRepository;
 
     public Answer register(Long questionId, Answer answer, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLogin(httpSession)) {
+            throw new UserNotLoggedInException();
+        }
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
 
         question.addAnswer(answer);
@@ -29,7 +34,10 @@ public class AnswerService {
         return answerRepository.save(answer);
     }
 
-    public void delete(Long questionId, Long id) {
+    public void delete(Long questionId, Long id, HttpSession httpSession) {
+        if (!HttpSessionUtils.isLogin(httpSession) || !this.match(id, httpSession)) {
+            throw new PermissionRestrictException();
+        }
         Answer answer = this.findById(id);
         Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
 

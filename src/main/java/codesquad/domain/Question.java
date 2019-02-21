@@ -1,5 +1,6 @@
 package codesquad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,7 @@ public class Question {
     private User writer;
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     @Column(nullable = false)
@@ -32,15 +34,15 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    private LocalDateTime creatDate = LocalDateTime.now();
+    private LocalDateTime createDate = LocalDateTime.now();
 
     private boolean deleted = false;
 
-    public String getFormattedCreatDate() {
-        if (creatDate == null) {
+    public String getFormattedCreateDate() {
+        if (createDate == null) {
             return "";
         }
-        return creatDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 
     public int getAnswersCount() {
@@ -61,4 +63,5 @@ public class Question {
         this.getAnswers().remove(answer);
         answer.setQuestion(null);
     }
+
 }
