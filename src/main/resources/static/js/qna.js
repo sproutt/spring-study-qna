@@ -73,7 +73,11 @@ function appendAnswer({id, contents, question, writer, formattedCreateDate}) {
     $(".qna-comment-slipp-articles").insertAdjacentHTML("beforeend", answerHtml);
 }
 
-function deleteAnswer(answerId) {
+function deleteAnswer({answerId, valid, errorMessage}) {
+    if (!valid) {
+        alert(errorMessage);
+        return;
+    }
     const selector = ".answer[data-id='" + answerId + "']";
     const target = $(selector);
     target.parentNode.removeChild(target);

@@ -45,6 +45,7 @@ public class UserController {
         if (!user.match(id)) {
             return "users/update_deny";
         }
+
         model.addAttribute("user", user);
         return "users/updateForm";
     }
