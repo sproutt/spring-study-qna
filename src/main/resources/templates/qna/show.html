@@ -17,7 +17,6 @@
                             <a href="/users/92/kimmunsu" class="article-author-name">{{writer.name}}</a>
                             <a href="/questions/413" class="article-header-time" title="퍼머링크">
                                 {{question.formattedCreateDate}}
-                                {{question.answers.size}}
                                 <i class="icon-link"></i>
                             </a>
                         </div>
@@ -49,6 +48,7 @@
                         <p class="qna-comment-count"><strong>{{question.answers.size}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
                             {{#question.answers}}
+                            {{^deleted}}
                             <article class="article answer" id="answer-{{id}}" data-id='{{id}}'>
                                 <div class="article-header">
                                     <div class="article-header-thumb">
@@ -81,16 +81,16 @@
                                     </ul>
                                 </div>
                             </article>
+                            {{/deleted}}
                             {{/question.answers}}
-                            {{/question}}
-                            <form class="submit-write" method="post" action="/questions/{{id}}/answers">
-                                <div class="form-group" style="padding:14px;">
-                                    <textarea id="contents" name="contents" class="form-control"
-                                              placeholder="Update your status"></textarea>
+                            <form class="submit-write" method="post" action="/api/questions/{{id}}/answers">
+                                <div class="form-group">
+                                    <textarea class="form-control" placeholder="당신도 답을 달아보세요" name="contents"></textarea>
                                 </div>
-                                <input type="submit" class="btn btn-success pull-right" value="답변하기"/>
-                                <div class="clearfix"/>
+                                <input type="submit" class="btn btn-success pull-right" value="답변하기" />
+                                <div class="clearfix" />
                             </form>
+                            {{/question}}
                         </div>
                     </div>
                 </div>

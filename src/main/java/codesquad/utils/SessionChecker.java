@@ -1,6 +1,7 @@
 package codesquad.utils;
 
-import codesquad.exception.UserNotLoginException;
+import codesquad.exception.UserNotEqualException;
+import codesquad.model.Answer;
 import codesquad.model.User;
 import org.springframework.stereotype.Component;
 
@@ -23,4 +24,10 @@ public class SessionChecker {
         return (User) session.getAttribute(USER_SESSION);
     }
 
+    public static void matchUserToAnswer(HttpSession session, Answer answer) {
+        User user = loggedinUser(session);
+        if (!user.isSameUser(answer.getWriter())) {
+            throw new UserNotEqualException();
+        }
+    }
 }

@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.service.AnswerService;
-import codesquad.service.QuestionService;
 import codesquad.utils.SessionChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,9 +11,6 @@ import javax.servlet.http.HttpSession;
 @Controller
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
-
-    @Autowired
-    QuestionService questionService;
 
     @Autowired
     AnswerService answerService;
@@ -29,7 +25,7 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(HttpSession session,@PathVariable Long questionId, @PathVariable Long id) {
+    public String delete(HttpSession session, @PathVariable Long questionId, @PathVariable Long id) {
         answerService.delete(session, questionId, id);
         return "redirect:/questions/{questionId}";
     }
