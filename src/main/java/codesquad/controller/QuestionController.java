@@ -3,9 +3,7 @@ package codesquad.controller;
 import codesquad.model.answer.Answer;
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
-import codesquad.service.AnswerService;
 import codesquad.service.QuestionService;
-import codesquad.service.UserService;
 import codesquad.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +17,7 @@ import javax.servlet.http.HttpSession;
 public class QuestionController {
 
     @Autowired
-    private AnswerService answerService;
-
-    @Autowired
     private QuestionService questionService;
-
-    @Autowired
-    private UserService userService;
 
     @GetMapping("/form")
     public String goToQnaForm(HttpSession session) {
@@ -45,9 +37,7 @@ public class QuestionController {
 
     @PostMapping("/{userId}")
     public String createQuestion(Question question, @PathVariable String userId) {
-        User writer = userService.findByUserId(userId);
-        question.setWriter(writer);
-        questionService.save(question);
+        questionService.save(question, userId);
         return "redirect:/";
     }
 
@@ -57,8 +47,8 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
         Question question = questionService.findById(id);
-        User user = userService.findSessionUser(session);
-        questionService.isAuthority(question, user);
+        User writer = (User) session.getAttribute("user");
+        questionService.isAuthority(id, writer);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
@@ -68,7 +58,7 @@ public class QuestionController {
         if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
-        User user = userService.findSessionUser(session);
+        User user = (User) session.getAttribute("user");
         questionService.delete(id, user);
         return "redirect:/";
     }
@@ -81,21 +71,21 @@ public class QuestionController {
 
     @PostMapping("/{id}/answer")
     public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session) {
-        User user = userService.findSessionUser(session);
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/users/loginForm";
         }
-        answerService.save(user, answer, id);
+        questionService.saveAnswer(user, answer, id);
         return "redirect:/question/" + id.toString();
     }
 
     @DeleteMapping("/{id}/answer/{answerId}")
     public String deleteAnswer(@PathVariable Long id, @PathVariable Long answerId, HttpSession session) {
-        User user = userService.findSessionUser(session);
+        User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/users/loginForm";
         }
-        answerService.delete(answerId, user);
+        questionService.deleteAnswer(answerId, user);
         return "redirect:/question/" + id.toString();
     }
 

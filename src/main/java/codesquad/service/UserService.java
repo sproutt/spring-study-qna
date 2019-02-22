@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(() -> new NullUserException(userId));
+        return userRepository.findByUserId(userId);
     }
 
     public User findSessionUser(HttpSession session) {

@@ -72,5 +72,11 @@ public class Question {
         this.title = question.title;
     }
 
+    public boolean isWriter(User user){
+        if(this.writer.getId().equals(user.getId())){
+            return true;
+        }
+        return false;
+    }
 
 }
