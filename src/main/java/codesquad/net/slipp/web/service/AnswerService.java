@@ -34,13 +34,10 @@ public class AnswerService {
     }
 
     public Answer findById(long id) {
-
         return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
     public User getWriter(long id){
-        System.out.println(answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id)));
-
         return answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 

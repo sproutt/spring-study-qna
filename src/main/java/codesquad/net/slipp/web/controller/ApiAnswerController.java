@@ -26,7 +26,6 @@ public class ApiAnswerController {
 
             return JsonResponse.fail(e.getMessage());
         }
-
         return JsonResponse.ok(answer);
     }
 
@@ -39,7 +38,6 @@ public class ApiAnswerController {
 
             return JsonResponse.fail(e.getMessage());
         }
-
         return JsonResponse.ok(answer);
     }
 }

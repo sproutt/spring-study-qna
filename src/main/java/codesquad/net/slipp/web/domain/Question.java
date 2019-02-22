@@ -44,7 +44,6 @@ public class Question {
     }
 
     public int getSize() {
-
         return answers.stream()
                 .filter(answer -> !answer.getDeleted())
                 .collect(Collectors.toList())

@@ -34,10 +34,8 @@ public class QuestionController {
     @GetMapping("/form")
     public String getQuestionForm(HttpSession session) {
         if (!SessionUtil.isLogin(session)) {
-
             return "redirect:/users/login";
         }
-
         return "/qna/form";
     }
 

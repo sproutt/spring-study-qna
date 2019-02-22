@@ -29,12 +29,10 @@ public class User {
     private String email;
 
     public boolean match(User user) {
-
         return this.getUserId() == user.getUserId();
     }
 
     public boolean match(String password) {
-
         return this.password.equals(password);
     }
 

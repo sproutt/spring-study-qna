@@ -20,20 +20,17 @@ public class UserController {
     @GetMapping("")
     public String userList(Model model) {
         model.addAttribute("users", userService.findAll());
-
         return "/user/list";
     }
 
     @PostMapping("")
     public String create(User user) {
         userService.save(user);
-
         return "redirect:/users";
     }
 
     @GetMapping("/login")
     public String loginForm() {
-
         return "/user/login";
     }
 
@@ -44,7 +41,6 @@ public class UserController {
 
             return "redirect:/";
         }
-
         return "/user/login_failed";
     }
 
@@ -70,7 +66,6 @@ public class UserController {
     }
 
     public String updateForm(HttpSession session) {
-
         return new StringBuffer("redirect:/users/").
                 append(SessionUtil.getSessionUserId(session)).
                 append("/form").toString();
@@ -79,7 +74,6 @@ public class UserController {
     @PutMapping("/{id}")
     public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
         if (!userService.checkIdPassword(updatedUser)) {
-
             return "/user/error";
         }
         userService.update(SessionUtil.getAuthUser(session, userService.findById(id)),

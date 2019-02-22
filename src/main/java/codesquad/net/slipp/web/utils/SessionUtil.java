@@ -16,20 +16,18 @@ public class SessionUtil {
 
             return false;
         }
-
         return true;
     }
 
     public static User getSessionUser(HttpSession session) {
         if(!isLogin(session)){
+
             throw new SessionNotFoundException();
         }
-
         return (User) session.getAttribute(SESSION_KEY);
     }
 
     public static Long getSessionUserId(HttpSession session) {
-
         return getSessionUser(session).getId();
     }
 
@@ -38,20 +36,20 @@ public class SessionUtil {
 
             return false;
         }
-
         return true;
     }
 
     public static User getAuthUser(HttpSession session, User user){
         if(!isSessionMatch(session, user)){
+
             throw new SessionNotMatchException();
         }
-
         return getSessionUser(session);
     }
 
     public static void checkAuth(HttpSession session, User user){
         if(!isSessionMatch(session, user)){
+
             throw new SessionNotMatchException();
         }
     }

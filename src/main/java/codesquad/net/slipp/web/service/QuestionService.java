@@ -24,14 +24,15 @@ public class QuestionService {
         Question question = questionRepository.findById(id).orElseThrow(
                 () -> new QuestionNotFoundException(id)
         );
-
         return question;
     }
 
     public Question getAuthedQuestion(HttpSession session, long id) {
         if (!this.isSessionMatch(session, id)) {
+
             throw new SessionNotMatchException();
-        } else return this.findById(id);
+        }
+        return this.findById(id);
     }
 
     public void update(Question modelQuestion, Question modifiedQuestion) {
@@ -40,12 +41,10 @@ public class QuestionService {
     }
 
     public Iterable<Question> findAll() {
-
         return questionRepository.findAll();
     }
 
     public Question save(Question question) {
-
         return questionRepository.save(question);
     }
 
@@ -60,7 +59,6 @@ public class QuestionService {
 
             return false;
         }
-
         return true;
     }
 

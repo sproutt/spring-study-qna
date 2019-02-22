@@ -46,7 +46,6 @@ public class UserService {
     }
 
     public User save(User user) {
-
         return userRepository.save(user);
     }
 
@@ -57,7 +56,6 @@ public class UserService {
     }
 
     public Iterable<User> findAll() {
-
         return userRepository.findAll();
     }
 }
