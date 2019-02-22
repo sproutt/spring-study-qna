@@ -3,6 +3,7 @@ package codesquad.net.slipp.web.domain;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Setter
-public class Question {
+public class Question extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -26,8 +27,6 @@ public class Question {
     @JsonIgnore
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
-
-    private LocalDateTime createTime = LocalDateTime.now();
 
     @Column(nullable = false, length = 200)
     private String title;

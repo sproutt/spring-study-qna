@@ -2,7 +2,7 @@ package codesquad.net.slipp.web.controller;
 
 import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.dto.AnswerDto;
-import codesquad.net.slipp.web.utils.JsonResponse;
+import codesquad.net.slipp.web.dto.JsonResponse;
 import codesquad.net.slipp.web.service.AnswerService;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;

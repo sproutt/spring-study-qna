@@ -1,4 +1,4 @@
-package codesquad.net.slipp.web.utils;
+package codesquad.net.slipp.web.dto;
 
 import codesquad.net.slipp.web.domain.Answer;
 import org.json.simple.JSONObject;
