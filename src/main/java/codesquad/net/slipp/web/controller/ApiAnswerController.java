@@ -4,7 +4,6 @@ import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.dto.AnswerDto;
 import codesquad.net.slipp.web.dto.JsonResponse;
 import codesquad.net.slipp.web.service.AnswerService;
-import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +17,7 @@ public class ApiAnswerController {
     private AnswerService answerService;
 
     @PostMapping
-    public JSONObject create(@PathVariable long questionId, @RequestBody AnswerDto answerDto, HttpSession session) {
+    public JsonResponse create(@PathVariable long questionId, @RequestBody AnswerDto answerDto, HttpSession session) {
         Answer answer;
         try {
             answer = answerService.save(session, answerDto.getContents(), questionId);
@@ -30,7 +29,7 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{answerId}")
-    public JSONObject deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
+    public JsonResponse deleteAnswer(@PathVariable long questionId, @PathVariable long answerId, HttpSession session) {
         Answer answer;
         try {
             answer = answerService.delete(session, answerId);

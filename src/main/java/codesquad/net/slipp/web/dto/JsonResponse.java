@@ -1,33 +1,27 @@
 package codesquad.net.slipp.web.dto;
 
 import codesquad.net.slipp.web.domain.Answer;
-import org.json.simple.JSONObject;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public class JsonResponse {
-    private static final String SUCESS_MESSAGE= "ok";
-    private static final String FAIL_MESSAGE="fail";
+@AllArgsConstructor
+@Getter
+public class JsonResponse<T> {
+    private static final String FAIL = "fail";
+    private static final String SUCESS = "ok";
 
-    public static JSONObject ok(Answer answer) {
-        JSONObject json = new JSONObject();
-        json.put("result", SUCESS_MESSAGE);
-        json.put("data", answer);
+    private String status;
+    private T data;
 
-        return json;
+    public static JsonResponse<Answer> ok(Answer answer) {
+        return new JsonResponse<>(SUCESS, answer);
     }
 
-    public static JSONObject ok(Long answerId) {
-        JSONObject json = new JSONObject();
-        json.put("result", SUCESS_MESSAGE);
-        json.put("data", answerId);
-
-        return json;
+    public static JsonResponse<Long> ok(Long answerId) {
+        return new JsonResponse<>(SUCESS, answerId);
     }
 
-    public static JSONObject fail(String errorMessage) {
-        JSONObject json = new JSONObject();
-        json.put("result", FAIL_MESSAGE);
-        json.put("data", errorMessage);
-
-        return json;
+    public static JsonResponse<String> fail(String errorMessage) {
+        return new JsonResponse<>(FAIL, errorMessage);
     }
 }
