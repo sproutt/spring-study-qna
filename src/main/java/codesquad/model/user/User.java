@@ -1,73 +1,47 @@
 package codesquad.model.user;
 
 import codesquad.model.answer.Answer;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
+@Data
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @Setter
     private Long id;
 
+    @Getter
+    @Setter
     @Column(nullable = false, length = 20)
     private String userId;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
     private String password;
+
+    @Getter
+    @Setter
+    @Column(nullable = false, length = 10)
     private String name;
+
+    @Getter
+    @Setter
+    @Column(nullable = false)
     private String email;
 
+    @Getter
+    @Setter
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
-
-    public List<Answer> getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(List<Answer> answers) {
-        this.answers = answers;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
 
     public void update(User newUser) {
         this.name = newUser.getName();

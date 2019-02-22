@@ -2,6 +2,7 @@ package codesquad.model.answer;
 
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,52 +10,30 @@ import javax.persistence.*;
 
 
 @Entity
+@Data
 public class Answer {
 
+    @Getter
+    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
+    @Getter
+    @Setter
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
+    @Getter
+    @Setter
     @ManyToOne
-    User writer;
+    private User writer;
 
-    String content;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public Question getQuestion() {
-        return question;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+    @Getter
+    @Setter
+    @Column(nullable = false)
+    private String content;
 
     public boolean isWriter(User user) {
         if (writer.getId().equals(user.getId())) {
