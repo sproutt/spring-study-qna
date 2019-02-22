@@ -36,14 +36,11 @@ public class Answer extends BaseTimeEntity{
     @Column(nullable = false)
     private Boolean deleted = false;
 
-    @Column(nullable = false)
-    private LocalDateTime createTime = LocalDateTime.now();
-
     public boolean match(Answer answer) {
         return this.id == answer.id;
     }
 
     public String getCreateYearToSecond() {
-        return createTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        return getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
 }
