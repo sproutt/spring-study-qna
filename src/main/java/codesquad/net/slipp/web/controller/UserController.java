@@ -66,9 +66,10 @@ public class UserController {
     }
 
     public String updateForm(HttpSession session) {
-        return new StringBuffer("redirect:/users/").
-                append(SessionUtil.getSessionUserId(session)).
-                append("/form").toString();
+        return new StringBuffer("redirect:/users/")
+                .append(SessionUtil.getSessionUserId(session))
+                .append("/form")
+                .toString();
 }
 
     @PutMapping("/{id}")

@@ -1,8 +1,6 @@
 package codesquad.net.slipp.web.domain;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -12,6 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Getter
 @Setter
 @NoArgsConstructor
+@RequiredArgsConstructor
 public class Answer {
 
     @Id
@@ -20,14 +19,17 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @NonNull
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_user"))
+    @NonNull
     private User writer;
 
     @Column(nullable = false)
     @Lob
+    @NonNull
     private String contents;
 
     @Column(nullable = false)
@@ -35,12 +37,6 @@ public class Answer {
 
     @Column(nullable = false)
     private LocalDateTime createTime = LocalDateTime.now();
-
-    public Answer(Question question, User writer, String contents) {
-        this.question = question;
-        this.writer = writer;
-        this.contents = contents;
-    }
 
     public boolean match(Answer answer) {
         return this.id == answer.id;
