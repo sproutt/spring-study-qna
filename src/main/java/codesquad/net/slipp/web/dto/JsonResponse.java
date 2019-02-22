@@ -17,10 +17,6 @@ public class JsonResponse<T> {
         return new JsonResponse<>(SUCESS, answer);
     }
 
-    public static JsonResponse<Long> ok(Long answerId) {
-        return new JsonResponse<>(SUCESS, answerId);
-    }
-
     public static JsonResponse<String> fail(String errorMessage) {
         return new JsonResponse<>(FAIL, errorMessage);
     }

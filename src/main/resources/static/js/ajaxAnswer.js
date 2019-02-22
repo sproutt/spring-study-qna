@@ -106,7 +106,6 @@ function deleteAnswer({result, data}) {
         console.log(data);
         return;
     }
-    console.log(data);
     $(".qna-comment-count strong").innerText = `${data.question.size}`;
 
     const query = `.article[id="answer-${data.id}"]`;
