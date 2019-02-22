@@ -49,13 +49,13 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+    public String update(@PathVariable Long id, User updatedUser, String password, HttpSession session) {
         if (!HttpSessionUtils.checkSessionUser(id, session)) {
             return "/users/loginForm";
         }
 
         User sessionedUser = (User) HttpSessionUtils.getSessionedUser(session);
-        if (!sessionedUser.isCorrectPassword(updatedUser.getPassword())) {
+        if (!sessionedUser.isCorrectPassword(password)) {
             return "redirect:/users/{id}/form";
         }
 

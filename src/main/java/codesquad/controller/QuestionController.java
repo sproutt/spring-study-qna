@@ -59,8 +59,7 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}")
     public String updateQuestion(@PathVariable Long id, Question updatedQuestion) {
-        Question question = questionService.findById(id);
-        questionService.updateQuestion(question, updatedQuestion);
+        questionService.updateQuestion(questionService.findById(id), updatedQuestion);
 
         return "redirect:/questions/{id}";
     }
