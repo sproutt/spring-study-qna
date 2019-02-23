@@ -1,13 +1,11 @@
 package codesquad.service;
 
+import codesquad.exception.QuestionNotFoundException;
 import codesquad.model.Question;
 import codesquad.repository.QuestionRepository;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 import javax.servlet.http.HttpSession;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +27,7 @@ public class QuestionService {
     }
 
     public Question findById(Long id) {
-        return questionRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 
     public void updateQuestion(Question question, Question updatedQuestion) {
@@ -39,6 +37,6 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Long id) {
-        questionRepository.delete(questionRepository.findById(id).orElseThrow(EntityNotFoundException::new));
+        questionRepository.delete(questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new));
     }
 }

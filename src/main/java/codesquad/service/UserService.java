@@ -1,11 +1,10 @@
 package codesquad.service;
 
+import codesquad.exception.UserNotFoundException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import javax.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -22,10 +21,10 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 }
