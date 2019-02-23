@@ -70,7 +70,7 @@ public class UserController {
                 .append(SessionUtil.getSessionUserId(session))
                 .append("/form")
                 .toString();
-}
+    }
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {

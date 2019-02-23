@@ -1,10 +1,8 @@
 package codesquad.net.slipp.web.domain;
 
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
@@ -12,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 @Setter
 @NoArgsConstructor
 @RequiredArgsConstructor
-public class Answer extends BaseTimeEntity{
+public class Answer extends BaseTimeEntity {
 
     @Id
     @GeneratedValue

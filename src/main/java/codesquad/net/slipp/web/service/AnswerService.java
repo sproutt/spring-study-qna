@@ -19,7 +19,7 @@ public class AnswerService {
     private QuestionRepository questionRepository;
 
     public Answer save(HttpSession session, String contents, long questionId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(()-> new QuestionNotFoundException(questionId));
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
         Answer answer = new Answer(question, SessionUtil.getSessionUser(session), contents);
 
         return answerRepository.save(answer);
@@ -37,8 +37,8 @@ public class AnswerService {
         return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
-    public User getWriter(long id){
-        return answerRepository.findUserById(id).orElseThrow(() -> new AnswerNotFoundException(id));
+    public User getWriter(long id) {
+        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id)).getWriter();
     }
 
 }

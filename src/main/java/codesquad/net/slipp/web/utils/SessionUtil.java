@@ -20,7 +20,7 @@ public class SessionUtil {
     }
 
     public static User getSessionUser(HttpSession session) {
-        if(!isLogin(session)){
+        if (!isLogin(session)) {
 
             throw new SessionNotFoundException();
         }
@@ -39,16 +39,16 @@ public class SessionUtil {
         return true;
     }
 
-    public static User getAuthUser(HttpSession session, User user){
-        if(!isSessionMatch(session, user)){
+    public static User getAuthUser(HttpSession session, User user) {
+        if (!isSessionMatch(session, user)) {
 
             throw new SessionNotMatchException();
         }
         return getSessionUser(session);
     }
 
-    public static void checkAuth(HttpSession session, User user){
-        if(!isSessionMatch(session, user)){
+    public static void checkAuth(HttpSession session, User user) {
+        if (!isSessionMatch(session, user)) {
 
             throw new SessionNotMatchException();
         }
