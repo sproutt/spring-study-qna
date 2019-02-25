@@ -30,8 +30,6 @@ public class QuestionController {
     @GetMapping("/{id}")
     public String goToQnaShow(Model model, @PathVariable Long id) {
         model.addAttribute("question", questionService.findById(id));
-        model.addAttribute("answerSize", questionService.getAnswerSize(id));
-        model.addAttribute("answers", questionService.getAnswer(id));
         return "/qna/show";
     }
 
@@ -54,7 +52,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/{id}")
-    public String deleteQuestion(Model model, @PathVariable Long id, HttpSession session) {
+    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
         if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }

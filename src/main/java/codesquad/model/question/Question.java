@@ -40,4 +40,8 @@ public class Question {
         return false;
     }
 
+    public int getAnswerSize(){
+        return answers.size();
+    }
+
 }
