@@ -11,6 +11,7 @@ import codesquad.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -39,7 +40,8 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public void delete(Long id, User user) {
+    public void delete(Long id, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         isAuthority(id, user);
         questionRepository.deleteById(id);
     }
@@ -58,24 +60,16 @@ public class QuestionService {
         return true;
     }
 
-    public List<Answer> getAnswer(Long id) {
-        Question question = findById(id);
-        return question.getAnswers();
-    }
-
-    public int getAnswerSize(Long id) {
-        List<Answer> answers = getAnswer(id);
-        return answers.size();
-    }
-
-    public void saveAnswer(User user, Answer answer, Long questionId) {
+    public void saveAnswer(HttpSession session, Answer answer, Long questionId) {
+        User user = (User) session.getAttribute("user");
         answer.setWriter(user);
         answer.setQuestion(findById(questionId));
         answer.setId(null);
         answerRepository.save(answer);
     }
 
-    public void deleteAnswer(Long id, User user) {
+    public void deleteAnswer(Long id, HttpSession session) {
+        User user = (User) session.getAttribute("user");
         Answer answer = answerRepository.findById(id).orElseThrow(() -> new RuntimeException());
         if (!answer.isWriter(user)) {
             throw new WrongUserException(user.getId());

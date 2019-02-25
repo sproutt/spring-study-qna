@@ -46,7 +46,7 @@ public class QuestionController {
         }
         Question question = questionService.findById(id);
         User writer = (User) session.getAttribute("user");
-        questionService.isAuthority(id, writer);
+        question.isWriter(writer);
         model.addAttribute("question", question);
         return "/qna/updateForm";
     }
@@ -56,8 +56,7 @@ public class QuestionController {
         if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
-        User user = (User) session.getAttribute("user");
-        questionService.delete(id, user);
+        questionService.delete(id, session);
         return "redirect:/";
     }
 
@@ -69,21 +68,19 @@ public class QuestionController {
 
     @PostMapping("/{id}/answer")
     public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
-        questionService.saveAnswer(user, answer, id);
+        questionService.saveAnswer(session, answer, id);
         return "redirect:/question/" + id.toString();
     }
 
     @DeleteMapping("/{id}/answer/{answerId}")
     public String deleteAnswer(@PathVariable Long id, @PathVariable Long answerId, HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
+        if (!SessionUtil.isLogin(session)) {
             return "redirect:/users/loginForm";
         }
-        questionService.deleteAnswer(answerId, user);
+        questionService.deleteAnswer(answerId, session);
         return "redirect:/question/" + id.toString();
     }
 

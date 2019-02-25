@@ -1,5 +1,6 @@
 package codesquad.model.question;
 
+import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.user.User;
 import lombok.Data;
@@ -37,7 +38,7 @@ public class Question {
         if(this.writer.getId().equals(user.getId())){
             return true;
         }
-        return false;
+        throw new WrongUserException(user.getId());
     }
 
     public int getAnswerSize(){
