@@ -45,7 +45,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, HttpSession session) {
         User user = userService.findByUserId(userId);
         session.setAttribute("user", user);
         return "redirect:/";
@@ -53,8 +53,7 @@ public class UserController {
 
     @PostMapping("/update/{id}")
     public String updateUser(User newUser, @PathVariable Long id) {
-        User user = userService.findById(id);
-        userService.update(user, newUser);
+        userService.update(id, newUser);
         return "redirect:/users/logout";
     }
 

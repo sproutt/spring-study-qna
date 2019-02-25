@@ -6,8 +6,6 @@ import codesquad.model.user.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpSession;
-
 @Service
 public class UserService {
 
@@ -26,11 +24,8 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
-    public User findSessionUser(HttpSession session) {
-        return (User) session.getAttribute("user");
-    }
-
-    public void update(User user, User newUser) {
+    public void update(Long id, User newUser) {
+        User user = findById(id);
         user.update(newUser);
         save(user);
     }
