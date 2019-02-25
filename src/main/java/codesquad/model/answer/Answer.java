@@ -3,8 +3,6 @@ package codesquad.model.answer;
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 
@@ -13,25 +11,17 @@ import javax.persistence.*;
 @Data
 public class Answer {
 
-    @Getter
-    @Setter
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Getter
-    @Setter
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
-    @Getter
-    @Setter
     @ManyToOne
     private User writer;
 
-    @Getter
-    @Setter
     @Column(nullable = false)
     private String content;
 
