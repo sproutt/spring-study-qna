@@ -18,16 +18,4 @@ public class HttpSessionUtils {
     public static User getSessionedUser(HttpSession session) {
         return (User) session.getAttribute(USER_SESSION_KEY);
     }
-
-    public static boolean checkSessionUser(Long id, HttpSession session) {
-        if (!HttpSessionUtils.isSessionedUser(session)) {
-            return false;
-        }
-
-        if (!HttpSessionUtils.getSessionedUser(session).isSameUser(id)) {
-            throw new IllegalStateException("Wrong access!");
-        }
-
-        return true;
-    }
 }

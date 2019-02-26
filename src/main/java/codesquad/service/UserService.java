@@ -27,4 +27,8 @@ public class UserService {
     public User findByUserId(String userId) {
         return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
+
+    public boolean isSameUserSessioned(Long id, User sessionedUser) {
+        return sessionedUser.isSameUser(id);
+    }
 }

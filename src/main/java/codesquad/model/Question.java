@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -27,8 +28,19 @@ public class Question {
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
+
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.getTitle();
         this.contents = updatedQuestion.getContents();
+    }
+
+    public Long findWriterId() {
+        return writer.getId();
+    }
+
+    public boolean isSameWriter(User sessionedUser) {
+        return this.writer.equals(sessionedUser);
     }
 }
