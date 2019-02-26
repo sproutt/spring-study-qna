@@ -1,5 +1,6 @@
 package codesquad.service;
 
+import codesquad.exception.AnswerNotFoundException;
 import codesquad.model.Answer;
 import codesquad.model.Question;
 import codesquad.model.User;
@@ -21,14 +22,16 @@ public class AnswerService {
     }
 
     public boolean isSameWriter(Long id, User sessionedUser) {
-        return sessionedUser.isSameUser(id);
+        return answerRepository.findById(id).orElseThrow(RuntimeException::new).isSameWriter(sessionedUser);
     }
 
     public void deleteAnswer(Long id) {
-        answerRepository.delete(answerRepository.findById(id).orElseThrow(RuntimeException::new));
+        Answer answer = answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
+        answer.delete();
+        answerRepository.save(answer);
     }
 
     public Long findWriterByAnswerId(Long id) {
-        return answerRepository.findById(id).orElseThrow(RuntimeException::new).findWriterId();
+        return answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new).findWriterId();
     }
 }

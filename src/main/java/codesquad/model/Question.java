@@ -1,5 +1,6 @@
 package codesquad.model;
 
+import codesquad.exception.QuestionNotFoundException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,12 +25,19 @@ public class Question {
     @Column(nullable = false)
     private String time;
 
+    @Column(nullable = false)
+    private boolean delete;
+
     @ManyToOne
     @JoinColumn(nullable = false, foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answers;
+
+    public Question() {
+        this.delete = false;
+    }
 
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.getTitle();
@@ -41,6 +49,14 @@ public class Question {
     }
 
     public boolean isSameWriter(User sessionedUser) {
-        return this.writer.equals(sessionedUser);
+        return this.writer.isSameUser(sessionedUser.getId());
+    }
+
+    public void delete() {
+        this.delete = true;
+    }
+
+    public boolean isAbleDelete() {
+        return answers.stream().allMatch(answer -> answer.isSameWriter(this.writer));
     }
 }

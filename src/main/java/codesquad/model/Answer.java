@@ -28,6 +28,9 @@ public class Answer {
     @Column(nullable = false)
     private String time;
 
+    @Column(nullable = false)
+    private boolean delete;
+
     public Answer() {
     }
 
@@ -35,9 +38,18 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
+        this.delete = false;
     }
 
     public Long findWriterId() {
-        return writer.getId();
+        return this.writer.getId();
+    }
+
+    public void delete() {
+        this.delete = true;
+    }
+
+    public boolean isSameWriter(User sessionedUser) {
+        return this.writer.isSameUser(sessionedUser.getId());
     }
 }

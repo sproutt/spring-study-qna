@@ -1,6 +1,7 @@
 package codesquad.service;
 
 import codesquad.exception.QuestionNotFoundException;
+import codesquad.exception.UserNotFoundException;
 import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.repository.QuestionRepository;
@@ -8,6 +9,7 @@ import codesquad.utils.HttpSessionUtils;
 import codesquad.utils.TimeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import javax.servlet.http.HttpSession;
 
 @Service
@@ -37,7 +39,11 @@ public class QuestionService {
     }
 
     public void deleteQuestion(Long id) {
-        questionRepository.delete(questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new));
+        Question question = questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
+        if (question.isAbleDelete()) {
+            question.delete();
+            questionRepository.save(question);
+        }
     }
 
     public Long findWriterIdByQuestionId(Long questionId) {
@@ -45,6 +51,6 @@ public class QuestionService {
     }
 
     public boolean isSameWriter(Long id, User sessionedUser) {
-        return questionRepository.findById(id).orElseThrow(RuntimeException::new).isSameWriter(sessionedUser);
+        return questionRepository.findById(id).orElseThrow(UserNotFoundException::new).isSameWriter(sessionedUser);
     }
 }

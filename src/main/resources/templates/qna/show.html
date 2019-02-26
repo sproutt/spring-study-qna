@@ -6,6 +6,9 @@
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
             {{#question}}
+            {{#delete}}
+            {{/delete}}
+            {{^delete}}
             <header class="qna-header">
                 <h2 class="qna-title">{{title}}</h2>
             </header>
@@ -46,9 +49,12 @@
                 </article>
                 <div class="qna-comment">
                     <div class="qna-comment-slipp">
-                        <p class="qna-comment-count"><strong>{{@index}}</strong>개의 의견</p>
+                        <p class="qna-comment-count"><strong></strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
                             {{#answers}}
+                            {{#delete}}
+                            {{/delete}}
+                            {{^delete}}
                             <article class="article" id="answer-1405">
                                 <div class="article-header">
                                     <div class="article-header-thumb">
@@ -81,6 +87,7 @@
                                     </ul>
                                 </div>
                             </article>
+                            {{/delete}}
                             {{/answers}}
                             <form class="submit-write" method="post" action="/questions/{{id}}/answers">
                                 <div class="form-group" style="padding:14px;">
@@ -93,6 +100,7 @@
                     </div>
                 </div>
             </div>
+            {{/delete}}
             {{/question}}
         </div>
     </div>

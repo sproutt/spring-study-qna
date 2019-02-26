@@ -49,8 +49,12 @@ public class QuestionController {
 
     @GetMapping("/questions/{questionId}/form")
     public String modifyQuestion(@PathVariable Long questionId, Model model, HttpSession session) {
-        if (!questionService.isSameWriter(questionId, HttpSessionUtils.getSessionedUser(session))) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
             return "redirect:/users/loginForm";
+        }
+
+        if (!questionService.isSameWriter(questionId, HttpSessionUtils.getSessionedUser(session))) {
+            return "redirect:/questions/{questionId}";
         }
         model.addAttribute("question", questionService.findById(questionId));
 
@@ -66,8 +70,12 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{questionId}")
     public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
-        if (!questionService.isSameWriter(questionService.findWriterIdByQuestionId(questionId), HttpSessionUtils.getSessionedUser(session))) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
             return "redirect:/users/loginForm";
+        }
+
+        if (!questionService.isSameWriter(questionService.findWriterIdByQuestionId(questionId), HttpSessionUtils.getSessionedUser(session))) {
+            return "redirect:/questions/{questionId}";
         }
         questionService.deleteQuestion(questionId);
 
