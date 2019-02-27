@@ -24,11 +24,6 @@ public class AnswerController {
         return "redirect:/questions/" + questionId;
     }
 
-    @PutMapping("/{id}")
-    public String modify(@PathVariable String questionId, @PathVariable Long id) {
-        return "redirect:/questions/" + questionId;
-    }
-
     @DeleteMapping("/{id}")
     public String delete(@PathVariable String questionId, @PathVariable Long id, HttpSession session) {
         if (!HttpSessionUtils.isSessionedUser(session)) {
