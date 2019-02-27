@@ -45,8 +45,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, HttpSession session) {
+    public String login(String userId, String password, HttpSession session) {
         User user = userService.findByUserId(userId);
+        if (!user.isCorrectPassword(password)) {
+            return "redirect:/users/login_failed";
+        }
         session.setAttribute("user", user);
         return "redirect:/";
     }
