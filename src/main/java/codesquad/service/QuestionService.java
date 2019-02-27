@@ -1,7 +1,6 @@
 package codesquad.service;
 
 import codesquad.exception.QuestionNotFoundException;
-import codesquad.exception.UserNotFoundException;
 import codesquad.model.Question;
 import codesquad.model.User;
 import codesquad.repository.QuestionRepository;
@@ -28,7 +27,7 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public Question findById(Long id) {
+    public Question findQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(QuestionNotFoundException::new);
     }
 
@@ -46,11 +45,7 @@ public class QuestionService {
         }
     }
 
-    public Long findWriterIdByQuestionId(Long questionId) {
-        return findById(questionId).findWriterId();
-    }
-
-    public boolean isSameWriter(Long id, User sessionedUser) {
-        return questionRepository.findById(id).orElseThrow(UserNotFoundException::new).isSameWriter(sessionedUser);
+    public boolean isSameWriter(Long id, HttpSession session) {
+        return findQuestionById(id).isSameWriter(HttpSessionUtils.getSessionedUser(session));
     }
 }

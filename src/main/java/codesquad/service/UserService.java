@@ -3,8 +3,11 @@ package codesquad.service;
 import codesquad.exception.UserNotFoundException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
+import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.servlet.http.HttpSession;
 
 @Service
 public class UserService {
@@ -28,7 +31,7 @@ public class UserService {
         return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
     }
 
-    public boolean isSameUserSessioned(Long id, User sessionedUser) {
-        return sessionedUser.isSameUser(id);
+    public boolean isSameUserSessioned(Long id, HttpSession session) {
+        return HttpSessionUtils.getSessionedUser(session).isSameUser(id);
     }
 }

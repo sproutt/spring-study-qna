@@ -40,7 +40,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!userService.isSameUserSessioned(id, HttpSessionUtils.getSessionedUser(session))) {
+        if (!userService.isSameUserSessioned(id, session)) {
             return "redirect:/users/loginForm";
         }
         model.addAttribute("user", userService.findById(id));
@@ -50,7 +50,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public String update(@PathVariable Long id, User updatedUser, String password, HttpSession session) {
-        if (!userService.isSameUserSessioned(id, HttpSessionUtils.getSessionedUser(session))) {
+        if (!userService.isSameUserSessioned(id, session)) {
             return "redirect:/users/loginForm";
         }
 

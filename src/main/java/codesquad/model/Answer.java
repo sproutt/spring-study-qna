@@ -31,18 +31,11 @@ public class Answer {
     @Column(nullable = false)
     private boolean delete;
 
-    public Answer() {
-    }
-
     public Answer(User writer, Question question, String contents) {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
         this.delete = false;
-    }
-
-    public Long findWriterId() {
-        return this.writer.getId();
     }
 
     public void delete() {

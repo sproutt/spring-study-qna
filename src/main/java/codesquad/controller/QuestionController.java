@@ -42,7 +42,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{questionId}")
     public String accessQuestion(@PathVariable Long questionId, Model model) {
-        model.addAttribute("question", questionService.findById(questionId));
+        model.addAttribute("question", questionService.findQuestionById(questionId));
 
         return "/qna/show";
     }
@@ -53,17 +53,17 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
 
-        if (!questionService.isSameWriter(questionId, HttpSessionUtils.getSessionedUser(session))) {
+        if (!questionService.isSameWriter(questionId, session)) {
             return "redirect:/questions/{questionId}";
         }
-        model.addAttribute("question", questionService.findById(questionId));
+        model.addAttribute("question", questionService.findQuestionById(questionId));
 
         return "/qna/updateForm";
     }
 
     @PutMapping("/questions/{questionId}")
     public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion) {
-        questionService.updateQuestion(questionService.findById(questionId), updatedQuestion);
+        questionService.updateQuestion(questionService.findQuestionById(questionId), updatedQuestion);
 
         return "redirect:/questions/{questionId}";
     }
@@ -74,7 +74,7 @@ public class QuestionController {
             return "redirect:/users/loginForm";
         }
 
-        if (!questionService.isSameWriter(questionService.findWriterIdByQuestionId(questionId), HttpSessionUtils.getSessionedUser(session))) {
+        if (!questionService.isSameWriter(questionId, session)) {
             return "redirect:/questions/{questionId}";
         }
         questionService.deleteQuestion(questionId);

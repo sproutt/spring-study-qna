@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.service.AnswerService;
-import codesquad.service.QuestionService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,15 +15,12 @@ public class AnswerController {
     @Autowired
     private AnswerService answerService;
 
-    @Autowired
-    private QuestionService questionService;
-
     @PostMapping("")
     public String uploadAnswer(@PathVariable Long questionId, String contents, HttpSession session) {
         if (!HttpSessionUtils.isSessionedUser(session)) {
             return "redirect:/users/loginForm";
         }
-        answerService.saveAnswer(HttpSessionUtils.getSessionedUser(session), questionService.findById(questionId), contents);
+        answerService.saveAnswer(session, questionId, contents);
         return "redirect:/questions/" + questionId;
     }
 
@@ -39,7 +35,7 @@ public class AnswerController {
             return "redirect:/users/loginForm";
         }
 
-        if (!answerService.isSameWriter(answerService.findWriterByAnswerId(id), HttpSessionUtils.getSessionedUser(session))) {
+        if (!answerService.isSameWriter(id, session)) {
             return "redirect:/questions/" + questionId;
         }
 
