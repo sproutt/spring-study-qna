@@ -18,13 +18,13 @@ import java.util.List;
 public class QuestionService {
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    AnswerRepository answerRepository;
+    private AnswerRepository answerRepository;
 
     @Autowired
-    QuestionRepository questionRepository;
+    private QuestionRepository questionRepository;
 
     public Question findById(Long id) {
         return questionRepository.findById(id).orElseThrow(() -> new NullQuestionException(id));
