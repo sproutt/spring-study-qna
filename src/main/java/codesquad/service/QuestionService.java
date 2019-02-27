@@ -1,6 +1,7 @@
 package codesquad.service;
 
 import codesquad.exception.NullQuestionException;
+import codesquad.exception.NullUserException;
 import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.answer.AnswerRepository;
@@ -47,7 +48,7 @@ public class QuestionService {
     }
 
     public void save(Question question, String userId) {
-        User writer = userRepository.findByUserId(userId);
+        User writer = userRepository.findByUserId(userId).orElseThrow(()->new NullUserException(userId));
         question.setWriter(writer);
         questionRepository.save(question);
     }
