@@ -13,8 +13,8 @@ public class indexController {
     private QuestionService questionService;
 
     @GetMapping("")
-    public String list(Model model){
-        model.addAttribute("questions",questionService.findAll());
+    public String list(Model model) {
+        model.addAttribute("questions", questionService.findAll());
         return "/index";
     }
 
