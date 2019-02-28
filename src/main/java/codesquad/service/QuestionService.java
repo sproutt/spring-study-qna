@@ -48,7 +48,7 @@ public class QuestionService {
     }
 
     public void save(Question question, String userId) {
-        User writer = userRepository.findByUserId(userId).orElseThrow(()->new NullUserException(userId));
+        User writer = userRepository.findByUserId(userId).orElseThrow(() -> new NullUserException(userId));
         question.setWriter(writer);
         questionRepository.save(question);
     }
@@ -75,7 +75,8 @@ public class QuestionService {
         if (!answer.isWriter(user)) {
             throw new WrongUserException(user.getId());
         }
-        answerRepository.delete(answer);
+        answer.setDeleted(true);
+        answerRepository.save(answer);
     }
 
 }

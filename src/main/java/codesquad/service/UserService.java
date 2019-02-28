@@ -21,7 +21,7 @@ public class UserService {
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId);
+        return userRepository.findByUserId(userId).orElseThrow(()->new NullUserException(userId));
     }
 
     public void update(Long id, User newUser) {

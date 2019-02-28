@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Data
@@ -26,7 +27,7 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    @OneToMany(mappedBy="question")
+    @OneToMany(mappedBy = "question")
     private List<Answer> answers;
 
     public void update(Question question) {
@@ -34,15 +35,19 @@ public class Question {
         this.title = question.title;
     }
 
-    public boolean isWriter(User user){
-        if(this.writer.getId().equals(user.getId())){
+    public boolean isWriter(User user) {
+        if (this.writer.getId().equals(user.getId())) {
             return true;
         }
         throw new WrongUserException(user.getId());
     }
 
-    public int getAnswerSize(){
-        return answers.size();
+    public long getAnswerSize() {
+        return answers.stream().filter(answer -> (!answer.isDeleted())).count();
+    }
+
+    public List<Answer> getTrueAnswers() {
+        return answers.stream().filter(answer -> (!answer.isDeleted())).collect(Collectors.toList());
     }
 
 }

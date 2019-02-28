@@ -53,7 +53,7 @@
                       <p class="qna-comment-count"><strong>{{answerSize}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
                           <article class="article" id="answer-1406">
-                              {{#answers}}
+                              {{#trueAnswers}}
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -82,7 +82,7 @@
                                   </ul>
                               </div>
                           </article>
-                          {{/answers}}
+                          {{/trueAnswers}}
 
                           <form class="submit-write" method="post" action="/question/{{id}}/answer">
                               <div class="form-group" style="padding:14px;">

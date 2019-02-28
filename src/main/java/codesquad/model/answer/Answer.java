@@ -2,7 +2,9 @@ package codesquad.model.answer;
 
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
+import lombok.Builder;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -23,6 +25,9 @@ public class Answer {
 
     @Column(nullable = false)
     private String content;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 
     public boolean isWriter(User user) {
         if (writer.getId().equals(user.getId())) {
