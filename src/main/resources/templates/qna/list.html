@@ -10,6 +10,7 @@
                 <li>
                     <div class="wrap">
                         <div class="main">
+                            {{^deleted}}
                             <strong class="subject">
                                 <a href="/questions/{{id}}">{{title}}</a>
                             </strong>
@@ -22,6 +23,7 @@
                                 <i class="icon-reply"></i>
                                 <span class="point">{{id}}</span>
                             </div>
+                            {{/deleted}}
                         </div>
                     </div>
                 </li>

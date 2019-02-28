@@ -33,44 +33,51 @@ public class QuestionController {
     @GetMapping("questions/form")
     public String getQuestionForm(HttpSession session, Model model) {
         if (!HttpSessionUtils.isSessionedUser(session)) {
-            return "/users/loginForm";
+            return "redirect:/users/loginForm";
         }
         model.addAttribute("user", HttpSessionUtils.getSessionedUser(session));
 
         return "/qna/form";
     }
 
-    @GetMapping("/questions/{id}")
-    public String accessQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
+    @GetMapping("/questions/{questionId}")
+    public String accessQuestion(@PathVariable Long questionId, Model model) {
+        model.addAttribute("question", questionService.findQuestionById(questionId));
 
         return "/qna/show";
     }
 
-    @GetMapping("/questions/{id}/form")
-    public String modifyQuestion(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.checkSessionUser(id, session)) {
-            return "/users/loginForm";
+    @GetMapping("/questions/{questionId}/form")
+    public String modifyQuestion(@PathVariable Long questionId, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
+            return "redirect:/users/loginForm";
         }
-        model.addAttribute("question", questionService.findById(id));
+
+        if (!questionService.isSameWriter(questionId, session)) {
+            return "redirect:/questions/{questionId}";
+        }
+        model.addAttribute("question", questionService.findQuestionById(questionId));
 
         return "/qna/updateForm";
     }
 
-    @PutMapping("/questions/{id}")
-    public String updateQuestion(@PathVariable Long id, Question updatedQuestion) {
-        Question question = questionService.findById(id);
-        questionService.updateQuestion(question, updatedQuestion);
+    @PutMapping("/questions/{questionId}")
+    public String updateQuestion(@PathVariable Long questionId, Question updatedQuestion) {
+        questionService.updateQuestion(questionService.findQuestionById(questionId), updatedQuestion);
 
-        return "redirect:/questions/{id}";
+        return "redirect:/questions/{questionId}";
     }
 
-    @DeleteMapping("/questions/{id}")
-    public String deleteQuestion(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.checkSessionUser(id, session)) {
-            return "/users/loginForm";
+    @DeleteMapping("/questions/{questionId}")
+    public String deleteQuestion(@PathVariable Long questionId, HttpSession session) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
+            return "redirect:/users/loginForm";
         }
-        questionService.deleteQuestion(id);
+
+        if (!questionService.isSameWriter(questionId, session)) {
+            return "redirect:/questions/{questionId}";
+        }
+        questionService.deleteQuestion(questionId);
 
         return "redirect:/";
     }

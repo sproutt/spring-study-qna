@@ -1,13 +1,15 @@
 package codesquad.service;
 
+import codesquad.exception.UserNotFoundException;
 import codesquad.model.User;
 import codesquad.repository.UserRepository;
+import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
+import javax.servlet.http.HttpSession;
 
-@Component
+@Service
 public class UserService {
 
     @Autowired
@@ -22,10 +24,14 @@ public class UserService {
     }
 
     public User findById(Long id) {
-        return userRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findById(id).orElseThrow(UserNotFoundException::new);
     }
 
     public User findByUserId(String userId) {
-        return userRepository.findByUserId(userId).orElseThrow(EntityNotFoundException::new);
+        return userRepository.findByUserId(userId).orElseThrow(UserNotFoundException::new);
+    }
+
+    public boolean isSameUserSessioned(Long id, HttpSession session) {
+        return HttpSessionUtils.getSessionedUser(session).isSameUser(id);
     }
 }
