@@ -18,25 +18,27 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public void save(HttpSession session, String content, long questionId) {
-        Question question = questionRepository.findById(questionId).orElseThrow(()-> new QuestionNotFoundException(questionId));
-        Answer answer = new Answer(question, SessionUtil.getSessionUser(session), content);
-        answerRepository.save(answer);
+    public Answer save(HttpSession session, String contents, long questionId) {
+        Question question = questionRepository.findById(questionId).orElseThrow(() -> new QuestionNotFoundException(questionId));
+        Answer answer = new Answer(question, SessionUtil.getSessionUser(session), contents);
+
+        return answerRepository.save(answer);
     }
 
-    public void delete(HttpSession session, long id) {
-        SessionUtil.checkAuth(session, getWriter(id));
+    public Answer delete(HttpSession session, long id) {
+        SessionUtil.checkAuth(session, this.getWriter(id));
         Answer answer = this.findById(id);
         answer.setDeleted(true);
+
+        return answerRepository.save(answer);
     }
 
     public Answer findById(long id) {
-
         return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id));
     }
 
-    public User getWriter(long id){
-        return answerRepository.findWriterById(id).orElseThrow(() -> new AnswerNotFoundException(id));
+    public User getWriter(long id) {
+        return answerRepository.findById(id).orElseThrow(() -> new AnswerNotFoundException(id)).getWriter();
     }
 
 }

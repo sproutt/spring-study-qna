@@ -1,14 +1,16 @@
 package codesquad.net.slipp.web.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
 @Setter
-public class Answer {
+@NoArgsConstructor
+@RequiredArgsConstructor
+public class Answer extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -16,27 +18,27 @@ public class Answer {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    @NonNull
     private Question question;
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_user"))
+    @NonNull
     private User writer;
 
     @Column(nullable = false)
     @Lob
-    private String content;
+    @NonNull
+    private String contents;
 
     @Column(nullable = false)
     private Boolean deleted = false;
-
-    public Answer(Question question, User writer, String content) {
-        this.question = question;
-        this.writer = writer;
-        this.content = content;
-    }
 
     public boolean match(Answer answer) {
         return this.id == answer.id;
     }
 
+    public String getCreateYearToSecond() {
+        return getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
 }

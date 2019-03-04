@@ -1,11 +1,9 @@
 package codesquad.net.slipp.web.utils;
 
 
-import codesquad.net.slipp.web.domain.Answer;
 import codesquad.net.slipp.web.domain.User;
 import codesquad.net.slipp.web.exception.SessionNotFoundException;
 import codesquad.net.slipp.web.exception.SessionNotMatchException;
-import codesquad.net.slipp.web.service.UserService;
 
 import javax.servlet.http.HttpSession;
 
@@ -18,20 +16,18 @@ public class SessionUtil {
 
             return false;
         }
-
         return true;
     }
 
     public static User getSessionUser(HttpSession session) {
-        if(!isLogin(session)){
+        if (!isLogin(session)) {
+
             throw new SessionNotFoundException();
         }
-
         return (User) session.getAttribute(SESSION_KEY);
     }
 
     public static Long getSessionUserId(HttpSession session) {
-
         return getSessionUser(session).getId();
     }
 
@@ -40,20 +36,20 @@ public class SessionUtil {
 
             return false;
         }
-
         return true;
     }
 
-    public static User getAuthUser(HttpSession session, User user){
-        if(isSessionMatch(session, user)){
+    public static User getAuthUser(HttpSession session, User user) {
+        if (!isSessionMatch(session, user)) {
+
             throw new SessionNotMatchException();
         }
-
         return getSessionUser(session);
     }
 
-    public static void checkAuth(HttpSession session, User user){
-        if(isSessionMatch(session, user)){
+    public static void checkAuth(HttpSession session, User user) {
+        if (!isSessionMatch(session, user)) {
+
             throw new SessionNotMatchException();
         }
     }

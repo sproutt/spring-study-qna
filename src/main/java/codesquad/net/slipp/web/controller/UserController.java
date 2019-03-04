@@ -1,7 +1,6 @@
 package codesquad.net.slipp.web.controller;
 
 import codesquad.net.slipp.web.domain.User;
-import codesquad.net.slipp.web.domain.UserRepository;
 import codesquad.net.slipp.web.service.UserService;
 import codesquad.net.slipp.web.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,20 +20,17 @@ public class UserController {
     @GetMapping("")
     public String userList(Model model) {
         model.addAttribute("users", userService.findAll());
-
         return "/user/list";
     }
 
     @PostMapping("")
     public String create(User user) {
         userService.save(user);
-
         return "redirect:/users";
     }
 
     @GetMapping("/login")
     public String loginForm() {
-
         return "/user/login";
     }
 
@@ -45,7 +41,6 @@ public class UserController {
 
             return "redirect:/";
         }
-
         return "/user/login_failed";
     }
 
@@ -70,16 +65,16 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @GetMapping("/updateForm")
     public String updateForm(HttpSession session) {
-
-        return new StringBuffer("redirect:/users/").append(SessionUtil.getSessionUserId(session)).append("/form").toString();
-}
+        return new StringBuffer("redirect:/users/")
+                .append(SessionUtil.getSessionUserId(session))
+                .append("/form")
+                .toString();
+    }
 
     @PutMapping("/{id}")
     public String update(@PathVariable long id, HttpSession session, User updatedUser, String modifiedPassword) {
         if (!userService.checkIdPassword(updatedUser)) {
-
             return "/user/error";
         }
         userService.update(SessionUtil.getAuthUser(session, userService.findById(id)),
