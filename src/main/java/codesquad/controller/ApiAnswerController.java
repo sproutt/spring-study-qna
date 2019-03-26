@@ -1,27 +1,27 @@
 package codesquad.controller;
 
+import codesquad.dto.AnswerDTO;
+import codesquad.model.Answer;
 import codesquad.service.AnswerService;
 import codesquad.utils.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 
-@Controller
-@RequestMapping("/questions/{questionId}/answers")
-public class AnswerController {
+@RestController
+@RequestMapping("/api/questions/{questionId}/answers")
+public class ApiAnswerController {
 
     @Autowired
     private AnswerService answerService;
 
     @PostMapping("")
-    public String uploadAnswer(@PathVariable Long questionId, String contents, HttpSession session) {
+    public Answer uploadAnswer(@PathVariable Long questionId, @RequestBody AnswerDTO answerDTO, HttpSession session) {
         if (!HttpSessionUtils.isSessionedUser(session)) {
-            return "redirect:/users/loginForm";
+            return null;
         }
-        answerService.saveAnswer(session, questionId, contents);
-        return "redirect:/questions/" + questionId;
+        return answerService.saveAnswer(session, questionId, answerDTO.getContents());
     }
 
     @DeleteMapping("/{id}")

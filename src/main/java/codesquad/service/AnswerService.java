@@ -24,11 +24,15 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public void saveAnswer(HttpSession session, Long questionId, String contents) {
+    public Answer saveAnswer(HttpSession session, Long questionId, String contents) {
         Answer answer = new Answer(HttpSessionUtils.getSessionedUser(session), findQuestion(questionId), contents);
         answer.setTime(TimeUtils.getCurrentTime());
 
-        answerRepository.save(answer);
+        Question question = findQuestion(questionId);
+        question.addAnswer(answer);
+        questionRepository.save(question);
+
+        return answerRepository.save(answer);
     }
 
     public boolean isSameWriter(Long id, HttpSession session) {

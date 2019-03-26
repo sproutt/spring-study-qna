@@ -1,8 +1,10 @@
 package codesquad.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
 import javax.persistence.*;
 
 @Getter
@@ -16,6 +18,7 @@ public class Answer {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_parent_id"))
     private Question question;
 
