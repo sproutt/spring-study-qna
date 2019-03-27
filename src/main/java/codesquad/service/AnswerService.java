@@ -36,13 +36,14 @@ public class AnswerService {
     }
 
     public boolean isSameWriter(Long id, HttpSession session) {
-        return findQuestion(id).isSameWriter(HttpSessionUtils.getSessionedUser(session));
+        return answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new).isSameWriter(HttpSessionUtils.getSessionedUser(session));
     }
 
-    public void deleteAnswer(Long id) {
+    public boolean deleteAnswer(Long id) {
         Answer answer = answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
         answer.delete();
-        answerRepository.save(answer);
+
+        return answerRepository.save(answer).isDeleted();
     }
 
     private Question findQuestion(Long id) {

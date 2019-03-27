@@ -33,17 +33,20 @@ public class Answer {
     private String time;
 
     @Column(nullable = false)
-    private boolean delete;
+    private boolean deleted;
+
+    private String url;
 
     public Answer(User writer, Question question, String contents) {
         this.writer = writer;
         this.question = question;
         this.contents = contents;
-        this.delete = false;
+        this.url = "/api/questions/" + question.getId() + "/answers";
+        this.deleted = false;
     }
 
     public void delete() {
-        this.delete = true;
+        this.deleted = true;
     }
 
     public boolean isSameWriter(User sessionedUser) {

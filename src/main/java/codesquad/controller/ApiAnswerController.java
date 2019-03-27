@@ -1,6 +1,8 @@
 package codesquad.controller;
 
+import codesquad.Result;
 import codesquad.dto.AnswerDTO;
+import codesquad.exception.UnAuthorizedException;
 import codesquad.model.Answer;
 import codesquad.service.AnswerService;
 import codesquad.utils.HttpSessionUtils;
@@ -25,17 +27,18 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public String delete(@PathVariable String questionId, @PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isSessionedUser(session)) {
-            return "redirect:/users/loginForm";
+    public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
+        if (!HttpSessionUtils.isSessionedUser(session) || !answerService.isSameWriter(id, session)) {
+            throw new UnAuthorizedException();
         }
 
-        if (!answerService.isSameWriter(id, session)) {
-            return "redirect:/questions/" + questionId;
+        Result result = new Result(id);
+
+        if (!answerService.deleteAnswer(id)) {
+            return result.fail("error message");
         }
 
-        answerService.deleteAnswer(id);
-
-        return "redirect:/questions/" + questionId;
+        System.out.println("넘어가랏");
+        return result.ok();
     }
 }
