@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 @Controller
 @RequestMapping("/question")
@@ -66,14 +67,14 @@ public class QuestionController {
         return "redirect:/";
     }
 
-    @PostMapping("/{id}/answer")
-    public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session) {
-        if (!SessionUtil.isLogin(session)) {
-            return "redirect:/users/loginForm";
-        }
-        questionService.saveAnswer(session, answer, id);
-        return "redirect:/question/" + id.toString();
-    }
+//    @PostMapping("/{id}/answer")
+//    public String addAnswer(Answer answer, @PathVariable Long id, HttpSession session) {
+//        if (!SessionUtil.isLogin(session)) {
+//            return "redirect:/users/loginForm";
+//        }
+//        questionService.saveAnswer(session, answer, id);
+//        return "redirect:/question/" + id.toString();
+//    }
 
     @DeleteMapping("/{id}/answer/{answerId}")
     public String deleteAnswer(@PathVariable Long id, @PathVariable Long answerId, HttpSession session) {

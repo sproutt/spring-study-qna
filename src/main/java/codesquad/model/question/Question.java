@@ -3,6 +3,8 @@ package codesquad.model.question;
 import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.user.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -15,6 +17,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    @JsonBackReference
     private User writer;
 
     @Id
@@ -27,7 +30,8 @@ public class Question {
     @Column(nullable = false)
     private String contents;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Answer> answers;
 
     public void update(Question question) {
@@ -51,3 +55,5 @@ public class Question {
     }
 
 }
+
+
