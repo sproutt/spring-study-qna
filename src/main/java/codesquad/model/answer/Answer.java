@@ -4,9 +4,7 @@ import codesquad.model.question.Question;
 import codesquad.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jdk.nashorn.internal.ir.annotations.Ignore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +20,7 @@ public class Answer {
 
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     @ManyToOne
+    @JsonBackReference
     private Question question;
 
     @ManyToOne

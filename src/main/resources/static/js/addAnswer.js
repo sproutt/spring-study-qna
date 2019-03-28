@@ -18,21 +18,36 @@ document.addEventListener("DOMContentLoaded", () => {
 function initEvents() {
     const answerBtn = document.getElementById("answerButton");
     if (answerBtn === null) return;
-    console.log("1번");
     answerBtn.addEventListener("click", registerAnswerHandler);
 }
 
-function fetchManager({url, method, body, headers, callback}) {
-    fetch(url, {method, body, headers, credentials: "same-origin"})
-        .then((response) => {
-            return response.json()
-        }).then((result) => {
-        callback(result)
+function fetchManager({ url, method, body, headers, callback }) {
+    fetch(url, {
+        //fetch("http://xxx.com/dd", {
+        method,
+        body,
+        headers,
+        credentials: "same-origin"
+    }).then((response) => {
+        const data = response.json();
+        return data.then(result =>  {
+            return {
+                'result' : result,
+                'status' : response.status
+            }
+        })
+    }).then( ({result, status}) => {
+        if(status >= 400) {
+            console.log('error 가 발생했네요 ', result.error);
+        }else{
+            callback(result)
+        }
+    }).catch(err => {
+        console.log("oops..", err)
     })
 }
 
 function registerAnswerHandler(evt) {
-    console.log("2번");
     evt.preventDefault();
     const content = document.getElementById("content").value;
     console.log(content);
@@ -77,8 +92,6 @@ function appendAnswer({id, question, writer, content}) {
             </div>
         </article> `
 
-    var element = document.getElementById("articles");
-    element.insertAdjacentHTML("afterbegin",html);
-    return;
-    //$(".qna-comment-slipp-articles").insertAdjacentHTML("afterbegin", html);
+    var element = document.getElementById("submit");
+    element.insertAdjacentHTML("beforebegin",html);
 }

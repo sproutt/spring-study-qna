@@ -1,9 +1,8 @@
 package codesquad.model.user;
 
 import codesquad.model.answer.Answer;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -30,9 +29,8 @@ public class User {
     @Column(nullable = false)
     private String email;
 
-    @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Answer> answers;
+//    @OneToMany(mappedBy = "question")
+//    private List<Answer> answers;
 
     public void update(User newUser) {
         this.name = newUser.getName();
