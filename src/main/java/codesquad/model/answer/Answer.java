@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 @Entity
@@ -30,6 +31,9 @@ public class Answer {
     private String content;
 
     @Column(nullable = false)
+    private String date;
+
+    @Column(nullable = false)
     private boolean deleted = false;
 
     public Answer(){
@@ -37,6 +41,7 @@ public class Answer {
         this.writer = null;
         this.question = null;
         this.content = null;
+        this.date = null;
     }
 
     public Answer(User writer,Question question,String content){
@@ -44,6 +49,7 @@ public class Answer {
         this.writer = writer;
         this.question = question;
         this.content = content;
+        this.date = new Date().toString();
     }
 
     public boolean isWriter(User user) {

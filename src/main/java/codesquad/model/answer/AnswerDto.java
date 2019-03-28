@@ -15,6 +15,8 @@ public class AnswerDto {
 
     private String content;
 
+    private String date;
+
     private boolean deleted = false;
 
     public AnswerDto(Answer answer){
@@ -23,6 +25,7 @@ public class AnswerDto {
         this.writer = answer.getWriter();
         this.content = answer.getContent();
         this.deleted = answer.isDeleted();
+        this.date = answer.getDate();
     }
 
 }

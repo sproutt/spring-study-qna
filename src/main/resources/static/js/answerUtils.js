@@ -50,7 +50,6 @@ function fetchManager({ url, method, body, headers, callback }) {
 function registerAnswerHandler(evt) {
     evt.preventDefault();
     const content = document.getElementById("content").value;
-    console.log(content);
     $(".form-control").value = "";
     const id = location.pathname;
     fetchManager({
@@ -62,16 +61,38 @@ function registerAnswerHandler(evt) {
     })
 }
 
-function appendAnswer({id, question, writer, content}) {
+function deleteAnswerHandler(evt) {
+    if(evt.target.className !== "answer-delete") return;
+    evt.preventDefault();
+    const url = evt.target.href;
+    const id = url.replace(/.+\/(\d+)$/, "$1");
+
+    fetchManager({
+        url,
+        method: 'DELETE',
+        headers: { 'content-type': 'application/json'},
+        body: JSON.stringify({id}),
+        callback: deleteAnswer
+    })
+}
+
+function deleteAnswer({id}) {
+    const selector = `[data-id=${id}]`;
+    const target = $(selector);
+    target.remove();
+}
+
+function appendAnswer({id, question, date, writer, content}) {
+
     const html = `
-        <article class="article">
+        <article class="article" data-id=${id}>
             <div class="article-header">
                 <div class="article-header-thumb">
                     <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
                 </div>
                 <div class="article-header-text">
                     <a href="#" class="article-author-name">${writer.name}</a>
-                    <div class="article-header-time">"2016-01-12 14:06"</div>
+                    <div class="article-header-time">${date}</div>
                 </div>
             </div>
             <div class="article-doc comment-doc">
@@ -80,13 +101,7 @@ function appendAnswer({id, question, writer, content}) {
             <div class="article-util">
             <ul class="article-util-list">
                 <li>
-                    <a class="link-modify-article" href="/api/questions/${question.id}/answers/${id}">수정</a>
-                </li>
-                <li>
-                    <form class="delete-answer-form" action="/api/questions/${question.id}/answers/${id}" method="POST">
-                        <input type="hidden" name="_method" value="DELETE">
-                        <button type="submit" class="delete-answer-button">삭제</button>
-                    </form>
+                    <a class="answer-delete" methods="DELETE" id ="deleteBtn" href="/api/question/${question.id}/answers/${id}">삭제</a>
                 </li>
             </ul>
             </div>
@@ -94,4 +109,7 @@ function appendAnswer({id, question, writer, content}) {
 
     var element = document.getElementById("submit");
     element.insertAdjacentHTML("beforebegin",html);
+
+    const removeBtn = document.getElementById("deleteBtn");
+    removeBtn.addEventListener("click", deleteAnswerHandler);
 }
