@@ -31,7 +31,7 @@ public class User {
     private String email;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Answer> answers;
 
     public void update(User newUser) {

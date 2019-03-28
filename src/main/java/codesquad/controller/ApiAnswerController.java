@@ -9,10 +9,11 @@ import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
 import codesquad.utils.SessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
+
 
 @RestController
 @RequestMapping("/api/question/{questionId}/answers")

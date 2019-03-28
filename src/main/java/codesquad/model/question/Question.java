@@ -4,6 +4,7 @@ import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @JsonBackReference
+    @JsonIgnore
     private User writer;
 
     @Id
@@ -31,7 +32,7 @@ public class Question {
     private String contents;
 
     @OneToMany(mappedBy = "question", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnore
     private List<Answer> answers;
 
     public void update(Question question) {
