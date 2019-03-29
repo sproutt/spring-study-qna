@@ -19,6 +19,8 @@ function initEvents() {
     const answerBtn = document.getElementById("answerButton");
     if (answerBtn === null) return;
     answerBtn.addEventListener("click", registerAnswerHandler);
+    var answerList = document.querySelector('.qna-comment-slipp-articles');
+    answerList.addEventListener('click',deleteAnswerHandler);
 }
 
 function fetchManager({ url, method, body, headers, callback }) {
@@ -109,7 +111,4 @@ function appendAnswer({id, question, date, writer, content}) {
 
     var element = document.getElementById("submit");
     element.insertAdjacentHTML("beforebegin",html);
-
-    const removeBtn = document.getElementById("deleteBtn");
-    removeBtn.addEventListener("click", deleteAnswerHandler);
 }
