@@ -5,7 +5,7 @@ import codesquad.exception.NullUserException;
 import codesquad.exception.WrongUserException;
 import codesquad.model.answer.Answer;
 import codesquad.model.answer.AnswerRepository;
-import codesquad.model.answer.ContentDto;
+import codesquad.model.content.Content;
 import codesquad.model.question.Question;
 import codesquad.model.question.QuestionRepository;
 import codesquad.model.user.User;
@@ -63,10 +63,10 @@ public class QuestionService {
         return true;
     }
 
-    public Answer saveAnswer(HttpSession session, ContentDto content, Long questionId) {
+    public Answer saveAnswer(HttpSession session, Content content, Long questionId) {
         User loginUser = SessionUtil.loginUser(session);
         Question question = findById(questionId);
-        return answerRepository.save(new Answer(loginUser, question , content.getContent()));
+        return answerRepository.save(new Answer(loginUser, question, content.getContent()));
     }
 
     public Answer deleteAnswer(Long id, HttpSession session) {

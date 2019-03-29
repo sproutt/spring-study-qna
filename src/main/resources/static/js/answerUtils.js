@@ -20,10 +20,10 @@ function initEvents() {
     if (answerBtn === null) return;
     answerBtn.addEventListener("click", registerAnswerHandler);
     var answerList = document.querySelector('.qna-comment-slipp-articles');
-    answerList.addEventListener('click',deleteAnswerHandler);
+    answerList.addEventListener('click', deleteAnswerHandler);
 }
 
-function fetchManager({ url, method, body, headers, callback }) {
+function fetchManager({url, method, body, headers, callback}) {
     fetch(url, {
         //fetch("http://xxx.com/dd", {
         method,
@@ -32,16 +32,16 @@ function fetchManager({ url, method, body, headers, callback }) {
         credentials: "same-origin"
     }).then((response) => {
         const data = response.json();
-        return data.then(result =>  {
+        return data.then(result => {
             return {
-                'result' : result,
-                'status' : response.status
+                'result': result,
+                'status': response.status
             }
         })
-    }).then( ({result, status}) => {
-        if(status >= 400) {
+    }).then(({result, status}) => {
+        if (status >= 400) {
             console.log('error 가 발생했네요 ', result.error);
-        }else{
+        } else {
             callback(result)
         }
     }).catch(err => {
@@ -64,7 +64,7 @@ function registerAnswerHandler(evt) {
 }
 
 function deleteAnswerHandler(evt) {
-    if(evt.target.className !== "answer-delete") return;
+    if (evt.target.className !== "answer-delete") return;
     evt.preventDefault();
     const url = evt.target.href;
     const id = url.replace(/.+\/(\d+)$/, "$1");
@@ -72,7 +72,7 @@ function deleteAnswerHandler(evt) {
     fetchManager({
         url,
         method: 'DELETE',
-        headers: { 'content-type': 'application/json'},
+        headers: {'content-type': 'application/json'},
         body: JSON.stringify({id}),
         callback: deleteAnswer
     })
@@ -110,5 +110,5 @@ function appendAnswer({id, question, date, writer, content}) {
         </article> `
 
     var element = document.getElementById("submit");
-    element.insertAdjacentHTML("beforebegin",html);
+    element.insertAdjacentHTML("beforebegin", html);
 }

@@ -19,9 +19,9 @@ public class AnswerDto {
 
     private boolean deleted = false;
 
-    public AnswerDto(Answer answer){
+    public AnswerDto(Answer answer) {
         this.id = answer.getId();
-        this.question =answer.getQuestion();
+        this.question = answer.getQuestion();
         this.writer = answer.getWriter();
         this.content = answer.getContent();
         this.deleted = answer.isDeleted();

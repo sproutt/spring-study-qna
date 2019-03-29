@@ -1,8 +1,8 @@
-package codesquad.model.answer;
+package codesquad.model.content;
 
 import lombok.Data;
 
 @Data
-public class ContentDto {
+public class Content {
     private String content;
 }
