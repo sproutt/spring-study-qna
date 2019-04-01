@@ -29,7 +29,7 @@ public class ApiAnswerController {
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable Long questionId, @PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isSessionedUser(session) || !answerService.isSameWriter(id, session)) {
+        if (!HttpSessionUtils.isSessionedUser(session)) {
             throw new UnAuthorizedException();
         }
 
