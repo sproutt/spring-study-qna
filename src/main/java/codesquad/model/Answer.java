@@ -1,5 +1,6 @@
 package codesquad.model;
 
+import codesquad.exception.UnAuthorizedException;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -45,7 +46,10 @@ public class Answer {
         this.deleted = false;
     }
 
-    public void delete() {
+    public void delete(User sessionedUser) {
+        if (isSameWriter(sessionedUser)) {
+            throw new UnAuthorizedException();
+        }
         this.deleted = true;
     }
 

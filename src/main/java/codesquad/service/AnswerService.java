@@ -39,9 +39,9 @@ public class AnswerService {
         return answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new).isSameWriter(HttpSessionUtils.getSessionedUser(session));
     }
 
-    public boolean deleteAnswer(Long id) {
+    public boolean deleteAnswer(User sessionedUser, Long id) {
         Answer answer = answerRepository.findById(id).orElseThrow(AnswerNotFoundException::new);
-        answer.delete();
+        answer.delete(sessionedUser);
 
         return answerRepository.save(answer).isDeleted();
     }

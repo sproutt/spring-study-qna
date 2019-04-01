@@ -6,6 +6,7 @@ import codesquad.exception.UnAuthorizedException;
 import codesquad.model.Answer;
 import codesquad.service.AnswerService;
 import codesquad.utils.HttpSessionUtils;
+import com.sun.deploy.net.HttpUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class ApiAnswerController {
     @PostMapping("")
     public Answer uploadAnswer(@PathVariable Long questionId, @RequestBody AnswerDTO answerDTO, HttpSession session) {
         if (!HttpSessionUtils.isSessionedUser(session)) {
-            return null;
+            throw new UnAuthorizedException();
         }
         return answerService.saveAnswer(session, questionId, answerDTO.getContents());
     }
@@ -34,11 +35,10 @@ public class ApiAnswerController {
 
         Result result = new Result(id);
 
-        if (!answerService.deleteAnswer(id)) {
+        if (!answerService.deleteAnswer(HttpSessionUtils.getSessionedUser(session), id)) {
             return result.fail("error message");
         }
 
-        System.out.println("넘어가랏");
         return result.ok();
     }
 }
