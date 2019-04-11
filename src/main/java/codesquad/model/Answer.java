@@ -47,7 +47,7 @@ public class Answer {
     }
 
     public void delete(User sessionedUser) {
-        if (isSameWriter(sessionedUser)) {
+        if (!isSameWriter(sessionedUser)) {
             throw new UnAuthorizedException();
         }
         this.deleted = true;

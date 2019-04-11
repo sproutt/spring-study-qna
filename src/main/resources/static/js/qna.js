@@ -14,7 +14,9 @@ function initEvents() {
     console.log(answerDeleteBtn)
     if (answerBtn === null) return;
     answerBtn.addEventListener("click", registerAnswerHandler);
-    answerDeleteBtn.addEventListener('click', deleteAnswerHandler);
+    answerDeleteBtn.forEach(function (delBtn) {
+        delBtn.addEventListener('click', deleteAnswerHandler)
+    })
 }
 
 function fetchManager({url, method, body, headers, callback}) {
@@ -47,7 +49,12 @@ function deleteAnswer({answerId}) {
     window.location.reload();
     const target = document.querySelector(`.article-answer[data-id='${answerId}']`);
     console.log(target)
-    target.parentNode.removeChild(target);
+
+    try {
+        target.parentNode.removeChild(target);
+    } catch (e) {
+        alert("delete is failed")
+    }
 }
 
 function registerAnswerHandler(evt) {

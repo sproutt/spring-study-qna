@@ -43,6 +43,7 @@ public class Question {
     }
 
     public void addAnswer(Answer answer) {
+        answer.setQuestion(this);
         this.answers.add(answer);
     }
 
