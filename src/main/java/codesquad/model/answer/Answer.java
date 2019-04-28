@@ -3,16 +3,16 @@ package codesquad.model.answer;
 import codesquad.model.question.Question;
 import codesquad.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.Date;
 
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Answer {
 
     @Id
@@ -37,15 +37,10 @@ public class Answer {
     private boolean deleted = false;
 
     public Answer(){
-        this.id = null;
-        this.writer = null;
-        this.question = null;
-        this.content = null;
-        this.date = null;
+
     }
 
     public Answer(User writer,Question question,String content){
-        this.id = null;
         this.writer = writer;
         this.question = question;
         this.content = content;
