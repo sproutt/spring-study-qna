@@ -7,7 +7,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 
 @Entity
@@ -31,20 +32,19 @@ public class Answer {
     private String content;
 
     @Column(nullable = false)
-    private String date;
+    private String date = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
     @Column(nullable = false)
     private boolean deleted = false;
 
-    public Answer(){
+    public Answer() {
 
     }
 
-    public Answer(User writer,Question question,String content){
+    public Answer(User writer, Question question, String content) {
         this.writer = writer;
         this.question = question;
         this.content = content;
-        this.date = new Date().toString();
     }
 
     public boolean isWriter(User user) {
