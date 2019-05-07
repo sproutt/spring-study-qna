@@ -78,7 +78,8 @@ function deleteAnswerHandler(evt) {
     })
 }
 
-function deleteAnswer({id}) {
+function deleteAnswer({answer}) {
+    var id = answer.id;
     const selector = `[data-id=${id}]`;
     const target = $(selector);
     target.remove();
