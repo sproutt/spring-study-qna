@@ -13,18 +13,8 @@ public class UserController {
 
   private ArrayList<User> users = new ArrayList<>();
 
-  @GetMapping("/user/form")
-  public String showSignUp(){
-    return "user/form";
-  }
-
-  @GetMapping("/user/login")
-  public String showSignIn(){
-    return "user/login";
-  }
-
   @PostMapping("/user/create")
-  public String createUser(User user){
+  public String createUser(User user) {
 
     users.add(user);
     System.out.println("user 추가됨. =>" + users.toString());
@@ -33,7 +23,7 @@ public class UserController {
   }
 
   @GetMapping("/user/list")
-  public String showUserList(Model model){
+  public String showUserList(Model model) {
 
     model.addAttribute("users", users);
     System.out.println("users 뷰로 전송됨.");
@@ -42,8 +32,8 @@ public class UserController {
   }
 
   @GetMapping("/user/profile/{userId}")
-  public String showProfile(@PathVariable("userId") String userId, Model model){
-    System.out.println(" userId 전달됨. -> "+ userId);
+  public String showProfile(@PathVariable("userId") String userId, Model model) {
+    System.out.println(" userId 전달됨. -> " + userId);
 
     model.addAttribute("user", findUser(userId));
     System.out.println("user 뷰로 전송됨.");
@@ -51,7 +41,7 @@ public class UserController {
     return "user/profile";
   }
 
-  private User findUser(String userId){
+  private User findUser(String userId) {
 
     return users.stream().filter((user -> user.getUserId().equals(userId)))
         .findFirst()
