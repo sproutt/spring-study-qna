@@ -1,4 +1,4 @@
-package codesquad.Model;
+package codesquad.VO;
 
 public class User {
 
@@ -37,15 +37,5 @@ public class User {
 
   public String getEmail() {
     return email;
-  }
-
-  @Override
-  public String toString() {
-    return "User{" +
-        "userId='" + userId + '\'' +
-        ", password='" + password + '\'' +
-        ", name='" + name + '\'' +
-        ", email='" + email + '\'' +
-        '}';
   }
 }
