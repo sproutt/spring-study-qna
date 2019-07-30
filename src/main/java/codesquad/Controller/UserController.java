@@ -13,7 +13,17 @@ public class UserController {
 
   private ArrayList<User> users = new ArrayList<>();
 
-  @PostMapping("/user/signup")
+  @GetMapping("/user/form")
+  public String showSignUp(){
+    return "user/form";
+  }
+
+  @GetMapping("/user/login")
+  public String showSignIn(){
+    return "user/login";
+  }
+
+  @PostMapping("/user/create")
   public String createUser(User user){
 
     users.add(user);
