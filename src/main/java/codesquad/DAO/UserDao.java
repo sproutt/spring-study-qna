@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface UserDao {
 
-  void insertUser(User user);
+  public void insertUser(User user);
 
-  User findUser(String userId);
+  public User findUser(String userId);
 
-  Collection<User> getUsers();
+  public Collection<User> getUsers();
 
 }

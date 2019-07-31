@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserService {
 
   @Autowired
-  UserDaoImpl users;
+  private UserDaoImpl users;
 
+  @Override
   public void addUser(User user) {
     users.insertUser(user);
   }
