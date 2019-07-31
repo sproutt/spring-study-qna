@@ -1,7 +1,7 @@
 package codesquad.Controller;
 
 import codesquad.VO.User;
-import codesquad.Service.UserServiceImp;
+import codesquad.Service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
   @Autowired
-  private UserServiceImp userService;
+  private UserServiceImpl userService;
 
-  @PostMapping("/create")
+  @PostMapping
   public String createUser(User user) {
 
     userService.addUser(user);
 
-    return "redirect:/user/list";
+    return "redirect:/users/list";
   }
 
   @GetMapping("/list")
@@ -33,7 +33,7 @@ public class UserController {
     return "user/list";
   }
 
-  @GetMapping("/profile/{userId}")
+  @GetMapping("/{userId}")
   public String showProfile(@PathVariable("userId") String userId, Model model) {
 
     model.addAttribute("user", userService.findUser(userId));

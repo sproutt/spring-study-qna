@@ -3,12 +3,13 @@ package codesquad.DAO;
 import codesquad.VO.User;
 import java.util.Collection;
 import java.util.HashMap;
-import org.springframework.stereotype.Component;
+import java.util.Map;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class UserDaoImpl implements UserDao {
 
-  private HashMap<String, User> userDB;
+  private Map<String, User> userDB;
 
   public UserDaoImpl() {
     userDB = new HashMap<>();
@@ -24,6 +25,7 @@ public class UserDaoImpl implements UserDao {
     return userDB.get(userId);
   }
 
+  @Override
   public Collection<User> getUsers() {
     return userDB.values();
   }
