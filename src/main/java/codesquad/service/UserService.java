@@ -1,6 +1,6 @@
-package codesquad.Service;
+package codesquad.service;
 
-import codesquad.VO.User;
+import codesquad.vo.User;
 import java.util.List;
 
 public interface UserService {

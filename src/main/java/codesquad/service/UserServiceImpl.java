@@ -1,7 +1,7 @@
-package codesquad.Service;
+package codesquad.service;
 
-import codesquad.DAO.UserDaoImpl;
-import codesquad.VO.User;
+import codesquad.dao.UserDaoImpl;
+import codesquad.vo.User;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

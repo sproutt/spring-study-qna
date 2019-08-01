@@ -1,7 +1,7 @@
-package codesquad.Controller;
+package codesquad.controller;
 
-import codesquad.VO.User;
-import codesquad.Service.UserServiceImpl;
+import codesquad.vo.User;
+import codesquad.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

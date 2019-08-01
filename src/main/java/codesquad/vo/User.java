@@ -1,4 +1,4 @@
-package codesquad.VO;
+package codesquad.vo;
 
 public class User {
 
