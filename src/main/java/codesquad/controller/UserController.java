@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import codesquad.vo.User;
+import codesquad.dto.User;
 import codesquad.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;

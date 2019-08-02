@@ -1,6 +1,6 @@
 package codesquad.dao;
 
-import codesquad.vo.User;
+import codesquad.dto.User;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

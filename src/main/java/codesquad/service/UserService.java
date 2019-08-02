@@ -1,6 +1,6 @@
 package codesquad.service;
 
-import codesquad.vo.User;
+import codesquad.dto.User;
 import java.util.List;
 
 public interface UserService {
