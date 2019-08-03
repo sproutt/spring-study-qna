@@ -16,7 +16,7 @@ public class QuestionController {
   private QuestionService questionService;
 
   @GetMapping("/")
-  public String showQuestionList(Model model){
+  public String showQuestionList(Model model) {
 
     model.addAttribute("questions", questionService.getQuestions());
 
@@ -24,7 +24,7 @@ public class QuestionController {
   }
 
   @GetMapping("/questions")
-  public String showQuestionForm(){
+  public String showQuestionForm() {
     return "qna/form";
   }
 
@@ -37,7 +37,7 @@ public class QuestionController {
   }
 
   @GetMapping("/questions/{index}")
-  public String findQuestion(@PathVariable("index") String index, Model model){
+  public String findQuestion(@PathVariable("index") String index, Model model) {
 
     model.addAttribute("question", questionService.getQuestion(index));
 

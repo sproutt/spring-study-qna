@@ -13,15 +13,15 @@ public class QuestionService {
   @Autowired
   private QuestionDao questions;
 
-  public void addQuestion(Question question){
+  public void addQuestion(Question question) {
     questions.insertQuestion(question);
   }
 
-  public Question getQuestion(String index){
+  public Question getQuestion(String index) {
     return questions.getQuestion(TypeGenerator.toInt(index));
   }
 
-  public List<Question> getQuestions(){
+  public List<Question> getQuestions() {
     return questions.getQuestions();
   }
 }

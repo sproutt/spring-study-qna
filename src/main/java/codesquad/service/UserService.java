@@ -30,6 +30,7 @@ public class UserService {
   }
 
   public boolean isSamePassword(String userId, User user) {
-    return users.findUser(userId).getPassword().equals(user.getPassword());
+    return users.findUser(userId).getPassword()
+        .equals(user.getPassword());
   }
 }
