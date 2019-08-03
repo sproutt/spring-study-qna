@@ -15,7 +15,7 @@ public class Question {
   }
 
   public String getTime() {
-    return TimeGenerator.getFormatTime(time);
+    return TimeGenerator.formatTime(time);
   }
 
   public String getWriter() {

@@ -42,6 +42,5 @@ public class QuestionController {
     model.addAttribute("question", questionService.getQuestion(index));
 
     return "qna/show";
-
   }
 }
