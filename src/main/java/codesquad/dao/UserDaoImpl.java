@@ -29,4 +29,8 @@ public class UserDaoImpl implements UserDao {
   public Collection<User> getUsers() {
     return userDB.values();
   }
+
+  public void modifyUser(String userId, User user){
+    userDB.put(userId, userDB.get(userId));
+  }
 }

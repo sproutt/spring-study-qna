@@ -22,10 +22,10 @@ public class UserController {
 
     userService.addUser(user);
 
-    return "redirect:/users/list";
+    return "redirect:/users";
   }
 
-  @GetMapping("/list")
+  @GetMapping
   public String showUserList(Model model) {
 
     model.addAttribute("users", userService.getUsers());
@@ -39,5 +39,25 @@ public class UserController {
     model.addAttribute("user", userService.findUser(userId));
 
     return "user/profile";
+  }
+
+  @GetMapping("/{userId}/form")
+  public String showUserInfo(@PathVariable("userId") String userId, Model model) {
+
+    model.addAttribute("user", userService.findUser(userId));
+
+    return "user/updateForm";
+  }
+
+  @PostMapping("/{userId}/update")
+  public String updateUser(@PathVariable("userId") String userId, User user) {
+
+    if(userService.isSamePassword(userId, user)){
+      userService.modifyUser(userId, user);
+
+      return "redirect:/users";
+    }
+
+    return "redirect:/"+userId+"/form";
   }
 }

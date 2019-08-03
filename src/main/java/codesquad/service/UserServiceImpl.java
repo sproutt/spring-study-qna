@@ -27,4 +27,12 @@ public class UserServiceImpl implements UserService {
   public List<User> getUsers() {
     return new ArrayList<>(users.getUsers());
   }
+
+  public void modifyUser(String userId, User user){
+      users.modifyUser(userId, user);
+  }
+
+  public boolean isSamePassword(String userId, User user){
+    return users.findUser(userId).getPassword() == user.getPassword();
+  }
 }
