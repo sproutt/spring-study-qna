@@ -1,7 +1,7 @@
 package codesquad.controller;
 
 import codesquad.dto.User;
-import codesquad.service.UserServiceImpl;
+import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserController {
 
   @Autowired
-  private UserServiceImpl userService;
+  private UserService userService;
 
   @PostMapping
   public String createUser(User user) {

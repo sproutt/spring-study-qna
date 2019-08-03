@@ -1,6 +1,6 @@
 package codesquad.dto;
 
-import java.text.SimpleDateFormat;
+import codesquad.util.TimeGenerator;
 import java.util.Date;
 
 public class Question {
@@ -8,15 +8,14 @@ public class Question {
   private String writer;
   private String title;
   private String contents;
-  private String time;
-
-  public String getTime() {
-    return time;
-  }
+  private Date time;
 
   public Question(){
-    time = new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss")
-        .format(new Date());
+    time = new Date();
+  }
+
+  public String getTime() {
+    return TimeGenerator.getFormatTime(time);
   }
 
   public String getWriter() {
