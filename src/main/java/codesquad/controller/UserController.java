@@ -1,5 +1,6 @@
 package codesquad.controller;
 
+import codesquad.dao.UserDao;
 import codesquad.dto.User;
 import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,14 +9,18 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
 
-  @Autowired
   private UserService userService;
+
+  public UserController(){
+    userService = new UserService();
+  }
 
   @PostMapping
   public String createUser(User user) {
@@ -49,15 +54,9 @@ public class UserController {
     return "user/updateForm";
   }
 
-  @PostMapping("/{userId}/update")
+  @PutMapping("/{userId}")
   public String updateUser(@PathVariable("userId") String userId, User user) {
-
-    if(userService.isSamePassword(userId, user)){
-      userService.modifyUser(userId, user);
-
-      return "redirect:/users";
-    }
-
-    return "redirect:/"+userId+"/form";
+    System.out.println("put   실행됨.");
+    return userService.updateUserUrl(userId, user);
   }
 }

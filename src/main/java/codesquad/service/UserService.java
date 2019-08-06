@@ -4,14 +4,16 @@ import codesquad.dao.UserDao;
 import codesquad.dto.User;
 import java.util.ArrayList;
 import java.util.List;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-  @Autowired
   private UserDao users;
+
+  public UserService() {
+    users = new UserDao();
+  }
 
   public void addUser(User user) {
     users.insertUser(user);
@@ -25,12 +27,17 @@ public class UserService {
     return new ArrayList<>(users.getUsers());
   }
 
-  public void modifyUser(String userId, User user) {
+  private void modifyUser(String userId, User user) {
     users.modifyUser(userId, user);
   }
 
-  public boolean isSamePassword(String userId, User user) {
-    return users.findUser(userId).getPassword()
-        .equals(user.getPassword());
+  public String updateUserUrl(String userId, User user) {
+    if (findUser(userId).isSamePassword(user)) {
+      modifyUser(userId, user);
+
+      return "redirect:/users";
+    }
+
+    return "redirect:/" + userId + "/form";
   }
 }

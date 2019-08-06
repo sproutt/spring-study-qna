@@ -27,7 +27,7 @@ public class UserDao {
     return userDB.values();
   }
 
-  public void modifyUser(String userId, User user){
+  public void modifyUser(String userId, User user) {
     userDB.put(userId, user);
   }
 }

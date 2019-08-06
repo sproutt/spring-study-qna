@@ -2,43 +2,25 @@ package codesquad.dto;
 
 import codesquad.util.TimeGenerator;
 import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+
 
 public class Question {
 
+  @Setter @Getter
   private String writer;
+  @Setter @Getter
   private String title;
+  @Setter @Getter
   private String contents;
   private Date time;
 
   public Question(){
-    time = new Date();
+    this.time = new Date();
   }
 
-  public String getTime() {
+  public String getTime(){
     return TimeGenerator.formatTime(time);
-  }
-
-  public String getWriter() {
-    return writer;
-  }
-
-  public void setWriter(String writer) {
-    this.writer = writer;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
-  public String getContents() {
-    return contents;
-  }
-
-  public void setContents(String contents) {
-    this.contents = contents;
   }
 }
