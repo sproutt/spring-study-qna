@@ -1,9 +1,8 @@
 package codesquad.controller;
 
-import codesquad.dao.UserDao;
 import codesquad.dto.User;
 import codesquad.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/users")
 public class UserController {
 
+  @Resource(name="userService")
   private UserService userService;
-
-  public UserController(){
-    userService = new UserService();
-  }
 
   @PostMapping
   public String createUser(User user) {
