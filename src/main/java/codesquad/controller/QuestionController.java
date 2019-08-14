@@ -15,7 +15,7 @@ public class QuestionController {
 
   private QuestionService questionService;
 
-  QuestionController(QuestionService questionService){
+  QuestionController(QuestionService questionService) {
     this.questionService = questionService;
   }
 
@@ -25,11 +25,6 @@ public class QuestionController {
     model.addAttribute("questions", questionService.getQuestions());
 
     return "main/index";
-  }
-
-  @GetMapping("/questions")
-  public String showQuestionForm() {
-    return "qna/form";
   }
 
   @PostMapping("/questions")
@@ -43,32 +38,32 @@ public class QuestionController {
   @GetMapping("/questions/{id}")
   public String findQuestion(@PathVariable("id") Long id, Model model) {
 
-    model.addAttribute("question", questionService.getQuestion(id));
+    model.addAttribute("question", questionService.getQuestionById(id));
 
     return "qna/show";
   }
 
-  @GetMapping("/questions/{id}/form")
-  public String updateQuestionForm(@PathVariable("id") Long id, Model model){
-
-    model.addAttribute("question", questionService.getQuestion(id));
-
-    return "qna/updateForm";
-  }
-
   @DeleteMapping("/questions/{id}")
-  public String deleteQuestion(@PathVariable("id") Long id){
+  public String deleteQuestion(@PathVariable("id") Long id) {
 
-    questionService.deleteQuestion(id);
+    questionService.deleteQuestionById(id);
 
     return "redirect:/";
   }
 
   @PutMapping("/questions/{id}")
-  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion){
+  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion) {
 
     questionService.updateQuestion(id, newQuestion);
 
     return "redirect:/";
+  }
+
+  @GetMapping("/questions/{id}/form")
+  public String showQuestionInfo(@PathVariable("id") Long id, Model model) {
+
+    model.addAttribute("question", questionService.getQuestionById(id));
+
+    return "qna/updateForm";
   }
 }

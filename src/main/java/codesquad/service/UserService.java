@@ -19,7 +19,7 @@ public class UserService {
     userRepository.save(user);
   }
 
-  public User findUser(Long Id) {
+  public User findUserById(Long Id) {
     return userRepository.findById(Id).get();
   }
 
@@ -30,18 +30,12 @@ public class UserService {
     return users;
   }
 
-  private void modifyUser(Long id, User newUser) {
-
-    User user = findUser(id);
-    user.update(newUser);
-    userRepository.save(user);
-  }
-
   public String updateUser(Long id, User newUser) {
-    User user = findUser(id);
+    User user = findUserById(id);
 
     if (user.isSamePassword(newUser)) {
-      modifyUser(id, newUser);
+      user.update(newUser);
+      userRepository.save(user);
 
       return "redirect:/users";
     }

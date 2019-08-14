@@ -19,7 +19,7 @@ public class QuestionService {
     questionRepository.save(question);
   }
 
-  public Question getQuestion(Long id) {
+  public Question getQuestionById(Long id) {
     return questionRepository.findById(id).get();
   }
 
@@ -36,7 +36,7 @@ public class QuestionService {
     questionRepository.save(question);
   }
 
-  public void deleteQuestion(Long id){
+  public void deleteQuestionById(Long id){
     questionRepository.deleteById(id);
   }
 }
