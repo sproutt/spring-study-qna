@@ -2,7 +2,6 @@ package codesquad.controller;
 
 import codesquad.dto.Question;
 import codesquad.service.QuestionService;
-import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,8 +11,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class QuestionController {
 
-  @Resource(name="questionService")
   private QuestionService questionService;
+
+  QuestionController(QuestionService questionService){
+    this.questionService = questionService;
+  }
 
   @GetMapping("/")
   public String showQuestionList(Model model) {
@@ -36,10 +38,10 @@ public class QuestionController {
     return "redirect:/";
   }
 
-  @GetMapping("/questions/{index}")
-  public String findQuestion(@PathVariable("index") String index, Model model) {
+  @GetMapping("/questions/{id}")
+  public String findQuestion(@PathVariable("id") Long id, Model model) {
 
-    model.addAttribute("question", questionService.getQuestion(index));
+    model.addAttribute("question", questionService.getQuestion(id));
 
     return "qna/show";
   }

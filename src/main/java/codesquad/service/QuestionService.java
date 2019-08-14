@@ -1,28 +1,32 @@
 package codesquad.service;
 
-import codesquad.dao.QuestionDao;
-import codesquad.dao.UserDao;
+import codesquad.dao.QuestionRepository;
 import codesquad.dto.Question;
+import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class QuestionService {
 
-  @Resource(name = "questionDao")
-  private QuestionDao questions;
+  private QuestionRepository questionRepository;
 
-  public void addQuestion(Question question) {
-    questions.insertQuestion(question);
+  QuestionService(QuestionRepository questionRepository) {
+    this.questionRepository = questionRepository;
   }
 
-  public Question getQuestion(String index) {
-    return questions.getQuestion(Integer.parseInt(index));
+  public void addQuestion(Question question) {
+    questionRepository.save(question);
+  }
+
+  public Question getQuestion(Long id) {
+    return questionRepository.findById(id).get();
   }
 
   public List<Question> getQuestions() {
-    return questions.getQuestions();
+    List<Question> questions = new ArrayList<>();
+    questionRepository.findAll().forEach(questions::add);
+
+    return questions;
   }
 }
