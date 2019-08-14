@@ -4,9 +4,11 @@ import codesquad.dto.Question;
 import codesquad.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 
 @Controller
 public class QuestionController {
@@ -44,5 +46,29 @@ public class QuestionController {
     model.addAttribute("question", questionService.getQuestion(id));
 
     return "qna/show";
+  }
+
+  @GetMapping("/questions/{id}/form")
+  public String updateQuestionForm(@PathVariable("id") Long id, Model model){
+
+    model.addAttribute("question", questionService.getQuestion(id));
+
+    return "qna/updateForm";
+  }
+
+  @DeleteMapping("/questions/{id}")
+  public String deleteQuestion(@PathVariable("id") Long id){
+
+    questionService.deleteQuestion(id);
+
+    return "redirect:/";
+  }
+
+  @PutMapping("/questions/{id}")
+  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion){
+
+    questionService.updateQuestion(id, newQuestion);
+
+    return "redirect:/";
   }
 }

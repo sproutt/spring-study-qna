@@ -11,21 +11,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
+@Setter @Getter
 public class Question {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Setter @Getter
   @Column(nullable = false)
   private String writer;
 
-  @Setter @Getter
   @Column(nullable = false)
   private String title;
 
-  @Setter @Getter
   private String contents;
   private Date time;
 
@@ -35,5 +33,12 @@ public class Question {
 
   public String getTime(){
     return TimeGenerator.formatTime(time);
+  }
+
+  public void update(Question newQuestion){
+    this.writer = newQuestion.writer;
+    this.title = newQuestion.title;
+    this.contents = newQuestion.contents;
+    this.time = newQuestion.time;
   }
 }

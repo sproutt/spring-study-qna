@@ -29,4 +29,14 @@ public class QuestionService {
 
     return questions;
   }
+
+  public void updateQuestion(Long id, Question newQuestion){
+    Question question = questionRepository.findById(id).get();
+    question.update(newQuestion);
+    questionRepository.save(question);
+  }
+
+  public void deleteQuestion(Long id){
+    questionRepository.deleteById(id);
+  }
 }
