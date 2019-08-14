@@ -27,6 +27,11 @@ public class QuestionController {
     return "main/index";
   }
 
+  @GetMapping("/questions")
+  public String showForm() {
+    return "qna/form";
+  }
+
   @PostMapping("/questions")
   public String showQuestions(Question question) {
 
