@@ -1,41 +1,45 @@
 package codesquad.service;
 
-import codesquad.dao.UserDao;
+import codesquad.dao.UserRepository;
 import codesquad.dto.User;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-  @Resource(name = "userDao")
-  private UserDao users;
+  private UserRepository userRepository;
 
-  public void addUser(User user) {
-    users.insertUser(user);
+  UserService(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
 
-  public User findUser(String userId) {
-    return users.findUser(userId);
+  public void addUser(User user) {
+    userRepository.save(user);
+  }
+
+  public User findUserById(Long Id) {
+    return userRepository.findById(Id).get();
   }
 
   public List<User> getUsers() {
-    return new ArrayList<>(users.getUsers());
+    List<User> users = new ArrayList<>();
+    userRepository.findAll().forEach(users::add);
+
+    return users;
   }
 
-  private void modifyUser(String userId, User user) {
-    users.modifyUser(userId, user);
-  }
+  public String updateUser(Long id, User newUser) {
+    User user = findUserById(id);
 
-  public String updateUserUrl(String userId, User user) {
-    if (findUser(userId).isSamePassword(user)) {
-      modifyUser(userId, user);
+    if (user.isSamePassword(newUser)) {
+      user.update(newUser);
+      userRepository.save(user);
 
       return "redirect:/users";
     }
 
-    return "redirect:/" + userId + "/form";
+    return "redirect:/users/" + id + "/form";
   }
 }
