@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.dto.User;
 import codesquad.service.UserService;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,24 @@ public class UserController {
 
   UserController(UserService userService) {
     this.userService = userService;
+  }
+
+  @GetMapping("/logout")
+  public String logout(HttpSession session){
+    session.removeAttribute("user");
+    return "redirect:/";
+  }
+
+  @PostMapping("/login")
+  public String login(String userId, String password, HttpSession session){
+
+    if(!userService.isUserFromDB(userId, password)){
+      return "redirect:/users/login/form";
+    }
+
+    session.setAttribute("sessionedUser", userService.getUserByUserId(userId));
+
+    return "redirect:/";
   }
 
   @PostMapping

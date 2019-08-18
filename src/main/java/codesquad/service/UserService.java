@@ -30,16 +30,30 @@ public class UserService {
     return users;
   }
 
-  public String updateUser(Long id, User newUser) {
+  public String updateUser(Long id, User updatedUser) {
     User user = findUserById(id);
 
-    if (user.isSamePassword(newUser)) {
-      user.update(newUser);
+    if (user.isSamePassword(updatedUser)) {
+      user.update(updatedUser);
       userRepository.save(user);
 
       return "redirect:/users";
     }
 
     return "redirect:/users/" + id + "/form";
+  }
+
+  public boolean isUserFromDB(String userId, String password){
+    User user = userRepository.findByUserId(userId);
+
+    if(user == null){
+      return false;
+    }
+
+    return user.getPassword().equals(password); //refac
+  }
+
+  public User getUserByUserId(String userId){
+    return userRepository.findByUserId(userId);
   }
 }
