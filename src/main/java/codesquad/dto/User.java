@@ -17,15 +17,27 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 20)
+  @Column(nullable = false, length = 20, unique = true)
   private String userId;
 
   private String password;
   private String name;
   private String email;
 
-  public boolean isSamePassword(User other) {
-    return this.password.equals(other.getPassword());
+  public boolean isSamePassword(User otherPassword) {
+    if(otherPassword == null){
+      return false;
+    }
+
+    return this.password.equals(otherPassword.getPassword());
+  }
+
+  public boolean isSameId(Long otherId){
+    if(otherId == null){
+      return false;
+    }
+
+    return this.id.equals(otherId);
   }
 
   public void update(User newUser) {

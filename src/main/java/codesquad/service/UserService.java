@@ -2,8 +2,10 @@ package codesquad.service;
 
 import codesquad.dao.UserRepository;
 import codesquad.dto.User;
+import codesquad.util.HttpSessionUtils;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -43,17 +45,18 @@ public class UserService {
     return "redirect:/users/" + id + "/form";
   }
 
-  public boolean isUserFromDB(String userId, String password){
+  public boolean isUserFromDB(String userId, String password) {
     User user = userRepository.findByUserId(userId);
 
-    if(user == null){
+    if (user == null) {
       return false;
     }
 
     return user.getPassword().equals(password); //refac
   }
 
-  public User getUserByUserId(String userId){
+  public User getUserByUserId(String userId) {
     return userRepository.findByUserId(userId);
   }
+
 }

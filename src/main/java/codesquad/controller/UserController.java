@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.dto.User;
 import codesquad.service.UserService;
+import codesquad.util.HttpSessionUtils;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,15 +23,15 @@ public class UserController {
   }
 
   @GetMapping("/logout")
-  public String logout(HttpSession session){
-    session.removeAttribute("user");
+  public String logout(HttpSession session) {
+    session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
     return "redirect:/";
   }
 
   @PostMapping("/login")
-  public String login(String userId, String password, HttpSession session){
+  public String login(String userId, String password, HttpSession session) {
 
-    if(!userService.isUserFromDB(userId, password)){
+    if (!userService.isUserFromDB(userId, password)) {
       return "redirect:/users/login/form";
     }
 
@@ -64,7 +65,17 @@ public class UserController {
   }
 
   @GetMapping("/{id}/form")
-  public String showUserInfo(@PathVariable("id") Long id, Model model) {
+  public String showUserInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
+
+    if (HttpSessionUtils.isLoginUser(session)) {
+      return "redirect:/users/login/form";
+    }
+
+    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+    if (!sessionedUser.isSameId(id)) {
+      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    }
 
     model.addAttribute("user", userService.findUserById(id));
 
@@ -72,8 +83,18 @@ public class UserController {
   }
 
   @PutMapping("/{id}")
-  public String updateUser(@PathVariable("id") Long id, User user) {
+  public String updateUser(@PathVariable("id") Long id, User updatedUser, HttpSession session) {
 
-    return userService.updateUser(id, user);
+    if (HttpSessionUtils.isLoginUser(session)) {
+      return "redirect:/users/login/form";
+    }
+
+    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+
+    if (!sessionedUser.isSameId(id)) {
+      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    }
+
+    return userService.updateUser(id, updatedUser);
   }
 }
