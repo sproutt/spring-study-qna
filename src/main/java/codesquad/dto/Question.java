@@ -14,7 +14,8 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter @Getter
+@Setter
+@Getter
 public class Question {
 
   @Id
@@ -31,22 +32,22 @@ public class Question {
   private String contents;
   private Date time;
 
-  public Question(){
+  public Question() {
     this.time = new Date();
   }
 
-  public String getTime(){
+  public String getTime() {
     return TimeGenerator.formatTime(time);
   }
 
-  public void update(Question newQuestion){
+  public void update(Question newQuestion) {
     this.writer = newQuestion.writer;
     this.title = newQuestion.title;
     this.contents = newQuestion.contents;
     this.time = newQuestion.time;
   }
 
-  public boolean isSameWriter(User user){
+  public boolean isSameWriter(User user) {
     return writer.getId() == user.getId();
   }
 }

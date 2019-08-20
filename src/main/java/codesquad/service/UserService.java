@@ -2,10 +2,8 @@ package codesquad.service;
 
 import codesquad.dao.UserRepository;
 import codesquad.dto.User;
-import codesquad.util.HttpSessionUtils;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,6 +23,10 @@ public class UserService {
     return userRepository.findById(Id).get();
   }
 
+  public User findUserByUserId(String userId) {
+    return userRepository.findByUserId(userId);
+  }
+
   public List<User> findAllUsers() {
     List<User> users = new ArrayList<>();
     userRepository.findAll().forEach(users::add);
@@ -42,28 +44,8 @@ public class UserService {
     return user.isSamePassword(password);
   }
 
-  public User getUserByUserId(String userId) {
-    return userRepository.findByUserId(userId);
-  }
 
-  public String userInfoService(Long id, HttpSession session) {
-    if (!HttpSessionUtils.isLoginUser(session)) {
-      return HttpSessionUtils.LOGIN_URL;
-    }
-
-    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-    HttpSessionUtils.checkIdOfUserFromSession(id, sessionedUser, session);
-
-    return "user/updateForm";
-  }
-
-  public String updateUserService(Long id, User updatedUser, HttpSession session){
-    if (!HttpSessionUtils.isLoginUser(session)) {
-      return HttpSessionUtils.LOGIN_URL;
-    }
-
-    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-    HttpSessionUtils.checkIdOfUserFromSession(id, sessionedUser, session);
+  public String updateUserService(Long id, User updatedUser) {
 
     User user = findUserById(id);
 

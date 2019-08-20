@@ -14,7 +14,7 @@ import lombok.Setter;
 public class User {
 
   @Id
-  @Column(name="id")
+  @Column(name = "id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
@@ -26,23 +26,23 @@ public class User {
   private String email;
 
   public boolean isSamePassword(User otherPassword) {
-    if(otherPassword == null){
+    if (otherPassword == null) {
       return false;
     }
 
     return password.equals(otherPassword.getPassword());
   }
 
-  public boolean isSameId(Long otherId){
-    if(otherId == null){
+  public boolean isSameId(Long otherId) {
+    if (otherId == null) {
       return false;
     }
 
     return this.id.equals(otherId);
   }
 
-  public boolean isSamePassword(String otherPassword){
-    if(otherPassword == null){
+  public boolean isSamePassword(String otherPassword) {
+    if (otherPassword == null) {
       return false;
     }
 

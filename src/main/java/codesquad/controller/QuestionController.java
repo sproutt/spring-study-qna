@@ -32,9 +32,7 @@ public class QuestionController {
   @GetMapping("/questions/form")
   public String showForm(HttpSession session) {
 
-    if (!HttpSessionUtils.isLoginUser(session)) {
-      return HttpSessionUtils.LOGIN_URL;
-    }
+    HttpSessionUtils.checkLogining(session);
 
     return "qna/form";
   }
@@ -48,11 +46,7 @@ public class QuestionController {
   }
 
   @GetMapping("/questions/{id}")
-  public String findQuestion(@PathVariable("id") Long id, Model model, HttpSession session) {
-
-    if (!HttpSessionUtils.isLoginUser(session)) {
-      return HttpSessionUtils.LOGIN_URL;
-    }
+  public String findQuestion(@PathVariable("id") Long id, Model model) {
 
     model.addAttribute("question", questionService.getQuestionById(id));
 
@@ -69,12 +63,19 @@ public class QuestionController {
   public String updateQuestion(@PathVariable("id") Long id, Question newQuestion,
       HttpSession session) {
 
-    return questionService.updateQuestion(id, newQuestion, session);
+    HttpSessionUtils.checkWriterOfQuestionFromSession(questionService.getQuestionById(id), session);
+
+    return questionService.updateQuestion(id, newQuestion);
   }
 
   @GetMapping("/questions/{id}/form")
   public String showQuestionInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-    return questionService.questionInfoService(id, model, session);
+    Question question = questionService.getQuestionById(id);
+    HttpSessionUtils.checkWriterOfQuestionFromSession(questionService.getQuestionById(id), session);
+
+    model.addAttribute("question", question);
+
+    return "qna/updateForm";
   }
 }

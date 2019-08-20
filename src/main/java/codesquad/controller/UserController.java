@@ -35,7 +35,7 @@ public class UserController {
       return "redirect:/users/login/form";
     }
 
-    session.setAttribute("sessionedUser", userService.getUserByUserId(userId));
+    session.setAttribute("sessionedUser", userService.findUserByUserId(userId));
 
     return "redirect:/";
   }
@@ -65,15 +65,18 @@ public class UserController {
   }
 
   @GetMapping("/{id}/form")
-  public String showUserInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
+  public String showUserInfo(@PathVariable("id") Long id, HttpSession session) {
 
+    HttpSessionUtils.checkIdOfUserFromSession(id, session);
 
-    return userService.userInfoService(id, session);
+    return "user/updateForm";
   }
 
   @PutMapping("/{id}")
   public String updateUser(@PathVariable("id") Long id, User updatedUser, HttpSession session) {
 
-    return userService.updateUserService(id, updatedUser, session);
+    HttpSessionUtils.checkIdOfUserFromSession(id, session);
+
+    return userService.updateUserService(id, updatedUser);
   }
 }
