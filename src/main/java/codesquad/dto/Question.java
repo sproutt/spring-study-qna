@@ -4,9 +4,12 @@ import codesquad.util.TimeGenerator;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,10 +21,11 @@ public class Question {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String writer;
+  @ManyToOne
+  @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+  private User writer;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 50)
   private String title;
 
   private String contents;
@@ -40,5 +44,9 @@ public class Question {
     this.title = newQuestion.title;
     this.contents = newQuestion.contents;
     this.time = newQuestion.time;
+  }
+
+  public boolean isSameWriter(User user){
+    return writer.getId() == user.getId();
   }
 }

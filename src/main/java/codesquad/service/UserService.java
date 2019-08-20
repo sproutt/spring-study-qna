@@ -25,14 +25,46 @@ public class UserService {
     return userRepository.findById(Id).get();
   }
 
-  public List<User> getUsers() {
+  public List<User> findAllUsers() {
     List<User> users = new ArrayList<>();
     userRepository.findAll().forEach(users::add);
 
     return users;
   }
 
-  public String updateUser(Long id, User updatedUser) {
+  public boolean isUserFromDB(String userId, String password) {
+    User user = userRepository.findByUserId(userId);
+
+    if (user == null) {
+      return false;
+    }
+
+    return user.isSamePassword(password);
+  }
+
+  public User getUserByUserId(String userId) {
+    return userRepository.findByUserId(userId);
+  }
+
+  public String userInfoService(Long id, HttpSession session) {
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
+    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+    HttpSessionUtils.checkIdOfUserFromSession(id, sessionedUser, session);
+
+    return "user/updateForm";
+  }
+
+  public String updateUserService(Long id, User updatedUser, HttpSession session){
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
+    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+    HttpSessionUtils.checkIdOfUserFromSession(id, sessionedUser, session);
+
     User user = findUserById(id);
 
     if (user.isSamePassword(updatedUser)) {
@@ -44,19 +76,4 @@ public class UserService {
 
     return "redirect:/users/" + id + "/form";
   }
-
-  public boolean isUserFromDB(String userId, String password) {
-    User user = userRepository.findByUserId(userId);
-
-    if (user == null) {
-      return false;
-    }
-
-    return user.getPassword().equals(password); //refac
-  }
-
-  public User getUserByUserId(String userId) {
-    return userRepository.findByUserId(userId);
-  }
-
 }

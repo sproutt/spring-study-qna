@@ -2,9 +2,12 @@ package codesquad.service;
 
 import codesquad.dao.QuestionRepository;
 import codesquad.dto.Question;
+import codesquad.util.HttpSessionUtils;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 @Service
 public class QuestionService {
@@ -30,13 +33,45 @@ public class QuestionService {
     return questions;
   }
 
-  public void updateQuestion(Long id, Question newQuestion){
-    Question question = questionRepository.findById(id).get();
+  public String updateQuestion(Long id, Question newQuestion, HttpSession session) {
+    if (HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
+    Question question = getQuestionById(id);
+    if (!HttpSessionUtils.isSameWriterFromSession(question, session)) {
+      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    }
+
     question.update(newQuestion);
     questionRepository.save(question);
+
+    return "redirect:/";
   }
 
-  public void deleteQuestionById(Long id){
+  public String deleteQuestionService(Long id, HttpSession session) {
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
+    Question question = getQuestionById(id);
+    HttpSessionUtils.checkWriterOfQuestionFromSession(id, question, session);
+
     questionRepository.deleteById(id);
+
+    return "redirect:/";
+  }
+
+  public String questionInfoService(Long id, Model model, HttpSession session){
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
+    Question question = getQuestionById(id);
+    HttpSessionUtils.checkWriterOfQuestionFromSession(id, question, session);
+
+    model.addAttribute("question", question);
+
+    return "qna/updateForm";
   }
 }

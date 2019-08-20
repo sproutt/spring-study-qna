@@ -2,6 +2,8 @@ package codesquad.controller;
 
 import codesquad.dto.Question;
 import codesquad.service.QuestionService;
+import codesquad.util.HttpSessionUtils;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +29,13 @@ public class QuestionController {
     return "main/index";
   }
 
-  @GetMapping("/questions")
-  public String showForm() {
+  @GetMapping("/questions/form")
+  public String showForm(HttpSession session) {
+
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
+
     return "qna/form";
   }
 
@@ -41,7 +48,11 @@ public class QuestionController {
   }
 
   @GetMapping("/questions/{id}")
-  public String findQuestion(@PathVariable("id") Long id, Model model) {
+  public String findQuestion(@PathVariable("id") Long id, Model model, HttpSession session) {
+
+    if (!HttpSessionUtils.isLoginUser(session)) {
+      return HttpSessionUtils.LOGIN_URL;
+    }
 
     model.addAttribute("question", questionService.getQuestionById(id));
 
@@ -49,26 +60,21 @@ public class QuestionController {
   }
 
   @DeleteMapping("/questions/{id}")
-  public String deleteQuestion(@PathVariable("id") Long id) {
+  public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
 
-    questionService.deleteQuestionById(id);
-
-    return "redirect:/";
+    return questionService.deleteQuestionService(id, session);
   }
 
   @PutMapping("/questions/{id}")
-  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion) {
+  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion,
+      HttpSession session) {
 
-    questionService.updateQuestion(id, newQuestion);
-
-    return "redirect:/";
+    return questionService.updateQuestion(id, newQuestion, session);
   }
 
   @GetMapping("/questions/{id}/form")
-  public String showQuestionInfo(@PathVariable("id") Long id, Model model) {
+  public String showQuestionInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-    model.addAttribute("question", questionService.getQuestionById(id));
-
-    return "qna/updateForm";
+    return questionService.questionInfoService(id, model, session);
   }
 }

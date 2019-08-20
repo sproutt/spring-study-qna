@@ -51,7 +51,7 @@ public class UserController {
   @GetMapping
   public String showUsers(Model model) {
 
-    model.addAttribute("users", userService.getUsers());
+    model.addAttribute("users", userService.findAllUsers());
 
     return "user/list";
   }
@@ -67,34 +67,13 @@ public class UserController {
   @GetMapping("/{id}/form")
   public String showUserInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-    if (HttpSessionUtils.isLoginUser(session)) {
-      return "redirect:/users/login/form";
-    }
 
-    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-    if (!sessionedUser.isSameId(id)) {
-      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-    }
-
-    model.addAttribute("user", userService.findUserById(id));
-
-    return "user/updateForm";
+    return userService.userInfoService(id, session);
   }
 
   @PutMapping("/{id}")
   public String updateUser(@PathVariable("id") Long id, User updatedUser, HttpSession session) {
 
-    if (HttpSessionUtils.isLoginUser(session)) {
-      return "redirect:/users/login/form";
-    }
-
-    User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-
-    if (!sessionedUser.isSameId(id)) {
-      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-    }
-
-    return userService.updateUser(id, updatedUser);
+    return userService.updateUserService(id, updatedUser, session);
   }
 }
