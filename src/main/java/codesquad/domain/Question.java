@@ -1,44 +1,53 @@
-package codesquad.dto;
+package codesquad.domain;
 
 import codesquad.util.TimeGenerator;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter @Getter
+@Setter
+@Getter
 public class Question {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false)
-  private String writer;
+  @ManyToOne
+  @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+  private User writer;
 
-  @Column(nullable = false)
+  @Column(nullable = false, length = 50)
   private String title;
 
   private String contents;
   private Date time;
 
-  public Question(){
+  public Question() {
     this.time = new Date();
   }
 
-  public String getTime(){
+  public String getTime() {
     return TimeGenerator.formatTime(time);
   }
 
-  public void update(Question newQuestion){
+  public void update(Question newQuestion) {
     this.writer = newQuestion.writer;
     this.title = newQuestion.title;
     this.contents = newQuestion.contents;
     this.time = newQuestion.time;
+  }
+
+  public boolean isSameWriter(User user) {
+    return writer.getId() == user.getId();
   }
 }

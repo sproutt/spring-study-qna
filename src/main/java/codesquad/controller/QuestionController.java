@@ -1,7 +1,9 @@
 package codesquad.controller;
 
-import codesquad.dto.Question;
+import codesquad.domain.Question;
 import codesquad.service.QuestionService;
+import codesquad.util.HttpSessionUtils;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,8 +29,11 @@ public class QuestionController {
     return "main/index";
   }
 
-  @GetMapping("/questions")
-  public String showForm() {
+  @GetMapping("/questions/form")
+  public String showForm(HttpSession session) {
+
+    HttpSessionUtils.checkLogining(session);
+
     return "qna/form";
   }
 
@@ -49,25 +54,35 @@ public class QuestionController {
   }
 
   @DeleteMapping("/questions/{id}")
-  public String deleteQuestion(@PathVariable("id") Long id) {
+  public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
 
-    questionService.deleteQuestionById(id);
+    HttpSessionUtils.checkLogining(session);
+
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
+    questionService.deleteQuestion(id);
 
     return "redirect:/";
   }
 
   @PutMapping("/questions/{id}")
-  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion) {
+  public String updateQuestion(@PathVariable("id") Long id, Question newQuestion,
+      HttpSession session) {
 
+    HttpSessionUtils.checkLogining(session);
+
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
     questionService.updateQuestion(id, newQuestion);
 
     return "redirect:/";
   }
 
   @GetMapping("/questions/{id}/form")
-  public String showQuestionInfo(@PathVariable("id") Long id, Model model) {
+  public String showQuestionInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-    model.addAttribute("question", questionService.getQuestionById(id));
+    Question question = questionService.getQuestionById(id);
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
+
+    model.addAttribute("question", question);
 
     return "qna/updateForm";
   }

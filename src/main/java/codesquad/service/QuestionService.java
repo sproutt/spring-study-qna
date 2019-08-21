@@ -1,9 +1,11 @@
 package codesquad.service;
 
 import codesquad.dao.QuestionRepository;
-import codesquad.dto.Question;
+import codesquad.domain.Question;
+import codesquad.domain.User;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,13 +32,24 @@ public class QuestionService {
     return questions;
   }
 
-  public void updateQuestion(Long id, Question newQuestion){
-    Question question = questionRepository.findById(id).get();
-    question.update(newQuestion);
-    questionRepository.save(question);
+  public void checkWriterIsUserOfSession(User userOfSession, Long id) {
+    if (!getQuestionById(id).isSameWriter(userOfSession)) {
+      throw new IllegalStateException("자신의 질문이 아닙니다");
+    }
   }
 
-  public void deleteQuestionById(Long id){
-    questionRepository.deleteById(id);
+  public void updateQuestion(Long id, Question updatedQuestion) {
+
+    Question question = getQuestionById(id);
+    question.update(updatedQuestion);
+    questionRepository.save(question);
+
   }
+
+  public void deleteQuestion(Long id) {
+
+    questionRepository.deleteById(id);
+
+  }
+
 }

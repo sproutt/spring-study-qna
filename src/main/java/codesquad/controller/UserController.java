@@ -1,9 +1,12 @@
 package codesquad.controller;
 
-import codesquad.dto.User;
+import codesquad.domain.User;
 import codesquad.service.UserService;
+import codesquad.util.HttpSessionUtils;
+import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +23,23 @@ public class UserController {
     this.userService = userService;
   }
 
+  @GetMapping("/logout")
+  public String logout(HttpSession session) {
+
+    HttpSessionUtils.removeUserFromSession(session);
+
+    return "redirect:/";
+  }
+
+  @PostMapping("/login")
+  public String login(String userId, String password, HttpSession session) {
+
+    userService.checkUserFromDB(userId, password);
+    HttpSessionUtils.setUserFromSession(session, userService.findUserByUserId(userId));
+
+    return "redirect:/";
+  }
+
   @PostMapping
   public String createUser(User user) {
 
@@ -31,7 +51,7 @@ public class UserController {
   @GetMapping
   public String showUsers(Model model) {
 
-    model.addAttribute("users", userService.getUsers());
+    model.addAttribute("users", userService.findAllUsers());
 
     return "user/list";
   }
@@ -45,16 +65,20 @@ public class UserController {
   }
 
   @GetMapping("/{id}/form")
-  public String showUserInfo(@PathVariable("id") Long id, Model model) {
+  public String showUserInfo(@PathVariable("id") Long id, HttpSession session) {
 
-    model.addAttribute("user", userService.findUserById(id));
+    HttpSessionUtils.checkLogining(session);
+    userService.checkIdOfSession(HttpSessionUtils.getUserFromSession(session), id);
 
     return "user/updateForm";
   }
 
   @PutMapping("/{id}")
-  public String updateUser(@PathVariable("id") Long id, User user) {
+  public String updateUser(@PathVariable("id") Long id, User updatedUser, HttpSession session) {
 
-    return userService.updateUser(id, user);
+    HttpSessionUtils.checkLogining(session);
+    userService.checkIdOfSession(HttpSessionUtils.getUserFromSession(session), id);
+
+    return userService.updateUserService(id, updatedUser);
   }
 }

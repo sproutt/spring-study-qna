@@ -1,7 +1,8 @@
 package codesquad.service;
 
+import codesquad.controller.LoginException;
 import codesquad.dao.UserRepository;
-import codesquad.dto.User;
+import codesquad.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -23,23 +24,47 @@ public class UserService {
     return userRepository.findById(Id).get();
   }
 
-  public List<User> getUsers() {
+  public User findUserByUserId(String userId) {
+    return userRepository.findByUserId(userId);
+  }
+
+  public List<User> findAllUsers() {
     List<User> users = new ArrayList<>();
     userRepository.findAll().forEach(users::add);
 
     return users;
   }
 
-  public String updateUser(Long id, User newUser) {
+  public void checkUserFromDB(String userId, String password) {
+    User user = userRepository.findByUserId(userId);
+
+    if (user == null) {
+      throw new IllegalStateException("사용자의 정보가 없습니다");
+    }
+
+    if (!user.isSameUser(password)) {
+      throw new LoginException("비밀번호가 틀립니다");
+    }
+  }
+
+
+  public String updateUserService(Long id, User updatedUser) {
+
     User user = findUserById(id);
 
-    if (user.isSamePassword(newUser)) {
-      user.update(newUser);
+    if (user.isSameUser(updatedUser)) {
+      user.update(updatedUser);
       userRepository.save(user);
 
       return "redirect:/users";
     }
 
     return "redirect:/users/" + id + "/form";
+  }
+
+  public void checkIdOfSession(User userFromSession, Long id) {
+    if (!userFromSession.isSameId(id)) {
+      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    }
   }
 }
