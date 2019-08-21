@@ -1,7 +1,8 @@
 package codesquad.service;
 
+import codesquad.controller.LoginException;
 import codesquad.dao.UserRepository;
-import codesquad.dto.User;
+import codesquad.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -34,14 +35,16 @@ public class UserService {
     return users;
   }
 
-  public boolean isUserFromDB(String userId, String password) {
+  public void checkUserFromDB(String userId, String password) {
     User user = userRepository.findByUserId(userId);
 
     if (user == null) {
-      return false;
+      throw new IllegalStateException("사용자의 정보가 없습니다");
     }
 
-    return user.isSamePassword(password);
+    if (!user.isSameUser(password)) {
+      throw new LoginException("비밀번호가 틀립니다");
+    }
   }
 
 
@@ -49,7 +52,7 @@ public class UserService {
 
     User user = findUserById(id);
 
-    if (user.isSamePassword(updatedUser)) {
+    if (user.isSameUser(updatedUser)) {
       user.update(updatedUser);
       userRepository.save(user);
 
@@ -57,5 +60,11 @@ public class UserService {
     }
 
     return "redirect:/users/" + id + "/form";
+  }
+
+  public void checkIdOfSession(User userFromSession, Long id) {
+    if (!userFromSession.isSameId(id)) {
+      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
+    }
   }
 }

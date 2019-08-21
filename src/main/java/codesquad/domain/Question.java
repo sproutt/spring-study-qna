@@ -1,4 +1,4 @@
-package codesquad.dto;
+package codesquad.domain;
 
 import codesquad.util.TimeGenerator;
 import java.util.Date;

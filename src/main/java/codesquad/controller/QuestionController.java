@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import codesquad.dto.Question;
+import codesquad.domain.Question;
 import codesquad.service.QuestionService;
 import codesquad.util.HttpSessionUtils;
 import javax.servlet.http.HttpSession;
@@ -56,23 +56,31 @@ public class QuestionController {
   @DeleteMapping("/questions/{id}")
   public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
 
-    return questionService.deleteQuestionService(id, session);
+    HttpSessionUtils.checkLogining(session);
+
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
+    questionService.deleteQuestion(id);
+
+    return "redirect:/";
   }
 
   @PutMapping("/questions/{id}")
   public String updateQuestion(@PathVariable("id") Long id, Question newQuestion,
       HttpSession session) {
 
-    HttpSessionUtils.checkWriterOfQuestionFromSession(questionService.getQuestionById(id), session);
+    HttpSessionUtils.checkLogining(session);
 
-    return questionService.updateQuestion(id, newQuestion);
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
+    questionService.updateQuestion(id, newQuestion);
+
+    return "redirect:/";
   }
 
   @GetMapping("/questions/{id}/form")
   public String showQuestionInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
     Question question = questionService.getQuestionById(id);
-    HttpSessionUtils.checkWriterOfQuestionFromSession(questionService.getQuestionById(id), session);
+    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
 
     model.addAttribute("question", question);
 

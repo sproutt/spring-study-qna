@@ -1,4 +1,4 @@
-package codesquad.dto;
+package codesquad.domain;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,12 +25,16 @@ public class User {
   private String name;
   private String email;
 
-  public boolean isSamePassword(User otherPassword) {
-    if (otherPassword == null) {
+  public boolean isSameUser(User other) {
+    if (other == null) {
       return false;
     }
 
-    return password.equals(otherPassword.getPassword());
+    if(userId != other.userId){
+      return false;
+    }
+
+    return password.equals(other.getPassword());
   }
 
   public boolean isSameId(Long otherId) {
@@ -41,7 +45,7 @@ public class User {
     return this.id.equals(otherId);
   }
 
-  public boolean isSamePassword(String otherPassword) {
+  public boolean isSameUser(String otherPassword) {
     if (otherPassword == null) {
       return false;
     }

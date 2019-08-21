@@ -1,8 +1,8 @@
 package codesquad.service;
 
 import codesquad.dao.QuestionRepository;
-import codesquad.dto.Question;
-import codesquad.util.HttpSessionUtils;
+import codesquad.domain.Question;
+import codesquad.domain.User;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -32,24 +32,24 @@ public class QuestionService {
     return questions;
   }
 
-  public String updateQuestion(Long id, Question updatedQuestion) {
+  public void checkWriterIsUserOfSession(User userOfSession, Long id) {
+    if (!getQuestionById(id).isSameWriter(userOfSession)) {
+      throw new IllegalStateException("자신의 질문이 아닙니다");
+    }
+  }
+
+  public void updateQuestion(Long id, Question updatedQuestion) {
 
     Question question = getQuestionById(id);
-
     question.update(updatedQuestion);
     questionRepository.save(question);
 
-    return "redirect:/";
   }
 
-  public String deleteQuestionService(Long id, HttpSession session) {
-
-    Question question = getQuestionById(id);
-    HttpSessionUtils.checkWriterOfQuestionFromSession(question, session);
+  public void deleteQuestion(Long id) {
 
     questionRepository.deleteById(id);
 
-    return "redirect:/";
   }
 
 }

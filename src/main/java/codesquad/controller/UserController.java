@@ -1,11 +1,12 @@
 package codesquad.controller;
 
-import codesquad.dto.User;
+import codesquad.domain.User;
 import codesquad.service.UserService;
 import codesquad.util.HttpSessionUtils;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,18 +25,17 @@ public class UserController {
 
   @GetMapping("/logout")
   public String logout(HttpSession session) {
-    session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+
+    HttpSessionUtils.removeUserFromSession(session);
+
     return "redirect:/";
   }
 
   @PostMapping("/login")
   public String login(String userId, String password, HttpSession session) {
 
-    if (!userService.isUserFromDB(userId, password)) {
-      return "redirect:/users/login/form";
-    }
-
-    session.setAttribute("sessionedUser", userService.findUserByUserId(userId));
+    userService.checkUserFromDB(userId, password);
+    HttpSessionUtils.setUserFromSession(session, userService.findUserByUserId(userId));
 
     return "redirect:/";
   }
@@ -67,7 +67,8 @@ public class UserController {
   @GetMapping("/{id}/form")
   public String showUserInfo(@PathVariable("id") Long id, HttpSession session) {
 
-    HttpSessionUtils.checkIdOfUserFromSession(id, session);
+    HttpSessionUtils.checkLogining(session);
+    userService.checkIdOfSession(HttpSessionUtils.getUserFromSession(session), id);
 
     return "user/updateForm";
   }
@@ -75,7 +76,8 @@ public class UserController {
   @PutMapping("/{id}")
   public String updateUser(@PathVariable("id") Long id, User updatedUser, HttpSession session) {
 
-    HttpSessionUtils.checkIdOfUserFromSession(id, session);
+    HttpSessionUtils.checkLogining(session);
+    userService.checkIdOfSession(HttpSessionUtils.getUserFromSession(session), id);
 
     return userService.updateUserService(id, updatedUser);
   }
