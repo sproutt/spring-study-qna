@@ -29,9 +29,9 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
         System.out.println(users.toString());
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(userId)) {
-                model.addAttribute("user", users.get(i));
+        for (User user : users) {
+            if (user.isSameUser(userId, user)) {
+                model.addAttribute("user", users);
                 break;
             }
         }

@@ -47,4 +47,11 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public boolean isSameUser(String userId, User user) {
+        if (user.getUserId().equals(userId)) {
+            return true;
+        }
+        return false;
+    }
 }
