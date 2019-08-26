@@ -45,14 +45,15 @@ public class Answer {
     time = updatedAnswer.time;
   }
 
-  @Override
-  public String toString() {
-    return "Answer{" +
-        "id=" + id +
-        ", writer=" + writer +
-        ", question=" + question +
-        ", contents='" + contents + '\'' +
-        ", time=" + time +
-        '}';
+  public boolean isWriter(User user){
+    if(user== null){
+      return false;
+    }
+
+    if(!writer.isSameUser(user)){
+      return false;
+    }
+
+    return true;
   }
 }

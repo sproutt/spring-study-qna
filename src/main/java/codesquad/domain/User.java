@@ -26,11 +26,12 @@ public class User {
   private String email;
 
   public boolean isSameUser(User other) {
+    System.out.println("0");
     if (other == null) {
       return false;
     }
 
-    if(userId != other.userId){
+    if(!userId.equals(other.getUserId())){
       return false;
     }
 
