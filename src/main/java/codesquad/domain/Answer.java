@@ -2,8 +2,6 @@ package codesquad.domain;
 
 import codesquad.util.TimeGenerator;
 import java.util.Date;
-import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -11,49 +9,50 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Setter
 @Getter
-public class Question {
+@Setter
+public class Answer {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @ManyToOne
-  @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+  @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
   private User writer;
 
-  @Column(nullable = false, length = 50)
-  private String title;
+  @ManyToOne
+  @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_question"))
+  private Question question;
 
   private String contents;
-
-  @OneToMany(mappedBy = "question")
-  private List<Answer> answers;
-
   private Date time;
 
-  public Question() {
-    this.time = new Date();
+  public Answer() {
+    time = new Date();
   }
 
   public String getTime() {
     return TimeGenerator.formatTime(time);
   }
 
-  public void update(Question newQuestion) {
-    this.writer = newQuestion.writer;
-    this.title = newQuestion.title;
-    this.contents = newQuestion.contents;
-    this.time = newQuestion.time;
+  public void update(Answer updatedAnswer) {
+    contents = updatedAnswer.contents;
+    time = updatedAnswer.time;
   }
 
-  public boolean isSameWriter(User user) {
-    return writer.getId() == user.getId();
+  @Override
+  public String toString() {
+    return "Answer{" +
+        "id=" + id +
+        ", writer=" + writer +
+        ", question=" + question +
+        ", contents='" + contents + '\'' +
+        ", time=" + time +
+        '}';
   }
 }
