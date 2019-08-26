@@ -23,7 +23,7 @@ public class AnswerService {
   public void deleteAnswer(Long id, User loginUser) {
     Answer answer = answerRepository.findById(id).get();
 
-    checkWriter(answer, loginUser);
+    checkWriterisAnswerOfSession(answer, loginUser);
 
     answerRepository.deleteById(id);
   }
@@ -31,13 +31,13 @@ public class AnswerService {
   public void updateAnswer(Long id, User loginUser, Answer updatedAnswer) {
     Answer answer = answerRepository.findById(id).get();
 
-    checkWriter(answer, loginUser);
+    checkWriterisAnswerOfSession(answer, loginUser);
 
     answer.update(updatedAnswer);
     answerRepository.save(answer);
   }
 
-  private void checkWriter(Answer answer, User user) {
+  public void checkWriterisAnswerOfSession(Answer answer, User user) {
     if (!answer.isWriter(user)) {
       throw new IllegalStateException("다른 사용자 입니다");
     }

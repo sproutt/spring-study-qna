@@ -46,7 +46,7 @@
           <div class="qna-comment-slipp">
             <p class="qna-comment-count"><strong>{{answers.length}}</strong>개의 의견</p>
             <div class="qna-comment-slipp-articles">
-            {{#answers}}
+              {{#answers}}
               <article class="article" id="answer-1405">
                 <div class="article-header">
                   <div class="article-header-thumb">
@@ -66,10 +66,12 @@
                 <div class="article-util">
                   <ul class="article-util-list">
                     <li>
-                      <a class="link-modify-article" href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
+                      <a class="link-modify-article"
+                         href="/questions/{{question.id}}/answers/{{id}}/form">수정</a>
                     </li>
                     <li>
-                      <form class="delete-answer-form" action="/questions/{{question.id}}/answers/{{id}}"
+                      <form class="delete-answer-form"
+                            action="/questions/{{question.id}}/answers/{{id}}"
                             method="POST">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="delete-answer-button">삭제</button>
@@ -77,14 +79,16 @@
                     </li>
                   </ul>
                 </div>
+              </article>
               {{/answers}}
-                {{/question}}
+              {{/question}}
               {{#sessionedUser}}
-              <form class="submit-write" action = /questions/{{question.id}}/answers method="post">
-                <input  id="writer_id" type="hidden" name="writer" value="{{id}}" >
-                <input  id="question_id" type="hidden" name="question" value="{{question.id}}">
+              <form class="submit-write" action=/questions/{{question.id}}/answers method="post">
+                <input id="writer_id" type="hidden" name="writer" value="{{id}}">
+                <input id="question_id" type="hidden" name="question" value="{{question.id}}">
                 <div class="form-group" style="padding:14px;">
-                  <textarea class="form-control" placeholder="Update your status" name = "contents"></textarea>
+                  <textarea class="form-control" placeholder="Update your status"
+                            name="contents"></textarea>
                 </div>
                 <button class="btn btn-success pull-right" type="submit">답변하기</button>
                 <div class="clearfix"/>

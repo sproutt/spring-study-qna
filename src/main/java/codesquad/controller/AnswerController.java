@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.domain.Answer;
-import codesquad.domain.User;
 import codesquad.service.AnswerService;
 import codesquad.util.HttpSessionUtils;
 import javax.servlet.http.HttpSession;
@@ -39,9 +38,8 @@ public class AnswerController {
       @PathVariable("id") Long id, HttpSession session) {
 
     HttpSessionUtils.checkLogining(session);
-    User loginUser = HttpSessionUtils.getUserFromSession(session);
 
-    answerService.deleteAnswer(id, loginUser);
+    answerService.deleteAnswer(id, HttpSessionUtils.getUserFromSession(session));
 
     return "redirect:/questions/" + questionId;
   }
@@ -51,21 +49,21 @@ public class AnswerController {
       @PathVariable("id") Long id, Answer updatedAnswer, HttpSession session) {
 
     HttpSessionUtils.checkLogining(session);
-    User loginUser = HttpSessionUtils.getUserFromSession(session);
 
-    answerService.updateAnswer(id, loginUser, updatedAnswer);
+    answerService.updateAnswer(id, HttpSessionUtils.getUserFromSession(session), updatedAnswer);
 
     return "redirect:/questions/" + questionId;
   }
 
   @GetMapping("/{id}/form")
-  public String updateForm(@PathVariable("questionId") Long questionId,
-      @PathVariable("id") Long id, HttpSession session, Model model) {
+  public String updateForm(@PathVariable("id") Long id, HttpSession session, Model model) {
 
     HttpSessionUtils.checkLogining(session);
 
+    answerService.checkWriterisAnswerOfSession(answerService.getAnswerById(id), HttpSessionUtils.getUserFromSession(session));
+
     model.addAttribute("answers", answerService.getAllAnswers());
-    model.addAttribute("answer", answerService.getAnswerById(id));
+    model.addAttribute("editAnswer", answerService.getAnswerById(id));
 
     return "answer/updateForm";
   }

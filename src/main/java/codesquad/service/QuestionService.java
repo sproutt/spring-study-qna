@@ -32,13 +32,15 @@ public class QuestionService {
     return questions;
   }
 
-  public void checkWriterIsUserOfSession(User userOfSession, Long id) {
-    if (!getQuestionById(id).isSameWriter(userOfSession)) {
+  public void checkWriterIsUserOfSession(User loginUser, Long id) {
+    if (!getQuestionById(id).isSameWriter(loginUser)) {
       throw new IllegalStateException("자신의 질문이 아닙니다");
     }
   }
 
-  public void updateQuestion(Long id, Question updatedQuestion) {
+  public void updateQuestion(User loginUser, Long id, Question updatedQuestion) {
+
+    checkWriterIsUserOfSession(loginUser, id);
 
     Question question = getQuestionById(id);
     question.update(updatedQuestion);
@@ -46,10 +48,11 @@ public class QuestionService {
 
   }
 
-  public void deleteQuestion(Long id) {
+  public void deleteQuestion(User loginUser, Long id) {
+
+    checkWriterIsUserOfSession(loginUser, id);
 
     questionRepository.deleteById(id);
-
   }
 
 }

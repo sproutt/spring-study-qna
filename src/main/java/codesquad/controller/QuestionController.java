@@ -58,8 +58,7 @@ public class QuestionController {
 
     HttpSessionUtils.checkLogining(session);
 
-    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
-    questionService.deleteQuestion(id);
+    questionService.deleteQuestion(HttpSessionUtils.getUserFromSession(session), id);
 
     return "redirect:/";
   }
@@ -70,8 +69,7 @@ public class QuestionController {
 
     HttpSessionUtils.checkLogining(session);
 
-    questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
-    questionService.updateQuestion(id, newQuestion);
+    questionService.updateQuestion(HttpSessionUtils.getUserFromSession(session), id, newQuestion);
 
     return "redirect:/";
   }
