@@ -1,6 +1,6 @@
 package codesquad.service;
 
-import codesquad.controller.LoginException;
+import codesquad.exception.LoginFailException;
 import codesquad.dao.UserRepository;
 import codesquad.domain.User;
 import java.util.ArrayList;
@@ -39,11 +39,11 @@ public class UserService {
     User user = userRepository.findByUserId(userId);
 
     if (user == null) {
-      throw new IllegalStateException("사용자의 정보가 없습니다");
+      throw new LoginFailException();
     }
 
     if (!user.isSameUser(password)) {
-      throw new LoginException("비밀번호가 틀립니다");
+      throw new LoginFailException();
     }
   }
 
