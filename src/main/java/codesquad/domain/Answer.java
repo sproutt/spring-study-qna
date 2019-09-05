@@ -50,7 +50,7 @@ public class Answer {
       return false;
     }
 
-    if(!writer.isSameUser(user)){
+    if(!writer.isSame(user)){
       return false;
     }
 

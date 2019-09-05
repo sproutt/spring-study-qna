@@ -1,22 +1,26 @@
 package codesquad.service;
 
-import codesquad.exception.LoginFailException;
 import codesquad.dao.UserRepository;
 import codesquad.domain.User;
+import codesquad.exception.LoginFailException;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
   private UserRepository userRepository;
+  private BCryptPasswordEncoder passwordEncoder;
 
   UserService(UserRepository userRepository) {
     this.userRepository = userRepository;
+    this.passwordEncoder = new BCryptPasswordEncoder();
   }
 
   public void addUser(User user) {
+    user.toSecret();
     userRepository.save(user);
   }
 
@@ -42,17 +46,16 @@ public class UserService {
       throw new LoginFailException();
     }
 
-    if (!user.isSameUser(password)) {
+    if (!user.isSamePassword(password)) {
       throw new LoginFailException();
     }
   }
-
 
   public String updateUserService(Long id, User updatedUser) {
 
     User user = findUserById(id);
 
-    if (user.isSameUser(updatedUser)) {
+    if (user.isSame(updatedUser)) {
       user.update(updatedUser);
       userRepository.save(user);
 
