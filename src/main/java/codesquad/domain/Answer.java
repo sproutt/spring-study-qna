@@ -45,12 +45,12 @@ public class Answer {
     time = updatedAnswer.time;
   }
 
-  public boolean isWriter(User user){
-    if(user== null){
+  public boolean isWriter(User user) {
+    if (user == null) {
       return false;
     }
 
-    if(!writer.isSame(user)){
+    if (!writer.isSame(user)) {
       return false;
     }
 

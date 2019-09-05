@@ -33,7 +33,7 @@ public class User {
       return false;
     }
 
-    if(!userId.equals(other.getUserId())){
+    if (!userId.equals(other.getUserId())) {
       return false;
     }
 
@@ -62,7 +62,7 @@ public class User {
     this.email = newUser.email;
   }
 
-  public void toSecret(){
+  public void toSecret() {
     password = PasswordGenerator.encode(password);
   }
 }
