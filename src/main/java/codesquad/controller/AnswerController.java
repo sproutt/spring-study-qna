@@ -60,7 +60,7 @@ public class AnswerController {
 
     HttpSessionUtils.checkLogining(session);
 
-    answerService.checkWriterisAnswerOfSession(answerService.getAnswerById(id), HttpSessionUtils.getUserFromSession(session));
+    answerService.checkWriterisUserOfSession(answerService.getAnswerById(id), HttpSessionUtils.getUserFromSession(session));
 
     model.addAttribute("answers", answerService.getAllAnswers());
     model.addAttribute("editAnswer", answerService.getAnswerById(id));

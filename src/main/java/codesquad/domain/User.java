@@ -8,7 +8,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Getter
@@ -37,7 +36,7 @@ public class User {
       return false;
     }
 
-    return PasswordGenerator.isSame(password, other.getPassword());
+    return password.equals(other.getPassword());
   }
 
   public boolean isSameId(Long otherId) {
