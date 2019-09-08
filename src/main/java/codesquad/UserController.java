@@ -13,12 +13,27 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<User>();
 
+    @GetMapping("/")
+    public String index(){
+        return "index";
+    }
+
     @PostMapping("/users")
     public String create(User user) {
         System.out.println("user : " + user);
         users.add(user);
         return "redirect:/users";
     }
+
+    @GetMapping("/users/login")
+    public String login() {
+        return "user/login";
+    }
+    @GetMapping("/users/form")
+    public String signUp() {
+        return "user/form";
+    }
+
 
     @GetMapping("/users")
     public String list(Model model) {
@@ -28,10 +43,10 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
-        System.out.println(users.toString());
+        //System.out.println(users.toString());
         for (User user : users) {
             if (user.isSameUser(userId, user)) {
-                model.addAttribute("user", users);
+                model.addAttribute("user", user);
                 break;
             }
         }
