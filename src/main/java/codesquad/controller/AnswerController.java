@@ -60,10 +60,8 @@ public class AnswerController {
 
     HttpSessionUtils.checkLogining(session);
 
-    answerService.checkWriterisUserOfSession(answerService.getAnswerById(id), HttpSessionUtils.getUserFromSession(session));
-
     model.addAttribute("answers", answerService.getAllAnswers());
-    model.addAttribute("editAnswer", answerService.getAnswerById(id));
+    model.addAttribute("editAnswer", answerService.findAnswerById(id));
 
     return "answer/updateForm";
   }

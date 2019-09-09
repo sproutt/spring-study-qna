@@ -3,8 +3,6 @@ package codesquad.service;
 import codesquad.dao.UserRepository;
 import codesquad.domain.User;
 import codesquad.exception.LoginFailException;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,39 +12,37 @@ public class UserService {
   private UserRepository userRepository;
   private BCryptPasswordEncoder passwordEncoder;
 
-  UserService(UserRepository userRepository) {
+  UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
-    this.passwordEncoder = new BCryptPasswordEncoder();
+    this.passwordEncoder = passwordEncoder;
   }
 
   public void addUser(User user) {
-    user.toSecret();
+    makeSecretPassword(user);
     userRepository.save(user);
   }
 
-  public User findUserById(Long Id) {
-    return userRepository.findById(Id).get();
+  private void makeSecretPassword(User user){
+    user.toSecret(passwordEncoder);
+  }
+
+  public User findUserById(Long id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
   }
 
   public User findUserByUserId(String userId) {
     return userRepository.findByUserId(userId);
   }
 
-  public List<User> findAllUsers() {
-    List<User> users = new ArrayList<>();
-    userRepository.findAll().forEach(users::add);
-
-    return users;
+  public Iterable<User> findAllUsers() {
+    return userRepository.findAll();
   }
 
   public void checkUserFromDB(String userId, String password) {
     User user = userRepository.findByUserId(userId);
 
-    if (user == null) {
-      throw new LoginFailException();
-    }
-
-    if (!user.isSamePassword(password)) {
+    if (user == null || !user.isSamePassword(password)) {
       throw new LoginFailException();
     }
   }
@@ -66,8 +62,6 @@ public class UserService {
   }
 
   public void checkIdOfSession(User userFromSession, Long id) {
-    if (!userFromSession.isSameId(id)) {
-      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-    }
+    userFromSession.checkId(id);
   }
 }

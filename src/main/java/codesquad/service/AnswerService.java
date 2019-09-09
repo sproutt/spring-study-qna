@@ -3,8 +3,6 @@ package codesquad.service;
 import codesquad.dao.AnswerRepository;
 import codesquad.domain.Answer;
 import codesquad.domain.User;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,35 +20,28 @@ public class AnswerService {
 
   public void deleteAnswer(Long id, User loginUser) {
 
-    checkWriterisUserOfSession(getAnswerById(id), loginUser);
+    Answer answer = findAnswerById(id);
+    answer.checkWriter(loginUser);
 
-    answerRepository.deleteById(id);
+    answerRepository.delete(answer);
   }
 
   public void updateAnswer(Long id, User loginUser, Answer updatedAnswer) {
-    Answer answer = answerRepository.findById(id).get();
 
-    checkWriterisUserOfSession(answer, loginUser);
+    Answer answer = findAnswerById(id);
+    answer.checkWriter(loginUser);
 
     answer.update(updatedAnswer);
     answerRepository.save(answer);
   }
 
-  public void checkWriterisUserOfSession(Answer answer, User user) {
-    if (!answer.isWriter(user)) {
-      throw new IllegalStateException("다른 사용자 입니다");
-    }
+
+  public Iterable<Answer> getAllAnswers() {
+    return answerRepository.findAll();
   }
 
-  public List<Answer> getAllAnswers() {
-    List<Answer> answers = new ArrayList<>();
-    answerRepository.findAll().forEach(answers::add);
-
-    return answers;
+  public Answer findAnswerById(Long id) {
+    return answerRepository.findById(id)
+        .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
   }
-
-  public Answer getAnswerById(Long id) {
-    return answerRepository.findById(id).get();
-  }
-
 }

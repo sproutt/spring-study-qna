@@ -1,7 +1,7 @@
 package codesquad.domain;
 
-import codesquad.util.TimeGenerator;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -35,27 +35,33 @@ public class Question {
 
   private String contents;
 
-  @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+  @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private List<Answer> answers;
 
-  private Date time;
+  private LocalDateTime createdDate;
+  private LocalDateTime updatedDate;
 
   public Question() {
-    this.time = new Date();
+    this.createdDate = LocalDateTime.now();
   }
 
   public String getTime() {
-    return TimeGenerator.formatTime(time);
+    if(updatedDate == null){
+      return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+    return updatedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
   }
 
-  public void update(Question newQuestion) {
-    this.writer = newQuestion.writer;
-    this.title = newQuestion.title;
-    this.contents = newQuestion.contents;
-    this.time = newQuestion.time;
+  public void update(Question updatedQuestion) {
+    this.writer = updatedQuestion.writer;
+    this.title = updatedQuestion.title;
+    this.contents = updatedQuestion.contents;
+    this.updatedDate = updatedQuestion.createdDate;
   }
 
-  public boolean isSameWriter(User user) {
-    return writer.getId() == user.getId();
+  public void checkWriter(User user) {
+    if(writer.getId() != user.getId()){
+      throw new IllegalStateException("자신의 질문이 아닙니다");
+    }
   }
 }

@@ -48,7 +48,7 @@ public class QuestionController {
   @GetMapping("/questions/{id}")
   public String findQuestion(@PathVariable("id") Long id, Model model) {
 
-    model.addAttribute("question", questionService.getQuestionById(id));
+    model.addAttribute("question", questionService.findQuestionById(id));
 
     return "qna/show";
   }
@@ -77,10 +77,9 @@ public class QuestionController {
   @GetMapping("/questions/{id}/form")
   public String showQuestionInfo(@PathVariable("id") Long id, Model model, HttpSession session) {
 
-    Question question = questionService.getQuestionById(id);
     questionService.checkWriterIsUserOfSession(HttpSessionUtils.getUserFromSession(session), id);
 
-    model.addAttribute("question", question);
+    model.addAttribute("question", questionService.findQuestionById(id));
 
     return "qna/updateForm";
   }

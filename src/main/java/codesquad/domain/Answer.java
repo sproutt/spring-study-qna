@@ -1,7 +1,7 @@
 package codesquad.domain;
 
-import codesquad.util.TimeGenerator;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
@@ -30,30 +30,29 @@ public class Answer {
   private Question question;
 
   private String contents;
-  private Date time;
+  private LocalDateTime createdDate;
+  private LocalDateTime updatedDate;
+
 
   public Answer() {
-    time = new Date();
+    this.createdDate = LocalDateTime.now();
   }
 
   public String getTime() {
-    return TimeGenerator.formatTime(time);
+    if (updatedDate == null) {
+      return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+    }
+    return updatedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
   }
 
   public void update(Answer updatedAnswer) {
-    contents = updatedAnswer.contents;
-    time = updatedAnswer.time;
+    this.contents = updatedAnswer.contents;
+    this.updatedDate = updatedAnswer.createdDate;
   }
 
-  public boolean isWriter(User user) {
-    if (user == null) {
-      return false;
+  public void checkWriter(User user) {
+    if (user == null || !writer.isSame(user)) {
+      throw new IllegalStateException("다른 사용자 입니다");
     }
-
-    if (!writer.isSame(user)) {
-      return false;
-    }
-
-    return true;
   }
 }
