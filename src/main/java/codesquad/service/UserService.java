@@ -42,7 +42,7 @@ public class UserService {
   public void checkUserFromDB(String userId, String password) {
     User user = userRepository.findByUserId(userId);
 
-    if (user == null || !user.isSamePassword(password)) {
+    if (user == null || !user.isSamePassword(password, passwordEncoder)) {
       throw new LoginFailException();
     }
   }
@@ -51,7 +51,7 @@ public class UserService {
 
     User user = findUserById(id);
 
-    if (user.isSame(updatedUser)) {
+    if (user.isSamePassword(updatedUser, passwordEncoder)) {
       user.update(updatedUser);
       userRepository.save(user);
 

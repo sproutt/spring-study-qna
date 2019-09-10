@@ -14,7 +14,10 @@ public class AnswerService {
     this.answerRepository = answerRepository;
   }
 
-  public void addAnswer(Answer answer) {
+  public void addAnswer(Answer answer, User loginUser) {
+;
+    answer.checkWriter(loginUser);
+
     answerRepository.save(answer);
   }
 

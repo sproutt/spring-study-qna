@@ -14,6 +14,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -41,8 +43,14 @@ public class Question {
   private LocalDateTime createdDate;
   private LocalDateTime updatedDate;
 
-  public Question() {
+  @PrePersist
+  public void prePersist(){
     this.createdDate = LocalDateTime.now();
+  }
+
+  @PreUpdate
+  public void preUpdate(){
+    this.updatedDate = LocalDateTime.now();
   }
 
   public String getTime() {
@@ -56,7 +64,6 @@ public class Question {
     this.writer = updatedQuestion.writer;
     this.title = updatedQuestion.title;
     this.contents = updatedQuestion.contents;
-    this.updatedDate = updatedQuestion.createdDate;
   }
 
   public void checkWriter(User user) {

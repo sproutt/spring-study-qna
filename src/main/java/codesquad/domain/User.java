@@ -1,7 +1,5 @@
 package codesquad.domain;
 
-import codesquad.unnamed.PasswordEncoder;
-import codesquad.util.PasswordGenerator;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -43,12 +41,16 @@ public class User {
     }
   }
 
-  public boolean isSamePassword(String otherPassword) {
+  public boolean isSamePassword(String otherPassword, BCryptPasswordEncoder passwordEncoder) {
     if (otherPassword == null) {
       return false;
     }
 
-    return PasswordGenerator.isSame(password, otherPassword);
+    return passwordEncoder.matches(otherPassword, password);
+  }
+
+  public boolean isSamePassword(User other, BCryptPasswordEncoder passwordEncoder) {
+    return isSamePassword(other.password, passwordEncoder);
   }
 
   public void update(User newUser) {
