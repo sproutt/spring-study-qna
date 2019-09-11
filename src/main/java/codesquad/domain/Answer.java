@@ -14,6 +14,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -33,19 +35,11 @@ public class Answer {
   private Question question;
 
   private String contents;
+
+  @CreationTimestamp
   private LocalDateTime createdDate;
+  @UpdateTimestamp
   private LocalDateTime updatedDate;
-  private Date testDate;
-
-  @PrePersist
-  public void prePersist(){
-    this.createdDate = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  public void preUpdate(){
-    this.updatedDate = LocalDateTime.now();
-  }
 
   public String getTime() {
     if (updatedDate == null) {

@@ -18,6 +18,8 @@ import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Setter
@@ -40,18 +42,10 @@ public class Question {
   @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
   private List<Answer> answers;
 
+  @CreationTimestamp
   private LocalDateTime createdDate;
+  @UpdateTimestamp
   private LocalDateTime updatedDate;
-
-  @PrePersist
-  public void prePersist(){
-    this.createdDate = LocalDateTime.now();
-  }
-
-  @PreUpdate
-  public void preUpdate(){
-    this.updatedDate = LocalDateTime.now();
-  }
 
   public String getTime() {
     if(updatedDate == null){
