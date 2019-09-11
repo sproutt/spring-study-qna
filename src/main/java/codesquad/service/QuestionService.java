@@ -3,7 +3,6 @@ package codesquad.service;
 import codesquad.dao.QuestionRepository;
 import codesquad.domain.Question;
 import codesquad.domain.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
