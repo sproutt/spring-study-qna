@@ -1,6 +1,6 @@
 package codesquad.util;
 
-import codesquad.controller.LoginException;
+import codesquad.exception.LoginException;
 import codesquad.domain.User;
 import javax.servlet.http.HttpSession;
 

@@ -3,9 +3,6 @@ package codesquad.service;
 import codesquad.dao.QuestionRepository;
 import codesquad.domain.Question;
 import codesquad.domain.User;
-import java.util.ArrayList;
-import java.util.List;
-import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,35 +18,35 @@ public class QuestionService {
     questionRepository.save(question);
   }
 
-  public Question getQuestionById(Long id) {
-    return questionRepository.findById(id).get();
+  public Question findQuestionById(Long id) {
+    return questionRepository.findById(id)
+        .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
   }
 
-  public List<Question> getQuestions() {
-    List<Question> questions = new ArrayList<>();
-    questionRepository.findAll().forEach(questions::add);
-
-    return questions;
+  public Iterable<Question> getQuestions() {
+    return questionRepository.findAll();
   }
 
-  public void checkWriterIsUserOfSession(User userOfSession, Long id) {
-    if (!getQuestionById(id).isSameWriter(userOfSession)) {
-      throw new IllegalStateException("자신의 질문이 아닙니다");
-    }
-  }
 
-  public void updateQuestion(Long id, Question updatedQuestion) {
+  public void updateQuestion(User loginUser, Long id, Question updatedQuestion) {
 
-    Question question = getQuestionById(id);
+    Question question = findQuestionById(id);
+    question.checkWriter(loginUser);
+
     question.update(updatedQuestion);
     questionRepository.save(question);
 
   }
 
-  public void deleteQuestion(Long id) {
+  public void deleteQuestion(User loginUser, Long id) {
 
-    questionRepository.deleteById(id);
+    Question question = findQuestionById(id);
+    question.checkWriter(loginUser);
+    questionRepository.delete(question);
+  }
 
+  public void checkWriterIsUserOfSession(User loginUser, Long id){
+    loginUser.checkId(id);
   }
 
 }

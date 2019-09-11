@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Entity
 @Getter
@@ -25,37 +26,40 @@ public class User {
   private String name;
   private String email;
 
-  public boolean isSameUser(User other) {
-    if (other == null) {
-      return false;
-    }
+  public boolean isSame(User other) {
 
-    if(userId != other.userId){
+    if (other == null || !userId.equals(other.getUserId())) {
       return false;
     }
 
     return password.equals(other.getPassword());
   }
 
-  public boolean isSameId(Long otherId) {
-    if (otherId == null) {
-      return false;
+  public void checkId(Long otherId) {
+    if (otherId == null || !this.id.equals(otherId)) {
+      throw new IllegalStateException("id가 틀립니다.");
     }
-
-    return this.id.equals(otherId);
   }
 
-  public boolean isSameUser(String otherPassword) {
+  public boolean isSamePassword(String otherPassword, BCryptPasswordEncoder passwordEncoder) {
     if (otherPassword == null) {
       return false;
     }
 
-    return password.equals(otherPassword);
+    return passwordEncoder.matches(otherPassword, password);
+  }
+
+  public boolean isSamePassword(User other, BCryptPasswordEncoder passwordEncoder) {
+    return isSamePassword(other.password, passwordEncoder);
   }
 
   public void update(User newUser) {
     this.password = newUser.password;
     this.name = newUser.name;
     this.email = newUser.email;
+  }
+
+  public void toSecret(BCryptPasswordEncoder passwordEncoder) {
+    this.password = passwordEncoder.encode(password);
   }
 }

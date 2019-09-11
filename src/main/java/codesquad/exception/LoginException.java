@@ -1,4 +1,4 @@
-package codesquad.controller;
+package codesquad.exception;
 
 public class LoginException extends IllegalStateException {
 

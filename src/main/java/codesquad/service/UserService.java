@@ -1,58 +1,57 @@
 package codesquad.service;
 
-import codesquad.controller.LoginException;
 import codesquad.dao.UserRepository;
 import codesquad.domain.User;
-import java.util.ArrayList;
-import java.util.List;
+import codesquad.exception.LoginFailException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
   private UserRepository userRepository;
+  private BCryptPasswordEncoder passwordEncoder;
 
-  UserService(UserRepository userRepository) {
+  UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public void addUser(User user) {
+    makeSecretPassword(user);
     userRepository.save(user);
   }
 
-  public User findUserById(Long Id) {
-    return userRepository.findById(Id).get();
+  private void makeSecretPassword(User user){
+    user.toSecret(passwordEncoder);
+  }
+
+  public User findUserById(Long id) {
+    return userRepository.findById(id)
+        .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
   }
 
   public User findUserByUserId(String userId) {
     return userRepository.findByUserId(userId);
   }
 
-  public List<User> findAllUsers() {
-    List<User> users = new ArrayList<>();
-    userRepository.findAll().forEach(users::add);
-
-    return users;
+  public Iterable<User> findAllUsers() {
+    return userRepository.findAll();
   }
 
   public void checkUserFromDB(String userId, String password) {
     User user = userRepository.findByUserId(userId);
 
-    if (user == null) {
-      throw new IllegalStateException("사용자의 정보가 없습니다");
-    }
-
-    if (!user.isSameUser(password)) {
-      throw new LoginException("비밀번호가 틀립니다");
+    if (user == null || !user.isSamePassword(password, passwordEncoder)) {
+      throw new LoginFailException();
     }
   }
-
 
   public String updateUserService(Long id, User updatedUser) {
 
     User user = findUserById(id);
 
-    if (user.isSameUser(updatedUser)) {
+    if (user.isSamePassword(updatedUser, passwordEncoder)) {
       user.update(updatedUser);
       userRepository.save(user);
 
@@ -63,8 +62,6 @@ public class UserService {
   }
 
   public void checkIdOfSession(User userFromSession, Long id) {
-    if (!userFromSession.isSameId(id)) {
-      throw new IllegalStateException("자신의 정보만 수정할 수 있습니다");
-    }
+    userFromSession.checkId(id);
   }
 }
