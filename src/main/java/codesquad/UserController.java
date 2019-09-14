@@ -14,7 +14,7 @@ public class UserController {
     private List<User> users = new ArrayList<User>();
 
     @GetMapping("/")
-    public String index(){
+    public String index() {
         return "index";
     }
 
@@ -29,11 +29,11 @@ public class UserController {
     public String login() {
         return "user/login";
     }
+
     @GetMapping("/users/form")
     public String signUp() {
         return "user/form";
     }
-
 
     @GetMapping("/users")
     public String list(Model model) {
@@ -44,12 +44,21 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
         //System.out.println(users.toString());
+        /*
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+               model.addAttribute("user", users.get(i)); //정상적으로 작동
+               break;
+            }
+        }*/
+
         for (User user : users) {
             if (user.isSameUser(userId, user)) {
                 model.addAttribute("user", user);
                 break;
             }
         }
+
         return "profile";
     }
 }
