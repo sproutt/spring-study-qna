@@ -1,5 +1,7 @@
 package codesquad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.persistence.Entity;
@@ -24,6 +26,7 @@ public class Answer {
   private Long id;
 
   @ManyToOne
+  @JsonIgnore
   @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
   private User writer;
 

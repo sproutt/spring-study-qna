@@ -83,7 +83,7 @@
               {{/answers}}
               {{/question}}
               {{#sessionedUser}}
-              <form class="submit-write" action=/questions/{{question.id}}/answers method="post">
+              <form class="submit-write" action=/api/questions/{{question.id}}/answers method="post">
                 <input id="writer_id" type="hidden" name="writer" value="{{id}}">
                 <input id="question_id" type="hidden" name="question" value="{{question.id}}">
                 <div class="form-group" style="padding:14px;">
