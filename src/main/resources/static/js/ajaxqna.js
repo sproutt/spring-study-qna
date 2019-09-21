@@ -27,6 +27,8 @@ function fetchManager({
         result,
         status
     }) => {
+        console.log("result = " + result + ", status = " + status);
+
         if (status >= 400) {
             console.log('error 가 발생했네요 ', result.error);
         } else {
@@ -37,9 +39,7 @@ function fetchManager({
     })
 }
 
-function appendAnswer(
-    result
-) {
+function appendAnswer(result) {
     console.log(result);
 
     const html = `
@@ -72,26 +72,19 @@ function appendAnswer(
             </article> `
 
     document.querySelector(".qna-comment-slipp-articles").insertAdjacentHTML("afterbegin", html);
-    document.querySelector(".length").innerHTML = document.querySelectorAll('.comment-doc').length;
+    answerCount();
 }
 
-function deleteAnswer({
-    answerid
-}) {
-    const selector = `.answer[data-id='${answerid}']`;
-    const target = $(selector);
-    target.parentNode.removeChild(target);
-}
 
 function registerAnswerHandler(evt) {
+
     evt.preventDefault();
+
     const content = document.querySelector(".descrip").value;
-    console.log(content);
     document.querySelector(".descrip").value = "";
 
     const url = document.querySelector(".submit-write").getAttribute("action");
-    console.log(url);
-
+    console.log(url + '으로 요청');
 
     fetchManager({
         url: url,
@@ -107,33 +100,52 @@ function registerAnswerHandler(evt) {
 }
 
 function deleteAnswerHandler(evt) {
-    if (evt.target.className !== "answer-delete")
-        return;
+
     evt.preventDefault();
-    const url = evt.target.href;
-    const id = url.replace(/.+\/(\d+)$/, "$1");
+
+    const url = evt.target.parentNode.getAttribute("action");
+    console.log(url + '으로 요청');
 
     fetchManager({
-        url,
+        url: url,
         method: 'DELETE',
         headers: {
             'content-type': 'application/json'
         },
-        body: JSON.stringify({
-            id
-        }),
         callback: deleteAnswer
     })
+
+    answerCount();
+}
+
+function answerCount() {
+    document.querySelector(".length").innerHTML = document.querySelectorAll('.comment-doc').length;
+}
+
+function deleteAnswer(answer) {
+    console.log('answerId =' + answer);
+
+    const selector = `.article[id="answer-${answer.id}"]`;
+    const target = document.querySelector(selector);
+    target.parentNode.removeChild(target);
 }
 
 function initEvents() {
-    console.log("initEvents실행");
-    const answerBtn = document.querySelector(".pull-right");
+    const answerBtn = document.querySelector(".qna-comment-slipp-articles");
 
-    answerBtn.addEventListener("click", registerAnswerHandler);
+    answerBtn.addEventListener("click", event => {
+        if (event.target.className === "delete-answer-button") {
+            deleteAnswerHandler(event);
+        }
+        if (event.target.className === "btn btn-success pull-right") {
+            registerAnswerHandler(event);
+        }
+        return;
+    });
+
+
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-
+document.addEventListener("DOMContentLoaded", (event) => {
     initEvents();
 })

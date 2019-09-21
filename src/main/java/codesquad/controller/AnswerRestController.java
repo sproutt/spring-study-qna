@@ -1,13 +1,12 @@
 package codesquad.controller;
 
-import codesquad.VO.AnswerVO;
+import codesquad.dto.AnswerDTO;
 import codesquad.domain.Answer;
 import codesquad.service.AnswerService;
 import codesquad.util.HttpSessionUtils;
-import java.util.HashMap;
-import java.util.Map;
 import javax.servlet.http.HttpSession;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,15 +25,40 @@ public class AnswerRestController {
 
 
   @PostMapping("")
-  public ResponseEntity<Answer> register(@PathVariable Long questionId, @RequestBody AnswerVO answerVo,
-  HttpSession session){
+  public ResponseEntity<Answer> register(@PathVariable Long questionId,
+      @RequestBody AnswerDTO answerDTO,
+      HttpSession session) {
 
     HttpSessionUtils.checkLogining(session);
 
-    Answer answer = answerService.addAnswer(answerVo, HttpSessionUtils.getUserFromSession(session),questionId);
+    try {
+      Answer answer = answerService
+          .addAnswer(answerDTO, HttpSessionUtils.getUserFromSession(session), questionId);
 
-    return ResponseEntity.accepted().body(answer);
+      return Result.ok(answer);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      return Result.fail();
+    }
   }
 
+  @DeleteMapping("/{id}")
+  public ResponseEntity<Answer> delete(@PathVariable Long questionId, @PathVariable Long id,
+      HttpSession session) {
 
+    HttpSessionUtils.checkLogining(session);
+
+    try {
+      Answer answer = answerService.deleteAnswer(id, HttpSessionUtils.getUserFromSession(session));
+
+      return Result.ok(answer);
+
+    } catch (Exception e) {
+      e.printStackTrace();
+
+      return Result.fail();
+    }
+  }
 }

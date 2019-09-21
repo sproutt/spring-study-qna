@@ -1,11 +1,11 @@
-package codesquad.VO;
+package codesquad.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class AnswerVO {
+public class AnswerDTO {
 
   private String content;
 

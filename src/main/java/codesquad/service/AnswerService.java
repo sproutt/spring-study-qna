@@ -1,6 +1,6 @@
 package codesquad.service;
 
-import codesquad.VO.AnswerVO;
+import codesquad.dto.AnswerDTO;
 import codesquad.dao.AnswerRepository;
 import codesquad.dao.QuestionRepository;
 import codesquad.domain.Answer;
@@ -19,22 +19,23 @@ public class AnswerService {
     this.questionRepository = questionRepository;
   }
 
-  public Answer addAnswer(AnswerVO answerVo, User loginUser, Long questionId) {
+  public Answer addAnswer(AnswerDTO answerDTO, User loginUser, Long questionId) {
 
     Question question = questionRepository.findById(questionId)
         .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
-    Answer answer = new Answer(answerVo.getContent(), loginUser, question);
+    Answer answer = new Answer(answerDTO.getContent(), loginUser, question);
 
     answerRepository.save(answer);
     return answer;
   }
 
-  public void deleteAnswer(Long id, User loginUser) {
+  public Answer deleteAnswer(Long id, User loginUser) {
 
     Answer answer = findAnswerById(id);
     answer.checkWriter(loginUser);
 
     answerRepository.delete(answer);
+    return answer;
   }
 
   public void updateAnswer(Long id, User loginUser, Answer updatedAnswer) {
