@@ -1,13 +1,16 @@
 package codesquad.controller;
 
+import codesquad.VO.AnswerVO;
 import codesquad.domain.Answer;
 import codesquad.service.AnswerService;
 import codesquad.util.HttpSessionUtils;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpSession;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,18 +25,15 @@ public class AnswerRestController {
   }
 
 
-  @PostMapping
-  public Map<String, Object> register(@PathVariable Long questionId, Answer answer,
+  @PostMapping("")
+  public ResponseEntity<Answer> register(@PathVariable Long questionId, @RequestBody AnswerVO answerVo,
   HttpSession session){
 
     HttpSessionUtils.checkLogining(session);
 
-    answerService.addAnswer(answer, HttpSessionUtils.getUserFromSession(session));
+    Answer answer = answerService.addAnswer(answerVo, HttpSessionUtils.getUserFromSession(session),questionId);
 
-    Map<String, Object> map= new HashMap<>();
-    map.put("answer", answer);
-
-    return map;
+    return ResponseEntity.accepted().body(answer);
   }
 
 

@@ -23,16 +23,16 @@ public class AnswerController {
     this.answerService = answerService;
   }
 
-  @PostMapping
-  public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer,
-      HttpSession session) {
-
-    HttpSessionUtils.checkLogining(session);
-
-    answerService.addAnswer(answer, HttpSessionUtils.getUserFromSession(session));
-
-    return "redirect:/questions/" + questionId;
-  }
+//  @PostMapping
+//  public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer,
+//      HttpSession session) {
+//
+//    HttpSessionUtils.checkLogining(session);
+//
+//    answerService.addAnswer(answer, HttpSessionUtils.getUserFromSession(session));
+//
+//    return "redirect:/questions/" + questionId;
+//  }
 
   @DeleteMapping("/{id}")
   public String deleteAnswer(@PathVariable("questionId") Long questionId,

@@ -26,7 +26,6 @@ public class Answer {
   private Long id;
 
   @ManyToOne
-  @JsonIgnore
   @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
   private User writer;
 
@@ -40,6 +39,12 @@ public class Answer {
   private LocalDateTime createdDate;
   @UpdateTimestamp
   private LocalDateTime updatedDate;
+
+  public Answer(String contents, User writer, Question question){
+    this.contents = contents;
+    this.writer = writer;
+    this.question = question;
+  }
 
   public String getTime() {
     if (updatedDate == null) {

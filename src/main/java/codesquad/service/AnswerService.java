@@ -1,7 +1,10 @@
 package codesquad.service;
 
+import codesquad.VO.AnswerVO;
 import codesquad.dao.AnswerRepository;
+import codesquad.dao.QuestionRepository;
 import codesquad.domain.Answer;
+import codesquad.domain.Question;
 import codesquad.domain.User;
 import org.springframework.stereotype.Service;
 
@@ -9,16 +12,21 @@ import org.springframework.stereotype.Service;
 public class AnswerService {
 
   private AnswerRepository answerRepository;
+  private QuestionRepository questionRepository;
 
-  public AnswerService(AnswerRepository answerRepository) {
+  public AnswerService(AnswerRepository answerRepository, QuestionRepository questionRepository) {
     this.answerRepository = answerRepository;
+    this.questionRepository = questionRepository;
   }
 
-  public void addAnswer(Answer answer, User loginUser) {
-;
-    answer.checkWriter(loginUser);
+  public Answer addAnswer(AnswerVO answerVo, User loginUser, Long questionId) {
+
+    Question question = questionRepository.findById(questionId)
+        .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
+    Answer answer = new Answer(answerVo.getContent(), loginUser, question);
 
     answerRepository.save(answer);
+    return answer;
   }
 
   public void deleteAnswer(Long id, User loginUser) {
