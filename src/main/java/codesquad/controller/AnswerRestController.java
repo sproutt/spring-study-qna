@@ -1,10 +1,12 @@
 package codesquad.controller;
 
-import codesquad.dto.AnswerDTO;
 import codesquad.domain.Answer;
+import codesquad.dto.AnswerDTO;
 import codesquad.service.AnswerService;
 import codesquad.util.HttpSessionUtils;
 import javax.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/questions/{questionId}/answers")
 public class AnswerRestController {
 
+  private static final Logger logger = LoggerFactory.getLogger(AnswerRestController.class);
+
   private AnswerService answerService;
 
   public AnswerRestController(AnswerService answerService) {
@@ -25,7 +29,7 @@ public class AnswerRestController {
 
 
   @PostMapping("")
-  public ResponseEntity<Answer> register(@PathVariable Long questionId,
+  public ResponseEntity register(@PathVariable Long questionId,
       @RequestBody AnswerDTO answerDTO,
       HttpSession session) {
 
@@ -33,19 +37,19 @@ public class AnswerRestController {
 
     try {
       Answer answer = answerService
-          .addAnswer(answerDTO, HttpSessionUtils.getUserFromSession(session), questionId);
+          .addAnswer(answerDTO.getContent(), HttpSessionUtils.getUserFromSession(session), questionId);
 
       return Result.ok(answer);
 
     } catch (Exception e) {
       e.printStackTrace();
 
-      return Result.fail();
+      return Result.fail(e.getMessage());
     }
   }
 
   @DeleteMapping("/{id}")
-  public ResponseEntity<Answer> delete(@PathVariable Long questionId, @PathVariable Long id,
+  public ResponseEntity delete(@PathVariable Long questionId, @PathVariable Long id,
       HttpSession session) {
 
     HttpSessionUtils.checkLogining(session);
@@ -58,7 +62,7 @@ public class AnswerRestController {
     } catch (Exception e) {
       e.printStackTrace();
 
-      return Result.fail();
+      return Result.fail(e.getMessage());
     }
   }
 }

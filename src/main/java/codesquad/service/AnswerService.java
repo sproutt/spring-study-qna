@@ -19,11 +19,11 @@ public class AnswerService {
     this.questionRepository = questionRepository;
   }
 
-  public Answer addAnswer(AnswerDTO answerDTO, User loginUser, Long questionId) {
+  public Answer addAnswer(String content, User loginUser, Long questionId) {
 
     Question question = questionRepository.findById(questionId)
         .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
-    Answer answer = new Answer(answerDTO.getContent(), loginUser, question);
+    Answer answer = new Answer(content, loginUser, question);
 
     answerRepository.save(answer);
     return answer;

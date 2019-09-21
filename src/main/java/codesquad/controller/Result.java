@@ -1,6 +1,7 @@
 package codesquad.controller;
 
 import codesquad.domain.Answer;
+import codesquad.dto.ErrorDTO;
 import org.springframework.http.ResponseEntity;
 
 public class Result {
@@ -9,7 +10,7 @@ public class Result {
     return ResponseEntity.accepted().body(answer);
   }
 
-  public static ResponseEntity<Answer> fail(){
-    return ResponseEntity.badRequest().body(null);
+  public static ResponseEntity<ErrorDTO> fail(String error){
+    return ResponseEntity.badRequest().body(new ErrorDTO(error));
   }
 }

@@ -21,28 +21,6 @@ public class AnswerController {
     this.answerService = answerService;
   }
 
-//  @PostMapping
-//  public String createAnswer(@PathVariable("questionId") Long questionId, Answer answer,
-//      HttpSession session) {
-//
-//    HttpSessionUtils.checkLogining(session);
-//
-//    answerService.addAnswer(answer, HttpSessionUtils.getUserFromSession(session));
-//
-//    return "redirect:/questions/" + questionId;
-//  }
-
-//  @DeleteMapping("/{id}")
-//  public String deleteAnswer(@PathVariable("questionId") Long questionId,
-//      @PathVariable("id") Long id, HttpSession session) {
-//
-//    HttpSessionUtils.checkLogining(session);
-//
-//    answerService.deleteAnswer(id, HttpSessionUtils.getUserFromSession(session));
-//
-//    return "redirect:/questions/" + questionId;
-//  }
-
   @PutMapping("/{id}")
   public String updateAnswer(@PathVariable("questionId") Long questionId,
       @PathVariable("id") Long id, Answer updatedAnswer, HttpSession session) {

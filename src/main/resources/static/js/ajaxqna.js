@@ -75,7 +75,6 @@ function appendAnswer(result) {
     answerCount();
 }
 
-
 function registerAnswerHandler(evt) {
 
     evt.preventDefault();
