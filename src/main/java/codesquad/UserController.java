@@ -13,10 +13,6 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<User>();
 
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
 
     @PostMapping("/users")
     public String create(User user) {
