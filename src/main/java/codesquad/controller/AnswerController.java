@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/questions/{questionId}/answers")
 public class AnswerController {
 
-  private AnswerService answerService;
+  private final AnswerService answerService;
 
   public AnswerController(AnswerService answerService) {
     this.answerService = answerService;

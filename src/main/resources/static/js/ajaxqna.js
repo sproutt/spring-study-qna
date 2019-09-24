@@ -1,5 +1,4 @@
 function $(selector) {
-    //잘 안됨...ㅠ
     return document.querySelector(selector);
 }
 
@@ -28,9 +27,10 @@ function fetchManager({
         status
     }) => {
         console.log("result = " + result + ", status = " + status);
+        console.log(result);
 
         if (status >= 400) {
-            console.log('error 가 발생했네요 ', result.error);
+            console.log('error 가 발생했네요 ', result.message);
         } else {
             callback(result)
         }
@@ -41,6 +41,7 @@ function fetchManager({
 
 function appendAnswer(result) {
     console.log(result);
+    result = result.content;
 
     const html = `
             <article class="article" id="answer-${result.id}">

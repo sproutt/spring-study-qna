@@ -3,10 +3,10 @@ package codesquad.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@Getter
 @AllArgsConstructor
-public class ErrorDTO {
+@Getter
+public class ResponseDTO<T> {
 
-  private String error;
+  private T content;
 
 }

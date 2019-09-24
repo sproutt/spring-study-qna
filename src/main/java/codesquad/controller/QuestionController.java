@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 @Controller
 public class QuestionController {
 
-  private QuestionService questionService;
+  private final QuestionService questionService;
 
   QuestionController(QuestionService questionService) {
     this.questionService = questionService;

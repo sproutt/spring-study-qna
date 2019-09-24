@@ -1,6 +1,5 @@
 package codesquad.domain;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -49,7 +48,7 @@ public class Question {
   private LocalDateTime updatedDate;
 
   public String getTime() {
-    if(updatedDate == null){
+    if (updatedDate == null) {
       return createdDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
     }
     return updatedDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -62,8 +61,13 @@ public class Question {
   }
 
   public void checkWriter(User user) {
-    if(writer.getId() != user.getId()){
+    if (writer.getId() != user.getId()) {
       throw new IllegalStateException("자신의 질문이 아닙니다");
     }
   }
+
+  public Answer addAnswer(String contents, User loginUser) {
+    return new Answer(contents, loginUser, this);
+  }
+
 }

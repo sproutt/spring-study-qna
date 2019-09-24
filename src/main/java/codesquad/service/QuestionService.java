@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class QuestionService {
 
-  private QuestionRepository questionRepository;
+  private final QuestionRepository questionRepository;
 
   QuestionService(QuestionRepository questionRepository) {
     this.questionRepository = questionRepository;
@@ -45,7 +45,7 @@ public class QuestionService {
     questionRepository.delete(question);
   }
 
-  public void checkWriterIsUserOfSession(User loginUser, Long id){
+  public void checkWriterIsUserOfSession(User loginUser, Long id) {
     loginUser.checkId(id);
   }
 

@@ -40,7 +40,7 @@ public class Answer {
   @UpdateTimestamp
   private LocalDateTime updatedDate;
 
-  public Answer(String contents, User writer, Question question){
+  public Answer(String contents, User writer, Question question) {
     this.contents = contents;
     this.writer = writer;
     this.question = question;
