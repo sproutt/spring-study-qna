@@ -20,7 +20,7 @@ public class UserController {
         users.add(user);
         return "redirect:/users";
     }
-
+    /*
     @GetMapping("/users/login")
     public String login() {
         return "user/login";
@@ -30,6 +30,7 @@ public class UserController {
     public String signUp() {
         return "user/form";
     }
+    */
 
     @GetMapping("/users")
     public String list(Model model) {

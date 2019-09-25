@@ -14,11 +14,12 @@ import java.util.List;
 @Controller
 public class QuestionController {
     private List<Question> questionList = new ArrayList<Question>();
-
+    /*
     @GetMapping("/qna/form.html")
     public String getQuestion() {
         return "/qna/form";
     }
+    */
 
     @PostMapping("/questions")
     public String question(Question question) {
