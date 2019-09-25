@@ -57,4 +57,12 @@ public class Question {
                 ", index=" + index +
                 '}';
     }
+
+    public boolean isSameIndex(int index, Question question) {
+        if (question.getIndex() == index) {
+            return true;
+        }
+        return false;
+    }
+
 }
