@@ -2,11 +2,10 @@ package codesquad.controller;
 
 import codesquad.domain.Answer;
 import codesquad.dto.AnswerDTO;
-import codesquad.dto.ResponseDTO;
+import codesquad.dto.Result;
 import codesquad.exception.ResponseException;
 import codesquad.service.AnswerService;
 import codesquad.util.HttpSessionUtils;
-import codesquad.util.ResponseUtil;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,8 +30,8 @@ public class AnswerRestController {
 
 
   @PostMapping
-  public ResponseDTO<Answer> register(@PathVariable Long questionId, @RequestBody AnswerDTO answerDTO,
-      HttpSession session) throws ResponseException {
+  public Result<Answer> register(@PathVariable Long questionId,
+      @RequestBody AnswerDTO answerDTO, HttpSession session) throws ResponseException {
 
     HttpSessionUtils.checkLogining(session);
 
@@ -43,8 +42,8 @@ public class AnswerRestController {
   }
 
   @DeleteMapping("/{id}")
-  public ResponseDTO<Answer> delete(@PathVariable Long questionId, @PathVariable Long id,
-      HttpSession session) throws ResponseException {
+  public Result<Answer> delete(@PathVariable Long id, HttpSession session)
+      throws ResponseException {
 
     HttpSessionUtils.checkLogining(session);
 

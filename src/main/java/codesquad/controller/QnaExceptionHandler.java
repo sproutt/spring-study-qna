@@ -1,10 +1,9 @@
 package codesquad.controller;
 
-import codesquad.dto.ErrorDTO;
+import codesquad.dto.Result;
 import codesquad.exception.LoginException;
 import codesquad.exception.LoginFailException;
 import codesquad.exception.ResponseException;
-import codesquad.util.ResponseUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -39,7 +38,7 @@ public class QnaExceptionHandler {
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(ResponseException.class)
-  public ErrorDTO responseError(ResponseException e) {
-    return ResponseUtil.fail(e.getMessage());
+  public Result<Object> responseError(ResponseException e) {
+    return Result.fail(e.getMessage());
   }
 }

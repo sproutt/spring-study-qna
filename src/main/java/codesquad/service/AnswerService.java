@@ -5,8 +5,7 @@ import codesquad.dao.QuestionRepository;
 import codesquad.domain.Answer;
 import codesquad.domain.Question;
 import codesquad.domain.User;
-import codesquad.dto.ResponseDTO;
-import codesquad.util.ResponseUtil;
+import codesquad.dto.Result;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -20,7 +19,7 @@ public class AnswerService {
     this.questionRepository = questionRepository;
   }
 
-  public ResponseDTO<Answer> addAnswer(String content, User loginUser, Long questionId) {
+  public Result<Answer> addAnswer(String content, User loginUser, Long questionId) {
 
     Question question = questionRepository.findById(questionId)
         .orElseThrow(() -> (new IllegalStateException("데이터를 찾을 수 없습니다.")));
@@ -28,17 +27,17 @@ public class AnswerService {
 
     answerRepository.save(answer);
 
-    return ResponseUtil.ok(answer);
+    return Result.ok(answer);
   }
 
-  public ResponseDTO<Answer> deleteAnswer(Long id, User loginUser) {
+  public Result<Answer> deleteAnswer(Long id, User loginUser) {
 
     Answer answer = findAnswerById(id);
     answer.checkWriter(loginUser);
 
     answerRepository.delete(answer);
 
-    return ResponseUtil.ok(answer);
+    return Result.ok(answer);
   }
 
   public void updateAnswer(Long id, User loginUser, Answer updatedAnswer) {
