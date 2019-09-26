@@ -13,24 +13,14 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<User>();
 
-
     @PostMapping("/users")
     public String create(User user) {
+        System.out.println("user : " + user);
+        user.setUserIndex(users.size() + 1);
         System.out.println("user : " + user);
         users.add(user);
         return "redirect:/users";
     }
-    /*
-    @GetMapping("/users/login")
-    public String login() {
-        return "user/login";
-    }
-
-    @GetMapping("/users/form")
-    public String signUp() {
-        return "user/form";
-    }
-    */
 
     @GetMapping("/users")
     public String list(Model model) {
@@ -40,14 +30,6 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String getProfile(@PathVariable("userId") String userId, Model model) {
-        //System.out.println(users.toString());
-        /*
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(userId)) {
-               model.addAttribute("user", users.get(i)); //정상적으로 작동
-               break;
-            }
-        }*/
 
         for (User user : users) {
             if (user.isSameUser(userId, user)) {
@@ -55,7 +37,35 @@ public class UserController {
                 break;
             }
         }
-
         return "profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(@PathVariable("userId") String userId, Model model) {
+        for (User user : users) {
+            if (user.isSameUser(userId, user)) {
+                model.addAttribute("user", user);
+                break;
+            }
+        }
+        return "user/updateForm";
+    }
+
+    @PostMapping("/users/{userId}/update")
+    public String editUser(@PathVariable("userId") String userId, User user) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getUserId().equals(userId)) {
+                if (users.get(i).getPassword().equals(user.getPassword())) {
+                    users.remove(i);
+                    users.add(i, user);
+                    users.get(i).setPassword(user.getChangePassword());
+                    users.get(i).setUserIndex(i + 1);
+                    break;
+                } else {
+                    return "user/updateForm";
+                }
+            }
+        }
+        return "redirect:/users";
     }
 }
