@@ -2,9 +2,9 @@ package codesquad.exception;
 
 public class LoginException extends IllegalStateException {
 
-  public LoginException(String msg) {
+  public LoginException(String message) {
 
-    super(msg);
+    super(message);
 
   }
 }

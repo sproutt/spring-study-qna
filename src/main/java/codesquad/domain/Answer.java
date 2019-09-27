@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -17,6 +18,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class Answer {
 
   @Id
@@ -37,6 +39,12 @@ public class Answer {
   private LocalDateTime createdDate;
   @UpdateTimestamp
   private LocalDateTime updatedDate;
+
+  public Answer(String contents, User writer, Question question) {
+    this.contents = contents;
+    this.writer = writer;
+    this.question = question;
+  }
 
   public String getTime() {
     if (updatedDate == null) {
