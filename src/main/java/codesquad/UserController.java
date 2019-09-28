@@ -45,12 +45,12 @@ public class UserController {
 
     @PostMapping("/{id}/update")
     public String editUser(@PathVariable("id") Long id, User user) {
-        User afterUser = userRepository.findById(id).get();
-        if (afterUser.getPassword().equals(user.getPassword())) {
-            afterUser.setName(user.getName());
-            afterUser.setEmail(user.getEmail());
-            afterUser.setPassword(user.getChangePassword());
-            userRepository.save(afterUser);
+        User changedUser = userRepository.findById(id).get();
+        if (changedUser.getPassword().equals(user.getPassword())) {
+            changedUser.setName(user.getName());
+            changedUser.setEmail(user.getEmail());
+            changedUser.setPassword(user.getChangePassword());
+            userRepository.save(changedUser);
         } else {
             return "user/updateForm";
         }
