@@ -1,10 +1,8 @@
 package codesquad;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelExtensionsKt;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,11 +18,8 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    //private List<Question> questionList = new ArrayList<Question>();
-
     @PostMapping("/questions")
     public String question(Question question) {
-        //question.setIndex(questionList.size() + 1);
         String time = checkCurrentTime();
         question.setTime(time);
         questionRepository.save(question);
@@ -46,14 +41,14 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}/form")
-    public ModelAndView updateQuestionForm(@PathVariable("id") Long id){
+    public ModelAndView updateQuestionForm(@PathVariable("id") Long id) {
         ModelAndView mav = new ModelAndView("qna/updateForm");
         mav.addObject("question", questionRepository.findById(id).get());
         return mav;
     }
 
     @PostMapping("/questions/{id}/update")
-    public String editQuestion(@PathVariable("id") Long id, Question question){
+    public String editQuestion(@PathVariable("id") Long id, Question question) {
         Question changedQuestion = questionRepository.findById(id).get();
         changedQuestion.setTitle(question.getTitle());
         changedQuestion.setContents(question.getContents());
@@ -62,23 +57,11 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}/delete")
-    public ModelAndView deleteQuestion(@PathVariable("id") Long id){
+    public ModelAndView deleteQuestion(@PathVariable("id") Long id) {
         ModelAndView mav = new ModelAndView("redirect:/");
         questionRepository.delete(questionRepository.findById(id).get());
         return mav;
     }
-    /*
-    @GetMapping("/questions/{index}")
-    public String getQuestion(@PathVariable("index") int index, Model model) {
-        for (Question question : questionList) {
-            if (question.isSameIndex(index, question)) {
-                model.addAttribute("question", question);
-                break;
-            }
-        }
-        return "qna/show";
-    }
-    */
 
     private String checkCurrentTime() {
         Date today = new Date();

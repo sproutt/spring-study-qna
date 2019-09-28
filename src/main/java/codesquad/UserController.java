@@ -55,22 +55,6 @@ public class UserController {
             return "user/updateForm";
         }
         return "redirect:/users";
-        /*
-        for (int i = 0; i < users.size(); i++) {
-            if (users.get(i).getUserId().equals(userId)) {
-                if (users.get(i).getPassword().equals(user.getPassword())) {
-                    users.remove(i);
-                    users.add(i, user);
-                    users.get(i).setPassword(user.getChangePassword());
-                    users.get(i).setUserIndex(i + 1);
-                    break;
-                } else {
-                    return "user/updateForm";
-                }
-            }
-        }
-        */
-        //return "redirect:/users";
     }
 
 }

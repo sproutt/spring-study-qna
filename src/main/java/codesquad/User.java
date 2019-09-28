@@ -76,5 +76,4 @@ public class User {
                 ", changePassword='" + changePassword + '\'' +
                 '}';
     }
-
 }
