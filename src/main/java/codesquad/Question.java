@@ -1,10 +1,13 @@
 package codesquad;
 
 import javax.persistence.*;
+import lombok.*;
 
+@Getter
+@Setter
+@ToString
 @Entity
 public class Question {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -16,7 +19,7 @@ public class Question {
     private String contents;
     private String time;
 
-
+    /*
     public Long getId() {
         return id;
     }
@@ -67,4 +70,5 @@ public class Question {
                 ", time='" + time + '\'' +
                 '}';
     }
+    */
 }

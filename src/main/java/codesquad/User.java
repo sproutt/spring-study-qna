@@ -1,7 +1,11 @@
 package codesquad;
 
+import lombok.*;
 import javax.persistence.*;
 
+@Getter
+@Setter
+@ToString
 @Entity
 public class User {
     @Id
@@ -16,7 +20,7 @@ public class User {
     private String email;
     private String changePassword;
 
-
+    /*
     public Long getId() {
         return id;
     }
@@ -76,4 +80,5 @@ public class User {
                 ", changePassword='" + changePassword + '\'' +
                 '}';
     }
+    */
 }
