@@ -35,20 +35,27 @@ public class UserController {
         mav.addObject("user", userRepository.findById(id).get());
         return mav;
     }
-    /*
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable("userId") String userId, Model model) {
-        for (User user : users) {
-            if (user.isSameUser(userId, user)) {
-                model.addAttribute("user", user);
-                break;
-            }
-        }
-        return "user/updateForm";
+
+    @GetMapping("/{id}/form")
+    public ModelAndView updateForm(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("user/updateForm");
+        mav.addObject("user", userRepository.findById(id).get());
+        return mav;
     }
 
-    @PostMapping("/users/{userId}/update")
-    public String editUser(@PathVariable("userId") String userId, User user) {
+    @PostMapping("/{id}/update")
+    public String editUser(@PathVariable("id") Long id, User user) {
+        User afterUser = userRepository.findById(id).get();
+        if (afterUser.getPassword().equals(user.getPassword())) {
+            afterUser.setName(user.getName());
+            afterUser.setEmail(user.getEmail());
+            afterUser.setPassword(user.getChangePassword());
+            userRepository.save(afterUser);
+        } else {
+            return "user/updateForm";
+        }
+        return "redirect:/users";
+        /*
         for (int i = 0; i < users.size(); i++) {
             if (users.get(i).getUserId().equals(userId)) {
                 if (users.get(i).getPassword().equals(user.getPassword())) {
@@ -62,7 +69,8 @@ public class UserController {
                 }
             }
         }
-        return "redirect:/users";
+        */
+        //return "redirect:/users";
     }
-    */
+
 }

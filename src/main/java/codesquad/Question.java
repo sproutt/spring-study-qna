@@ -15,17 +15,14 @@ public class Question {
     private String title;
     private String contents;
     private String time;
-    private int index;
 
-    public Question() {
+
+    public Long getId() {
+        return id;
     }
 
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getTime() {
@@ -68,15 +65,6 @@ public class Question {
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", time='" + time + '\'' +
-                ", index=" + index +
                 '}';
     }
-
-    public boolean isSameIndex(int index, Question question) {
-        if (question.getIndex() == index) {
-            return true;
-        }
-        return false;
-    }
-
 }

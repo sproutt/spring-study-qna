@@ -15,7 +15,6 @@ public class User {
     private String name;
     private String email;
     private String changePassword;
-    private int userIndex;
 
 
     public Long getId() {
@@ -24,14 +23,6 @@ public class User {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public int getUserIndex() {
-        return userIndex;
-    }
-
-    public void setUserIndex(int userIndex) {
-        this.userIndex = userIndex;
     }
 
     public String getChangePassword() {
@@ -77,20 +68,13 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "userId='" + userId + '\'' +
+                "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", changePassword='" + changePassword + '\'' +
-                ", userIndex=" + userIndex +
                 '}';
-    }
-
-    public boolean isSameUser(String userId, User user) {
-        if (user.getUserId().equals(userId)) {
-            return true;
-        }
-        return false;
     }
 
 }

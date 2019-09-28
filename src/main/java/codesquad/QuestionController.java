@@ -36,8 +36,8 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public ModelAndView questionShow(@PathVariable long id) {
-        ModelAndView mav = new ModelAndView("question/profile");
+    public ModelAndView questionShow(@PathVariable("id") Long id) {
+        ModelAndView mav = new ModelAndView("qna/show");
         mav.addObject("question", questionRepository.findById(id).get());
         return mav;
     }
