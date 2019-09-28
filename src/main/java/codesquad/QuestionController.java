@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelExtensionsKt;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,6 +59,13 @@ public class QuestionController {
         changedQuestion.setContents(question.getContents());
         questionRepository.save(changedQuestion);
         return "redirect:/";
+    }
+
+    @DeleteMapping("/questions/{id}/delete")
+    public ModelAndView deleteQuestion(@PathVariable("id") Long id){
+        ModelAndView mav = new ModelAndView("redirect:/");
+        questionRepository.delete(questionRepository.findById(id).get());
+        return mav;
     }
     /*
     @GetMapping("/questions/{index}")
