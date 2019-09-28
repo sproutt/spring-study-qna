@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ModelAndView show(@PathVariable long id) {
+    public ModelAndView show(@PathVariable("id") Long id) {
         ModelAndView mav = new ModelAndView("user/profile");
         mav.addObject("user", userRepository.findById(id).get());
         return mav;

@@ -1,11 +1,24 @@
 package codesquad;
 
+import javax.persistence.*;
+
+@Entity
 public class Question {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+
     private String title;
     private String contents;
     private String time;
     private int index;
+
+    public Question() {
+    }
 
     public int getIndex() {
         return index;
@@ -50,7 +63,8 @@ public class Question {
     @Override
     public String toString() {
         return "Question{" +
-                "writer='" + writer + '\'' +
+                "id=" + id +
+                ", writer='" + writer + '\'' +
                 ", title='" + title + '\'' +
                 ", contents='" + contents + '\'' +
                 ", time='" + time + '\'' +
