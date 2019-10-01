@@ -47,9 +47,12 @@ public class UserController {
     public String editUser(@PathVariable("id") Long id, User user) {
         User changedUser = userRepository.findById(id).get();
         if (changedUser.isSamePassword(changedUser,user)) {
+            user.changeUserInfo(changedUser,user);
+            /*
             changedUser.setName(user.getName());
             changedUser.setEmail(user.getEmail());
             changedUser.setPassword(user.getChangePassword());
+            */
             userRepository.save(changedUser);
         } else {
             return "user/updateForm";
