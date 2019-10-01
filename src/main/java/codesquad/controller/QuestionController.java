@@ -1,5 +1,7 @@
-package codesquad;
+package codesquad.controller;
 
+import codesquad.QuestionRepository;
+import codesquad.domain.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -7,10 +9,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.servlet.ModelAndView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 @Controller
 public class QuestionController {
@@ -20,8 +18,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String question(Question question) {
-        String time = checkCurrentTime();
-        question.setTime(time);
+        question.checkCurrentTime();
         questionRepository.save(question);
         System.out.println("add 후 question : " + question);
         return "redirect:/";
@@ -34,17 +31,15 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public ModelAndView questionsShow(@PathVariable("id") Long id) {
-        ModelAndView mav = new ModelAndView("qna/show");
-        mav.addObject("question", questionRepository.findById(id).get());
-        return mav;
+    public String questionsShow(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "qna/show";
     }
 
     @GetMapping("/questions/{id}/form")
-    public ModelAndView updateQuestionForm(@PathVariable("id") Long id) {
-        ModelAndView mav = new ModelAndView("qna/updateForm");
-        mav.addObject("question", questionRepository.findById(id).get());
-        return mav;
+    public String updateQuestionForm(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).get());
+        return "qna/updateForm";
     }
 
     @PostMapping("/questions/{id}/update")
@@ -57,16 +52,8 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}/delete")
-    public ModelAndView deleteQuestion(@PathVariable("id") Long id) {
-        ModelAndView mav = new ModelAndView("redirect:/");
+    public String deleteQuestion(@PathVariable("id") Long id) {
         questionRepository.delete(questionRepository.findById(id).get());
-        return mav;
-    }
-
-    private String checkCurrentTime() {
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
-        return date.format(today) + " " + time.format(today);
+        return "redirect:/";
     }
 }
