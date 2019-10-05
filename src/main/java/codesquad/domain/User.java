@@ -1,8 +1,8 @@
 package codesquad.domain;
 
-import codesquad.UserRepository;
-import lombok.*;
-import org.springframework.ui.Model;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -29,10 +29,5 @@ public class User {
             return true;
         }
         return false;
-    }
-
-
-    public void changeUserInfo(User changedUser, User user) {
-        changedUser
     }
 }

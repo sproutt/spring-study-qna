@@ -32,27 +32,35 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
-        return "user/profile";
+        if (userRepository.findById(id).isPresent()) {
+            model.addAttribute("user", userRepository.findById(id).get());
+            return "user/profile";
+        } else {
+            return "/users";
+        }
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
-        return "user/updateForm";
+        if (userRepository.findById(id).isPresent()) {
+            model.addAttribute("user", userRepository.findById(id).get());
+            return "user/updateForm";
+        } else {
+            return "/users";
+        }
     }
 
-    //setter사용금지
+    //setter사용금지 아직 미반영
     @PostMapping("/{id}/update")
     public String editUser(@PathVariable("id") Long id, User user) {
         User changedUser = userRepository.findById(id).get();
-        if (changedUser.isSamePassword(changedUser,user)) {
-            user.changeUserInfo(changedUser,user);
-            /*
+        if (changedUser.isSamePassword(changedUser, user)) {
+            //user.changeUserInfo(changedUser,user);
+
             changedUser.setName(user.getName());
             changedUser.setEmail(user.getEmail());
             changedUser.setPassword(user.getChangePassword());
-            */
+
             userRepository.save(changedUser);
         } else {
             return "user/updateForm";

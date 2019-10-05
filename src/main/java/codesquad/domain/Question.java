@@ -1,8 +1,10 @@
 package codesquad.domain;
 
-import javax.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,7 +24,7 @@ public class Question {
     private String contents;
     private String time;
 
-    public void checkCurrentTime(){
+    public void checkCurrentTime() {
         Date today = new Date();
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
