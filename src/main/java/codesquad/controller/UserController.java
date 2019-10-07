@@ -59,7 +59,7 @@ public class UserController {
     @PostMapping("/{id}/update")
     public String editUser(@PathVariable("id") Long id, User user) {
         User changedUser = userRepository.findById(id).get();
-        if (changedUser.isSamePassword(changedUser, user)) {
+        if (changedUser.isSamePasswordForEdit(changedUser, user)) {
             //user.changeUserInfo(changedUser,user);
 
             changedUser.setName(user.getName());
@@ -73,9 +73,14 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/userLogin")
     public String login(String userId, String password, HttpSession session) {
-        userRepository.findByUserId(userId)
-        session.setAttribute("sessionedUser", user);
+        User loginUser = userRepository.findByUserId(userId);
+        if (loginUser.isSamePasswordForLogin(password, loginUser)) {
+            session.setAttribute("sessionedUser", loginUser);
+        } else {
+            return "/user/login_failed";
+        }
+        return "redirect:/users";
     }
 }
