@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.Optional;
+
 @Controller
 public class QuestionController {
 
@@ -32,8 +34,9 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String questionsShow(@PathVariable("id") Long id, Model model) {
-        if (questionRepository.findById(id).isPresent()) {
-            model.addAttribute("question", questionRepository.findById(id).get());
+        Optional<Question> findQuestion = questionRepository.findById(id);
+        if (findQuestion.isPresent()) {
+            model.addAttribute("question", findQuestion.get());
             return "qna/show";
         } else {
             return "/";
@@ -42,8 +45,9 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/form")
     public String updateQuestionForm(@PathVariable("id") Long id, Model model) {
-        if (questionRepository.findById(id).isPresent()) {
-            model.addAttribute("question", questionRepository.findById(id).get());
+        Optional<Question> findQuestion = questionRepository.findById(id);
+        if (findQuestion.isPresent()) {
+            model.addAttribute("question", findQuestion.get());
             return "qna/updateForm";
         } else {
             return "/questions/{id}";
@@ -61,8 +65,9 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{id}/delete")
     public String deleteQuestion(@PathVariable("id") Long id) {
-        if (questionRepository.findById(id).isPresent()) {
-            questionRepository.delete(questionRepository.findById(id).get());
+        Optional<Question> findQuestion = questionRepository.findById(id);
+        if (findQuestion.isPresent()) {
+            questionRepository.delete(findQuestion.get());
             return "redirect:/";
         } else {
             return "/";

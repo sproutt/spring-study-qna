@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -32,8 +35,9 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        if (userRepository.findById(id).isPresent()) {
-            model.addAttribute("user", userRepository.findById(id).get());
+        Optional<User> findUser = userRepository.findById(id);
+        if (findUser.isPresent()) {
+            model.addAttribute("user", findUser.get());
             return "user/profile";
         } else {
             return "/users";
@@ -42,8 +46,9 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model) {
-        if (userRepository.findById(id).isPresent()) {
-            model.addAttribute("user", userRepository.findById(id).get());
+        Optional<User> findUser = userRepository.findById(id);
+        if (findUser.isPresent()) {
+            model.addAttribute("user", findUser.get());
             return "user/updateForm";
         } else {
             return "/users";
@@ -68,4 +73,9 @@ public class UserController {
         return "redirect:/users";
     }
 
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        userRepository.findByUserId(userId)
+        session.setAttribute("sessionedUser", user);
+    }
 }
