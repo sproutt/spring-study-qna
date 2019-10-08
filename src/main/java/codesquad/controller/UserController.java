@@ -33,6 +33,12 @@ public class UserController {
         return "/user/list";
     }
 
+    @GetMapping("/missMatch")
+    public String failed_list(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "/user/edit_failed_list";
+    }
+
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
         Optional<User> findUser = userRepository.findById(id);
@@ -45,7 +51,21 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable("id") Long id, Model model) {
+    public String updateForm(@PathVariable("id") Long id, Model model, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+        if (value != null) {
+            User user = (User) value;
+            if (id == user.getId()) {
+                model.addAttribute("user", user);
+                return "user/updateForm";
+            } else {
+                return "/users/missMatch";
+            }
+        } else {
+            return "/users";
+        }
+
+        /*
         Optional<User> findUser = userRepository.findById(id);
         if (findUser.isPresent()) {
             model.addAttribute("user", findUser.get());
@@ -53,11 +73,21 @@ public class UserController {
         } else {
             return "/users";
         }
+        */
     }
 
     //setter사용금지 아직 미반영
     @PostMapping("/{id}/update")
-    public String editUser(@PathVariable("id") Long id, User user) {
+    public String editUser(/*@PathVariable("id") Long id,*/ User user, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+        User loginUser = (User) value;
+        if (loginUser.isSamePassword(user, loginUser)) {
+            userRepository.save(loginUser.editProfile(user, loginUser));
+            return "redirect:/users";
+        } else {
+            return "user/updateForm";
+        }
+        /*
         User changedUser = userRepository.findById(id).get();
         if (changedUser.isSamePasswordForEdit(changedUser, user)) {
             //user.changeUserInfo(changedUser,user);
@@ -71,6 +101,7 @@ public class UserController {
             return "user/updateForm";
         }
         return "redirect:/users";
+        */
     }
 
     @PostMapping("/userLogin")
