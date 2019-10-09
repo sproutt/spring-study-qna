@@ -21,7 +21,7 @@ public class Question {
     @Column(nullable = false, length = 20)
     private String writer;
 
-
+    private String userId;
     private String title;
     private String contents;
     private String time;
@@ -34,7 +34,16 @@ public class Question {
     }
 
 
-    public void checkWriter(User loginUser) {
-        setWriter(loginUser.getName());
+
+    public void checkUserInfo(User loginUser) {
+        this.writer = loginUser.getName();
+        this.userId  = loginUser.getUserId();
     }
+
+    public void changeQuestionInfo(Question editedQuestion){
+        this.title = editedQuestion.getTitle();
+        this.contents = editedQuestion.getContents();
+        checkCurrentTime();
+    }
+
 }

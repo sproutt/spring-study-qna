@@ -24,7 +24,7 @@ public class QuestionController {
         Object value = session.getAttribute("sessionedUser");
         User loginUser = (User) value;
 
-        question.checkWriter(loginUser);
+        question.checkUserInfo(loginUser);
 
         questionRepository.save(question);
         System.out.println("add 후 question : " + question);
@@ -59,82 +59,54 @@ public class QuestionController {
         }
     }
 
-    @PutMapping("/questions/{id}/form")
+    @GetMapping("/questions/{id}/form")
     public String updateQuestionForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Optional<Question> findQuestion = questionRepository.findById(id);
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().getWriter().equals(user.getName())) {
+            if (value != null && findQuestion.get().getUserId().equals(user.getUserId())) {
                 model.addAttribute("question", findQuestion.get());
                 return "qna/updateForm";
             } else {
-                return "/questions/{id}/missMatch";
+                return "/questions/" + id + "/missMatch";
             }
         } else {
-            return "/questions/{id}";
+            return "/questions/" + id;
         }
-        /*
+    }
+
+    @PutMapping("/questions/{id}/update")
+    public String editQuestion(@PathVariable("id") Long id, Question question, HttpSession session) {
+        Optional<Question> maybeQuestion = questionRepository.findById(id);
+        if (maybeQuestion.isPresent()) {
+            Object value = session.getAttribute("sessionedUser");
+            Question findQuestion = maybeQuestion.get();
+            User user = (User) value;
+            if (value != null && findQuestion.getUserId().equals(user.getUserId())) {
+                findQuestion.changeQuestionInfo(question);
+                questionRepository.save(findQuestion);
+                return "redirect:/";
+            } else {
+                return "/questions/" + id + "/missMatch";
+            }
+        } else {
+            return "/questions/" + id;
+        }
+    }
+
+    @DeleteMapping("/questions/{id}/delete")
+    public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
         Optional<Question> findQuestion = questionRepository.findById(id);
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().getWriter().equals(user.getName())) {
-                model.addAttribute("question", findQuestion.get());
-                return "qna/updateForm";
+            if (value != null && findQuestion.get().getUserId().equals(user.getUserId())) {
+                questionRepository.delete(findQuestion.get());
+                return "redirect:/";
             } else {
-                return "/questions/{id}/missMatch";
+                return "redirect:/users/login";
             }
-        } else {
-            return "/questions/{id}";
-        }
-        */
-        /*
-        Optional<Question> findQuestion = questionRepository.findById(id);
-        if (findQuestion.isPresent()) {
-            Object value = session.getAttribute("sessionedUser");
-            if (value == null) {
-                return "/questions/{id}/missMatch";
-            } else {
-                User user = (User) value;
-                if (findQuestion.get().getWriter().equals(user.getName())) {
-                    model.addAttribute("question", findQuestion.get());
-                    return "qna/updateForm";
-                } else {
-                    return "/questions/{id}/missMatch";
-                }
-            }
-        } else {
-            return "/questions/{id}";
-        }
-        */
-    }
-
-
-    /*
-    @GetMapping("/missMatch")
-    public String failed_list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "/qna/show_failed_edit";
-    }
-    */
-
-
-    @PostMapping("/questions/{id}/update")
-    public String editQuestion(@PathVariable("id") Long id, Question question) {
-        Question changedQuestion = questionRepository.findById(id).get();
-        changedQuestion.setTitle(question.getTitle());
-        changedQuestion.setContents(question.getContents());
-        questionRepository.save(changedQuestion);
-        return "redirect:/";
-    }
-
-    @DeleteMapping("/questions/{id}/delete")
-    public String deleteQuestion(@PathVariable("id") Long id) {
-        Optional<Question> findQuestion = questionRepository.findById(id);
-        if (findQuestion.isPresent()) {
-            questionRepository.delete(findQuestion.get());
-            return "redirect:/";
         } else {
             return "/";
         }

@@ -64,19 +64,8 @@ public class UserController {
         } else {
             return "/users";
         }
-
-        /*
-        Optional<User> findUser = userRepository.findById(id);
-        if (findUser.isPresent()) {
-            model.addAttribute("user", findUser.get());
-            return "user/updateForm";
-        } else {
-            return "/users";
-        }
-        */
     }
 
-    //setter사용금지 아직 미반영
     @PostMapping("/{id}/update")
     public String editUser(/*@PathVariable("id") Long id,*/ User user, HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
