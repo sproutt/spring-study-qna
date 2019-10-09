@@ -17,8 +17,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
     @Column(nullable = false, length = 20)
     private String writer;
+
 
     private String title;
     private String contents;
@@ -29,5 +31,10 @@ public class Question {
         SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
         SimpleDateFormat time = new SimpleDateFormat("HH:mm");
         this.time = date.format(today) + " " + time.format(today);
+    }
+
+
+    public void checkWriter(User loginUser) {
+        setWriter(loginUser.getName());
     }
 }

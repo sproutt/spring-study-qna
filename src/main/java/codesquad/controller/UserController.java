@@ -83,7 +83,7 @@ public class UserController {
         User loginUser = (User) value;
         if (loginUser.isSamePassword(user, loginUser)) {
             userRepository.save(loginUser.editProfile(user, loginUser));
-            return "redirect:/users";
+            return "redirect:/";
         } else {
             return "user/updateForm";
         }
@@ -103,9 +103,12 @@ public class UserController {
         return "redirect:/users";
         */
     }
-
+    @GetMapping("/login")
+    public String login(){
+        return "user/login";
+    }
     @PostMapping("/userLogin")
-    public String login(String userId, String password, HttpSession session) {
+    public String loginAccess(String userId, String password, HttpSession session) {
         User loginUser = userRepository.findByUserId(userId);
         if (loginUser.isSamePasswordForLogin(password, loginUser)) {
             session.setAttribute("sessionedUser", loginUser);
@@ -113,5 +116,12 @@ public class UserController {
             return "/user/login_failed";
         }
         return "redirect:/users";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session){
+        session.removeAttribute("seesionedUser");
+        session.invalidate();
+        return "redirect:/";
     }
 }
