@@ -17,9 +17,14 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
+    /*
     @Column(nullable = false, length = 20)
     private String writer;
+    */
 
     private String userId;
     private String title;
@@ -34,16 +39,24 @@ public class Question {
     }
 
 
-
     public void checkUserInfo(User loginUser) {
-        this.writer = loginUser.getName();
-        this.userId  = loginUser.getUserId();
+        this.writer = loginUser;
     }
 
-    public void changeQuestionInfo(Question editedQuestion){
-        this.title = editedQuestion.getTitle();
-        this.contents = editedQuestion.getContents();
+    public void changeQuestionInfo(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
         checkCurrentTime();
     }
+
+    public boolean isSameUserId(User loginUser) {
+        if (writer.getUserId() == loginUser.getUserId()) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
 
 }

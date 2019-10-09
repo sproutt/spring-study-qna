@@ -65,8 +65,9 @@ public class QuestionController {
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().getUserId().equals(user.getUserId())) {
+            if (value != null && findQuestion.get().isSameUserId(user)) {
                 model.addAttribute("question", findQuestion.get());
+                System.out.println("실행됐다.");
                 return "qna/updateForm";
             } else {
                 return "/questions/" + id + "/missMatch";
@@ -81,17 +82,16 @@ public class QuestionController {
         Optional<Question> maybeQuestion = questionRepository.findById(id);
         if (maybeQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
-            Question findQuestion = maybeQuestion.get();
             User user = (User) value;
-            if (value != null && findQuestion.getUserId().equals(user.getUserId())) {
-                findQuestion.changeQuestionInfo(question);
-                questionRepository.save(findQuestion);
+            if (value != null && maybeQuestion.get().isSameUserId(user)) {
+                maybeQuestion.get().changeQuestionInfo(question);
+                questionRepository.save(maybeQuestion.get());
                 return "redirect:/";
             } else {
-                return "/questions/" + id + "/missMatch";
+                return "redirect:/questions/" + id + "/missMatch";
             }
         } else {
-            return "/questions/" + id;
+            return "redirect:/questions/" + id;
         }
     }
 
@@ -101,7 +101,7 @@ public class QuestionController {
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().getUserId().equals(user.getUserId())) {
+            if (value != null && findQuestion.get().isSameUserId(user)) {
                 questionRepository.delete(findQuestion.get());
                 return "redirect:/";
             } else {
