@@ -1,14 +1,11 @@
 package codesquad.controller;
 
-import codesquad.UserRepository;
+import codesquad.repository.UserRepository;
 import codesquad.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
@@ -66,11 +63,11 @@ public class UserController {
         }
     }
 
-    @PostMapping("/{id}/update")
-    public String editUser(/*@PathVariable("id") Long id,*/ User user, HttpSession session) {
+    @PutMapping("/{id}/update")
+    public String editUser(User user, HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
         User loginUser = (User) value;
-        if (loginUser.isSamePassword(user, loginUser)) {
+        if (loginUser.isSamePassword(user.getPassword())) {
             userRepository.save(loginUser.editProfile(user, loginUser));
             return "redirect:/";
         } else {
@@ -78,19 +75,23 @@ public class UserController {
         }
     }
 
-    @PostMapping("/userLogin")
+    @PostMapping("/doLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
-        User loginUser = userRepository.findByUserId(userId);
-        if (loginUser.isSamePasswordForLogin(password, loginUser)) {
-            session.setAttribute("sessionedUser", loginUser);
+        Optional<User> loginUser = userRepository.findByUserId(userId);
+        if (loginUser.isPresent()) {
+            if (loginUser.get().isSamePassword(password)) {
+                session.setAttribute("sessionedUser", loginUser);
+                return "redirect:/users";
+            } else {
+                return "/user/login_failed";
+            }
         } else {
-            return "/user/login_failed";
+            return "redirect:/users";
         }
-        return "redirect:/users";
     }
 
     @GetMapping("/logout")
-    public String logout(HttpSession session){
+    public String logout(HttpSession session) {
         session.removeAttribute("seesionedUser");
         session.invalidate();
         return "redirect:/";

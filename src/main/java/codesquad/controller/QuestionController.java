@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import codesquad.QuestionRepository;
+import codesquad.repository.QuestionRepository;
 import codesquad.domain.Question;
 import codesquad.domain.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +19,12 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String question(Question question, HttpSession session) {
-        question.checkCurrentTime();
+        question.setCurrentTime();
 
         Object value = session.getAttribute("sessionedUser");
         User loginUser = (User) value;
 
-        question.checkUserInfo(loginUser);
+        question.setUserInfo(loginUser);
 
         questionRepository.save(question);
         System.out.println("add 후 question : " + question);
@@ -65,7 +65,7 @@ public class QuestionController {
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().isSameUserId(user)) {
+            if (value != null && findQuestion.get().getWriter().isSameUserId(user)) {
                 model.addAttribute("question", findQuestion.get());
                 System.out.println("실행됐다.");
                 return "qna/updateForm";
@@ -83,7 +83,7 @@ public class QuestionController {
         if (maybeQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && maybeQuestion.get().isSameUserId(user)) {
+            if (value != null && maybeQuestion.get().getWriter().isSameUserId(user)) {
                 maybeQuestion.get().changeQuestionInfo(question);
                 questionRepository.save(maybeQuestion.get());
                 return "redirect:/";
@@ -101,7 +101,7 @@ public class QuestionController {
         if (findQuestion.isPresent()) {
             Object value = session.getAttribute("sessionedUser");
             User user = (User) value;
-            if (value != null && findQuestion.get().isSameUserId(user)) {
+            if (value != null && findQuestion.get().getWriter().isSameUserId(user)) {
                 questionRepository.delete(findQuestion.get());
                 return "redirect:/";
             } else {
@@ -110,5 +110,16 @@ public class QuestionController {
         } else {
             return "/";
         }
+    }
+
+    @GetMapping("/questions/form")
+    public String doQuestion(HttpSession session){
+        Object value = session.getAttribute("sessionedUser");
+        if (value != null) {
+            return "/qna/form";
+        } else {
+            return "/users/login";
+        }
+
     }
 }

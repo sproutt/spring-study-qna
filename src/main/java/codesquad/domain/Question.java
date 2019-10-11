@@ -5,8 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -26,32 +26,20 @@ public class Question {
     private String contents;
     private String time;
 
-    public void checkCurrentTime() {
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
-        this.time = date.format(today) + " " + time.format(today);
+    public void setCurrentTime() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        this.time = currentDateTime.format(dateTimeFormatter);
     }
 
 
-    public void checkUserInfo(User loginUser) {
+    public void setUserInfo(User loginUser) {
         this.writer = loginUser;
     }
 
     public void changeQuestionInfo(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
-        checkCurrentTime();
+        setCurrentTime();
     }
-
-    public boolean isSameUserId(User loginUser) {
-        if (writer.getUserId() == loginUser.getUserId()) {
-            return true;
-        } else {
-            return false;
-        }
-
-    }
-
-
 }
