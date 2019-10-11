@@ -76,26 +76,8 @@ public class UserController {
         } else {
             return "user/updateForm";
         }
-        /*
-        User changedUser = userRepository.findById(id).get();
-        if (changedUser.isSamePasswordForEdit(changedUser, user)) {
-            //user.changeUserInfo(changedUser,user);
-
-            changedUser.setName(user.getName());
-            changedUser.setEmail(user.getEmail());
-            changedUser.setPassword(user.getChangePassword());
-
-            userRepository.save(changedUser);
-        } else {
-            return "user/updateForm";
-        }
-        return "redirect:/users";
-        */
     }
-    @GetMapping("/login")
-    public String login(){
-        return "user/login";
-    }
+
     @PostMapping("/userLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
         User loginUser = userRepository.findByUserId(userId);

@@ -21,11 +21,6 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User writer;
 
-    /*
-    @Column(nullable = false, length = 20)
-    private String writer;
-    */
-
     private String userId;
     private String title;
     private String contents;

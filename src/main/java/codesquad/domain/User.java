@@ -21,8 +21,6 @@ public class User {
     private String password;
     private String name;
     private String email;
-    //private String changePassword;
-
 
     public boolean isSamePassword(User user, User loginUser) {
         if (loginUser.getPassword().equals(user.getPassword())) {
