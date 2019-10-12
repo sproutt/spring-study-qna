@@ -1,7 +1,7 @@
 package codesquad.controller;
 
-import codesquad.repository.UserRepository;
 import codesquad.domain.User;
+import codesquad.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,22 +38,21 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        Optional<User> findUser = userRepository.findById(id);
-        if (findUser.isPresent()) {
-            model.addAttribute("user", findUser.get());
+        Optional<User> maybeUser = userRepository.findById(id);
+        if (maybeUser.isPresent()) {
+            model.addAttribute("user", maybeUser.get());
             return "user/profile";
-        } else {
-            return "/users";
         }
+        return "/users";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
-            User user = (User) value;
-            if (id == user.getId()) {
-                model.addAttribute("user", user);
+            Optional<User> maybeUser = (Optional<User>) value;
+            if (id.equals(maybeUser.get().getId())) {
+                model.addAttribute("user", maybeUser.get());
                 return "user/updateForm";
             } else {
                 return "/users/missMatch";
@@ -66,10 +65,11 @@ public class UserController {
     @PutMapping("/{id}/update")
     public String editUser(User user, HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
-        User loginUser = (User) value;
-        if (loginUser.isSamePassword(user.getPassword())) {
-            userRepository.save(loginUser.editProfile(user, loginUser));
-            return "redirect:/";
+        Optional<User> maybeUser = (Optional<User>) value;
+        if (maybeUser.get().isSamePassword(user.getPassword())) {
+            maybeUser.get().editProfile(user);
+            userRepository.save(maybeUser.get());
+            return "redirect:/users";
         } else {
             return "user/updateForm";
         }
@@ -77,10 +77,10 @@ public class UserController {
 
     @PostMapping("/doLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
-        Optional<User> loginUser = userRepository.findByUserId(userId);
-        if (loginUser.isPresent()) {
-            if (loginUser.get().isSamePassword(password)) {
-                session.setAttribute("sessionedUser", loginUser);
+        Optional<User> maybeUser = userRepository.findByUserId(userId);
+        if (maybeUser.isPresent()) {
+            if (maybeUser.get().isSamePassword(password)) {
+                session.setAttribute("sessionedUser", maybeUser);
                 return "redirect:/users";
             } else {
                 return "/user/login_failed";

@@ -37,7 +37,7 @@ public class Question {
         this.writer = loginUser;
     }
 
-    public void changeQuestionInfo(Question question) {
+    public void changeInfo(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
         setCurrentTime();

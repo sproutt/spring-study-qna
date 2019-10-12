@@ -23,16 +23,15 @@ public class User {
     private String email;
 
     public boolean isSamePassword(String inputPassword) {
-        return inputPassword.equals(this.password) ? true : false;
+        return this.password.equals(inputPassword);
     }
 
-    public User editProfile(User user, User loginUser) {
-        loginUser.setName(user.getName());
-        loginUser.setEmail(user.getEmail());
-        return loginUser;
+    public void editProfile(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
     }
 
     public boolean isSameUserId(User loginUser) {
-        return this.userId.equals(loginUser.getUserId()) ? true : false;
+        return this.userId.equals(loginUser.getUserId());
     }
 }
