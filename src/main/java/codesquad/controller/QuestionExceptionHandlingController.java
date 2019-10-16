@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 public class QuestionExceptionHandlingController {
 
     @ExceptionHandler(NoSuchElementException.class)
-    public String checkError() {
+    public String questionNullError() {
         System.out.println("에러발생");
         return "redirect:/";
     }
