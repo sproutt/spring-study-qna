@@ -39,24 +39,16 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String questionsShow(@PathVariable("id") Long id, Model model) {
-        Optional<Question> maybeQuestion = questionRepository.findById(id);
-        if (maybeQuestion.isPresent()) {
-            model.addAttribute("question", maybeQuestion.get());
-            return "qna/show";
-        } else {
-            return "/";
-        }
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        model.addAttribute("question", question);
+        return "qna/show";
     }
 
     @GetMapping("/questions/{id}/missMatch")
     public String questionsShow_Failed_Edit(@PathVariable("id") Long id, Model model) {
-        Optional<Question> maybeQuestion = questionRepository.findById(id);
-        if (maybeQuestion.isPresent()) {
-            model.addAttribute("question", maybeQuestion.get());
-            return "/qna/show_failed_edit";
-        } else {
-            return "/";
-        }
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        model.addAttribute("question", question);
+        return "/qna/show_failed_edit";
     }
 
     @GetMapping("/questions/{id}/form")
@@ -68,42 +60,36 @@ public class QuestionController {
             model.addAttribute("question", question);
             return "qna/updateForm";
         } else {
+
             return "/questions/" + id + "/missMatch";
         }
     }
 
     @PutMapping("/questions/{id}")
-    public String editQuestion(@PathVariable("id") Long id, Question question, HttpSession session) {
-        Optional<Question> maybeQuestion = questionRepository.findById(id);
-        if (maybeQuestion.isPresent()) {
-            Object value = session.getAttribute("sessionedUser");
-            Optional<User> user = (Optional<User>) value;
-            if (value != null && maybeQuestion.get().getWriter().isSameUserId(user.get())) {
-                maybeQuestion.get().changeInfo(question);
-                questionRepository.save(maybeQuestion.get());
-                return "redirect:/";
-            } else {
-                return "redirect:/questions/" + id + "/missMatch";
-            }
+    public String editQuestion(@PathVariable("id") Long id, Question newQuestion, HttpSession session) {
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Object value = session.getAttribute("sessionedUser");
+        Optional<User> user = (Optional<User>) value;
+        if (value != null && question.getWriter().isSameUserId(user.get())) {
+            question.changeInfo(newQuestion);
+            questionRepository.save(question);
+            return "redirect:/";
         } else {
-            return "redirect:/questions/" + id;
+            return "redirect:/questions/" + id + "/missMatch";
         }
+
     }
 
     @DeleteMapping("/questions/{id}")
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
-        Optional<Question> maybeQuestion = questionRepository.findById(id);
-        if (maybeQuestion.isPresent()) {
-            Object value = session.getAttribute("sessionedUser");
-            Optional<User> user = (Optional<User>) value;
-            if (value != null && maybeQuestion.get().getWriter().isSameUserId(user.get())) {
-                questionRepository.delete(maybeQuestion.get());
-                return "redirect:/";
-            } else {
-                return "redirect:/users/login";
-            }
+        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        Object value = session.getAttribute("sessionedUser");
+        Optional<User> user = (Optional<User>) value;
+        if (value != null && question.getWriter().isSameUserId(user.get())) {
+            questionRepository.delete(question);
+            return "redirect:/";
         } else {
-            return "/";
+            return "/user/login_failed";
         }
     }
 
