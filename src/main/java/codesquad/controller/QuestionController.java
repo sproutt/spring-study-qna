@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Controller
 public class QuestionController {
@@ -21,9 +20,9 @@ public class QuestionController {
     public String question(Question question, HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
-            Optional<User> loginUser = (Optional<User>) value;
+            User loginUser = (User) value;
             question.setCurrentTime();
-            question.setUserInfo(loginUser.get());
+            question.setUserInfo(loginUser);
             questionRepository.save(question);
             System.out.println("add 후 question : " + question);
             return "redirect:/";
@@ -49,8 +48,8 @@ public class QuestionController {
     public String updateQuestionForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        Optional<User> user = (Optional<User>) value;
-        if (value != null && question.getWriter().isSameUserId(user.get())) {
+        User user = (User) value;
+        if (value != null && question.getWriter().isSameUserId(user)) {
             model.addAttribute("question", question);
             return "qna/updateForm";
         } else {
@@ -63,8 +62,8 @@ public class QuestionController {
     public String editQuestion(@PathVariable("id") Long id, Question newQuestion, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        Optional<User> user = (Optional<User>) value;
-        if (value != null && question.getWriter().isSameUserId(user.get())) {
+        User user = (User) value;
+        if (value != null && question.getWriter().isSameUserId(user)) {
             question.changeInfo(newQuestion);
             questionRepository.save(question);
             return "redirect:/";
@@ -79,8 +78,8 @@ public class QuestionController {
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        Optional<User> user = (Optional<User>) value;
-        if (value != null && question.getWriter().isSameUserId(user.get())) {
+        User user = (User) value;
+        if (value != null && question.getWriter().isSameUserId(user)) {
             questionRepository.delete(question);
             return "redirect:/";
         } else {

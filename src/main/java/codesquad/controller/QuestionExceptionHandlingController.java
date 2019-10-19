@@ -10,7 +10,7 @@ public class QuestionExceptionHandlingController {
 
     @ExceptionHandler(NoSuchElementException.class)
     public String questionNullError() {
-        System.out.println("에러발생");
-        return "redirect:/";
+        System.out.println("question Null값에 접근");
+        return "qna/questionError";
     }
 }

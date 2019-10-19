@@ -31,56 +31,56 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        Optional<User> maybeUser = userRepository.findById(id);
-        if (maybeUser.isPresent()) {
-            model.addAttribute("user", maybeUser.get());
-            return "user/profile";
-        }
-        return "/users";
+        User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
+        model.addAttribute("user", user);
+        return "user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model, HttpSession session) {
+        userRepository.findById(id).orElseThrow(NullPointerException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
-            Optional<User> maybeUser = (Optional<User>) value;
-            if (id.equals(maybeUser.get().getId())) {
-                model.addAttribute("user", maybeUser.get());
+            User user = (User) value;
+            if (id.equals(user.getId())) {
+                model.addAttribute("user", user);
                 return "user/updateForm";
             } else {
                 model.addAttribute("userMissMatch", userRepository.findAll());
                 return "user/list";
             }
         } else {
-            return "/users";
+            return "user/login";
         }
     }
 
     @PutMapping("/{id}/update")
-        public String editUser(User user, HttpSession session) {
-            Object value = session.getAttribute("sessionedUser");
-            Optional<User> maybeUser = (Optional<User>) value;
-            if (maybeUser.get().isSamePassword(user.getPassword())) {
-                maybeUser.get().editProfile(user);
-                userRepository.save(maybeUser.get());
+    public String editUser(@PathVariable("id") Long id, User user, HttpSession session) {
+        userRepository.findById(id).orElseThrow(NullPointerException::new);
+        Object value = session.getAttribute("sessionedUser");
+        if (value != null) {
+            User originUser = (User) value;
+            if (originUser.isSamePassword(user.getPassword())) {
+                originUser.editProfile(user);
+                userRepository.save(originUser);
                 return "redirect:/users";
             } else {
                 return "user/updateForm";
             }
+        } else {
+            return "user/login";
         }
+    }
 
     @PostMapping("/doLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
         Optional<User> maybeUser = userRepository.findByUserId(userId);
-        if (maybeUser.isPresent()) {
-            if (maybeUser.get().isSamePassword(password)) {
-                session.setAttribute("sessionedUser", maybeUser);
-                return "redirect:/users";
-            } else {
-                return "user/login_failed";
-            }
+        User user = maybeUser.orElseThrow(NullPointerException::new);
+        if (user.isSamePassword(password)) {
+            session.setAttribute("sessionedUser", user);
+            return "redirect:/users";
         } else {
-            return "/users";
+            return "user/login_failed";
         }
     }
 
