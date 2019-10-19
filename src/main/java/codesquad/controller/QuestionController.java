@@ -48,8 +48,7 @@ public class QuestionController {
     public String updateQuestionForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        User user = (User) value;
-        if (value != null && question.getWriter().isSameUserId(user)) {
+        if (value != null && question.getWriter().isSameUserId((User) value)) {
             model.addAttribute("question", question);
             return "qna/updateForm";
         } else {
@@ -62,8 +61,7 @@ public class QuestionController {
     public String editQuestion(@PathVariable("id") Long id, Question newQuestion, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        User user = (User) value;
-        if (value != null && question.getWriter().isSameUserId(user)) {
+        if (value != null && question.getWriter().isSameUserId((User) value)) {
             question.changeInfo(newQuestion);
             questionRepository.save(question);
             return "redirect:/";
@@ -71,15 +69,13 @@ public class QuestionController {
             model.addAttribute("userMissMatchQuestion", question);
             return "qna/show";
         }
-
     }
 
     @DeleteMapping("/questions/{id}")
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
-        User user = (User) value;
-        if (value != null && question.getWriter().isSameUserId(user)) {
+        if (value != null && question.getWriter().isSameUserId((User) value)) {
             questionRepository.delete(question);
             return "redirect:/";
         } else {
