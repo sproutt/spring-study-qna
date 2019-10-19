@@ -19,16 +19,17 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String question(Question question, HttpSession session) {
-        question.setCurrentTime();
-
         Object value = session.getAttribute("sessionedUser");
-        Optional<User> loginUser = (Optional<User>) value;
-
-        question.setUserInfo(loginUser.get());
-
-        questionRepository.save(question);
-        System.out.println("add 후 question : " + question);
-        return "redirect:/";
+        if (value != null) {
+            Optional<User> loginUser = (Optional<User>) value;
+            question.setCurrentTime();
+            question.setUserInfo(loginUser.get());
+            questionRepository.save(question);
+            System.out.println("add 후 question : " + question);
+            return "redirect:/";
+        } else {
+            return "redirect:/users/login";
+        }
     }
 
     @GetMapping("/")
@@ -44,13 +45,6 @@ public class QuestionController {
         return "qna/show";
     }
 
-    @GetMapping("/questions/{id}/missMatch")
-    public String questionsShow_Failed_Edit(@PathVariable("id") Long id, Model model) {
-        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        model.addAttribute("question", question);
-        return "/qna/show_failed_edit";
-    }
-
     @GetMapping("/questions/{id}/form")
     public String updateQuestionForm(@PathVariable("id") Long id, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
@@ -60,13 +54,13 @@ public class QuestionController {
             model.addAttribute("question", question);
             return "qna/updateForm";
         } else {
-
-            return "/questions/" + id + "/missMatch";
+            model.addAttribute("userMissMatchQuestion", question);
+            return "qna/show";
         }
     }
 
     @PutMapping("/questions/{id}")
-    public String editQuestion(@PathVariable("id") Long id, Question newQuestion, HttpSession session) {
+    public String editQuestion(@PathVariable("id") Long id, Question newQuestion, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         Optional<User> user = (Optional<User>) value;
@@ -75,7 +69,8 @@ public class QuestionController {
             questionRepository.save(question);
             return "redirect:/";
         } else {
-            return "redirect:/questions/" + id + "/missMatch";
+            model.addAttribute("userMissMatchQuestion", question);
+            return "qna/show";
         }
 
     }
@@ -89,7 +84,7 @@ public class QuestionController {
             questionRepository.delete(question);
             return "redirect:/";
         } else {
-            return "/user/login_failed";
+            return "user/login_failed";
         }
     }
 
@@ -97,7 +92,7 @@ public class QuestionController {
     public String doQuestion(HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
-            return "/qna/form";
+            return "qna/form";
         } else {
             return "/users/login";
         }

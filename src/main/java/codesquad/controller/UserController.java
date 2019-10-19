@@ -19,7 +19,6 @@ public class UserController {
 
     @PostMapping("")
     public String create(User user) {
-        System.out.println("user : " + user);
         userRepository.save(user);
         return "redirect:/users";
     }
@@ -27,13 +26,7 @@ public class UserController {
     @GetMapping("")
     public String list(Model model) {
         model.addAttribute("users", userRepository.findAll());
-        return "/user/list";
-    }
-
-    @GetMapping("/missMatch")
-    public String failed_list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
-        return "/user/edit_failed_list";
+        return "user/list";
     }
 
     @GetMapping("/{id}")
@@ -55,7 +48,8 @@ public class UserController {
                 model.addAttribute("user", maybeUser.get());
                 return "user/updateForm";
             } else {
-                return "/users/missMatch";
+                model.addAttribute("userMissMatch", userRepository.findAll());
+                return "user/list";
             }
         } else {
             return "/users";
@@ -63,17 +57,17 @@ public class UserController {
     }
 
     @PutMapping("/{id}/update")
-    public String editUser(User user, HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
-        Optional<User> maybeUser = (Optional<User>) value;
-        if (maybeUser.get().isSamePassword(user.getPassword())) {
-            maybeUser.get().editProfile(user);
-            userRepository.save(maybeUser.get());
-            return "redirect:/users";
-        } else {
-            return "user/updateForm";
+        public String editUser(User user, HttpSession session) {
+            Object value = session.getAttribute("sessionedUser");
+            Optional<User> maybeUser = (Optional<User>) value;
+            if (maybeUser.get().isSamePassword(user.getPassword())) {
+                maybeUser.get().editProfile(user);
+                userRepository.save(maybeUser.get());
+                return "redirect:/users";
+            } else {
+                return "user/updateForm";
+            }
         }
-    }
 
     @PostMapping("/doLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
@@ -83,10 +77,10 @@ public class UserController {
                 session.setAttribute("sessionedUser", maybeUser);
                 return "redirect:/users";
             } else {
-                return "/user/login_failed";
+                return "user/login_failed";
             }
         } else {
-            return "redirect:/users";
+            return "/users";
         }
     }
 

@@ -34,4 +34,5 @@ public class User {
     public boolean isSameUserId(User loginUser) {
         return this.userId.equals(loginUser.getUserId());
     }
+
 }

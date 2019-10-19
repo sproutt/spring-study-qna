@@ -32,7 +32,6 @@ public class Question {
         this.time = currentDateTime.format(dateTimeFormatter);
     }
 
-
     public void setUserInfo(User loginUser) {
         this.writer = loginUser;
     }
@@ -42,4 +41,5 @@ public class Question {
         this.contents = question.getContents();
         setCurrentTime();
     }
+
 }
