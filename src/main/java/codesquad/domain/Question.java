@@ -5,8 +5,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Setter
@@ -17,17 +17,29 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
 
+    private String userId;
     private String title;
     private String contents;
     private String time;
 
-    public void checkCurrentTime() {
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd");
-        SimpleDateFormat time = new SimpleDateFormat("HH:mm");
-        this.time = date.format(today) + " " + time.format(today);
+    public void setCurrentTime() {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        this.time = currentDateTime.format(dateTimeFormatter);
     }
+
+    public void setUserInfo(User loginUser) {
+        this.writer = loginUser;
+    }
+
+    public void changeInfo(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+        setCurrentTime();
+    }
+
 }

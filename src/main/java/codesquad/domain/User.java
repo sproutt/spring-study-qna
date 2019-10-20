@@ -21,13 +21,18 @@ public class User {
     private String password;
     private String name;
     private String email;
-    private String changePassword;
 
-
-    public boolean isSamePassword(User changedUser, User user) {
-        if (changedUser.getPassword().equals(user.getPassword())) {
-            return true;
-        }
-        return false;
+    public boolean isSamePassword(String inputPassword) {
+        return this.password.equals(inputPassword);
     }
+
+    public void editProfile(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
+    }
+
+    public boolean isSameUserId(User loginUser) {
+        return this.userId.equals(loginUser.getUserId());
+    }
+
 }
