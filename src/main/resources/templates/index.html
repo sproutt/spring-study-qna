@@ -3,6 +3,7 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default qna-list">
             <ul class="list">
+                <!--
                 <li>
                     <div class="wrap">
                         <div class="main">
@@ -21,6 +22,7 @@
                         </div>
                     </div>
                 </li>
+
                 <li>
                     <div class="wrap">
                         <div class="main">
@@ -39,12 +41,13 @@
                         </div>
                     </div>
                 </li>
+                -->
                 {{#questionList}}
                 <li>
                     <div class="wrap">
                         <div class="main">
                             <strong class="subject">
-                                <a href="/questions/{{index}}">{{title}}</a>
+                                <a href="/questions/{{id}}">{{title}}</a>
                             </strong>
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
@@ -53,7 +56,7 @@
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
-                                <span class="point">{{index}}</span>
+                                <span class="point">{{id}}</span>
                             </div>
                         </div>
                     </div>
