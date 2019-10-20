@@ -5,6 +5,24 @@ public class User {
     private String password;
     private String name;
     private String email;
+    private String changePassword;
+    private int userIndex;
+
+    public int getUserIndex() {
+        return userIndex;
+    }
+
+    public void setUserIndex(int userIndex) {
+        this.userIndex = userIndex;
+    }
+
+    public String getChangePassword() {
+        return changePassword;
+    }
+
+    public void setChangePassword(String changePassword) {
+        this.changePassword = changePassword;
+    }
 
     public void setEmail(String email) {
         this.email = email;
@@ -45,6 +63,8 @@ public class User {
                 ", password='" + password + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
+                ", changePassword='" + changePassword + '\'' +
+                ", userIndex=" + userIndex +
                 '}';
     }
 
