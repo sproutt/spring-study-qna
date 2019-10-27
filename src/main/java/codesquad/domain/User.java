@@ -9,7 +9,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

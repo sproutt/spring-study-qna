@@ -3,34 +3,29 @@ package codesquad.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collection;
-import java.util.List;
 
-@Getter
 @Setter
+@Getter
 @ToString
 @Entity
-public class Question {
+public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    private User writer;
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+    private Question question;
 
-    @OneToMany(mappedBy = "question")
-    private List<Answer> answers;
-
-
-    //private String userId;
-    private String title;
-    private String contents;
+    private String writer;
+    private String reply;
     private String time;
+    private Long writerId;
 
     public void setCurrentTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -38,13 +33,15 @@ public class Question {
         this.time = currentDateTime.format(dateTimeFormatter);
     }
 
-    public void setUserInfo(User loginUser) {
-        this.writer = loginUser;
+    public void setQuestionInfo(Question question) {
+        this.question = question;
     }
 
-    public void changeInfo(Question question) {
-        this.title = question.getTitle();
-        this.contents = question.getContents();
-        setCurrentTime();
+    public void setUserInfo(User loginUser) {
+        this.writer = loginUser.getUserId();
+        this.writerId = loginUser.getId();
+    }
+    public boolean isSameUser(User loginUser){
+        return this.writerId.equals(loginUser.getId());
     }
 }

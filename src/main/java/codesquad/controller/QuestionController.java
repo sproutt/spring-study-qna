@@ -1,7 +1,9 @@
 package codesquad.controller;
 
+import codesquad.domain.Answer;
 import codesquad.domain.Question;
 import codesquad.domain.User;
+import codesquad.repository.AnswerRepository;
 import codesquad.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,9 @@ import java.util.NoSuchElementException;
 public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
+
 
     @PostMapping("/questions")
     public String question(Question question, HttpSession session) {
@@ -41,6 +46,7 @@ public class QuestionController {
     public String questionsShow(@PathVariable("id") Long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         model.addAttribute("question", question);
+        //model.addAttribute("answerList",answerRepository.findByQuestionId(id));
         return "qna/show";
     }
 
