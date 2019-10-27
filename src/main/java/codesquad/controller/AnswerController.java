@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.naming.directory.NoSuchAttributeException;
 import javax.persistence.GeneratedValue;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -44,13 +46,20 @@ public class AnswerController {
 
     @DeleteMapping("/questions/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable("questionId") Long questionId, @PathVariable("id") Long id, HttpSession session) {
-        Answer answer = answerRepository.findByQuestionId(questionId).orElseThrow(NullPointerException::new);
-        Object value = session.getAttribute("sessionedUser");
-        if (value != null && answer.isSameUser((User) value)) {
-            answerRepository.delete(answer);
-            return "redirect:/questions/" + questionId;
-        } else {
-            return "user/login_failed";
+        List<Answer> answers = answerRepository.findByQuestionId(questionId).orElseThrow(NullPointerException::new);
+        for (int i = 0; i < answers.size(); i++) {
+            if (answers.get(i).getId() == id) {
+                Answer answer = answers.get(i);
+                Object value = session.getAttribute("sessionedUser");
+                if (value != null && answer.isSameUser((User) value)) {
+                    answerRepository.delete(answer);
+                    answers.remove(i);
+                    return "redirect:/questions/" + questionId;
+                } else {
+                    return "redirect:/users/login";
+                }
+            }
         }
+        return "redirect:/";
     }
 }

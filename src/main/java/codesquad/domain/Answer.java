@@ -38,7 +38,7 @@ public class Answer {
     }
 
     public void setUserInfo(User loginUser) {
-        this.writer = loginUser.getUserId();
+        this.writer = loginUser.getName();
         this.writerId = loginUser.getId();
     }
     public boolean isSameUser(User loginUser){
