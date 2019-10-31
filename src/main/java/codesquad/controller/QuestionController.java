@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -46,7 +47,6 @@ public class QuestionController {
     public String questionsShow(@PathVariable("id") Long id, Model model) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         model.addAttribute("question", question);
-        //model.addAttribute("answerList",answerRepository.findByQuestionId(id));
         return "qna/show";
     }
 
@@ -82,8 +82,19 @@ public class QuestionController {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null && question.getWriter().isSameUserId((User) value)) {
-            questionRepository.delete(question);
-            return "redirect:/";
+            if (answerRepository.findByQuestionId(id).isPresent()) {
+                List<Answer> answers = answerRepository.findByQuestionId(id).orElseThrow(NullPointerException::new);
+                for (int i = 0; i < answers.size(); i++) {
+                    if(!answers.get(i).getWriterId().equals(question.getWriter().getId())){
+                        return "redirect:/questions/"+id;
+                    }
+                }
+                questionRepository.delete(question);
+                return "redirect:/";
+            } else {
+                questionRepository.delete(question);
+                return "redirect:/";
+            }
         } else {
             return "user/login_failed";
         }
