@@ -20,16 +20,15 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public List<Question> findQuestionList() {
+    public List<Question> findQuestions() {
         return questionRepository.findAll();
     }
 
     public Question findQuestion(Long id) {
-        Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        return question;
+        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
-    public String updateQuestion(Long id, Model model, HttpSession session) {
+    public String update(Long id, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null && question.getWriter().isSameUserId((User) value)) {
@@ -41,7 +40,7 @@ public class QuestionService {
         }
     }
 
-    public String editQuestion(Long id, Question newQuestion, Model model, HttpSession session) {
+    public String edit(Long id, Question newQuestion, Model model, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null && question.getWriter().isSameUserId((User) value)) {
@@ -54,7 +53,7 @@ public class QuestionService {
         }
     }
 
-    public String deleteQuestion(Long id, HttpSession session) {
+    public String delete(Long id, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null && question.getWriter().isSameUserId((User) value)) {
@@ -76,7 +75,7 @@ public class QuestionService {
         }
     }
 
-    public String clickQuestion(HttpSession session) {
+    public String click(HttpSession session) {
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
             return "qna/form";

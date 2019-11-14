@@ -23,7 +23,7 @@ public class Answer {
     private Question question;
 
     private String writer;
-    private String reply;
+    private String answer;
     private String time;
     private Long writerId;
 

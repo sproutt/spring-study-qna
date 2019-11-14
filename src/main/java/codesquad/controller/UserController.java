@@ -1,7 +1,6 @@
 package codesquad.controller;
 
 import codesquad.domain.User;
-import codesquad.repository.UserRepository;
 import codesquad.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -9,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/users")
@@ -19,7 +17,7 @@ public class UserController {
 
     @PostMapping("")
     public String create(User user) {
-        userService.createUser(user);
+        userService.create(user);
         return "redirect:/users";
     }
 
@@ -37,7 +35,7 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable("id") Long id, Model model, HttpSession session) {
-        return userService.userUpdate(id, model,session);
+        return userService.update(id, model,session);
     }
 
     @PutMapping("/{id}/update")
@@ -47,12 +45,12 @@ public class UserController {
 
     @PostMapping("/doLogin")
     public String loginAccess(String userId, String password, HttpSession session) {
-        return userService.userLogin(userId,password,session);
+        return userService.login(userId,password,session);
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        userService.userLogout(session);
+        userService.logout(session);
         return "redirect:/";
     }
 }

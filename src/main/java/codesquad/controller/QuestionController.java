@@ -21,8 +21,8 @@ public class QuestionController {
     }
 
     @GetMapping("/")
-    public String questionList(Model model) {
-        model.addAttribute("questionList", questionService.findQuestionList());
+    public String questions(Model model) {
+        model.addAttribute("questionList", questionService.findQuestions());
         return "index";
     }
 
@@ -34,21 +34,21 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/form")
     public String updateQuestionForm(@PathVariable("id") Long id, Model model, HttpSession session) {
-        return questionService.updateQuestion(id, model, session);
+        return questionService.update(id, model, session);
     }
 
     @PutMapping("/questions/{id}")
     public String editQuestion(@PathVariable("id") Long id, Question newQuestion, Model model, HttpSession session) {
-        return questionService.editQuestion(id, newQuestion, model, session);
+        return questionService.edit(id, newQuestion, model, session);
     }
 
     @DeleteMapping("/questions/{id}")
     public String deleteQuestion(@PathVariable("id") Long id, HttpSession session) {
-        return questionService.deleteQuestion(id, session);
+        return questionService.delete(id, session);
     }
 
     @GetMapping("/questions/form")
     public String clickQuestion(HttpSession session) {
-        return questionService.clickQuestion(session);
+        return questionService.click(session);
     }
 }

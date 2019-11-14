@@ -17,11 +17,11 @@ public class AnswerController {
 
     @PostMapping("/questions/{questionId}/answers")
     public String replyAnswer(@PathVariable("questionId") Long id, Answer answer, HttpSession session) {
-        return answerService.replyAnswer(id, answer, session);
+        return answerService.reply(id, answer, session);
     }
 
     @DeleteMapping("/questions/{questionId}/answers/{id}")
     public String deleteAnswer(@PathVariable("questionId") Long questionId, @PathVariable("id") Long id, HttpSession session) {
-        return answerService.deleteAnswer(questionId, id, session);
+        return answerService.delete(questionId, id, session);
     }
 }

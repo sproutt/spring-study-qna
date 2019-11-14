@@ -19,7 +19,7 @@ public class AnswerService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public String replyAnswer(Long id, Answer answer, HttpSession session) {
+    public String reply(Long id, Answer answer, HttpSession session) {
         Question question = questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
@@ -36,7 +36,7 @@ public class AnswerService {
         }
     }
 
-    public String deleteAnswer(Long questionId, Long id, HttpSession session) {
+    public String delete(Long questionId, Long id, HttpSession session) {
         List<Answer> answers = answerRepository.findByQuestionId(questionId).orElseThrow(NullPointerException::new);
         for (int i = 0; i < answers.size(); i++) {
             if (answers.get(i).getId() == id) {

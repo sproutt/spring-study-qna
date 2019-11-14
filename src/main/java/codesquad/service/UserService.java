@@ -15,7 +15,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public void createUser(User user) {
+    public void create(User user) {
         userRepository.save(user);
     }
 
@@ -24,11 +24,10 @@ public class UserService {
     }
 
     public User findUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(NullPointerException::new);
-        return user;
+        return userRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
-    public String userLogin(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpSession session) {
         Optional<User> maybeUser = userRepository.findByUserId(userId);
         User user = maybeUser.orElseThrow(NullPointerException::new);
         if (user.isSamePassword(password)) {
@@ -39,12 +38,12 @@ public class UserService {
         }
     }
 
-    public void userLogout(HttpSession session) {
+    public void logout(HttpSession session) {
         session.removeAttribute("seesionedUser");
         session.invalidate();
     }
 
-    public String userUpdate(Long id, Model model, HttpSession session) {
+    public String update(Long id, Model model, HttpSession session) {
         userRepository.findById(id).orElseThrow(NullPointerException::new);
         Object value = session.getAttribute("sessionedUser");
         if (value != null) {
