@@ -22,14 +22,12 @@ public class QuestionController {
 
     @GetMapping("/")
     public String questions(Model model) {
-        model.addAttribute("questionList", questionService.findQuestions());
-        return "index";
+        return questionService.findQuestions(model);
     }
 
     @GetMapping("/questions/{id}")
     public String questionsShow(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("question", questionService.findQuestion(id));
-        return "qna/show";
+        return questionService.findQuestion(id, model);
     }
 
     @GetMapping("/questions/{id}/form")

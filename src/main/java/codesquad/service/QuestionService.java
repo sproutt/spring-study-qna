@@ -20,12 +20,14 @@ public class QuestionService {
     @Autowired
     private QuestionRepository questionRepository;
 
-    public List<Question> findQuestions() {
-        return questionRepository.findAll();
+    public String findQuestions(Model model) {
+        model.addAttribute("questionList", questionRepository.findAll());
+        return "index";
     }
 
-    public Question findQuestion(Long id) {
-        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public String findQuestion(Long id, Model model) {
+        model.addAttribute("question", questionRepository.findById(id).orElseThrow(NoSuchElementException::new));
+        return "qna/show";
     }
 
     public String update(Long id, Model model, HttpSession session) {
@@ -60,7 +62,7 @@ public class QuestionService {
             if (answerRepository.findByQuestionId(id).isPresent()) {
                 List<Answer> answers = answerRepository.findByQuestionId(id).orElseThrow(NullPointerException::new);
                 for (int i = 0; i < answers.size(); i++) {
-                    if (!answers.get(i).getWriterId().equals(question.getWriter().getId())) {
+                    if (!answers.get(i).getWriter().getId().equals(question.getWriter().getId())) {
                         return "redirect:/questions/" + id;
                     }
                 }

@@ -3,7 +3,6 @@ package codesquad.domain;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.boot.autoconfigure.web.ResourceProperties;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -22,10 +21,11 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+    private User writer;
     private String answer;
     private String time;
-    private Long writerId;
 
     public void setCurrentTime() {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -38,10 +38,9 @@ public class Answer {
     }
 
     public void setUserInfo(User loginUser) {
-        this.writer = loginUser.getName();
-        this.writerId = loginUser.getId();
+        this.writer = loginUser;
     }
     public boolean isSameUser(User loginUser){
-        return this.writerId.equals(loginUser.getId());
+        return this.writer.getId().equals(loginUser.getId());
     }
 }

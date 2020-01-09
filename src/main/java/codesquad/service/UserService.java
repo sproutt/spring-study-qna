@@ -19,17 +19,18 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public List<User> findUsers() {
-        return userRepository.findAll();
+    public String findUsers(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "user/list";
     }
 
-    public User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(NullPointerException::new);
+    public String findUser(Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id).orElseThrow(NullPointerException::new));
+        return "user/profile";
     }
 
     public String login(String userId, String password, HttpSession session) {
-        Optional<User> maybeUser = userRepository.findByUserId(userId);
-        User user = maybeUser.orElseThrow(NullPointerException::new);
+        User user = userRepository.findByUserId(userId).orElseThrow(NullPointerException::new);
         if (user.isSamePassword(password)) {
             session.setAttribute("sessionedUser", user);
             return "redirect:/users";
@@ -39,7 +40,7 @@ public class UserService {
     }
 
     public void logout(HttpSession session) {
-        session.removeAttribute("seesionedUser");
+        session.removeAttribute("sessionedUser");
         session.invalidate();
     }
 

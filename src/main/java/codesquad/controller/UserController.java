@@ -23,14 +23,12 @@ public class UserController {
 
     @GetMapping("")
     public String list(Model model) {
-        model.addAttribute("users", userService.findUsers());
-        return "user/list";
+        return userService.findUsers(model);
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("user", userService.findUser(id));
-        return "user/profile";
+        return userService.findUser(id,model);
     }
 
     @GetMapping("/{id}/form")
