@@ -6,22 +6,6 @@ public class User {
     private String name;
     private String email;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
     public void setUserId(String userId) {
         this.userId = userId;
     }
@@ -38,6 +22,22 @@ public class User {
         this.email = email;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -46,5 +46,9 @@ public class User {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 '}';
+    }
+
+    public boolean isSameUser(String userId) {
+        return this.userId.equals(userId);
     }
 }

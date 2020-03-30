@@ -14,36 +14,31 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/user/form")
-    public String showForm() {
+    @GetMapping("/users/form")
+    public String show() {
         return "user/form";
     }
 
-    @PostMapping("/user/create")
+    @PostMapping("/users")
     public String create(User user) {
         users.add(user);
-        return "redirect:/user/list";
+        return "redirect:/users";
     }
 
-    @GetMapping("/user/list")
-    public String list(Model model) {
+    @GetMapping("/users")
+    public String get(Model model) {
         model.addAttribute("users", users);
         return "user/list";
     }
 
-    @GetMapping("/user/{userId}")
-    public String showProfile(@PathVariable String userId, Model model) {
+    @GetMapping("/users/{userId}")
+    public String get(@PathVariable String userId, Model model) {
         for (int i = 0; i < users.size(); i++) {
             User user = users.get(i);
-            if (findUser(user, userId)) {
+            if (user.isSameUser(userId)) {
                 model.addAttribute("user", user);
             }
         }
         return "user/profile";
     }
-
-    private boolean findUser(User user, String userId) {
-        return user.getUserId().equals(userId);
-    }
-
 }
