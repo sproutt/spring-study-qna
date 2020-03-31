@@ -4,6 +4,7 @@ import codesquad.domain.Question;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
@@ -30,4 +31,10 @@ public class QuestionController {
         return "redirect:/";
     }
 
+    @GetMapping("/questions/{index}")
+    public String get(@PathVariable int index, Model model) {
+        int questionIndex = index - 1;
+        model.addAttribute("question", questionList.get(questionIndex));
+        return "qna/show";
+    }
 }
