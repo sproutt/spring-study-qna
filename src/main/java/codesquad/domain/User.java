@@ -3,6 +3,7 @@ package codesquad.domain;
 public class User {
     private String userId;
     private String password;
+    private String changedPassword;
     private String name;
     private String email;
 
@@ -22,6 +23,10 @@ public class User {
         this.email = email;
     }
 
+    public void setChangedPassword(String changedPassword) {
+        this.changedPassword = changedPassword;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -38,17 +43,21 @@ public class User {
         return email;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "userId='" + userId + '\'' +
-                ", password='" + password + '\'' +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+    public String getChangedPassword() {
+        return changedPassword;
     }
 
     public boolean isSameUser(String userId) {
         return this.userId.equals(userId);
+    }
+
+    public boolean isSamePassword(User user) {
+        return this.password.equals(user.getPassword());
+    }
+
+    public void changeUserInfo(User user) {
+        this.password = user.getChangedPassword();
+        this.name = user.getName();
+        this.email = user.getEmail();
     }
 }
