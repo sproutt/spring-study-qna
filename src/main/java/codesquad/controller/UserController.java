@@ -31,7 +31,9 @@ public class UserController {
         User user = new User();
         for (int i = 0; i < users.size(); i++) {
             user = users.get(i);
-            if (user.isSameUser(userId)) break;
+            if (user.isSameUser(userId)) {
+                break;
+            }
         }
         model.addAttribute("user", user);
         return "user/profile";
@@ -47,7 +49,9 @@ public class UserController {
         User user = new User();
         for (int i = 0; i < users.size(); i++) {
             user = users.get(i);
-            if (user.isSameUser(id)) break;
+            if (user.isSameUser(id)) {
+                break;
+            }
         }
         model.addAttribute("user", user);
         return "user/updateForm";
@@ -58,7 +62,9 @@ public class UserController {
         User beforeUser = new User();
         for (int i = 0; i < users.size(); i++) {
             beforeUser = users.get(i);
-            if (beforeUser.isSameUser(id)) break;
+            if (beforeUser.isSameUser(id)) {
+                break;
+            }
         }
         if (beforeUser.isSamePassword(user)) {
             beforeUser.changeUserInfo(user);
