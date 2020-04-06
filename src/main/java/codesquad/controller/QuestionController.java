@@ -33,8 +33,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{index}")
     public String get(@PathVariable int index, Model model) {
-        int questionIndex = index - 1;
-        model.addAttribute("question", questionList.get(questionIndex));
+        model.addAttribute("question", questionList.get(index));
         return "qna/show";
     }
 }
