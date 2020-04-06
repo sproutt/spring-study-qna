@@ -28,15 +28,13 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String get(@PathVariable String userId, Model model) {
-        User user = new User();
-        for (int i = 0; i < users.size(); i++) {
-            user = users.get(i);
+        for (User user : users) {
             if (user.isSameUser(userId)) {
-                break;
+                model.addAttribute("user", user);
+                return "user/profile";
             }
         }
-        model.addAttribute("user", user);
-        return "user/profile";
+        return "/users";
     }
 
     @GetMapping("/users/form")
@@ -44,33 +42,35 @@ public class UserController {
         return "user/form";
     }
 
-    @GetMapping("/users/{id}/form")
-    public String updateForm(@PathVariable String id, Model model) {
-        User user = new User();
-        for (int i = 0; i < users.size(); i++) {
-            user = users.get(i);
-            if (user.isSameUser(id)) {
-                break;
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.isSameUser(userId)) {
+                model.addAttribute("user", user);
+                return "user/updateForm";
             }
         }
-        model.addAttribute("user", user);
-        return "user/updateForm";
+        return "/users";
     }
 
     @PostMapping("/users/{id}/update")
     public String update(@PathVariable String id, User user, Model model) {
-        User beforeUser = new User();
-        for (int i = 0; i < users.size(); i++) {
-            beforeUser = users.get(i);
-            if (beforeUser.isSameUser(id)) {
-                break;
-            }
-        }
+        User beforeUser = users.get(findUser(id));
         if (beforeUser.isSamePassword(user)) {
             beforeUser.changeUserInfo(user);
             return "redirect:/users";
         }
         model.addAttribute("user", beforeUser);
         return "user/updateForm";
+    }
+
+    private int findUser(String id) {
+        int index = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).isSameUser(id)) {
+                index = i;
+            }
+        }
+        return index;
     }
 }
