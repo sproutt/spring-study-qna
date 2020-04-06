@@ -42,23 +42,23 @@ public class UserController {
         return "user/form";
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String updateForm(@PathVariable String userId, Model model) {
+    @GetMapping("/users/{id}/form")
+    public String updateForm(@PathVariable String id, Model model) {
         User user = new User();
         for (int i = 0; i < users.size(); i++) {
             user = users.get(i);
-            if (user.isSameUser(userId)) break;
+            if (user.isSameUser(id)) break;
         }
         model.addAttribute("user", user);
         return "user/updateForm";
     }
 
-    @PostMapping("/users/{userId}/update")
-    public String update(@PathVariable String userId, User user, Model model) {
+    @PostMapping("/users/{id}/update")
+    public String update(@PathVariable String id, User user, Model model) {
         User beforeUser = new User();
         for (int i = 0; i < users.size(); i++) {
             beforeUser = users.get(i);
-            if (beforeUser.isSameUser(userId)) break;
+            if (beforeUser.isSameUser(id)) break;
         }
         if (beforeUser.isSamePassword(user)) {
             beforeUser.changeUserInfo(user);
