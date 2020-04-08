@@ -14,11 +14,6 @@ import java.util.List;
 public class UserController {
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/users/form")
-    public String show() {
-        return "user/form";
-    }
-
     @PostMapping("/users")
     public String create(User user) {
         users.add(user);
@@ -33,12 +28,49 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String get(@PathVariable String userId, Model model) {
-        for (int i = 0; i < users.size(); i++) {
-            User user = users.get(i);
+        for (User user : users) {
             if (user.isSameUser(userId)) {
                 model.addAttribute("user", user);
+                return "user/profile";
             }
         }
-        return "user/profile";
+        return "/users";
+    }
+
+    @GetMapping("/users/form")
+    public String show() {
+        return "user/form";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String updateForm(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if (user.isSameUser(userId)) {
+                model.addAttribute("user", user);
+                return "user/updateForm";
+            }
+        }
+        return "/users";
+    }
+
+    @PostMapping("/users/{id}/update")
+    public String update(@PathVariable String id, User user, Model model) {
+        User beforeUser = users.get(findUser(id));
+        if (beforeUser.isSamePassword(user)) {
+            beforeUser.changeUserInfo(user);
+            return "redirect:/users";
+        }
+        model.addAttribute("user", beforeUser);
+        return "user/updateForm";
+    }
+
+    private int findUser(String id) {
+        int index = 0;
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).isSameUser(id)) {
+                index = i;
+            }
+        }
+        return index;
     }
 }
