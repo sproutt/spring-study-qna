@@ -73,7 +73,7 @@ public class User {
         return this.password.equals(user.getPassword());
     }
 
-    public void changeUserInfo(User user){
+    public void changeUserInfo(User user) {
         this.password = user.getChangedPassword();
         this.name = user.getName();
         this.email = user.getEmail();
