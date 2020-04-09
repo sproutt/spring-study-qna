@@ -69,7 +69,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession httpSession) {
+    public String login(String userId, String password, HttpSession session) {
         User user = userRepository.findByUserId(userId);
         if (user == null) {
             return "redirect:/users/loginForm";
@@ -79,7 +79,13 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
         System.out.println("Login성공");
-        httpSession.setAttribute("sessionedUser", user);
+        session.setAttribute("sessionedUser", user);
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.removeAttribute("sessionedUser");
         return "redirect:/";
     }
 }
