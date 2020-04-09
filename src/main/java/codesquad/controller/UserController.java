@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,5 +60,26 @@ public class UserController {
         }
         model.addAttribute("user", beforeUser);
         return "user/updateForm";
+    }
+
+    //로그인 기능
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession httpSession) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            return "redirect:/users/loginForm";
+        }
+
+        if (!password.equals(user.getPassword())) {
+            return "redirect:/users/loginForm";
+        }
+        System.out.println("Login성공");
+        httpSession.setAttribute("sessionedUser", user);
+        return "redirect:/";
     }
 }
