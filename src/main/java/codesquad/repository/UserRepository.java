@@ -1,4 +1,7 @@
 package codesquad.repository;
 
-public class UserRepository {
+import codesquad.domain.User;
+import org.springframework.data.repository.CrudRepository;
+
+public interface UserRepository extends CrudRepository<User, Long> {
 }
