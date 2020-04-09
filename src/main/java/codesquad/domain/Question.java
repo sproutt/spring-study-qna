@@ -47,4 +47,9 @@ public class Question {
         this.contents = contents;
     }
 
+    public void changeQuestionInfo(Question question) {
+        this.title = question.getTitle();
+        this.contents = question.getContents();
+    }
+
 }
