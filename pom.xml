@@ -41,7 +41,7 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
-			<scope>runtime</scope>
+			<version>1.4.192</version>
 		</dependency>
 		<dependency>
 			<groupId>net.rakugakibox.spring.boot</groupId>
