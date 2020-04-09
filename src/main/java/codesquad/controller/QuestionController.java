@@ -5,6 +5,7 @@ import codesquad.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +40,11 @@ public class QuestionController {
     public String get(@PathVariable Long id, Model model) {
         model.addAttribute("question", questionRepository.findById(id));
         return "qna/show";
+    }
+
+    @DeleteMapping("/questions/{id}")
+    public String delete(@PathVariable Long id) {
+        questionRepository.deleteById(id);
+        return "redirect:/";
     }
 }
