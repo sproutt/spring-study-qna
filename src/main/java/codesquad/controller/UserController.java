@@ -45,13 +45,31 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Object tmpUser = session.getAttribute("sessionedUser");
+        if (tmpUser == null) {
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = (User) tmpUser;
+        if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
+            throw new IllegalStateException("Go Away.");
+        }
+        //model.addAttribute("user", userRepository.findById(sessionedUser.getId()).get());
         model.addAttribute("user", userRepository.findById(id).get());
         return "user/updateForm";
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, User user, Model model) {
+    public String update(@PathVariable Long id, User user, Model model, HttpSession session) {
+        Object tmpUser = session.getAttribute("sessionedUser");
+        if (tmpUser == null) {
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = (User) tmpUser;
+        if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
+            throw new IllegalStateException("Go Away");
+        }
+
         User beforeUser = userRepository.findById(id).get();
         if (beforeUser.isSamePassword(user)) {
             beforeUser.changeUserInfo(user);
