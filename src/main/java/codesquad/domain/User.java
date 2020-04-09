@@ -73,6 +73,13 @@ public class User {
         return this.password.equals(user.getPassword());
     }
 
+    public boolean checkPassword(String password) {
+        if (password == null) {
+            return false;
+        }
+        return this.password.equals(password);
+    }
+
     public void changeUserInfo(User user) {
         this.password = user.getChangedPassword();
         this.name = user.getName();

@@ -2,6 +2,7 @@ package codesquad.controller;
 
 import codesquad.domain.User;
 import codesquad.repository.UserRepository;
+import codesquad.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,11 +47,10 @@ public class UserController {
 
     @GetMapping("/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object tmpUser = session.getAttribute("sessionedUser");
-        if (tmpUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = (User) tmpUser;
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
             throw new IllegalStateException("Go Away.");
         }
@@ -61,11 +61,10 @@ public class UserController {
 
     @PostMapping("/{id}/update")
     public String update(@PathVariable Long id, User user, Model model, HttpSession session) {
-        Object tmpUser = session.getAttribute("sessionedUser");
-        if (tmpUser == null) {
+        if (HttpSessionUtils.isLoginUser(session)) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = (User) tmpUser;
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
             throw new IllegalStateException("Go Away");
         }
@@ -93,11 +92,11 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
 
-        if (!password.equals(user.getPassword())) {
+        if (!user.checkPassword(password)) {
             return "redirect:/users/loginForm";
         }
         System.out.println("Login성공");
-        session.setAttribute("sessionedUser", user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
         return "redirect:/";
     }
 
