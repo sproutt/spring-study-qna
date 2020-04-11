@@ -51,11 +51,10 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
+        if (!sessionedUser.isSameId(id)) {
             throw new IllegalStateException("Go Away.");
         }
-        //model.addAttribute("user", userRepository.findById(sessionedUser.getId()).get());
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", sessionedUser);
         return "user/updateForm";
     }
 
@@ -65,17 +64,15 @@ public class UserController {
             return "redirect:/users/loginForm";
         }
         User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!id.equals(sessionedUser.getId())) { // TDA로 바꾸자
+        if (!sessionedUser.isSameId(id)) {
             throw new IllegalStateException("Go Away");
         }
-
-        User beforeUser = userRepository.findById(id).get();
-        if (beforeUser.isSamePassword(user)) {
-            beforeUser.changeUserInfo(user);
-            userRepository.save(beforeUser);
+        if (sessionedUser.isSamePassword(user)) {
+            sessionedUser.changeUserInfo(user);
+            userRepository.save(sessionedUser);
             return "redirect:/users";
         }
-        model.addAttribute("user", beforeUser);
+        model.addAttribute("user", sessionedUser);
         return "user/updateForm";
     }
 
@@ -91,7 +88,6 @@ public class UserController {
         if (user == null) {
             return "redirect:/users/loginForm";
         }
-
         if (!user.checkPassword(password)) {
             return "redirect:/users/loginForm";
         }
@@ -102,7 +98,7 @@ public class UserController {
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
-        session.removeAttribute("sessionedUser");
+        session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
         return "redirect:/";
     }
 }

@@ -37,7 +37,6 @@ public class QuestionController {
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
         question.setUserInfo(session);
-
         questionRepository.save(question);
         return "redirect:/";
     }

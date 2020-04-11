@@ -69,6 +69,10 @@ public class User {
         return this.userId.equals(userId);
     }
 
+    public boolean isSameId(Long id) {
+        return this.id.equals(id);
+    }
+
     public boolean isSamePassword(User user) {
         return this.password.equals(user.getPassword());
     }
