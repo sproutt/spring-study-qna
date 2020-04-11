@@ -12,10 +12,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User user;
 
-    private String userId;
     private String title;
     private String contents;
 
@@ -23,14 +23,8 @@ public class Question {
         return id;
     }
 
-    public String getWriter() {
-        return writer;
-    }
-
-    public void setUserInfo(HttpSession session) {
-        User user = HttpSessionUtils.getUserFromSession(session);
-        this.writer = user.getName();
-        this.userId = user.getUserId();
+    public User getUser() {
+        return user;
     }
 
     public String getTitle() {
@@ -53,13 +47,17 @@ public class Question {
         this.contents = contents;
     }
 
+    public void setUserInfo(HttpSession session) {
+        this.user = HttpSessionUtils.getUserFromSession(session);
+    }
+
     public void changeQuestionInfo(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
 
     public boolean isSameUserId(User sessionedUser) {
-        if (this.userId.equals(sessionedUser.getUserId())) {
+        if (this.user.getUserId().equals(sessionedUser.getUserId())) {
             return true;
         }
         return false;
