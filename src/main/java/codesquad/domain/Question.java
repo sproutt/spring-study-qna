@@ -15,6 +15,7 @@ public class Question {
     @Column(nullable = false, length = 20)
     private String writer;
 
+    private String userId;
     private String title;
     private String contents;
 
@@ -26,9 +27,10 @@ public class Question {
         return writer;
     }
 
-    public void setWriter(HttpSession session) {
+    public void setUserInfo(HttpSession session) {
         User user = HttpSessionUtils.getUserFromSession(session);
         this.writer = user.getName();
+        this.userId = user.getUserId();
     }
 
     public String getTitle() {
@@ -56,4 +58,10 @@ public class Question {
         this.contents = question.getContents();
     }
 
+    public boolean isSameUserId(User sessionedUser) {
+        if (this.userId.equals(sessionedUser.getUserId())) {
+            return true;
+        }
+        return false;
+    }
 }

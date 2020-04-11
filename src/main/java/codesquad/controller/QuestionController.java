@@ -1,6 +1,7 @@
 package codesquad.controller;
 
 import codesquad.domain.Question;
+import codesquad.domain.User;
 import codesquad.repository.QuestionRepository;
 import codesquad.util.HttpSessionUtils;
 import com.sun.org.apache.xpath.internal.operations.Mod;
@@ -35,7 +36,7 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
-        question.setWriter(session);
+        question.setUserInfo(session);
         questionRepository.save(question);
         return "redirect:/";
     }
@@ -46,23 +47,47 @@ public class QuestionController {
         return "qna/show";
     }
 
-    @DeleteMapping("/questions/{id}")
-    public String delete(@PathVariable Long id) {
-        questionRepository.deleteById(id);
-        return "redirect:/";
-    }
-
     @GetMapping("/questions/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            throw new IllegalStateException("You can't edit other's article");
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id).get();
+        if (!question.isSameUserId(sessionedUser)) {
+            throw new IllegalStateException("You can't edit other's article");
+        }
+        model.addAttribute("question", question);
         return "qna/updateForm";
     }
 
     @PostMapping("/questions/{id}/update")
-    public String update(@PathVariable Long id, Question question) {
+    public String update(@PathVariable Long id, Question question, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            throw new IllegalStateException("You can't edit other's article");
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
         Question beforeQuestion = questionRepository.findById(id).get();
+        if (!beforeQuestion.isSameUserId(sessionedUser)) {
+            throw new IllegalStateException("You can't edit other's article");
+        }
         beforeQuestion.changeQuestionInfo(question);
         questionRepository.save(beforeQuestion);
         return "redirect:/";
     }
+
+    @DeleteMapping("/questions/{id}")
+    public String delete(@PathVariable Long id, HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "redirect:/users/loginForm";
+        }
+        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+        Question question = questionRepository.findById(id).get();
+        if (!question.isSameUserId(sessionedUser)) {
+            return "redirect:/users/loginForm";
+        }
+        questionRepository.deleteById(id);
+        return "redirect:/";
+    }
+
 }
