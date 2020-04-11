@@ -1,6 +1,9 @@
 package codesquad.domain;
 
+import codesquad.util.HttpSessionUtils;
+
 import javax.persistence.*;
+import javax.servlet.http.HttpSession;
 
 @Entity
 public class Question {
@@ -23,8 +26,9 @@ public class Question {
         return writer;
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public void setWriter(HttpSession session) {
+        User user = HttpSessionUtils.getUserFromSession(session);
+        this.writer = user.getName();
     }
 
     public String getTitle() {

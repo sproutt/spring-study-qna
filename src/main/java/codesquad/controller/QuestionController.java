@@ -2,12 +2,14 @@ package codesquad.controller;
 
 import codesquad.domain.Question;
 import codesquad.repository.QuestionRepository;
+import codesquad.util.HttpSessionUtils;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,12 +26,16 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/form")
-    public String show() {
+    public String show(HttpSession session) {
+        if (!HttpSessionUtils.isLoginUser(session)) {
+            return "/users/loginForm";
+        }
         return "qna/form";
     }
 
     @PostMapping("/questions")
-    public String create(Question question) {
+    public String create(Question question, HttpSession session) {
+        question.setWriter(session);
         questionRepository.save(question);
         return "redirect:/";
     }
