@@ -26,11 +26,6 @@ public class UserController {
         return "redirect:/users";
     }
 
-    @GetMapping("/form")
-    public String showForm() {
-        return "/user/form";
-    }
-
     @GetMapping("/{userId}")
     public String showProfile(@PathVariable String userId,Model model){
         model.addAttribute("user",userService.getUser(userId));
