@@ -7,20 +7,16 @@ public class User {
     private String name;
     private String email;
 
-    public void setUserId(String userId) {
+    public User(String userId, int password, String name, String email) {
         this.userId = userId;
-    }
-
-    public void setPassword(int password) {
         this.password = password;
-    }
-
-    public void setName(String name) {
         this.name = name;
+
+        this.email = email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public boolean isSameId(String userId) {
+        return this.userId.equals(userId);
     }
 
     public String getUserId() {
