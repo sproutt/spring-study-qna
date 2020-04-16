@@ -61,7 +61,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions/{id}/update")
-    public String update(@PathVariable Long id, Question question, HttpSession session) {
+    public String update(@PathVariable Long id, String title, String contents, HttpSession session) {
         if (!HttpSessionUtils.isLoginUser(session)) {
             throw new IllegalStateException("You can't edit other's article");
         }
@@ -70,7 +70,7 @@ public class QuestionController {
         if (!beforeQuestion.isSameUserId(sessionedUser)) {
             throw new IllegalStateException("You can't edit other's article");
         }
-        beforeQuestion.changeQuestionInfo(question);
+        beforeQuestion.changeQuestionInfo(title, contents);
         questionRepository.save(beforeQuestion);
         return "redirect:/";
     }

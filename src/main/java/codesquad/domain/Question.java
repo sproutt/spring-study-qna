@@ -29,9 +29,9 @@ public class Question {
         this.contents = contents;
     }
 
-    public void changeQuestionInfo(Question question) {
-        this.title = question.getTitle();
-        this.contents = question.getContents();
+    public void changeQuestionInfo(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
     }
 
     public boolean isSameUserId(User sessionedUser) {

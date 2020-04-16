@@ -1,24 +1,24 @@
-/*
 package codesquad.service;
 
-import codesquad.domain.UserSaveRequestDto;
-import codesquad.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import codesquad.domain.User;
 
-import javax.transaction.Transactional;
+public interface UserService {
+    void create(String userId, String password, String name, String email);
 
-@RequiredArgsConstructor
-@Service
-public class UserService {
-    @Autowired
-    UserRepository userRepository;
+    Iterable<User> findUsers();
 
-    @Transactional
-    public String save(final UserSaveRequestDto requestDto) {
-        userRepository.save(requestDto.toEntity()).getId();
-        return "redirect:/users";
-    }
+    User findUser(Long id);
+
+    User findUser(String userId);
+
+    boolean isSessionedUser();
+
+    User getLoginUser(Long id);
+
+    boolean checkPassword(User user);
+
+    boolean checkPassword(String password);
+
+    void updateUser(User user);
 }
-*/
+

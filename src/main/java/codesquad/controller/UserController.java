@@ -1,7 +1,7 @@
 package codesquad.controller;
 
 import codesquad.domain.User;
-import codesquad.repository.UserRepository;
+import codesquad.service.UserService;
 import codesquad.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,23 +20,23 @@ public class UserController {
     private final static Logger LOGGER = Logger.getGlobal();
 
     @Autowired
-    private UserRepository userRepository;
+    private UserService userService;
 
     @PostMapping("")
     public String create(String userId, String password, String name, String email) {
-        userRepository.save(new User().builder().userId(userId).password(password).name(name).email(email).build());
+        userService.create(userId, password, name, email);
         return "redirect:/users";
     }
 
     @GetMapping("")
     public String get(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        model.addAttribute("users", userService.findUsers());
         return "user/list";
     }
 
     @GetMapping("/{id}")
     public String get(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", userService.findUser(id));
         return "user/profile";
     }
 
@@ -46,33 +46,24 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+    public String updateForm(@PathVariable Long id, Model model) {
+        if (!userService.isSessionedUser()) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.isSameId(id)) {
-            throw new IllegalStateException("Go Away.");
-        }
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", userService.getLoginUser(id));
         return "user/updateForm";
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, User user, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+    public String update(@PathVariable Long id, User user, Model model) {
+        if (!userService.isSessionedUser()) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        if (!sessionedUser.isSameId(id)) {
-            throw new IllegalStateException("Go Away");
-        }
-        if (sessionedUser.isSamePassword(user)) {
-            sessionedUser.changeUserInfo(user);
-            userRepository.save(sessionedUser);
+        if (userService.checkPassword(user)) {
+            userService.updateUser(user);
             return "redirect:/users";
         }
-        model.addAttribute("user", sessionedUser);
+        model.addAttribute("user", userService.getLoginUser(id));
         return "user/updateForm";
     }
 
@@ -84,14 +75,13 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession session) {
-        User user = userRepository.findByUserId(userId);
-        if (user == null) {
+        if (userService.findUser(userId) == null) {
             return "redirect:/users/loginForm";
         }
-        if (!user.checkPassword(password)) {
+        if (!userService.checkPassword(password)) {
             return "redirect:/users/loginForm";
         }
-        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, userService.findUser(userId));
         LOGGER.info("Login success");
         return "redirect:/";
     }

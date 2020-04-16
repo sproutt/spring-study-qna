@@ -43,6 +43,10 @@ public class User {
         return this.password.equals(user.getPassword());
     }
 
+    public boolean isSamePassword(String password) {
+        return this.password.equals(password);
+    }
+
     public boolean checkPassword(String password) {
         if (password == null) {
             return false;
