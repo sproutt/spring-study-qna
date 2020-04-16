@@ -1,10 +1,13 @@
 package codesquad.domain;
 
-import codesquad.util.HttpSessionUtils;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import javax.servlet.http.HttpSession;
 
+@Getter
+@NoArgsConstructor
 @Entity
 public class Question {
 
@@ -19,36 +22,11 @@ public class Question {
     private String title;
     private String contents;
 
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
+    @Builder
+    public Question(User user, String title, String contents) {
+        this.user = user;
         this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public void setUserInfo(HttpSession session) {
-        this.user = HttpSessionUtils.getUserFromSession(session);
     }
 
     public void changeQuestionInfo(Question question) {

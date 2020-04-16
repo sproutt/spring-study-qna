@@ -12,19 +12,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/users")
 public class UserController {
+    private final static Logger LOGGER = Logger.getGlobal();
 
     @Autowired
     private UserRepository userRepository;
 
     @PostMapping("")
-    public String create(User user) {
-        userRepository.save(user);
+    public String create(String userId, String password, String name, String email) {
+        userRepository.save(new User().builder().userId(userId).password(password).name(name).email(email).build());
         return "redirect:/users";
     }
 
@@ -91,14 +91,15 @@ public class UserController {
         if (!user.checkPassword(password)) {
             return "redirect:/users/loginForm";
         }
-        System.out.println("Login성공");
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user);
+        LOGGER.info("Login success");
         return "redirect:/";
     }
 
     @GetMapping("/logout")
     public String logout(HttpSession session) {
         session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
+        LOGGER.info("Logout success");
         return "redirect:/";
     }
 }
