@@ -3,6 +3,8 @@ package codesquad.controller;
 import codesquad.domain.Question;
 import codesquad.domain.User;
 import codesquad.repository.QuestionRepository;
+import codesquad.service.QuestionService;
+import codesquad.service.UserService;
 import codesquad.util.HttpSessionUtils;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,14 @@ import java.util.List;
 
 @Controller
 public class QuestionController {
-
     @Autowired
-    private QuestionRepository questionRepository;
+    QuestionService questionService;
+    @Autowired
+    UserService userService;
 
     @GetMapping("/")
     public String get(Model model) {
-        model.addAttribute("questionList", questionRepository.findAll());
+        model.addAttribute("questionList", questionService.findQuestions());
         return "qna/index";
     }
 
@@ -35,57 +38,50 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(String title, String contents, HttpSession session) {
-        questionRepository.save(new Question().builder().user(HttpSessionUtils.getUserFromSession(session)).title(title).contents(contents).build());
+    public String create(String title, String contents) {
+        questionService.create(title, contents);
         return "redirect:/";
     }
 
     @GetMapping("/questions/{id}")
     public String get(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", questionService.findQuestion(id));
         return "qna/show";
     }
 
     @GetMapping("/questions/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+    public String updateForm(@PathVariable Long id, Model model) {
+        if (!userService.isSessionedUser()) {
             throw new IllegalStateException("You can't edit other's article");
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(id).get();
-        if (!question.isSameUserId(sessionedUser)) {
+        if (!questionService.checkUserId(id)) {
             throw new IllegalStateException("You can't edit other's article");
         }
-        model.addAttribute("question", question);
+        model.addAttribute("question", questionService.findQuestion(id));
         return "qna/updateForm";
     }
 
     @PostMapping("/questions/{id}/update")
-    public String update(@PathVariable Long id, String title, String contents, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+    public String update(@PathVariable Long id, String title, String contents) {
+        if (!userService.isSessionedUser()) {
             throw new IllegalStateException("You can't edit other's article");
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question beforeQuestion = questionRepository.findById(id).get();
-        if (!beforeQuestion.isSameUserId(sessionedUser)) {
+        if (!questionService.checkUserId(id)) {
             throw new IllegalStateException("You can't edit other's article");
         }
-        beforeQuestion.changeQuestionInfo(title, contents);
-        questionRepository.save(beforeQuestion);
+        questionService.updateQuestionInfo(id, title, contents);
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}")
-    public String delete(@PathVariable Long id, HttpSession session) {
-        if (!HttpSessionUtils.isLoginUser(session)) {
+    public String delete(@PathVariable Long id) {
+        if (!userService.isSessionedUser()) {
             return "redirect:/users/loginForm";
         }
-        User sessionedUser = HttpSessionUtils.getUserFromSession(session);
-        Question question = questionRepository.findById(id).get();
-        if (!question.isSameUserId(sessionedUser)) {
+        if (!questionService.checkUserId(id)) {
             return "redirect:/users/loginForm";
         }
-        questionRepository.deleteById(id);
+        questionService.deleteQuestion(id);
         return "redirect:/";
     }
 
