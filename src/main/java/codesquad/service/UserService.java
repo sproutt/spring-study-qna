@@ -2,6 +2,8 @@ package codesquad.service;
 
 import codesquad.domain.User;
 
+import javax.servlet.http.HttpSession;
+
 public interface UserService {
     void create(String userId, String password, String name, String email);
 
@@ -11,14 +13,14 @@ public interface UserService {
 
     User findUser(String userId);
 
-    boolean isSessionedUser();
+    boolean isSessionedUser(HttpSession session);
 
-    User getLoginUser(Long id);
+    User getLoginUser(Long id, HttpSession session);
 
-    boolean checkPassword(User user);
+    boolean checkPassword(String password, HttpSession session);
 
-    boolean checkPassword(String password);
+    boolean checkPassword(String userId, String password);
 
-    void updateUser(User user);
+    void updateUser(String changedPassword, String name, String email, HttpSession session);
 }
 

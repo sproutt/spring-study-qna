@@ -1,6 +1,5 @@
 package codesquad.controller;
 
-import codesquad.domain.User;
 import codesquad.service.UserService;
 import codesquad.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,24 +45,24 @@ public class UserController {
     }
 
     @GetMapping("/{id}/form")
-    public String updateForm(@PathVariable Long id, Model model) {
-        if (!userService.isSessionedUser()) {
+    public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+        if (!userService.isSessionedUser(session)) {
             return "redirect:/users/loginForm";
         }
-        model.addAttribute("user", userService.getLoginUser(id));
+        model.addAttribute("user", userService.getLoginUser(id, session));
         return "user/updateForm";
     }
 
     @PostMapping("/{id}/update")
-    public String update(@PathVariable Long id, User user, Model model) {
-        if (!userService.isSessionedUser()) {
+    public String update(@PathVariable Long id, String password, String changedPassword, String name, String email, Model model, HttpSession session) {
+        if (!userService.isSessionedUser(session)) {
             return "redirect:/users/loginForm";
         }
-        if (userService.checkPassword(user)) {
-            userService.updateUser(user);
+        if (userService.checkPassword(password, session)) {
+            userService.updateUser(changedPassword, name, email, session);
             return "redirect:/users";
         }
-        model.addAttribute("user", userService.getLoginUser(id));
+        model.addAttribute("user", userService.getLoginUser(id, session));
         return "user/updateForm";
     }
 
@@ -78,7 +77,7 @@ public class UserController {
         if (userService.findUser(userId) == null) {
             return "redirect:/users/loginForm";
         }
-        if (!userService.checkPassword(password)) {
+        if (!userService.checkPassword(userId, password)) {
             return "redirect:/users/loginForm";
         }
         session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, userService.findUser(userId));

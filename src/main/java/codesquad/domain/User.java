@@ -19,7 +19,6 @@ public class User {
     private String userId;
 
     private String password;
-    private String changedPassword;
     private String name;
     private String email;
 
@@ -31,32 +30,20 @@ public class User {
         this.email = email;
     }
 
-    public boolean isSameUser(String userId) {
-        return this.userId.equals(userId);
-    }
-
     public boolean isSameId(Long id) {
         return this.id.equals(id);
     }
 
-    public boolean isSamePassword(User user) {
-        return this.password.equals(user.getPassword());
-    }
-
     public boolean isSamePassword(String password) {
-        return this.password.equals(password);
-    }
-
-    public boolean checkPassword(String password) {
         if (password == null) {
             return false;
         }
         return this.password.equals(password);
     }
 
-    public void changeUserInfo(User user) {
-        this.password = user.getChangedPassword();
-        this.name = user.getName();
-        this.email = user.getEmail();
+    public void changeUserInfo(String changedPassword, String name, String email) {
+        this.password = changedPassword;
+        this.name = name;
+        this.email = email;
     }
 }

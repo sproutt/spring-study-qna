@@ -13,13 +13,11 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     QuestionRepository questionRepository;
 
-    private HttpSession session;
-
     public Iterable<Question> findQuestions() {
         return questionRepository.findAll();
     }
 
-    public void create(String title, String contents) {
+    public void create(String title, String contents, HttpSession session) {
         questionRepository.save(new Question().builder().user(HttpSessionUtils.getUserFromSession(session)).title(title).contents(contents).build());
     }
 
@@ -27,7 +25,7 @@ public class QuestionServiceImpl implements QuestionService {
         return questionRepository.findById(id).get();
     }
 
-    public boolean checkUserId(Long id) {
+    public boolean checkUserId(Long id, HttpSession session) {
         return findQuestion(id).isSameUserId(HttpSessionUtils.getUserFromSession(session));
     }
 
