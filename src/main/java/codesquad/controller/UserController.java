@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/users")
 public class UserController {
 
-    @Autowired
     private UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("")
     public String showList(Model model) {
-        model.addAttribute("users", userRepository.selectAll());
+        model.addAttribute("users", userRepository.findAll());
         return "/user/list";
     }
 
@@ -28,7 +31,7 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public String showProfile(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.select(userId));
+        model.addAttribute("user", userRepository.find(userId));
         return "/user/profile";
     }
 
