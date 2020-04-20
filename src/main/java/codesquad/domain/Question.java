@@ -1,7 +1,13 @@
 package codesquad.domain;
 
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 
+@Getter
+@NoArgsConstructor
 @Entity
 public class Question {
 
@@ -9,47 +15,29 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 20)
-    private String writer;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User user;
 
     private String title;
     private String contents;
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public void setWriter(String writer) {
-        this.writer = writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
+    @Builder
+    public Question(User user, String title, String contents) {
+        this.user = user;
         this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
         this.contents = contents;
     }
 
-    public void changeQuestionInfo(Question question) {
-        this.title = question.getTitle();
-        this.contents = question.getContents();
+    public void changeQuestionInfo(String title, String contents) {
+        this.title = title;
+        this.contents = contents;
     }
 
+    public boolean isSameUserId(User sessionedUser) {
+        if (this.user.getUserId().equals(sessionedUser.getUserId())) {
+            return true;
+        }
+        return false;
+    }
 }
