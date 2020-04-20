@@ -30,9 +30,4 @@ public class UserRepository {
         }
         return null;
     }
-
-    public void updateUser(String userId, int password, String name, String email) {
-        User user = find(userId);
-        user.update(password, name, email);
-    }
 }

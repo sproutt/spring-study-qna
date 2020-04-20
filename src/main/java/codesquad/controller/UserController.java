@@ -43,8 +43,9 @@ public class UserController {
 
     @PostMapping("/{userId}/update")
     public String updateUser(@PathVariable String userId, String currentPassword, String newPassword, String name, String email) {
-        if (userRepository.find(userId).getPassword() == Integer.parseInt(currentPassword)) {
-            userRepository.updateUser(userId, Integer.parseInt(newPassword), name, email);
+        User user = userRepository.find(userId);
+        if (user.getPassword() == Integer.parseInt(currentPassword)) {
+            user.update(Integer.parseInt(newPassword), name, email);
             return "redirect:/users";
         }
         return "redirect:/users/" + userId + "/form";
