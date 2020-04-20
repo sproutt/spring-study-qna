@@ -13,6 +13,9 @@ public class QuestionServiceImpl implements QuestionService {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Autowired
+    AnswerService answerService;
+
     public Iterable<Question> findQuestions() {
         return questionRepository.findAll();
     }
@@ -22,7 +25,9 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public Question findQuestion(Long id) {
-        return questionRepository.findById(id).get();
+        Question question = questionRepository.findById(id).get();
+        question.updateAnswers(answerService.findAnswers(id));
+        return question;
     }
 
     public boolean checkUserId(Long id, HttpSession session) {

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
@@ -18,6 +19,9 @@ public class Question {
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User user;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
 
     private String title;
     private String contents;
@@ -39,5 +43,9 @@ public class Question {
             return true;
         }
         return false;
+    }
+
+    public void updateAnswers(List<Answer> answers){
+        this.answers = answers;
     }
 }
