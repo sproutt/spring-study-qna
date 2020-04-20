@@ -35,4 +35,18 @@ public class UserController {
         return "/user/profile";
     }
 
+    @GetMapping("/{userId}/form")
+    public String showUpdateForm(@PathVariable String userId, Model model) {
+        model.addAttribute("user", userRepository.find(userId));
+        return "/user/updateForm";
+    }
+
+    @PostMapping("/{userId}/update")
+    public String updateUser(@PathVariable String userId, String currentPassword, String newPassword, String name, String email) {
+        if (userRepository.find(userId).getPassword() == Integer.parseInt(currentPassword)) {
+            userRepository.updateUser(userId, Integer.parseInt(newPassword), name, email);
+            return "redirect:/users";
+        }
+        return "redirect:/users/" + userId + "/form";
+    }
 }

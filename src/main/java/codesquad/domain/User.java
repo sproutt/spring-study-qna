@@ -34,4 +34,10 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+    public void update(int password, String name, String email) {
+        this.password = password;
+        this.name = name;
+        this.email = email;
+    }
 }
