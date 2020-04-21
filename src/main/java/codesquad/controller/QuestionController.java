@@ -16,9 +16,9 @@ import javax.servlet.http.HttpSession;
 @Controller
 public class QuestionController {
     @Autowired
-    QuestionService questionService;
+    private QuestionService questionService;
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @GetMapping("/")
     public String get(Model model) {

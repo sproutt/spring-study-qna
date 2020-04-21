@@ -11,7 +11,6 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Question {
-    private static final int INITIAL_VALUE = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +32,7 @@ public class Question {
         this.user = user;
         this.title = title;
         this.contents = contents;
-        this.answersNum = INITIAL_VALUE;
+        this.answersNum = 0;
     }
 
     public void changeQuestionInfo(String title, String contents) {
@@ -55,12 +54,10 @@ public class Question {
 
     public boolean checkAnswersUser() {
         for (Answer answer : answers) {
-            if (!answer.getWriter().isSameId(user.getId())) {
+            if (!answer.isSameWriter(user.getId())) {
                 return false;
             }
         }
         return true;
     }
-
-
 }

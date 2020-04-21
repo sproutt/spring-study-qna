@@ -31,4 +31,11 @@ public class Answer {
         this.answer = answer;
         this.writer = writer;
     }
+
+    public boolean isSameWriter(Long id) {
+        if (this.writer.isSameId(id)) {
+            return true;
+        }
+        return false;
+    }
 }
