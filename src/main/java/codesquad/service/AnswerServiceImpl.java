@@ -24,11 +24,10 @@ public class AnswerServiceImpl implements AnswerService {
         if (!answerRepository.findById(id).get().getWriter().isSameId(HttpSessionUtils.getUserFromSession(session).getId())) {
             throw new IllegalStateException("You can't delete other's answer");
         }
-        answerRepository.delete(answerRepository.findById(id).get());
+        answerRepository.deleteById(id);
     }
 
     public List<Answer> findAnswers(Long questionId) {
         return answerRepository.findByQuestionId(questionId);
     }
-
 }

@@ -11,4 +11,5 @@ public interface AnswerService {
     List<Answer> findAnswers(Long questionId);
 
     void delete(Long id, HttpSession session);
+
 }

@@ -41,6 +41,10 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public void deleteQuestion(Long id) {
-        questionRepository.deleteById(id);
+        if (findQuestion(id).getAnswers().isEmpty() || findQuestion(id).checkAnswersUser()) {
+            questionRepository.deleteById(id);
+        } else {
+            throw new IllegalStateException("You can't delete this article");
+        }
     }
 }

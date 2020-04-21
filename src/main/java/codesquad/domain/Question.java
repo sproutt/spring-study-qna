@@ -21,7 +21,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User user;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answers;
 
     private String title;
@@ -52,4 +52,15 @@ public class Question {
         this.answers = answers;
         this.answersNum = answers.size();
     }
+
+    public boolean checkAnswersUser() {
+        for (Answer answer : answers) {
+            if (!answer.getWriter().isSameId(user.getId())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
