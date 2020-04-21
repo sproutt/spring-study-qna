@@ -11,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class Question {
+    private static final int INITIAL_VALUE = 0;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,12 +26,14 @@ public class Question {
 
     private String title;
     private String contents;
+    private int answersNum;
 
     @Builder
     public Question(User user, String title, String contents) {
         this.user = user;
         this.title = title;
         this.contents = contents;
+        this.answersNum = INITIAL_VALUE;
     }
 
     public void changeQuestionInfo(String title, String contents) {
@@ -45,7 +48,8 @@ public class Question {
         return false;
     }
 
-    public void updateAnswers(List<Answer> answers){
+    public void updateAnswers(List<Answer> answers) {
         this.answers = answers;
+        this.answersNum = answers.size();
     }
 }

@@ -20,7 +20,15 @@ public class AnswerServiceImpl implements AnswerService {
         answerRepository.save(new Answer().builder().question(questionService.findQuestion(questionId)).answer(answer).writer(HttpSessionUtils.getUserFromSession(session)).build());
     }
 
+    public void delete(Long id, HttpSession session) {
+        if (!answerRepository.findById(id).get().getWriter().isSameId(HttpSessionUtils.getUserFromSession(session).getId())) {
+            throw new IllegalStateException("You can't delete other's answer");
+        }
+        answerRepository.delete(answerRepository.findById(id).get());
+    }
+
     public List<Answer> findAnswers(Long questionId) {
         return answerRepository.findByQuestionId(questionId);
     }
+
 }
