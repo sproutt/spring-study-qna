@@ -49,7 +49,7 @@ public class QuestionController {
     @GetMapping("/questions/{id}/form")
     public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
         if (!userService.isSessionedUser(session)) {
-            throw new IllegalStateException("You can't edit other's article");
+                throw new IllegalStateException("You can't edit other's article");
         }
         if (!questionService.checkUserId(id, session)) {
             throw new IllegalStateException("You can't edit other's article");
