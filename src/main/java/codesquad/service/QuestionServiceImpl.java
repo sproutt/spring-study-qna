@@ -21,7 +21,11 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public void create(String title, String contents, HttpSession session) {
-        questionRepository.save(new Question().builder().user(HttpSessionUtils.getUserFromSession(session)).title(title).contents(contents).build());
+        questionRepository.save(new Question()
+                .builder()
+                .user(HttpSessionUtils.getUserFromSession(session))
+                .title(title)
+                .contents(contents).build());
     }
 
     public Question findQuestion(Long id) {
@@ -41,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public void deleteQuestion(Long id) {
-        if (findQuestion(id).getAnswers().isEmpty() || findQuestion(id).checkAnswersUser()) {
+        if (findQuestion(id).isCanDelete()) {
             questionRepository.deleteById(id);
         } else {
             throw new IllegalStateException("You can't delete this article");

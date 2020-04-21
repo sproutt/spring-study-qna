@@ -17,7 +17,12 @@ public class AnswerServiceImpl implements AnswerService {
     QuestionService questionService;
 
     public void create(Long questionId, String answer, HttpSession session) {
-        answerRepository.save(new Answer().builder().question(questionService.findQuestion(questionId)).answer(answer).writer(HttpSessionUtils.getUserFromSession(session)).build());
+        answerRepository.save(new Answer()
+                .builder()
+                .question(questionService.findQuestion(questionId))
+                .answer(answer)
+                .writer(HttpSessionUtils.getUserFromSession(session))
+                .build());
     }
 
     public void delete(Long id, HttpSession session) {

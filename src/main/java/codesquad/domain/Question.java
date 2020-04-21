@@ -52,7 +52,10 @@ public class Question {
         this.answersNum = answers.size();
     }
 
-    public boolean checkAnswersUser() {
+    public boolean isCanDelete() {
+        if (this.answers.isEmpty()) {
+            return true;
+        }
         for (Answer answer : answers) {
             if (!answer.isSameWriter(user.getId())) {
                 return false;

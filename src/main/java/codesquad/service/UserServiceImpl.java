@@ -15,7 +15,13 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 
     public void create(String userId, String password, String name, String email) {
-        userRepository.save(new User().builder().userId(userId).password(password).name(name).email(email).build());
+        userRepository.save(new User()
+                .builder()
+                .userId(userId)
+                .password(password)
+                .name(name)
+                .email(email)
+                .build());
     }
 
     public Iterable<User> findUsers() {
