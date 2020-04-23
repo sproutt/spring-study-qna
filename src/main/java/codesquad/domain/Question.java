@@ -3,6 +3,7 @@ package codesquad.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @Entity
+@ToString
 public class Question {
 
     @Id
@@ -47,11 +49,6 @@ public class Question {
         return false;
     }
 
-    public void updateAnswers(List<Answer> answers) {
-        this.answers = answers;
-        this.answersNum = answers.size();
-    }
-
     public boolean isCanDelete() {
         if (this.answers.isEmpty()) {
             return true;
@@ -62,5 +59,9 @@ public class Question {
             }
         }
         return true;
+    }
+
+    public void updateAnswersNum() {
+        this.answersNum = answers.size();
     }
 }

@@ -18,8 +18,11 @@ import java.util.logging.Logger;
 public class UserController {
     private final static Logger LOGGER = Logger.getGlobal();
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping("")
     public String create(String userId, String password, String name, String email) {

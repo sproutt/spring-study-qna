@@ -3,7 +3,6 @@ package codesquad.service;
 import codesquad.domain.User;
 import codesquad.repository.UserRepository;
 import codesquad.util.HttpSessionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
@@ -11,8 +10,11 @@ import javax.servlet.http.HttpSession;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Autowired
-    UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     public void create(String userId, String password, String name, String email) {
         userRepository.save(new User()
@@ -29,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User findUser(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElseThrow(NullPointerException::new);
     }
 
     public User findUser(String userId) {

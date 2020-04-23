@@ -3,12 +3,14 @@ package codesquad.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@ToString
 public class Answer {
 
     @Id
@@ -34,6 +36,13 @@ public class Answer {
 
     public boolean isSameWriter(Long id) {
         if (this.writer.isSameId(id)) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isSameWriter(User user) {
+        if (this.writer.getId() == user.getId()) {
             return true;
         }
         return false;

@@ -6,15 +6,17 @@ import codesquad.util.HttpSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
-    @Autowired
-    QuestionRepository questionRepository;
 
-    @Autowired
-    AnswerService answerService;
+    private final QuestionRepository questionRepository;
+
+    public QuestionServiceImpl(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     public Iterable<Question> findQuestions() {
         return questionRepository.findAll();
@@ -29,8 +31,8 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     public Question findQuestion(Long id) {
-        Question question = questionRepository.findById(id).get();
-        question.updateAnswers(answerService.findAnswers(id));
+        Question question = questionRepository.findById(id).orElseThrow(NullPointerException::new);
+        question.updateAnswersNum();
         return question;
     }
 

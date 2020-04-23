@@ -3,12 +3,15 @@ package codesquad.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor
 @Entity
+@ToString
 public class User {
 
     @Id
