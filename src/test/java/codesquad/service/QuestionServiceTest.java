@@ -1,13 +1,11 @@
 package codesquad.service;
 
 import codesquad.domain.Question;
-import codesquad.domain.User;
 import codesquad.repository.QuestionRepository;
 import codesquad.util.HttpSessionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockHttpSession;
@@ -19,7 +17,7 @@ import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class QuestionServiceImplTest {
+public class QuestionServiceTest {
 
     private MockHttpSession session;
 
@@ -31,22 +29,18 @@ public class QuestionServiceImplTest {
     private UserService userService;
 
     @Before
-    public void setUptQuestions() {
+    public void setUpQuestions() {
         session = new MockHttpSession();
         session.setAttribute("sessionedUser", userService.findUser(Integer.toUnsignedLong(1)));
-        System.out.println(HttpSessionUtils.getUserFromSession(session).toString());
-        Question question = new Question().builder()
+        questionRepository.save(new Question().builder()
                 .title("tmpTilte")
                 .contents("asdadasdasdasdasdas")
                 .user(HttpSessionUtils.getUserFromSession(session))
-                .build();
-        questionRepository.save(question);
-        System.out.println(question.toString());
+                .build());
     }
 
     @Test
     public void findQuestions() {
-        System.out.println(questionService.findQuestion(Integer.toUnsignedLong(1)).toString());
         assertNotNull(questionService.findQuestion(Integer.toUnsignedLong(1)));
     }
 
