@@ -8,10 +8,10 @@ import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
+@ToString
 @Getter
 @NoArgsConstructor
 @Entity
-@ToString
 public class Question {
 
     @Id
@@ -22,7 +22,7 @@ public class Question {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     private User user;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
     private List<Answer> answers;
 
     private String title;
