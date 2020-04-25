@@ -3,11 +3,11 @@ package codesquad.domain;
 public class User {
 
     private String userId;
-    private int password;
+    private String password;
     private String name;
     private String email;
 
-    public User(String userId, int password, String name, String email) {
+    public User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
@@ -19,11 +19,15 @@ public class User {
         return this.userId.equals(userId);
     }
 
+    public boolean isSamePassword(String password) {
+        return this.password.equals(password);
+    }
+
     public String getUserId() {
         return userId;
     }
 
-    public int getPassword() {
+    public String getPassword() {
         return password;
     }
 
@@ -35,7 +39,7 @@ public class User {
         return email;
     }
 
-    public void update(int password, String name, String email) {
+    public void update(String password, String name, String email) {
         this.password = password;
         this.name = name;
         this.email = email;

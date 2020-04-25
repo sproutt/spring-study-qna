@@ -23,11 +23,9 @@ public class UserRepository {
     }
 
     public User find(String userId) {
-        for (User user : users) {
-            if (user.isSameId(userId)) {
-                return user;
-            }
-        }
-        return null;
+        return users.stream()
+                .filter(user -> user.isSameId(userId))
+                .findFirst()
+                .get();
     }
 }
