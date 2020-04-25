@@ -11,7 +11,6 @@ public class User {
         this.userId = userId;
         this.password = password;
         this.name = name;
-
         this.email = email;
     }
 
