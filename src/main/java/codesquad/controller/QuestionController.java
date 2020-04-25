@@ -19,7 +19,7 @@ public class QuestionController {
 
     @GetMapping("/")
     public String showQuestionList(Model model) {
-        model.addAttribute( "questions",questionRepository.findAll());
+        model.addAttribute("questions", questionRepository.findAll());
         return "/index";
     }
 
@@ -34,9 +34,5 @@ public class QuestionController {
         model.addAttribute("question", questionRepository.find(index));
         return "/qna/show";
     }
-
-
-
-
 }
 
