@@ -20,11 +20,12 @@ public class UserServiceTest {
 
     @Autowired
     private UserRepository userRepository;
-    @Autowired
+
     private UserService userService;
 
     @Before
     public void setUpSession() {
+        userService = new UserServiceImpl(userRepository);
         session = new MockHttpSession();
         session.setAttribute("sessionedUser", userService.findUser(Integer.toUnsignedLong(1)));
     }
@@ -33,7 +34,7 @@ public class UserServiceTest {
     public void create() {
         String userId = "qwe";
         userService.create(userId, "123", "seobseob", "seob@naver.com");
-        assertNotNull(userRepository.findByUserId(userId));
+        assertNotNull(userService.findUser(userId));
     }
 
     @Test

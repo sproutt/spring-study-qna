@@ -2,7 +2,6 @@ package codesquad.service;
 
 import codesquad.domain.Question;
 import codesquad.repository.QuestionRepository;
-import codesquad.util.HttpSessionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,21 +21,18 @@ public class QuestionServiceTest {
     private MockHttpSession session;
 
     @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
-    private QuestionService questionService;
-    @Autowired
     private UserService userService;
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    private QuestionService questionService;
 
     @Before
     public void setUpQuestions() {
+        questionService = new QuestionServiceImpl(questionRepository);
         session = new MockHttpSession();
         session.setAttribute("sessionedUser", userService.findUser(Integer.toUnsignedLong(1)));
-        questionRepository.save(new Question().builder()
-                .title("tmpTilte")
-                .contents("asdadasdasdasdasdas")
-                .user(HttpSessionUtils.getUserFromSession(session))
-                .build());
+        questionService.create("tmpTilte", "asdadasdasdasdasdas", session);
     }
 
     @Test
@@ -46,9 +42,9 @@ public class QuestionServiceTest {
 
     @Test
     public void create() {
-        List<Question> beforeQuestionList = (List<Question>) questionRepository.findAll();
+        List<Question> beforeQuestionList = (List<Question>) questionService.findQuestions();
         questionService.create("titititititi", "conconocnocnocon", session);
-        List<Question> afterQuestionList = (List<Question>) questionRepository.findAll();
+        List<Question> afterQuestionList = (List<Question>) questionService.findQuestions();
         assertEquals(afterQuestionList.size() - beforeQuestionList.size(), 1);
     }
 
@@ -76,9 +72,9 @@ public class QuestionServiceTest {
     @Test
     public void deleteQuestion() {
         questionService.create("titititititi", "conconocnocnocon", session);
-        List<Question> beforeQuestionList = (List<Question>) questionRepository.findAll();
+        List<Question> beforeQuestionList = (List<Question>) questionService.findQuestions();
         questionService.deleteQuestion(Integer.toUnsignedLong(2));
-        List<Question> afterQuestionList = (List<Question>) questionRepository.findAll();
+        List<Question> afterQuestionList = (List<Question>) questionService.findQuestions();
         assertEquals(beforeQuestionList.size() - afterQuestionList.size(), 1);
     }
 }

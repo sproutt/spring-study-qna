@@ -1,10 +1,7 @@
 package codesquad.service;
 
 import codesquad.domain.Answer;
-import codesquad.domain.Question;
 import codesquad.repository.AnswerRepository;
-import codesquad.repository.QuestionRepository;
-import codesquad.util.HttpSessionUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,37 +19,30 @@ import static org.junit.Assert.assertNotNull;
 @SpringBootTest
 public class AnswerServiceTest {
 
-    private MockHttpSession session;
-    private Question question;
-
-    @Autowired
-    private AnswerService answerService;
     @Autowired
     private AnswerRepository answerRepository;
-
     @Autowired
-    private QuestionRepository questionRepository;
-
+    private QuestionService questionService;
     @Autowired
     private UserService userService;
 
+    private MockHttpSession session;
+
+    private AnswerService answerService;
+
     @Before
     public void setUpAnswers() {
+        answerService = new AnswerServiceImpl(answerRepository, questionService);
         session = new MockHttpSession();
         session.setAttribute("sessionedUser", userService.findUser(Integer.toUnsignedLong(1)));
-        question = new Question().builder()
-                .title("tmpTilte")
-                .contents("asdadasdasdasdasdas")
-                .user(HttpSessionUtils.getUserFromSession(session))
-                .build();
-        questionRepository.save(question);
+        questionService.create("tmpTitle", "asdasdasd", session);
     }
 
     @Test
     public void create() {
-        List<Answer> beforeAnswerList = (List<Answer>) answerRepository.findAll();
+        List<Answer> beforeAnswerList = (List<Answer>) answerService.findAnswers(Integer.toUnsignedLong(1));
         answerService.create(Integer.toUnsignedLong(1), "replyreplyrepley", session);
-        List<Answer> afterAnswerList = (List<Answer>) answerRepository.findAll();
+        List<Answer> afterAnswerList = (List<Answer>) answerService.findAnswers(Integer.toUnsignedLong(1));
         assertEquals(afterAnswerList.size() - beforeAnswerList.size(), 1);
     }
 
@@ -65,9 +55,9 @@ public class AnswerServiceTest {
     @Test
     public void delete() {
         answerService.create(Integer.toUnsignedLong(1), "replyreplyrepley", session);
-        List<Answer> beforeAnswerList = (List<Answer>) answerRepository.findAll();
+        List<Answer> beforeAnswerList = (List<Answer>) answerService.findAnswers(Integer.toUnsignedLong(1));
         answerService.delete(Integer.toUnsignedLong(1), session);
-        List<Answer> afterAnswerList = (List<Answer>) answerRepository.findAll();
+        List<Answer> afterAnswerList = (List<Answer>) answerService.findAnswers(Integer.toUnsignedLong(1));
         assertEquals(beforeAnswerList.size() - afterAnswerList.size(), 1);
     }
 }
