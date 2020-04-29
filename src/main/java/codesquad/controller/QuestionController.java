@@ -3,7 +3,6 @@ package codesquad.controller;
 import codesquad.service.QuestionService;
 import codesquad.service.UserService;
 import codesquad.util.HttpSessionUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,10 +14,14 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class QuestionController {
-    @Autowired
-    QuestionService questionService;
-    @Autowired
-    UserService userService;
+
+    private final QuestionService questionService;
+    private final UserService userService;
+
+    public QuestionController(QuestionService questionService, UserService userService) {
+        this.questionService = questionService;
+        this.userService = userService;
+    }
 
     @GetMapping("/")
     public String get(Model model) {
