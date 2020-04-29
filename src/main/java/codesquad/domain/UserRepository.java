@@ -14,7 +14,7 @@ public class UserRepository {
         users = new ArrayList<>();
     }
 
-    public List<User> selectAll() {
+    public List<User> findAll() {
         return users;
     }
 
@@ -22,12 +22,10 @@ public class UserRepository {
         users.add(user);
     }
 
-    public User select(String userId) {
-        for (User user : users) {
-            if (user.isSameId(userId)) {
-                return user;
-            }
-        }
-        return null;
+    public User find(String userId) {
+        return users.stream()
+                .filter(user -> user.isSameId(userId))
+                .findFirst()
+                .get();
     }
 }

@@ -19,10 +19,9 @@ public class MvcConfig extends WebMvcConfigurationSupport {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
 
-        registry.addViewController("/").setViewName("index");
         registry.addViewController("/users/login").setViewName("user/login");
         registry.addViewController("/users/form").setViewName("user/form");
+        registry.addViewController("/qna/form").setViewName("/qna/form");
     }
 
 }
-
