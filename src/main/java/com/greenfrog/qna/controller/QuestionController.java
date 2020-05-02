@@ -1,7 +1,7 @@
-package codesquad.controller;
+package com.greenfrog.qna.controller;
 
-import codesquad.domain.Question;
-import codesquad.domain.QuestionRepository;
+import com.greenfrog.qna.domain.Question;
+import com.greenfrog.qna.domain.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;

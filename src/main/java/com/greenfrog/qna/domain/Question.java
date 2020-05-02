@@ -1,4 +1,4 @@
-package codesquad.domain;
+package com.greenfrog.qna.domain;
 
 import java.time.format.DateTimeFormatter;
 

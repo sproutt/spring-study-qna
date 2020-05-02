@@ -1,5 +1,5 @@
 
-package codesquad.config;
+package com.greenfrog.qna.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;

@@ -1,4 +1,4 @@
-package codesquad.domain;
+package com.greenfrog.qna.domain;
 
 public class User {
 

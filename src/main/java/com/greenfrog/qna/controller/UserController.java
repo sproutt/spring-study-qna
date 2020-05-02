@@ -1,8 +1,7 @@
-package codesquad.controller;
+package com.greenfrog.qna.controller;
 
-import codesquad.domain.User;
-import codesquad.domain.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.greenfrog.qna.domain.User;
+import com.greenfrog.qna.domain.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
