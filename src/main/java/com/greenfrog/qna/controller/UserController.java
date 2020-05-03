@@ -1,56 +1,51 @@
 package com.greenfrog.qna.controller;
 
 import com.greenfrog.qna.domain.User;
-import com.greenfrog.qna.domain.UserRepository;
+import com.greenfrog.qna.dto.UserUpdateDTO;
+import com.greenfrog.qna.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping(value = "/users")
 public class UserController {
 
-    private UserRepository userRepository;
+    private UserService userService;
 
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping("")
     public String showList(Model model) {
-        List<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
+        model.addAttribute("users", userService.findAll());
         return "/user/list";
     }
 
     @PostMapping("")
     public String signUp(User user) {
-        userRepository.save(user);
+        userService.signUp(user);
         return "redirect:/users";
     }
 
-    @GetMapping("/{userId}")
-    public String showProfile(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.findByUserId(userId));
+    @GetMapping("/{id}")
+    public String showProfile(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findById(id));
         return "/user/profile";
     }
 
-    @GetMapping("/{userId}/form")
-    public String showUpdateForm(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.findByUserId(userId));
+    @GetMapping("/{id}/form")
+    public String showUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userService.findById(id));
         return "/user/updateForm";
     }
 
-    @PostMapping("/{userId}/update")
-    public String updateUser(@PathVariable String userId, String currentPassword, String newPassword, String name, String email) {
-        User user = userRepository.findByUserId(userId);
-        if (user.isSamePassword(currentPassword)) {
-            user.update(newPassword, name, email);
-            userRepository.save(user);
+    @PostMapping("/{id}/update")
+    public String updateUser(@PathVariable Long id, UserUpdateDTO userUpdateDTO) {
+        if (userService.update(id, userUpdateDTO)) {
             return "redirect:/users";
         }
-        return "redirect:/users/" + userId + "/form";
+        return "redirect:/users/" + id + "/form";
     }
 }

@@ -1,5 +1,6 @@
 package com.greenfrog.qna.domain;
 
+import com.greenfrog.qna.dto.UserUpdateDTO;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -25,9 +26,9 @@ public class User {
         return this.password.equals(password);
     }
 
-    public void update(String password, String name, String email) {
-        this.password = password;
-        this.name = name;
-        this.email = email;
+    public void update(UserUpdateDTO userUpdateDTO) {
+        this.password = userUpdateDTO.getNewPassword();
+        this.name = userUpdateDTO.getName();
+        this.email = userUpdateDTO.getEmail();
     }
 }

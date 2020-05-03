@@ -1,5 +1,6 @@
-package com.greenfrog.qna.domain;
+package com.greenfrog.qna.repository;
 
+import com.greenfrog.qna.domain.Question;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
