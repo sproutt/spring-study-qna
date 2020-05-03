@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping(value = "/users")
 public class UserController {
@@ -18,33 +20,35 @@ public class UserController {
 
     @GetMapping("")
     public String showList(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+        List<User> users = userRepository.findAll();
+        model.addAttribute("users", users);
         return "/user/list";
     }
 
     @PostMapping("")
     public String signUp(User user) {
-        userRepository.insert(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/{userId}")
     public String showProfile(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.find(userId));
+        model.addAttribute("user", userRepository.findByUserId(userId));
         return "/user/profile";
     }
 
     @GetMapping("/{userId}/form")
     public String showUpdateForm(@PathVariable String userId, Model model) {
-        model.addAttribute("user", userRepository.find(userId));
+        model.addAttribute("user", userRepository.findByUserId(userId));
         return "/user/updateForm";
     }
 
     @PostMapping("/{userId}/update")
     public String updateUser(@PathVariable String userId, String currentPassword, String newPassword, String name, String email) {
-        User user = userRepository.find(userId);
+        User user = userRepository.findByUserId(userId);
         if (user.isSamePassword(currentPassword)) {
             user.update(newPassword, name, email);
+            userRepository.save(user);
             return "redirect:/users";
         }
         return "redirect:/users/" + userId + "/form";
