@@ -1,36 +1,27 @@
 package com.greenfrog.qna.domain;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.time.format.DateTimeFormatter;
 
 import static java.time.LocalDateTime.now;
 
+@Getter
+@Setter
+@Entity
 public class Question {
+
+    @Id
+    @GeneratedValue
+    private Long id;
 
     private String writer;
     private String title;
     private String contents;
     private String createTime;
 
-    public Question(String writer, String title, String contents) {
-        this.writer = writer;
-        this.title = title;
-        this.contents = contents;
-        createTime = now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
-    }
-
-    public String getWriter() {
-        return writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
 }

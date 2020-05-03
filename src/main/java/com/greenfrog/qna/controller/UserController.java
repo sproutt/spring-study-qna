@@ -41,7 +41,8 @@ public class UserController {
         return "/user/updateForm";
     }
 
-    @PostMapping("/{id}/update")
+
+    @PutMapping("/{id}/update")
     public String updateUser(@PathVariable Long id, UserUpdateDTO userUpdateDTO) {
         if (userService.update(id, userUpdateDTO)) {
             return "redirect:/users";
