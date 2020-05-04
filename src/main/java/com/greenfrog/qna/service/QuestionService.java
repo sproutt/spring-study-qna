@@ -36,4 +36,8 @@ public class QuestionService {
         question.update(questionUpdateDTO);
         questionRepository.save(question);
     }
+
+    public void delete(Long id) {
+        questionRepository.deleteById(id);
+    }
 }
