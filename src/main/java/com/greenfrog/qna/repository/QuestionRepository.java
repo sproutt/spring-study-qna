@@ -1,28 +1,8 @@
 package com.greenfrog.qna.repository;
 
 import com.greenfrog.qna.domain.Question;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.ArrayList;
-import java.util.List;
+public interface QuestionRepository extends JpaRepository<Question, Long> {
 
-@Repository
-public class QuestionRepository {
-    private List<Question> questions;
-
-    public QuestionRepository() {
-        questions = new ArrayList<>();
-    }
-
-    public void insert(Question question) {
-        this.questions.add(question);
-    }
-
-    public List<Question> findAll() {
-        return questions;
-    }
-
-    public Question find(int index) {
-        return questions.get(index - 1);
-    }
 }

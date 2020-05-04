@@ -1,14 +1,11 @@
 package com.greenfrog.qna.domain;
 
+import com.greenfrog.qna.dto.QuestionUpdateDTO;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import java.time.format.DateTimeFormatter;
-
-import static java.time.LocalDateTime.now;
+import javax.persistence.*;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -16,12 +13,20 @@ import static java.time.LocalDateTime.now;
 public class Question {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String writer;
     private String title;
     private String contents;
     private String createTime;
 
+    public Question() {
+        createTime = new Date().toString();
+    }
+
+    public void update(QuestionUpdateDTO questionUpdateDTO) {
+        this.writer = questionUpdateDTO.getWriter();
+        this.title = questionUpdateDTO.getTitle();
+        this.contents = questionUpdateDTO.getContents();
+    }
 }
