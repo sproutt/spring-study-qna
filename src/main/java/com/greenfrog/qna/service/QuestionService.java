@@ -26,18 +26,18 @@ public class QuestionService {
         questionRepository.save(question);
     }
 
-    public Question findQuestionById(Long id) {
-        return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public Question findQuestionById(int id) {
+        return questionRepository.findById((long) id).orElseThrow(NoSuchElementException::new);
     }
 
 
-    public void updateQuestion(Long id, QuestionUpdateDTO questionUpdateDTO) {
+    public void updateQuestion(int id, QuestionUpdateDTO questionUpdateDTO) {
         Question question = findQuestionById(id);
         question.update(questionUpdateDTO);
         questionRepository.save(question);
     }
 
-    public void deleteQuestion(Long id) {
-        questionRepository.deleteById(id);
+    public void deleteQuestion(int id) {
+        questionRepository.deleteById((long) id);
     }
 }

@@ -30,25 +30,25 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{id}")
-    public String showQuestion(@PathVariable Long id, Model model) {
+    public String showQuestion(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findQuestionById(id));
         return "/qna/show";
     }
 
     @GetMapping("/questions/{id}/updateForm")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
+    public String showUpdateForm(@PathVariable int id, Model model) {
         model.addAttribute("question", questionService.findQuestionById(id));
         return "/qna/updateForm";
     }
 
     @PutMapping("/questions/{id}")
-    public String updateQuestion(@PathVariable Long id, QuestionUpdateDTO questionUpdateDTO) {
+    public String updateQuestion(@PathVariable int id, QuestionUpdateDTO questionUpdateDTO) {
         questionService.updateQuestion(id, questionUpdateDTO);
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}")
-    public String deleteQuestion(@PathVariable Long id) {
+    public String deleteQuestion(@PathVariable int id) {
         questionService.deleteQuestion(id);
         return "redirect:/";
     }

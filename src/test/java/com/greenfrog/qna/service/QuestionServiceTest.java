@@ -41,7 +41,7 @@ public class QuestionServiceTest {
         given(questionRepository.findById(1l)).willReturn(Optional.of(question));
 
         //when
-        questionService.updateQuestion(1l, questionUpdateDTO);
+        questionService.updateQuestion(1, questionUpdateDTO);
 
         //then
         assertThat(question.getTitle()).isEqualTo("Javascript");
