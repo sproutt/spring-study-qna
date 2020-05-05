@@ -5,16 +5,13 @@ import com.greenfrog.qna.dto.UserUpdateDTO;
 import com.greenfrog.qna.repository.UserRepository;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 
-@RunWith(SpringRunner.class)
 public class UserServiceTest {
 
     UserService userService;
@@ -28,7 +25,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void updateTest() {
+    public void updateUserTest() {
         User user = new User();
         user.setId(1l);
         user.setUserId("imbf");
@@ -46,7 +43,7 @@ public class UserServiceTest {
         given(userRepository.findById(1l)).willReturn(Optional.of(user));
 
         //when
-        boolean ok = userService.update(1l, userUpdateDTO);
+        boolean ok = userService.updateUser(1l, userUpdateDTO);
 
         //then
         assertThat(ok).isTrue();
