@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     public UserController(UserService userService) {
         this.userService = userService;
@@ -44,7 +44,8 @@ public class UserController {
 
     @PutMapping("/{id}/update")
     public String updateUser(@PathVariable Long id, UserUpdateDTO userUpdateDTO) {
-        if (userService.update(id, userUpdateDTO)) {
+        boolean updateResult = userService.updateUser(id, userUpdateDTO);
+        if (updateResult) {
             return "redirect:/users";
         }
         return "redirect:/users/" + id + "/form";
