@@ -30,7 +30,7 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
-    public boolean update(Long id, UserUpdateDTO userUpdateDTO) {
+    public boolean updateUser(Long id, UserUpdateDTO userUpdateDTO) {
         User user = this.findById(id);
         if (user.isSamePassword(userUpdateDTO.getCurrentPassword())) {
             user.update(userUpdateDTO);
