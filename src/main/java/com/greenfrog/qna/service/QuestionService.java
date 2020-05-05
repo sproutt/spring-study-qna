@@ -31,13 +31,13 @@ public class QuestionService {
     }
 
 
-    public void update(Long id, QuestionUpdateDTO questionUpdateDTO) {
+    public void updateQuestion(Long id, QuestionUpdateDTO questionUpdateDTO) {
         Question question = findById(id);
         question.update(questionUpdateDTO);
         questionRepository.save(question);
     }
 
-    public void delete(Long id) {
+    public void deleteQuestion(Long id) {
         questionRepository.deleteById(id);
     }
 }
