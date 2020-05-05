@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class QuestionController {
 
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
     public QuestionController(QuestionService questionService) {
         this.questionService = questionService;
@@ -43,13 +43,13 @@ public class QuestionController {
 
     @PutMapping("/questions/{id}")
     public String updateQuestion(@PathVariable Long id, QuestionUpdateDTO questionUpdateDTO) {
-        questionService.update(id, questionUpdateDTO);
+        questionService.updateQuestion(id, questionUpdateDTO);
         return "redirect:/";
     }
 
     @DeleteMapping("/questions/{id}")
     public String deleteQuestion(@PathVariable Long id) {
-        questionService.delete(id);
+        questionService.deleteQuestion(id);
         return "redirect:/";
     }
 
