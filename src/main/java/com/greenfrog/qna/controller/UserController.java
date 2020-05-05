@@ -30,20 +30,20 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public String showProfile(@PathVariable Long id, Model model) {
+    public String showProfile(@PathVariable int id, Model model) {
         model.addAttribute("user", userService.findUserById(id));
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
-    public String showUpdateForm(@PathVariable Long id, Model model) {
+    public String showUpdateForm(@PathVariable int id, Model model) {
         model.addAttribute("user", userService.findUserById(id));
         return "/user/updateForm";
     }
 
 
     @PutMapping("/{id}/update")
-    public String updateUser(@PathVariable Long id, UserUpdateDTO userUpdateDTO) {
+    public String updateUser(@PathVariable int id, UserUpdateDTO userUpdateDTO) {
         boolean updateResult = userService.updateUser(id, userUpdateDTO);
         if (updateResult) {
             return "redirect:/users";

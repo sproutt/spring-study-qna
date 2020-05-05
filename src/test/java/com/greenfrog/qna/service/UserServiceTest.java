@@ -43,7 +43,7 @@ public class UserServiceTest {
         given(userRepository.findById(1l)).willReturn(Optional.of(user));
 
         //when
-        boolean ok = userService.updateUser(1l, userUpdateDTO);
+        boolean ok = userService.updateUser( 1, userUpdateDTO);
 
         //then
         assertThat(ok).isTrue();

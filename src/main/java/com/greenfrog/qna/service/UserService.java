@@ -26,11 +26,11 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public User findUserById(int id) {
+        return userRepository.findById((long) id).orElseThrow(NoSuchElementException::new);
     }
 
-    public boolean updateUser(Long id, UserUpdateDTO userUpdateDTO) {
+    public boolean updateUser(int id, UserUpdateDTO userUpdateDTO) {
         User user = this.findUserById(id);
         if (user.isSamePassword(userUpdateDTO.getCurrentPassword())) {
             user.update(userUpdateDTO);
