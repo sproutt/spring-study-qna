@@ -22,17 +22,17 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public void register(Question question) {
+    public void registerQuestion(Question question) {
         questionRepository.save(question);
     }
 
-    public Question findById(Long id) {
+    public Question findQuestionById(Long id) {
         return questionRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
 
     public void updateQuestion(Long id, QuestionUpdateDTO questionUpdateDTO) {
-        Question question = findById(id);
+        Question question = findQuestionById(id);
         question.update(questionUpdateDTO);
         questionRepository.save(question);
     }

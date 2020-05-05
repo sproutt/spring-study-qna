@@ -25,19 +25,19 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String registerQuestion(Question question) {
-        questionService.register(question);
+        questionService.registerQuestion(question);
         return "redirect:/";
     }
 
     @GetMapping("/questions/{id}")
     public String showQuestion(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
+        model.addAttribute("question", questionService.findQuestionById(id));
         return "/qna/show";
     }
 
     @GetMapping("/questions/{id}/updateForm")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("question", questionService.findById(id));
+        model.addAttribute("question", questionService.findQuestionById(id));
         return "/qna/updateForm";
     }
 
