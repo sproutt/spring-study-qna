@@ -26,12 +26,12 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User findById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(NoSuchElementException::new);
     }
 
     public boolean updateUser(Long id, UserUpdateDTO userUpdateDTO) {
-        User user = this.findById(id);
+        User user = this.findUserById(id);
         if (user.isSamePassword(userUpdateDTO.getCurrentPassword())) {
             user.update(userUpdateDTO);
             userRepository.save(user);

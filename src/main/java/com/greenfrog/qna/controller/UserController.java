@@ -31,13 +31,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public String showProfile(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userService.findUserById(id));
         return "/user/profile";
     }
 
     @GetMapping("/{id}/form")
     public String showUpdateForm(@PathVariable Long id, Model model) {
-        model.addAttribute("user", userService.findById(id));
+        model.addAttribute("user", userService.findUserById(id));
         return "/user/updateForm";
     }
 
