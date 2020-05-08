@@ -2,7 +2,6 @@ package com.greenfrog.qna.controller;
 
 import com.greenfrog.qna.domain.Question;
 import com.greenfrog.qna.dto.QuestionUpdateDTO;
-import com.greenfrog.qna.repository.QuestionRepository;
 import com.greenfrog.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +23,7 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String registerQuestion(Question question) {
+    public String registerQuestion(@RequestBody Question question) {
         questionService.registerQuestion(question);
         return "redirect:/";
     }
