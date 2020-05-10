@@ -1,7 +1,7 @@
 package com.greenfrog.qna.controller;
 
 import com.greenfrog.qna.domain.Question;
-import com.greenfrog.qna.dto.QuestionUpdateDTO;
+import com.greenfrog.qna.dto.QuestionDTO;
 import com.greenfrog.qna.service.QuestionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,8 +23,8 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String registerQuestion(@RequestBody Question question) {
-        questionService.registerQuestion(question);
+    public String registerQuestion(QuestionDTO questionDTO) {
+        questionService.registerQuestion(questionDTO);
         return "redirect:/";
     }
 
@@ -41,7 +41,7 @@ public class QuestionController {
     }
 
     @PutMapping("/questions/{id}")
-    public String updateQuestion(@PathVariable int id, QuestionUpdateDTO questionUpdateDTO) {
+    public String updateQuestion(@PathVariable int id, QuestionDTO questionUpdateDTO) {
         questionService.updateQuestion(id, questionUpdateDTO);
         return "redirect:/";
     }

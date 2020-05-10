@@ -1,7 +1,7 @@
 package com.greenfrog.qna.service;
 
 import com.greenfrog.qna.domain.Question;
-import com.greenfrog.qna.dto.QuestionUpdateDTO;
+import com.greenfrog.qna.dto.QuestionDTO;
 import com.greenfrog.qna.repository.QuestionRepository;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +22,8 @@ public class QuestionService {
         return questionRepository.findAll();
     }
 
-    public void registerQuestion(Question question) {
-        questionRepository.save(question);
+    public void registerQuestion(QuestionDTO questionDTO) {
+        questionRepository.save(new Question(questionDTO));
     }
 
     public Question findQuestionById(int id) {
@@ -31,9 +31,9 @@ public class QuestionService {
     }
 
 
-    public void updateQuestion(int id, QuestionUpdateDTO questionUpdateDTO) {
+    public void updateQuestion(int id, QuestionDTO questionDTO) {
         Question question = findQuestionById(id);
-        question.update(questionUpdateDTO);
+        question.update(questionDTO);
         questionRepository.save(question);
     }
 
