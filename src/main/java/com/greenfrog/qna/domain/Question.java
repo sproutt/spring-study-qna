@@ -4,7 +4,7 @@ import com.greenfrog.qna.dto.QuestionDTO;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Getter
 @Entity
@@ -32,7 +32,7 @@ public class Question {
         this.writer = questionDTO.getWriter();
         this.title = questionDTO.getTitle();
         this.contents = questionDTO.getContents();
-        createTime = new Date().toString();
+        createTime = LocalDateTime.now().toString();
     }
 
     public void update(QuestionDTO questionDTO) {
