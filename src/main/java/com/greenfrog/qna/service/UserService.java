@@ -1,6 +1,7 @@
 package com.greenfrog.qna.service;
 
 import com.greenfrog.qna.domain.User;
+import com.greenfrog.qna.dto.UserDTO;
 import com.greenfrog.qna.dto.UserUpdateDTO;
 import com.greenfrog.qna.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class UserService {
     }
 
 
-    public void signUp(User user) {
-        userRepository.save(user);
+    public void signUp(UserDTO userDTO) {
+        userRepository.save(new User(userDTO));
     }
 
     public User findUserById(int id) {
@@ -32,7 +33,8 @@ public class UserService {
 
     public boolean updateUser(int id, UserUpdateDTO userUpdateDTO) {
         User user = this.findUserById(id);
-        if (user.isSamePassword(userUpdateDTO.getCurrentPassword())) {
+        boolean result = user.isSamePassword(userUpdateDTO.getCurrentPassword());
+        if (result) {
             user.update(userUpdateDTO);
             userRepository.save(user);
             return true;

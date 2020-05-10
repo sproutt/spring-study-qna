@@ -1,6 +1,7 @@
 package com.greenfrog.qna.controller;
 
 import com.greenfrog.qna.domain.User;
+import com.greenfrog.qna.dto.UserDTO;
 import com.greenfrog.qna.dto.UserUpdateDTO;
 import com.greenfrog.qna.service.UserService;
 import org.springframework.stereotype.Controller;
@@ -24,8 +25,8 @@ public class UserController {
     }
 
     @PostMapping("")
-    public String signUp(User user) {
-        userService.signUp(user);
+    public String signUp(UserDTO userDTO) {
+        userService.signUp(userDTO);
         return "redirect:/users";
     }
 
