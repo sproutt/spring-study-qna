@@ -1,11 +1,11 @@
-package codesquad;
+package com.greenfrog.qna;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class QnaApplication {
+public class Application {
     public static void main(String[] args) {
-        SpringApplication.run(QnaApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

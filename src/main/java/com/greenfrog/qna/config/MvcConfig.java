@@ -1,17 +1,19 @@
 
-package codesquad.config;
+package com.greenfrog.qna.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class MvcConfig extends WebMvcConfigurationSupport {
+public class MvcConfig implements WebMvcConfigurer {
 
     @Override
-    protected void addResourceHandlers(ResourceHandlerRegistry registry) {
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
     }
 
@@ -22,6 +24,12 @@ public class MvcConfig extends WebMvcConfigurationSupport {
         registry.addViewController("/users/login").setViewName("user/login");
         registry.addViewController("/users/form").setViewName("user/form");
         registry.addViewController("/qna/form").setViewName("/qna/form");
+    }
+
+    @Bean
+    public HiddenHttpMethodFilter httpMethodFilter() {
+        HiddenHttpMethodFilter hiddenHttpMethodFilter = new HiddenHttpMethodFilter();
+        return hiddenHttpMethodFilter;
     }
 
 }
