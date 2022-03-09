@@ -4,6 +4,8 @@ import codesquad.domain.User;
 import codesquad.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
+
 
 @Controller
 public class UserController {
@@ -22,6 +24,12 @@ public class UserController {
 
     @GetMapping("/users")
     public String showAll() {
-        return "user/list.html";
+        List<User> users = userService.findAll();
+        return "/user/list";
+    }
+
+    @GetMapping("/user/create")
+    public String createForm() {
+        return "/user/form";
     }
 }
