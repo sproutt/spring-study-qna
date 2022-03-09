@@ -3,6 +3,7 @@ package codesquad.service;
 import codesquad.domain.User;
 import codesquad.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -25,5 +26,9 @@ public class UserService {
         userRepository.findByEmail(user.getEmail())
                 .ifPresent(m -> { throw new IllegalArgumentException("이미 사용중인 이메일 주소 입니다.");
                 });
+    }
+
+    public List<User> findAll() {
+        return userRepository.findAll();
     }
 }
