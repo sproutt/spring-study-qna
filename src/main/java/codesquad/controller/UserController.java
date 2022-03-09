@@ -3,7 +3,9 @@ package codesquad.controller;
 import codesquad.domain.User;
 import codesquad.service.UserService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -16,6 +18,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/user/create")
+    public String createForm() {
+        return "user/form";
+    }
+
     @PostMapping("/user/create")
     public String create(@ModelAttribute User user) {
         userService.join(user);
@@ -23,13 +30,17 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String showAll() {
+    public String showAllUsers(Model model) throws IOException {
         List<User> users = userService.findAll();
-        return "/user/list";
+        model.addAttribute("users", users);
+        return "user/list";
     }
 
-    @GetMapping("/user/create")
-    public String createForm() {
-        return "/user/form";
+    @GetMapping("/users/{userId}")
+    public String showUserInfo(@PathVariable String userId, Model model) {
+        User user = userService.findByUserId(userId);
+        model.addAttribute("userId", user.getUserId());
+        model.addAttribute("email", user.getEmail());
+        return "user/profile";
     }
 }
