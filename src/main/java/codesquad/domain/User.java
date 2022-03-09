@@ -1,6 +1,5 @@
 package codesquad.domain;
 
-import lombok.Builder;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
