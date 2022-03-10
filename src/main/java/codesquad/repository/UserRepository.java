@@ -25,4 +25,8 @@ public class UserRepository {
                 "select u from User u", User.class)
                 .getResultList();
     }
+
+    public User findById(Long id) {
+        return em.find(User.class, id);
+    }
 }

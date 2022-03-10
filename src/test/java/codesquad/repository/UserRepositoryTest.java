@@ -61,4 +61,25 @@ class UserRepositoryTest {
         //then
         assertThat(users.size()).isEqualTo(2);
     }
+
+    @Test
+    @DisplayName("회원 아이디로 단건 회원 정보를 조회하기")
+    void findOne() throws Exception{
+        //given
+        User user = new User();
+        user.setName("a");
+        user.setEmail("a@naver.com");
+        user.setUserId("a");
+        user.setPassword("a");
+        userRepository.save(user);
+
+        //when
+        User savedUser = userRepository.findById(user.getId());
+
+        //then
+        assertThat(savedUser.getId()).isEqualTo(user.getId());
+        assertThat(savedUser.getName()).isEqualTo(user.getName());
+        assertThat(savedUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(savedUser.getPassword()).isEqualTo(user.getPassword());
+    }
 }
