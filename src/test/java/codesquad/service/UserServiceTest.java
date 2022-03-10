@@ -61,4 +61,22 @@ class UserServiceTest {
         assertThat(users.size()).isEqualTo(2);
     }
 
+    @Test
+    @DisplayName("id를 통해 단건 회원 정보 조회")
+    void findUserById() throws Exception{
+        //given
+        User user = new User();
+        user.setName("a");
+        user.setEmail("a@naver.com");
+        user.setUserId("a");
+        user.setPassword("a");
+        userService.join(user);
+
+        //when
+        User foundUser = userService.findOne(user.getId());
+
+        //then
+        assertThat(foundUser.getId()).isEqualTo(user.getId());
+    }
+
 }
