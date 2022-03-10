@@ -36,8 +36,16 @@ public class UserController {
     //회원가입
     @PostMapping("/user/create")
     public String join(@ModelAttribute User user) {
-        System.out.println("UserController.join");
         userService.join(user);
         return "redirect:/users";
+    }
+
+    //회원 정보
+    @GetMapping("/users/{userId}")
+    public String userInfo(Model model, @PathVariable("userId") Long userId) {
+        User foundUser = userService.findOne(userId);
+        model.addAttribute("user", foundUser);
+
+        return "/user/profile";
     }
 }
