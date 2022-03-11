@@ -26,11 +26,12 @@ class UserServiceTest {
 
     @BeforeEach
     void 사용자_한명_생성() {
-        user = new User();
-        user.setUserId("saint6839");
-        user.setPassword("1234");
-        user.setName("채상엽");
-        user.setEmail("saint6839@gmail.com");
+        user = User.craeteUser("saint6839", "1234", "채상엽", "saint6839@gmail.com");
+    }
+
+    @Test
+    void 테스트() {
+        System.out.println(user.getPassword());
     }
 
     @Test
@@ -48,11 +49,7 @@ class UserServiceTest {
     @DisplayName("여러명의 사용자가 가입하고 목록을 조회했을때 List의 크기가 일치하는지 테스트")
     void 사용자_목록_조회() {
         // given
-        User user2 = new User();
-        user2.setUserId("hongildong");
-        user2.setPassword("4321");
-        user2.setName("홍길동");
-        user2.setEmail("hongildong@gmail.com");
+        User user2 = User.craeteUser("holgildong", "4321", "홍길동", "hongildong@gmail.com");
 
         // when
         userService.join(user);
@@ -66,11 +63,7 @@ class UserServiceTest {
     @DisplayName("동일한 사용자 아이디로 회원가입 했을때 예외 검증")
     void 중복_UserId_사용자_검증() {
         // given
-        User user2 = new User();
-        user2.setUserId("saint6839");
-        user2.setPassword("4321");
-        user2.setName("홍길동");
-        user2.setEmail("hongildong@gmail.com");
+        User user2 = User.craeteUser("saint6839", "4321", "홍길동", "hongildong@gmail.com");
 
         // when
         userService.join(user);
@@ -85,11 +78,7 @@ class UserServiceTest {
     @DisplayName("동일한 이메일로 회원가입 했을때 예외 검증")
     void 중복_Email_사용자_검증() {
         // given
-        User user2 = new User();
-        user2.setUserId("gildong");
-        user2.setPassword("4321");
-        user2.setName("홍길동");
-        user2.setEmail("saint6839@gmail.com");
+        User user2 = User.craeteUser("gildong", "4321", "홍길동", "saint6839@gmail.com");
 
         // when
         userService.join(user);
