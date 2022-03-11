@@ -26,13 +26,6 @@ public class UserController {
         return "/user/list";
     }
 
-    //회원가입 폼
-    @GetMapping("/user")
-    public String createForm(Model model) {
-        model.addAttribute("question", new User());
-        return "/user/form";
-    }
-
     //회원가입
     @PostMapping("/user/create")
     public String join(@ModelAttribute User user) {
