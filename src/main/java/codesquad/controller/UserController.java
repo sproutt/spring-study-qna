@@ -18,10 +18,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user/create")
-    public String createForm() {
-        return "user/form";
-    }
 
     @PostMapping("/user/create")
     public String create(@ModelAttribute User user) {
