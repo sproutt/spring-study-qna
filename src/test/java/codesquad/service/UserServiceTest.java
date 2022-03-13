@@ -30,11 +30,6 @@ class UserServiceTest {
     }
 
     @Test
-    void 테스트() {
-        System.out.println(user.getPassword());
-    }
-
-    @Test
     @DisplayName("회원가입을한 아이디로 사용자를 조회했을때 가입한 사용자와 일치하는지 테스트")
     void 사용자_회원가입() {
         // given
