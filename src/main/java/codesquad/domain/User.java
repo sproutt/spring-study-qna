@@ -16,10 +16,14 @@ public class User {
     private String name;
     private String email;
 
-    protected User() {
+    private User(String userId, String password, String name, String email) {
+        this.userId = userId;
+        this.password = password;
+        this.name = name;
+        this.email = email;
     }
 
-    private User(String userId, String password, String name, String email) {
+    protected User() {
     }
 
     public static User craeteUser(String userId, String password, String name, String email) {
