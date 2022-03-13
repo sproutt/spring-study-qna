@@ -2,43 +2,40 @@ package codesquad.controller;
 
 
 import codesquad.domain.User;
-import codesquad.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.ArrayList;
 
 @Controller
 public class UserController {
 
-    private final UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final ArrayList<User> registry = new ArrayList<>();
 
     //유저 목록
     @GetMapping("/users")
     public String list(Model model) {
-        List<User> users = userService.findUsers();
-        model.addAttribute("users", users);
-        return "/user/list";
+        model.addAttribute("users", registry);
+        return "user/list";
     }
 
     //회원가입
-    @PostMapping("/user/create")
-    public String join(@ModelAttribute User user) {
-        userService.join(user);
+    @PostMapping("/users")
+    public String join(User user) {
+        registry.add(user);
         return "redirect:/users";
     }
 
     //회원 정보
     @GetMapping("/users/{userId}")
-    public String userInfo(Model model, @PathVariable("userId") Long userId) {
-        User foundUser = userService.findOne(userId);
-        model.addAttribute("user", foundUser);
-
-        return "/user/profile";
+    public String userInfo(Model model, @PathVariable("userId") String userId) {
+        for (User user : registry) {
+            if(user.getUserId().equals(userId)) {
+                model.addAttribute(user);
+                break;
+            }
+        }
+        return "user/profile";
     }
 }
