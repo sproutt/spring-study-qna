@@ -23,7 +23,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                {{#each users}}
+                {{#users}}
                 <tr>
                     <th scope="row">{{id}}</th>
                     <td>{{userId}}</td>
@@ -31,7 +31,7 @@
                     <td>{{email}}</td>
                     <td><a class="btn btn-success" href="/users/{{userId}}" role="button">수정</a></td>
                 </tr>
-                {{/each}}
+                {{/users}}
                 <tr>
                     <th scope="row">1</th>
                     <td>javajigi</td>
