@@ -1,6 +1,6 @@
 buildscript {
     ext {
-정        springBootVersion = '2.3.0.RELEASE'
+        springBootVersion = '2.0.3.RELEASE'
     }
     repositories {
         mavenCentral()
@@ -28,7 +28,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web')
     compile('org.springframework.boot:spring-boot-devtools') // DevTools dependency
     compile('org.hibernate:hibernate-java8')
-    implementation 'org.springframework.boot:spring-boot-starter-mustache' // mustache dependency
+    compile('org.springframework.boot:spring-boot-starter-mustache') // mustache dependency
     runtime('com.h2database:h2')
     runtime('net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
