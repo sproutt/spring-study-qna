@@ -23,6 +23,6 @@ public class UserController {
     @GetMapping("/users")
     public String list(Model model) {
         model.addAttribute("users", users);
-        return "users/list";
+        return "user/list";
     }
 }
