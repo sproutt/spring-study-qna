@@ -18,9 +18,11 @@ import java.util.Optional;
 public class UserController {
 
     private List<User> users = new ArrayList<>();
+    private Long id = 1L;
 
     @PostMapping("/users")
     public String create(@ModelAttribute User user) {
+        user.createId(id++);
         users.add(user);
         return "redirect:/users";
     }
