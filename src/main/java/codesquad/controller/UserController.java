@@ -35,8 +35,10 @@ public class UserController {
 
     @GetMapping("/users/{userId}")
     public String showUserInfo(@PathVariable String userId, Model model) {
-        Optional<User> userOptional = users.stream().filter(user -> user.getUserId().equals(userId)).findAny();
-        User user = userOptional.orElseThrow(NoSuchUserException::new);
+        User user = users.stream()
+                .filter(u -> u.getUserId().equals(userId))
+                .findAny()
+                .orElseThrow(NoSuchUserException::new);
 
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("email", user.getEmail());
