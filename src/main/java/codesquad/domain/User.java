@@ -1,33 +1,22 @@
 package codesquad.domain;
 
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
-@Entity
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public User(String userId, String password, String name, String email) {
+    public User(Long id, String userId, String password, String name, String email) {
+        this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    protected User() {
-    }
-
-    public static User craeteUser(String userId, String password, String name, String email) {
-        return new User(userId, password, name, email);
+    public void createId(Long id) {
+        this.id = id;
     }
 
     public Long getId() {
