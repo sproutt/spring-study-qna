@@ -33,13 +33,17 @@ public class UserController {
     }
 
     @GetMapping("/users/{userId}")
-    public String showUserInfo(@PathVariable String userId, Model model) {
+    public String showUserProfile(@PathVariable String userId, Model model) {
         User user = users.stream()
-                .filter(u -> u.getUserId().equals(userId))
+                .filter(u -> u.isUserIdEqual(userId))
                 .findAny()
                 .orElseThrow(NoSuchUserException::new);
-        model.addAttribute("userId", user.getUserId());
-        model.addAttribute("email", user.getEmail());
+        model.addAttribute("user", user);
         return "user/profile";
+    }
+
+    @GetMapping("/users/{id}/form")
+    public String editIndividualInfo(@PathVariable Long id) {
+        return "user/updateForm";
     }
 }
