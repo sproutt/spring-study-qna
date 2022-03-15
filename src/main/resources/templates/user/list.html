@@ -27,10 +27,10 @@
                 {{#users}}
                 <tr>
                     <th scope="row">{{id}}</th>
-                    <td>{{userId}}</td>
+                    <td><a href="/users/{{userId}}"> {{userId}}</a></td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a class="btn btn-success" href="/users/{{userId}}" role="button">수정</a></td>
+                    <td><a class="btn btn-success" href="/users/{{id}}/form" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 <tr>
