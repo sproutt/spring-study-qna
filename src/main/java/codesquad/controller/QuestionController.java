@@ -47,11 +47,9 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public String showQuestionInfo(@PathVariable int index, Model model) {
         Question question = questions.stream()
-                .filter(ques -> ques.getId() == index)
+                .filter(ques -> ques.isIndexEqual(index))
                 .findAny()
                 .orElseThrow(NoSuchElementException::new);
-        System.out.println("글 내용 :" + question.getContents());
-
         model.addAttribute("question", question);
         return "qna/show";
     }
