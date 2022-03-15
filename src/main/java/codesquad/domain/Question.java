@@ -42,4 +42,8 @@ public class Question {
     public String getTime() {
         return time;
     }
+
+    public boolean isIndexEqual(int index) {
+        return this.id == index;
+    }
 }
