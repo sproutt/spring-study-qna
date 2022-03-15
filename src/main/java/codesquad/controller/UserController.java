@@ -11,13 +11,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Controller
 public class UserController {
 
-    private List<User> users = new ArrayList<>();
+    private final List<User> users = new ArrayList<>();
     private Long id = 1L;
 
     @PostMapping("/users")
@@ -39,7 +38,6 @@ public class UserController {
                 .filter(u -> u.getUserId().equals(userId))
                 .findAny()
                 .orElseThrow(NoSuchUserException::new);
-
         model.addAttribute("userId", user.getUserId());
         model.addAttribute("email", user.getEmail());
         return "user/profile";
