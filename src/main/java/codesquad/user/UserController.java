@@ -38,4 +38,16 @@ public class UserController {
         }
         return "user/profile";
     }
+
+    @GetMapping("/users/{id}/form")
+    public String updateForm(Model model, @PathVariable("id") String id) {
+        for (User user : registry) {
+            if(user.getUserId().equals(id)) {
+                model.addAttribute(user);
+                break;
+            }
+        }
+
+        return "/user/updateForm";
+    }
 }
