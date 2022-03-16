@@ -19,6 +19,32 @@ public class User {
         this.id = id;
     }
 
+    public void editUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void editPassword(String password) {
+        this.password = password;
+    }
+
+    public void editName(String name) {
+        this.name = name;
+    }
+
+    public void editEmail(String email) {
+        this.email = email;
+    }
+
+    public boolean isIdEqual(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean isUserEqual(User user) {
+        return this.equals(user);
+    }
+
+
+
     public Long getId() {
         return id;
     }
@@ -42,4 +68,7 @@ public class User {
     public boolean isUserIdEqual(String userId) {
         return this.userId.equals(userId);
     }
+
+
+
 }
