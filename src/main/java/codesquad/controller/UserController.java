@@ -27,13 +27,13 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String showAllUsers(Model model) {
+    public String showUserListForm(Model model) {
         model.addAttribute("users", users);
         return "user/list";
     }
 
     @GetMapping("/users/{userId}")
-    public String showUserProfile(@PathVariable String userId, Model model) {
+    public String showUserProfileForm(@PathVariable String userId, Model model) {
         User user = users.stream()
                 .filter(u -> u.isUserIdEqual(userId))
                 .findAny()
@@ -43,7 +43,22 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/form")
-    public String editIndividualInfo(@PathVariable Long id) {
+    public String showEditIndividualInfoForm(@PathVariable Long id) {
         return "user/updateForm";
+    }
+
+    @PostMapping("/users/{id}/update")
+    public String editIndividualInfo(@PathVariable Long id, User user, Model model) {
+        User editedUser= users.stream()
+                .filter(u -> u.isIdEqual(id))
+                .findAny()
+                .orElseThrow(NoSuchUserException::new);
+
+        editedUser.editUserId(user.getUserId());
+        editedUser.editPassword(user.getPassword());
+        editedUser.editName(user.getName());
+        editedUser.editEmail(user.getEmail());
+
+        return "redirect:/users";
     }
 }
