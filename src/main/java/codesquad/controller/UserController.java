@@ -54,11 +54,7 @@ public class UserController {
                 .findAny()
                 .orElseThrow(NoSuchUserException::new);
 
-        editedUser.editUserId(user.getUserId());
-        editedUser.editPassword(user.getPassword());
-        editedUser.editName(user.getName());
-        editedUser.editEmail(user.getEmail());
-
+        editedUser.editInfo(user);
         return "redirect:/users";
     }
 }
