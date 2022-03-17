@@ -27,7 +27,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String qnaList(Model model, @PathVariable int index) {
+    public String qnaList(Model model, @PathVariable("index") int index) {
         Question question = registry.get(index - 1);
         model.addAttribute("qna", question);
 
