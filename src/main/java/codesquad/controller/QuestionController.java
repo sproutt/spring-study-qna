@@ -1,6 +1,7 @@
 package codesquad.controller;
 
 import codesquad.domain.Question;
+import codesquad.exception.NoSuchQuestionException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,7 @@ public class QuestionController {
         Question question = questions.stream()
                 .filter(ques -> ques.isIndexEqual(index))
                 .findAny()
-                .orElseThrow(NoSuchElementException::new);
+                .orElseThrow(NoSuchQuestionException::new);
         model.addAttribute("question", question);
         return "qna/show";
     }
