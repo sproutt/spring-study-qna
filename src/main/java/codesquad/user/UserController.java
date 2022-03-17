@@ -1,17 +1,16 @@
 package codesquad.user;
 
-
-import codesquad.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 public class UserController {
 
-    private final ArrayList<User> registry = new ArrayList<>();
+    private final List<User> registry = new ArrayList<>();
 
     //유저 목록
     @GetMapping("/users")
@@ -30,24 +29,30 @@ public class UserController {
     //회원 정보
     @GetMapping("/users/{userId}")
     public String userInfo(Model model, @PathVariable("userId") String userId) {
-        for (User user : registry) {
-            if(user.getUserId().equals(userId)) {
-                model.addAttribute(user);
-                break;
-            }
-        }
+        model.addAttribute(findUserById(userId));
         return "user/profile";
     }
 
     @GetMapping("/users/{id}/form")
     public String updateForm(Model model, @PathVariable("id") String id) {
-        for (User user : registry) {
-            if(user.getUserId().equals(id)) {
-                model.addAttribute(user);
-                break;
-            }
-        }
-
+        model.addAttribute(findUserById(id));
         return "/user/updateForm";
+    }
+
+    @PostMapping("/users/{id}/update")
+    public String update(User user, @PathVariable("id") String id) {
+        User foundUser = findUserById(id);
+
+        if (foundUser.validatePassword(user)) {
+            foundUser.update(user);
+        }
+        return "redirect:/users";
+    }
+
+    private User findUserById(String id) {
+        return registry.stream()
+                .filter(user -> user.getUserId().equals(id))
+                .findFirst()
+                .get();
     }
 }
