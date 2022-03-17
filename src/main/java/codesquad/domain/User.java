@@ -30,6 +30,10 @@ public class User {
         return this.id.equals(id);
     }
 
+    public boolean isUserIdEqual(String userId) {
+        return this.userId.equals(userId);
+    }
+
     public Long getId() {
         return id;
     }
@@ -49,11 +53,4 @@ public class User {
     public String getEmail() {
         return email;
     }
-
-    public boolean isUserIdEqual(String userId) {
-        return this.userId.equals(userId);
-    }
-
-
-
 }
