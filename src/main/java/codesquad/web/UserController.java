@@ -31,10 +31,35 @@ public class UserController {
     public String profile(@PathVariable String userId, Model model) {
         for (User user : users) {
             if(user.getUserId().equals(userId)) {
-                model.addAttribute(user);
+                model.addAttribute("user", user);
                 break;
             }
         }
         return "user/profile";
+    }
+
+    @GetMapping("/users/{userId}/form")
+    public String userInfoUpdateForm(@PathVariable String userId, Model model) {
+        for (User user : users) {
+            if(user.getUserId().equals(userId)) {
+                model.addAttribute("user", user);
+                break;
+            }
+        }
+        return "user/updateForm";
+    }
+
+    @PostMapping("/users/{userId}/update")
+    public String update(@PathVariable String userId, Model model, User updatedUser) {
+        User savedUser = users.stream()
+                .filter(user -> user.getUserId().equals(userId))
+                .findFirst()
+                .get();
+
+        if(savedUser.validatePassword(updatedUser)) {
+            savedUser.update(updatedUser);
+        }
+
+        return "redirect:/users";
     }
 }
