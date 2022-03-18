@@ -1,9 +1,18 @@
 package codesquad.domain;
 
 public class Question {
+    private static Long index;
     private String writer;
     private String title;
     private String contents;
+
+    public Long getIndex() {
+        return index;
+    }
+
+    public void setIndex(Long index) {
+        this.index = index;
+    }
 
     public String getWriter() {
         return writer;
