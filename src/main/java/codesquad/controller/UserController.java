@@ -20,6 +20,11 @@ public class UserController {
 	private List<User> users = new ArrayList<>();
 	private Long sequence = 0L;
 
+	@GetMapping("/user")
+	public String getForm(){
+		return "user/form";
+	}
+
 	@PostMapping("/users")
 	public String join(User user){
 		user.setId(++sequence);
@@ -42,5 +47,4 @@ public class UserController {
 		}
 		return "profile";
 	}
-
 }
