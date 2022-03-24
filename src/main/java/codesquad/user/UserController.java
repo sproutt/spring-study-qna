@@ -1,58 +1,60 @@
 package codesquad.user;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
     private final List<User> registry = new ArrayList<>();
 
-    //유저 목록
-    @GetMapping("/users")
-    public String list(Model model) {
-        model.addAttribute("users", registry);
-        return "user/list";
-    }
+    @Autowired
+    private UserRepository userRepository;
 
-    //회원가입
-    @PostMapping("/users")
-    public String join(User user) {
-        registry.add(user);
+    @PostMapping("")
+    public String create(User user) {
+        System.out.println("user = " + user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
-    //회원 정보
-    @GetMapping("/users/{userId}")
-    public String userInfo(Model model, @PathVariable("userId") String userId) {
-        model.addAttribute(findUserById(userId));
-        return "user/profile";
+    @GetMapping("")
+    public String list(Model model) {
+        model.addAttribute("users", userRepository.findAll());
+        return "/user/list";
     }
 
-    @GetMapping("/users/{id}/form")
-    public String updateForm(Model model, @PathVariable("id") String id) {
-        model.addAttribute(findUserById(id));
+    @GetMapping("{id}")
+    public ModelAndView show(@PathVariable long id) {
+        ModelAndView mav = new ModelAndView("user/profile");
+        mav.addObject("user", userRepository.findById(id).get());
+        return mav;
+    }
+
+    @GetMapping("{id}/form")
+    public String updateForm(Model model, @PathVariable("id") Long id) {
+        model.addAttribute("user", userRepository.findById(id).get());
         return "/user/updateForm";
     }
 
-    @PostMapping("/users/{id}/update")
-    public String update(User user, @PathVariable("id") String id) {
-        User foundUser = findUserById(id);
+    @PostMapping("{id}/update")
+    public String update(User user, @PathVariable("id") Long id) {
+        User foundUser = userRepository.findById(id).get();
 
         if (foundUser.validatePassword(user)) {
             foundUser.update(user);
         }
+        userRepository.save(foundUser);
         return "redirect:/users";
-    }
-
-    private User findUserById(String id) {
-        return registry.stream()
-                .filter(user -> user.getUserId().equals(id))
-                .findFirst()
-                .get();
     }
 }
