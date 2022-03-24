@@ -20,6 +20,11 @@ public class UserController {
 	private List<User> users = new ArrayList<>();
 	private Long sequence = 0L;
 
+	@GetMapping("/user")
+	public String getForm(){
+		return "user/form";
+	}
+
 	@PostMapping("/users")
 	public String join(User user){
 		user.setId(++sequence);
@@ -43,4 +48,25 @@ public class UserController {
 		return "profile";
 	}
 
+	@GetMapping("/user/{id}/form")
+	public String updateForm(@PathVariable Long id, Model model){
+		for (User user : users){
+			if(user.getId() == user.getId()){
+				model.addAttribute("user", user);
+				break;
+			}
+		}
+		return "user/updateForm";
+	}
+
+	@PostMapping("/users/{id}/update")
+	public String update(@PathVariable Long id, User user, Model model){
+		for (User savedUser : users){
+			if(savedUser.getId() == id && savedUser.validatePassword(user)){
+				savedUser.update(user);
+				break;
+			}
+		}
+		return "redirect:/users";
+	}
 }
