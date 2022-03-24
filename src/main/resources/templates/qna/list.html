@@ -20,12 +20,12 @@
                 {{#question}}
                 <tr>
                     <th scope="row">
-                        {{@index_1}}
+                        {{id}}
                     </th>
-                    <td onclick="location.href='/questions/{{@index_1}}'">{{title}}</td>
+                    <td onclick="location.href='/questions/{{id}}'">{{title}}</td>
                     <td>{{writer}}</td>
                     <td>{{contents}}</td>
-                    <td><a href="#" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/questions/{{id}}/updateForm" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/question}}
                 </tbody>

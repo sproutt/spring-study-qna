@@ -22,12 +22,12 @@
                 {{#users}}
                 <tr>
                     <th scope="row">
-                        {{@index}}
+경                        {{id}}
                     </th>
-                    <td onclick="location.href='users/{{userId}}'">{{userId}}</td>
+                    <td onclick="location.href='users/{{id}}'">{{userId}}</td>
                     <td>{{name}}</td>
                     <td>{{email}}</td>
-                    <td><a href="/users/{{userId}}/form" class="btn btn-success" role="button">수정</a></td>
+                    <td><a href="/users/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
                 </tr>
                 {{/users}}
                 </tbody>
