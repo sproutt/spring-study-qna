@@ -7,6 +7,19 @@ public class User {
 	private String name;
 	private String email;
 
+	public void update(User user){
+		this.password = user.getPassword();
+		this.name = user.getName();
+		this.email = user.getEmail();
+	}
+
+	public boolean validatePassword(User user){
+		if (this.password.equals(user.getPassword())){
+			return true;
+		}
+		return false;
+	}
+
 	public String getUserId() {
 		return userId;
 	}

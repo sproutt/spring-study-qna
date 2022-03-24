@@ -47,4 +47,26 @@ public class UserController {
 		}
 		return "profile";
 	}
+
+	@GetMapping("/user/{id}/form")
+	public String updateForm(@PathVariable Long id, Model model){
+		for (User user : users){
+			if(user.getId() == user.getId()){
+				model.addAttribute("user", user);
+				break;
+			}
+		}
+		return "user/updateForm";
+	}
+
+	@PostMapping("/users/{id}/update")
+	public String update(@PathVariable Long id, User user, Model model){
+		for (User savedUser : users){
+			if(savedUser.getId() == id && savedUser.validatePassword(user)){
+				savedUser.update(user);
+				break;
+			}
+		}
+		return "redirect:/users";
+	}
 }
