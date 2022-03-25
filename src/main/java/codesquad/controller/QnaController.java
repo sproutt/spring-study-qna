@@ -17,6 +17,7 @@ public class QnaController {
 
 	private List<Question> questions = new ArrayList<>();
 	private Long index = 0L;
+
 	@GetMapping("/qna")
 	public String getForm(){
 		return "qna/form";
@@ -24,8 +25,8 @@ public class QnaController {
 
 	@PostMapping("/questions")
 	public String ask(Question question){
-		questions.add(question);
 		question.setIndex(++index);
+		questions.add(question);
 		return "redirect:/";
 	}
 
