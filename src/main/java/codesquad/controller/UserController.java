@@ -1,24 +1,21 @@
 package codesquad.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
-import codesquad.domain.User;
+import codesquad.domain.user.User;
+import codesquad.domain.user.UserRepository;
 
 @Controller
 public class UserController {
 
-	private List<User> users = new ArrayList<>();
-	private Long sequence = 0L;
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping("/user")
 	public String getForm(){
@@ -27,8 +24,8 @@ public class UserController {
 
 	@PostMapping("/users")
 	public String join(User user){
-		user.setId(++sequence);
-		users.add(user);
+		System.out.println("user : " + user);
+		userRepository.save(user);
 		return "redirect:/users";
 	}
 
