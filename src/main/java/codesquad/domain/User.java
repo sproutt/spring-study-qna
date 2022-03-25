@@ -13,8 +13,15 @@ public class User {
 		this.email = user.getEmail();
 	}
 
-	public boolean validatePassword(User user){
+	public boolean isSamePassword(User user){
 		if (this.password.equals(user.getPassword())){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isSameId(long userid){
+		if(this.id == userid){
 			return true;
 		}
 		return false;
