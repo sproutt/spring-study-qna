@@ -31,21 +31,18 @@ public class UserController {
 
 	@GetMapping("/users")
 	public String list(Model model){
-		model.addAttribute("users", users);
-		return "list";
+		model.addAttribute("users", userRepository.findAll());
+		return "user/list";
 	}
 
-	@GetMapping("/users/{userName}")
-	public String profile(@PathVariable String userName, Model model){
-		for (User user : users) {
-			if(user.getUserId().equals(userName)){
-				model.addAttribute("user", user);
-			}
-		}
-		return "profile";
+	@GetMapping("/users/{id}")
+	public ModelAndView show(@PathVariable Long id){
+		ModelAndView mav = new ModelAndView("user/profile");
+		mav.addObject("user", userRepository.findById(id).get());
+		return mav;
 	}
 
-	@GetMapping("/user/{id}/form")
+	@GetMapping("/users/{id}/form")
 	public String updateForm(@PathVariable Long id, Model model){
 		for (User user : users){
 			if(user.isSameId(id)){
