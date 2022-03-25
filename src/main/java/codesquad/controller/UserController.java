@@ -18,7 +18,7 @@ import codesquad.domain.User;
 public class UserController {
 
 	private List<User> users = new ArrayList<>();
-	private long sequence = 0L;
+	private Long sequence = 0L;
 
 	@GetMapping("/user")
 	public String getForm(){
@@ -49,7 +49,7 @@ public class UserController {
 	}
 
 	@GetMapping("/user/{id}/form")
-	public String updateForm(@PathVariable long id, Model model){
+	public String updateForm(@PathVariable Long id, Model model){
 		for (User user : users){
 			if(user.isSameId(id)){
 				model.addAttribute("user", user);
@@ -60,9 +60,9 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{id}/update")
-	public String update(@PathVariable long id, User user, Model model){
+	public String update(@PathVariable Long id, User user, Model model){
 		for (User savedUser : users){
-			if(savedUser.getId() == id && savedUser.isSamePassword(user)){
+			if(savedUser.isSameId(id) && savedUser.isSamePassword(user)){
 				savedUser.update(user);
 				break;
 			}

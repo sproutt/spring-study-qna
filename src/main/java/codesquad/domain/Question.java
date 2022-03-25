@@ -4,7 +4,7 @@ public class Question {
 	private String writer;
 	private String title;
 	private String contents;
-	private Long index;
+	private long index;
 
 	public Long getIndex() {
 		return index;

@@ -1,7 +1,7 @@
 package codesquad.domain;
 
 public class User {
-	private long id;
+	private Long id;
 	private String userId;
 	private String password;
 	private String name;
@@ -20,8 +20,8 @@ public class User {
 		return false;
 	}
 
-	public boolean isSameId(long userid){
-		if(this.id == userid){
+	public boolean isSameId(Long userid){
+		if(this.id.equals( userid)){
 			return true;
 		}
 		return false;
@@ -63,7 +63,7 @@ public class User {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 }

@@ -19,7 +19,7 @@ import codesquad.domain.User;
 public class QnaController {
 
 	private List<Question> questions = new ArrayList<>();
-	private long index = 0L;
+	private Long index = 0L;
 
 	@GetMapping("/qna")
 	public String getForm(){
@@ -41,15 +41,9 @@ public class QnaController {
 	}
 
 	@GetMapping("/questions/{index}")
-	public String show(@PathVariable long index, Model model){
+	public String show(@PathVariable Long index, Model model){
 		for (Question question : questions) {
-			System.out.println(question.getIndex());
-			System.out.println(index);
-			System.out.println(question.getIndex() == index);
-			Long a = 1L;
-			Long b = 1L;
-			System.out.println(a==b);
-			if(question.getIndex() == index){
+			if(question.getIndex().equals(index)){
 				model.addAttribute("questions", questions);
 				break;
 			}
