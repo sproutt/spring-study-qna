@@ -1,53 +1,45 @@
 package codesquad.controller;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import codesquad.domain.Question;
-import codesquad.domain.User;
+import codesquad.domain.question.Question;
+import codesquad.domain.question.QuestionRepository;
 
 @Controller
-@RequestMapping
 public class QnaController {
 
-	private List<Question> questions = new ArrayList<>();
-	private Long index = 0L;
+	@Autowired
+	private QuestionRepository questionRepository;
 
 	@GetMapping("/qna")
-	public String getForm(){
+	public String getForm() {
 		return "qna/form";
 	}
 
 	@GetMapping("/")
 	// @RequestMapping(value = "/", method = RequestMethod.GET)
-	public String list(Model model){
-		model.addAttribute("questions", questions);
+	public String list(Model model) {
+		model.addAttribute("questions", questionRepository.findAll());
 		return "index";
 	}
 
 	@PostMapping("/questions")
-	public String ask(Question question){
-		question.setIndex(++index);
-		questions.add(question);
+	public String ask(Question question) {
+		questionRepository.save(question);
 		return "redirect:/";
 	}
 
 	@GetMapping("/questions/{index}")
-	public String show(@PathVariable Long index, Model model){
-		for (Question question : questions) {
-			if(question.getIndex().equals(index)){
-				model.addAttribute("questions", questions);
-				break;
-			}
-		}
+	public String show(@PathVariable Long index, Model model) {
+		Optional<Question> question = questionRepository.findById(index);
+		model.addAttribute("question", question);
 		return "qna/show";
 	}
 }
