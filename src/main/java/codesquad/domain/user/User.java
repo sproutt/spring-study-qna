@@ -20,13 +20,12 @@ public class User {
 	private String email;
 
 	public void update(User user) {
-		this.password = user.getPassword();
 		this.name = user.getName();
 		this.email = user.getEmail();
 	}
 
-	public boolean isSamePassword(User user) {
-		if (this.password.equals(user.getPassword())) {
+	public boolean isSamePassword(String password) {
+		if (this.password.equals(password)) {
 			return true;
 		}
 		return false;
@@ -71,7 +70,7 @@ public class User {
 		this.email = email;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
