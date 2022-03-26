@@ -18,34 +18,34 @@ public class UserController {
 	private UserRepository userRepository;
 
 	@GetMapping("/user")
-	public String getForm(){
+	public String getForm() {
 		return "user/form";
 	}
 
 	@PostMapping("/users")
-	public String join(User user){
+	public String join(User user) {
 		System.out.println("user : " + user);
 		userRepository.save(user);
 		return "redirect:/users";
 	}
 
 	@GetMapping("/users")
-	public String list(Model model){
+	public String list(Model model) {
 		model.addAttribute("users", userRepository.findAll());
 		return "user/list";
 	}
 
 	@GetMapping("/users/{id}")
-	public ModelAndView show(@PathVariable Long id){
+	public ModelAndView show(@PathVariable Long id) {
 		ModelAndView mav = new ModelAndView("user/profile");
 		mav.addObject("user", userRepository.findById(id).get());
 		return mav;
 	}
 
 	@GetMapping("/users/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model){
-		for (User user : users){
-			if(user.isSameId(id)){
+	public String updateForm(@PathVariable Long id, Model model) {
+		for (User user : users) {
+			if (user.isSameId(id)) {
 				model.addAttribute("user", user);
 				break;
 			}
@@ -54,9 +54,9 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{id}/update")
-	public String update(@PathVariable Long id, User user, Model model){
-		for (User savedUser : users){
-			if(savedUser.isSameId(id) && savedUser.isSamePassword(user)){
+	public String update(@PathVariable Long id, User user, Model model) {
+		for (User savedUser : users) {
+			if (savedUser.isSameId(id) && savedUser.isSamePassword(user)) {
 				savedUser.update(user);
 				break;
 			}

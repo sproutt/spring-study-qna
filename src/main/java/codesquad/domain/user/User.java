@@ -12,28 +12,28 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable=false, length=20)
+	@Column(nullable = false, length = 20)
 	private String userId;
 
 	private String password;
 	private String name;
 	private String email;
 
-	public void update(User user){
+	public void update(User user) {
 		this.password = user.getPassword();
 		this.name = user.getName();
 		this.email = user.getEmail();
 	}
 
-	public boolean isSamePassword(User user){
-		if (this.password.equals(user.getPassword())){
+	public boolean isSamePassword(User user) {
+		if (this.password.equals(user.getPassword())) {
 			return true;
 		}
 		return false;
 	}
 
-	public boolean isSameId(Long userid){
-		if(this.id.equals( userid)){
+	public boolean isSameId(Long userid) {
+		if (this.id.equals(userid)) {
 			return true;
 		}
 		return false;
