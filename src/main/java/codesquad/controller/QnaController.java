@@ -42,4 +42,30 @@ public class QnaController {
 		model.addAttribute("question", question.get());
 		return "qna/show";
 	}
+
+	@GetMapping("/questions/{index}/form")
+	public String updateForm(@PathVariable Long index, Model model) {
+		Optional<Question> savedQuestion = questionRepository.findById(index);
+		if(savedQuestion.get().isSameIndex(index)) {
+			model.addAttribute("question", savedQuestion.get());
+		}
+		return "qna/updateForm";
+	}
+
+	@PostMapping("/questions/{index}")
+	public String update(@PathVariable Long index, Question updatedQuestion) {
+		Optional<Question> question = questionRepository.findById(index);
+		if(updatedQuestion.isSameIndex(question.get().getIndex())) {
+			question.get().update(updatedQuestion);
+			questionRepository.save(question.get());
+		}
+		return "redirect:/";
+	}
+
+	@DeleteMapping("/questions/{index}")
+	public String delete(@PathVariable Long index) {
+		Optional<Question> question = questionRepository.findById(index);
+		questionRepository.delete(question.get());
+		return "redirect:/";
+	}
 }
