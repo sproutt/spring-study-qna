@@ -44,7 +44,11 @@ public class User {
         this.email = user.getEmail();
     }
 
-    public boolean validatePassword(User updatedUser) {
-        return this.password.equals(updatedUser.getPassword());
+    public boolean equalsPassword(String password) {
+        return this.password.equals(password);
+    }
+
+    public boolean isSameUser(String userId) {
+        return this.userId.equals(userId);
     }
 }

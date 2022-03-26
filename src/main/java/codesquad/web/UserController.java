@@ -30,7 +30,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String profile(@PathVariable String userId, Model model) {
         for (User user : users) {
-            if(user.getUserId().equals(userId)) {
+            if (user.isSameUser(userId)) {
                 model.addAttribute("user", user);
                 break;
             }
@@ -41,7 +41,7 @@ public class UserController {
     @GetMapping("/users/{userId}/form")
     public String userInfoUpdateForm(@PathVariable String userId, Model model) {
         for (User user : users) {
-            if(user.getUserId().equals(userId)) {
+            if (user.isSameUser(userId)) {
                 model.addAttribute("user", user);
                 break;
             }
@@ -52,14 +52,14 @@ public class UserController {
     @PostMapping("/users/{userId}/update")
     public String update(@PathVariable String userId, Model model, User updatedUser) {
         User savedUser = users.stream()
-                .filter(user -> user.getUserId().equals(userId))
-                .findFirst()
-                .get();
+                              .filter(user -> user.getUserId().equals(userId))
+                              .findFirst().orElseThrow(RuntimeException::new);
 
-        if(savedUser.validatePassword(updatedUser)) {
+        if (savedUser.equalsPassword(updatedUser.getPassword())) {
             savedUser.update(updatedUser);
         }
 
         return "redirect:/users";
+
     }
 }

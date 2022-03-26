@@ -30,9 +30,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String show(@PathVariable int index, Model model) {
+    public String show(@PathVariable Long index, Model model) {
         for(Question question : questions) {
-            if(question.getIndex() == index) {
+            if(question.equalsIndex(index)) {
                 model.addAttribute("question", question);
                 break;
             }

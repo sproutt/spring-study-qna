@@ -1,7 +1,7 @@
 package codesquad.domain;
 
 public class Question {
-    private static Long index;
+    private Long index;
     private String writer;
     private String title;
     private String contents;
@@ -36,5 +36,9 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
+    }
+
+    public boolean equalsIndex(Long index) {
+        return this.index.equals(index);
     }
 }
