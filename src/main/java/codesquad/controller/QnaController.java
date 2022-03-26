@@ -39,7 +39,7 @@ public class QnaController {
 	@GetMapping("/questions/{index}")
 	public String show(@PathVariable Long index, Model model) {
 		Optional<Question> question = questionRepository.findById(index);
-		model.addAttribute("question", question);
+		model.addAttribute("question", question.get());
 		return "qna/show";
 	}
 }
