@@ -46,22 +46,19 @@ public class UserController {
 
 	@GetMapping("/users/{id}/form")
 	public String updateForm(@PathVariable Long id, Model model) {
-		for (User user : users) {
-			if (user.isSameId(id)) {
-				model.addAttribute("user", user);
-				break;
-			}
+		Optional<User> savedUser = userRepository.findById(id);
+		if(savedUser.get().isSameId(id)) {
+			model.addAttribute("user", savedUser.get());
 		}
 		return "user/updateForm";
 	}
 
 	@PostMapping("/users/{id}/update")
-	public String update(@PathVariable Long id, User user, Model model) {
-		for (User savedUser : users) {
-			if (savedUser.isSameId(id) && savedUser.isSamePassword(user)) {
-				savedUser.update(user);
-				break;
-			}
+	public String update(@PathVariable Long id, User updatedUser, Model model) {
+		Optional<User> user = userRepository.findById(id);
+		if(user.get().isSamePassword(updatedUser.getPassword())) {
+			user.get().update(updatedUser);
+			userRepository.save(user.get());
 		}
 		return "redirect:/users";
 	}
