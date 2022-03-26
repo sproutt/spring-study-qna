@@ -54,7 +54,7 @@ public class UserController {
 	}
 
 	@PostMapping("/users/{id}/update")
-	public String update(@PathVariable Long id, User updatedUser, Model model) {
+	public String update(@PathVariable Long id, User updatedUser) {
 		Optional<User> user = userRepository.findById(id);
 		if(user.get().isSamePassword(updatedUser.getPassword())) {
 			user.get().update(updatedUser);

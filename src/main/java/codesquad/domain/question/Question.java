@@ -52,4 +52,16 @@ public class Question {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
+
+	public boolean isSameIndex(Long index) {
+		if(this.index.equals(index)) {
+			return true;
+		}
+		return false;
+	}
+
+	public void update(Question question){
+		this.title = question.title;
+		this.contents = question.contents;
+	}
 }
