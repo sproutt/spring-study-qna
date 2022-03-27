@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class QuestionController {
@@ -28,13 +29,9 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public String show(@PathVariable Long index, Model model) {
-        for(Question question : questions) {
-            if(question.equalsIndex(index)) {
-                model.addAttribute("question", question);
-                break;
-            }
-        }
-        return "qna/show";
+    public ModelAndView show(@PathVariable Long index) {
+        ModelAndView mav = new ModelAndView("qna/show");
+        mav.addObject("question", questionRepository.findById(index));
+        return mav;
     }
 }
