@@ -9,14 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/users")
 public class UserController {
-
-    private final List<User> registry = new ArrayList<>();
 
     @Autowired
     private UserRepository userRepository;
@@ -37,24 +32,28 @@ public class UserController {
     @GetMapping("{id}")
     public ModelAndView show(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("user/profile");
-        mav.addObject("user", userRepository.findById(id).get());
+        mav.addObject("user", getUserById(id));
         return mav;
     }
 
     @GetMapping("{id}/form")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", userRepository.findById(id).get());
+        model.addAttribute("user", getUserById(id));
         return "/user/updateForm";
     }
 
     @PostMapping("{id}/update")
     public String update(User user, @PathVariable("id") Long id) {
-        User foundUser = userRepository.findById(id).get();
+        User foundUser = getUserById(id);
 
         if (foundUser.validatePassword(user)) {
             foundUser.update(user);
         }
         userRepository.save(foundUser);
         return "redirect:/users";
+    }
+
+    private User getUserById(Long id) {
+        return userRepository.findById(id).get();
     }
 }
