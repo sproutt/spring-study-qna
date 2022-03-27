@@ -1,9 +1,20 @@
 package codesquad.domain.question;
 
+import javax.persistence.*;
+
+@Entity
 public class Question {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
+
+    @Column(nullable = false, length = 20)
     private String writer;
+
+    @Column(nullable = false, length = 200)
     private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
     public Long getIndex() {
