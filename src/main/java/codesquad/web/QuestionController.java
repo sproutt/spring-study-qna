@@ -17,6 +17,11 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
+    @GetMapping("/questions")
+    public String qnaForm() {
+        return "qna/form";
+    }
+
     @PostMapping("/questions")
     public String create(Question question) {
         questionRepository.save(question);
@@ -40,6 +45,16 @@ public class QuestionController {
     public String updateForm(@PathVariable Long index, Model model) {
         model.addAttribute("question", questionRepository.findById(index).get());
         return "qna/updateForm";
+    }
+
+    @PostMapping("/questions/{index}")
+    public String update(@PathVariable Long index, Question updatedQuestion) {
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(RuntimeException::new);
+        if(savedQuestion.equalsIndex(index)) {
+            savedQuestion.update(updatedQuestion);
+            questionRepository.save(savedQuestion);
+        }
+        return "redirect:/";
     }
 
     @DeleteMapping("/questions/{index}")

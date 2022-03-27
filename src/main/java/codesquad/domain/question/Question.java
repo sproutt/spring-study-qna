@@ -52,4 +52,10 @@ public class Question {
     public boolean equalsIndex(Long index) {
         return this.index.equals(index);
     }
+
+    public void update(Question updatedQuestion) {
+        this.writer = updatedQuestion.getWriter();
+        this.title = updatedQuestion.getTitle();
+        this.contents = updatedQuestion.getContents();
+    }
 }
