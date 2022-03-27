@@ -31,7 +31,7 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public ModelAndView show(@PathVariable Long index) {
         ModelAndView mav = new ModelAndView("qna/show");
-        mav.addObject("question", questionRepository.findById(index));
+        mav.addObject("question", questionRepository.findById(index).get());
         return mav;
     }
 }
