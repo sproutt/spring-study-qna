@@ -36,17 +36,12 @@ public class UserController {
         return mav;
     }
 
-//    @GetMapping("/users/{userId}/form")
-//    public String userInfoUpdateForm(@PathVariable String userId, Model model) {
-//        for (User user : users) {
-//            if (user.isSameUser(userId)) {
-//                model.addAttribute("user", user);
-//                break;
-//            }
-//        }
-//        return "user/updateForm";
-//    }
-//
+    @GetMapping("/users/{id}/form")
+    public String userInfoUpdateForm(@PathVariable Long id, Model model) {
+        model.addAttribute("user", userRepository.findById(id));
+        return "user/updateForm";
+    }
+
 //    @PostMapping("/users/{userId}/update")
 //    public String update(@PathVariable String userId, Model model, User updatedUser) {
 //        User savedUser = users.stream()
