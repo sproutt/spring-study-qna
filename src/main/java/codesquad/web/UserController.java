@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,15 +32,11 @@ public class UserController {
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String profile(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.isSameUser(userId)) {
-                model.addAttribute("user", user);
-                break;
-            }
-        }
-        return "user/profile";
+    @GetMapping("/users/{id}")
+    public ModelAndView profile(@PathVariable Long id) {
+        ModelAndView mav = new ModelAndView("user/profile");
+        mav.addObject("user", userRepository.findById(id).get());
+        return mav;
     }
 
     @GetMapping("/users/{userId}/form")
