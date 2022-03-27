@@ -63,9 +63,9 @@
         </div>
         <div class="collapse navbar-collapse" id="navbar-collapse2">
             <ul class="nav navbar-nav navbar-right">
-                <li class="active"><a href="index.html">Posts</a></li>
+                <li class="active"><a href="/">Posts</a></li>
                 <li><a href="user/login.html" role="button">로그인</a></li>
-                <li><a href="user/form.html" role="button">회원가입</a></li>
+                <li><a href="/users/form" role="button">회원가입</a></li>
                 <!--
                 <li><a href="#loginModal" role="button" data-toggle="modal">로그인</a></li>
                 <li><a href="#registerModal" role="button" data-toggle="modal">회원가입</a></li>
@@ -84,7 +84,7 @@
             <form name="question" method="post" action="/users/{{{id}}}/update">
                 <div class="form-group">
                     <label for="userId">사용자 아이디</label>
-                    <input type="text" class="form-control"  id="userId" name="userId" value="{{userId}}" placeholder="User ID" disabled>
+                    <input type="text" class="form-control"  id="userId" name="userId" value="{{userId}}" placeholder="User ID" readonly>
                 </div>
                 <div class="form-group">
                     <label for="password">비밀번호</label>
