@@ -42,17 +42,15 @@ public class UserController {
         return "user/updateForm";
     }
 
-//    @PostMapping("/users/{userId}/update")
-//    public String update(@PathVariable String userId, Model model, User updatedUser) {
-//        User savedUser = users.stream()
-//                              .filter(user -> user.getUserId().equals(userId))
-//                              .findFirst().orElseThrow(RuntimeException::new);
-//
-//        if (savedUser.equalsPassword(updatedUser.getPassword())) {
-//            savedUser.update(updatedUser);
-//        }
-//
-//        return "redirect:/users";
-//
-//    }
+    @PostMapping("/users/{id}/update")
+    public String update(@PathVariable Long id, Model model, User updatedUser) {
+        User savedUser = userRepository.findById(id).orElseThrow(RuntimeException::new);
+
+        if (savedUser.equalsPassword(updatedUser.getPassword())) {
+            savedUser.update(updatedUser);
+            userRepository.save(savedUser);
+        }
+
+        return "redirect:/users";
+    }
 }
