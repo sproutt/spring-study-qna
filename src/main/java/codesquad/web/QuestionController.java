@@ -34,4 +34,10 @@ public class QuestionController {
         mav.addObject("question", questionRepository.findById(index).get());
         return mav;
     }
+
+    @GetMapping("/questions/{index}/updateForm")
+    public String updateForm(@PathVariable Long index, Model model) {
+        model.addAttribute("question", questionRepository.findById(index).get());
+        return "qna/updateForm";
+    }
 }
