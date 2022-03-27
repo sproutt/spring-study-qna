@@ -1,6 +1,8 @@
 package codesquad.web;
 
 import codesquad.domain.question.Question;
+import codesquad.domain.question.QuestionRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,13 +15,12 @@ import java.util.List;
 @Controller
 public class QuestionController {
 
-    private List<Question> questions = new ArrayList<>();
-    private static Long index = 1L;
+    @Autowired
+    private QuestionRepository questionRepository;
 
     @PostMapping("/questions")
     public String create(Question question) {
-        question.setIndex(index++);
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
