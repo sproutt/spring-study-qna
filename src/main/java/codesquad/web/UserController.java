@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/update")
-    public String update(@PathVariable Long id, Model model, User updatedUser) {
+    public String update(@PathVariable Long id, User updatedUser) {
         User savedUser = userRepository.findById(id).orElseThrow(RuntimeException::new);
 
         if (savedUser.equalsPassword(updatedUser.getPassword())) {
