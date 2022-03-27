@@ -28,13 +28,13 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String qnaInfo(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("question", questionRepository.findById(id).get());
+        model.addAttribute("question", getQuestionById(id));
         return "qna/show";
     }
 
     @PostMapping("/questions/{id}/update")
     public String update(Question question, @PathVariable("id") Long id) {
-        Question findQuestion = questionRepository.findById(id).get();
+        Question findQuestion = getQuestionById(id);
 
         findQuestion.update(question);
         questionRepository.save(findQuestion);
@@ -43,7 +43,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/updateForm")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        Question findQuestion = questionRepository.findById(id).get();
+        Question findQuestion = getQuestionById(id);
         model.addAttribute("question", findQuestion);
 
         return "/qna/updateForm";
@@ -51,7 +51,11 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{id}/delete")
     public String remove(@PathVariable("id") Long id) {
-        questionRepository.delete(questionRepository.findById(id).get());
+        questionRepository.delete(getQuestionById(id));
         return "redirect:/";
+    }
+
+    private Question getQuestionById(Long id) {
+        return questionRepository.findById(id).get();
     }
 }
