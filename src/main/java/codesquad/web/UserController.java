@@ -10,9 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 public class UserController {
 
@@ -39,28 +36,28 @@ public class UserController {
         return mav;
     }
 
-    @GetMapping("/users/{userId}/form")
-    public String userInfoUpdateForm(@PathVariable String userId, Model model) {
-        for (User user : users) {
-            if (user.isSameUser(userId)) {
-                model.addAttribute("user", user);
-                break;
-            }
-        }
-        return "user/updateForm";
-    }
-
-    @PostMapping("/users/{userId}/update")
-    public String update(@PathVariable String userId, Model model, User updatedUser) {
-        User savedUser = users.stream()
-                              .filter(user -> user.getUserId().equals(userId))
-                              .findFirst().orElseThrow(RuntimeException::new);
-
-        if (savedUser.equalsPassword(updatedUser.getPassword())) {
-            savedUser.update(updatedUser);
-        }
-
-        return "redirect:/users";
-
-    }
+//    @GetMapping("/users/{userId}/form")
+//    public String userInfoUpdateForm(@PathVariable String userId, Model model) {
+//        for (User user : users) {
+//            if (user.isSameUser(userId)) {
+//                model.addAttribute("user", user);
+//                break;
+//            }
+//        }
+//        return "user/updateForm";
+//    }
+//
+//    @PostMapping("/users/{userId}/update")
+//    public String update(@PathVariable String userId, Model model, User updatedUser) {
+//        User savedUser = users.stream()
+//                              .filter(user -> user.getUserId().equals(userId))
+//                              .findFirst().orElseThrow(RuntimeException::new);
+//
+//        if (savedUser.equalsPassword(updatedUser.getPassword())) {
+//            savedUser.update(updatedUser);
+//        }
+//
+//        return "redirect:/users";
+//
+//    }
 }

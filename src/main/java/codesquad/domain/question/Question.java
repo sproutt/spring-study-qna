@@ -1,4 +1,4 @@
-package codesquad.domain;
+package codesquad.domain.question;
 
 public class Question {
     private Long index;
