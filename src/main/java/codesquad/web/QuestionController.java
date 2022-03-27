@@ -5,6 +5,7 @@ import codesquad.domain.question.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,5 +40,12 @@ public class QuestionController {
     public String updateForm(@PathVariable Long index, Model model) {
         model.addAttribute("question", questionRepository.findById(index).get());
         return "qna/updateForm";
+    }
+
+    @DeleteMapping("/questions/{index}")
+    public String delete(@PathVariable Long index) {
+        Question question = questionRepository.findById(index).orElseThrow(RuntimeException::new);
+        questionRepository.delete(question);
+        return "redirect:/";
     }
 }
