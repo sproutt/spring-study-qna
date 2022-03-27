@@ -1,6 +1,6 @@
 package codesquad.web;
 
-import codesquad.domain.User;
+import codesquad.domain.user.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
