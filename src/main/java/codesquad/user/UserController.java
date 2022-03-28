@@ -45,10 +45,8 @@ public class UserController {
     @PostMapping("{id}/update")
     public String update(User user, @PathVariable("id") Long id) {
         User foundUser = getUserById(id);
+        foundUser.update(user);
 
-        if (foundUser.validatePassword(user)) {
-            foundUser.update(user);
-        }
         userRepository.save(foundUser);
         return "redirect:/users";
     }
