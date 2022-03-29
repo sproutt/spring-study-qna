@@ -26,11 +26,11 @@ public class User {
         this.email = user.getEmail();
     }
 
-    public boolean isIdEqual(Long id) {
+    public boolean equalsId(Long id) {
         return this.id.equals(id);
     }
 
-    public boolean isUserIdEqual(String userId) {
+    public boolean equalsUserId(String userId) {
         return this.userId.equals(userId);
     }
 

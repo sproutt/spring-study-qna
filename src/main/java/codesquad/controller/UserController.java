@@ -4,10 +4,7 @@ import codesquad.domain.User;
 import codesquad.exception.NoSuchUserException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +32,7 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String showUserProfileForm(@PathVariable String userId, Model model) {
         User user = users.stream()
-                         .filter(u -> u.isUserIdEqual(userId))
+                         .filter(u -> u.equalsUserId(userId))
                          .findAny()
                          .orElseThrow(NoSuchUserException::new);
         model.addAttribute("user", user);
@@ -47,10 +44,10 @@ public class UserController {
         return "user/updateForm";
     }
 
-    @PostMapping("/users/{id}/update")
-    public String editIndividualInfo(@PathVariable Long id, User user, Model model) {
+    @PutMapping("/users/{id}")
+    public String editIndividualInfo(@PathVariable Long id, User user) {
         User editedUser = users.stream()
-                               .filter(u -> u.isIdEqual(id))
+                               .filter(u -> u.equalsId(id))
                                .findAny()
                                .orElseThrow(NoSuchUserException::new);
 

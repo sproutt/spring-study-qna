@@ -43,7 +43,7 @@ public class Question {
         return time;
     }
 
-    public boolean isIndexEqual(int index) {
+    public boolean equalsIndex(int index) {
         return this.id == index;
     }
 }
