@@ -43,7 +43,7 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public String showQuestionInfo(@PathVariable int index, Model model) {
         Question question = questions.stream()
-                                     .filter(ques -> ques.isIndexEqual(index))
+                                     .filter(ques -> ques.equalsIndex(index))
                                      .findAny()
                                      .orElseThrow(NoSuchQuestionException::new);
         model.addAttribute("question", question);
