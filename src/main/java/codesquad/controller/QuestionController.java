@@ -9,13 +9,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Controller
 public class QuestionController {
@@ -27,7 +24,7 @@ public class QuestionController {
         question.createId(id);
         question.createWrittenTime(getWrittenTime());
         questions.add(question);
-        return "redirect:/";
+        return "redirect:/questions";
     }
 
     private String getWrittenTime() {
@@ -37,7 +34,7 @@ public class QuestionController {
         return nowDateTime.format(formatter);
     }
 
-    @GetMapping("/")
+    @GetMapping("/questions")
     public String showAllQuestions(Model model) {
         model.addAttribute("questions", questions);
         return "index";
