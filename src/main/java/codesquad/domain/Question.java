@@ -1,13 +1,16 @@
 package codesquad.domain;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Question {
     private final String writer;
     private final String title;
     private final String contents;
     private Long id;
-    private String time;
+    private LocalDateTime time;
 
-    public Question(Long id, String writer, String title, String contents, String time) {
+    public Question(Long id, String writer, String title, String contents, LocalDateTime time) {
         this.id = id;
         this.writer = writer;
         this.title = title;
@@ -19,7 +22,7 @@ public class Question {
         this.id = id;
     }
 
-    public void createWrittenTime(String writtenTime) {
+    public void createWrittenTime(LocalDateTime writtenTime) {
         this.time = writtenTime;
     }
 
@@ -40,7 +43,8 @@ public class Question {
     }
 
     public String getTime() {
-        return time;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
+        return time.format(formatter);
     }
 
     public boolean equalsIndex(int index) {

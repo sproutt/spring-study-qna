@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +26,8 @@ public class QuestionController {
         return "redirect:/questions";
     }
 
-    private String getWrittenTime() {
-        LocalDateTime nowDateTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
-
-        return nowDateTime.format(formatter);
+    private LocalDateTime getWrittenTime() {
+        return LocalDateTime.now();
     }
 
     @GetMapping("/questions")
