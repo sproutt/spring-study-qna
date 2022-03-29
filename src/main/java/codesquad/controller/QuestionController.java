@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -30,13 +31,10 @@ public class QuestionController {
     }
 
     private String getWrittenTime() {
-        LocalDate nowDate = LocalDate.now();
-        LocalTime nowTime = LocalTime.now();
+        LocalDateTime nowDateTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("hh:mm");
-        String formatedNowTime = nowTime.format(formatter);
-
-        return nowDate + " " + formatedNowTime;
+        return nowDateTime.format(formatter);
     }
 
     @GetMapping("/")
