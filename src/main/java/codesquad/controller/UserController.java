@@ -35,9 +35,9 @@ public class UserController {
     @GetMapping("/users/{userId}")
     public String showUserProfileForm(@PathVariable String userId, Model model) {
         User user = users.stream()
-                .filter(u -> u.isUserIdEqual(userId))
-                .findAny()
-                .orElseThrow(NoSuchUserException::new);
+                         .filter(u -> u.isUserIdEqual(userId))
+                         .findAny()
+                         .orElseThrow(NoSuchUserException::new);
         model.addAttribute("user", user);
         return "user/profile";
     }
@@ -49,10 +49,10 @@ public class UserController {
 
     @PostMapping("/users/{id}/update")
     public String editIndividualInfo(@PathVariable Long id, User user, Model model) {
-        User editedUser= users.stream()
-                .filter(u -> u.isIdEqual(id))
-                .findAny()
-                .orElseThrow(NoSuchUserException::new);
+        User editedUser = users.stream()
+                               .filter(u -> u.isIdEqual(id))
+                               .findAny()
+                               .orElseThrow(NoSuchUserException::new);
 
         editedUser.editInfo(user);
         return "redirect:/users";

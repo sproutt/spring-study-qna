@@ -1,10 +1,10 @@
 package codesquad.domain;
 
 public class Question {
-    private Long id;
     private final String writer;
     private final String title;
     private final String contents;
+    private Long id;
     private String time;
 
     public Question(Long id, String writer, String title, String contents, String time) {
