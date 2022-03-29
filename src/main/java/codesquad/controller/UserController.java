@@ -51,7 +51,7 @@ public class UserController {
                                .findAny()
                                .orElseThrow(NoSuchUserException::new);
 
-        editedUser.editInfo(user);
+        editedUser.update(user);
         return "redirect:/users";
     }
 }
