@@ -56,13 +56,13 @@ public class User {
     }
 
     public void update(User user) {
-        if (validatePassword(user)) {
+        if (equalsPassword(user.getPassword())) {
             name = user.getName();
             email = user.getEmail();
         }
     }
 
-    private boolean validatePassword(User user) {
-        return user.getPassword().equals(password);
+    private boolean equalsPassword(String password) {
+        return this.password.equals(password);
     }
 }
