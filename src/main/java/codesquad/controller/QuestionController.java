@@ -2,27 +2,26 @@ package codesquad.controller;
 
 import codesquad.domain.Question;
 import codesquad.exception.NoSuchQuestionException;
+import codesquad.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class QuestionController {
-    private final List<Question> questions = new ArrayList<>();
-    private final Long id = 1L;
+
+    private final QuestionRepository questionRepository;
+
+    public QuestionController(QuestionRepository questionRepository) {
+        this.questionRepository = questionRepository;
+    }
 
     @PostMapping("/questions")
     public String create(@ModelAttribute Question question) {
-        question.createId(id);
         question.createWrittenTime(getWrittenTime());
-        questions.add(question);
+        questionRepository.save(question);
         return "redirect:/questions";
     }
 
@@ -32,17 +31,23 @@ public class QuestionController {
 
     @GetMapping("/questions")
     public String showAllQuestions(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
-    @GetMapping("/questions/{index}")
-    public String showQuestionInfo(@PathVariable int index, Model model) {
-        Question question = questions.stream()
-                                     .filter(ques -> ques.equalsIndex(index))
-                                     .findAny()
-                                     .orElseThrow(NoSuchQuestionException::new);
+    @GetMapping("/questions/{id}")
+    public String showQuestionDetail(@PathVariable Long id, Model model) {
+        Question question = questionRepository.findById(id)
+                                              .orElseThrow(NoSuchQuestionException::new);
         model.addAttribute("question", question);
         return "qna/show";
     }
+
+    @DeleteMapping("/questions/{id}")
+    public String remove(@PathVariable Long id) {
+        questionRepository.delete(questionRepository.findById(id)
+                                                    .orElseThrow(NoSuchQuestionException::new));
+        return "redirect:/questions";
+    }
+
 }
