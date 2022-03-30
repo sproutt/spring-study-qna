@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,34 +39,34 @@ public class QnaController {
 
 	@GetMapping("/questions/{index}")
 	public String show(@PathVariable Long index, Model model) {
-		Optional<Question> question = questionRepository.findById(index);
-		model.addAttribute("question", question.get());
+		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		model.addAttribute("question", question);
 		return "qna/show";
 	}
 
 	@GetMapping("/questions/{index}/form")
 	public String updateForm(@PathVariable Long index, Model model) {
-		Optional<Question> savedQuestion = questionRepository.findById(index);
-		if(savedQuestion.get().isSameIndex(index)) {
-			model.addAttribute("question", savedQuestion.get());
+		Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		if(savedQuestion.isSameIndex(index)) {
+			model.addAttribute("question", savedQuestion);
 		}
 		return "qna/updateForm";
 	}
 
 	@PostMapping("/questions/{index}")
 	public String update(@PathVariable Long index, Question updatedQuestion) {
-		Optional<Question> question = questionRepository.findById(index);
-		if(updatedQuestion.isSameIndex(question.get().getIndex())) {
-			question.get().update(updatedQuestion);
-			questionRepository.save(question.get());
+		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		if(updatedQuestion.isSameIndex(question.getIndex())) {
+			question.update(updatedQuestion);
+			questionRepository.save(question);
 		}
 		return "redirect:/";
 	}
 
 	@DeleteMapping("/questions/{index}")
 	public String delete(@PathVariable Long index) {
-		Optional<Question> question = questionRepository.findById(index);
-		questionRepository.delete(question.get());
+		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		questionRepository.delete(question);
 		return "redirect:/";
 	}
 }

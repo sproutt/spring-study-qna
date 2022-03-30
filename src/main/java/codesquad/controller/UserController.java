@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -46,19 +46,19 @@ public class UserController {
 
 	@GetMapping("/users/{id}/form")
 	public String updateForm(@PathVariable Long id, Model model) {
-		Optional<User> savedUser = userRepository.findById(id);
-		if(savedUser.get().isSameId(id)) {
-			model.addAttribute("user", savedUser.get());
+		User savedUser = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+		if(savedUser.isSameId(id)) {
+			model.addAttribute("user", savedUser);
 		}
 		return "user/updateForm";
 	}
 
 	@PostMapping("/users/{id}/update")
 	public String update(@PathVariable Long id, User updatedUser) {
-		Optional<User> user = userRepository.findById(id);
-		if(user.get().isSamePassword(updatedUser.getPassword())) {
-			user.get().update(updatedUser);
-			userRepository.save(user.get());
+		User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+		if(user.isSamePassword(updatedUser.getPassword())) {
+			user.update(updatedUser);
+			userRepository.save(user);
 		}
 		return "redirect:/users";
 	}
