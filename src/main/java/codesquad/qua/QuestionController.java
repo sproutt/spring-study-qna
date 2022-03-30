@@ -34,17 +34,17 @@ public class QuestionController {
 
     @PostMapping("/questions/{id}/update")
     public String update(Question question, @PathVariable("id") Long id) {
-        Question findQuestion = getQuestionById(id);
+        Question savedQuestion = getQuestionById(id);
 
-        findQuestion.update(question);
-        questionRepository.save(findQuestion);
+        savedQuestion.update(question);
+        questionRepository.save(savedQuestion);
         return "redirect:/";
     }
 
     @GetMapping("/questions/{id}/updateForm")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        Question findQuestion = getQuestionById(id);
-        model.addAttribute("question", findQuestion);
+        Question savedQuestion = getQuestionById(id);
+        model.addAttribute("question", savedQuestion);
 
         return "/qna/updateForm";
     }
