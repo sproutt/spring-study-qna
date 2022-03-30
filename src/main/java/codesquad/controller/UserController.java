@@ -1,42 +1,41 @@
 package codesquad.controller;
 
+import codesquad.domain.EditUserDto;
 import codesquad.domain.User;
 import codesquad.exception.NoSuchUserException;
+import codesquad.repository.UserRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class UserController {
 
-    private final List<User> users = new ArrayList<>();
-    private Long id = 1L;
+    private final UserRepository userRepository;
+
+    public UserController(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @PostMapping("/users")
     public String create(@ModelAttribute User user) {
-        user.createId(id++);
-        users.add(user);
+        userRepository.save(user);
         return "redirect:/users";
     }
 
     @GetMapping("/users")
     public String showUserListForm(Model model) {
-        model.addAttribute("users", users);
+        model.addAttribute("users", userRepository.findAll());
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String showUserProfileForm(@PathVariable String userId, Model model) {
-        User user = users.stream()
-                         .filter(u -> u.equalsUserId(userId))
-                         .findAny()
-                         .orElseThrow(NoSuchUserException::new);
-        model.addAttribute("user", user);
-        return "user/profile";
+    @GetMapping("/users/{id}")
+    public ModelAndView showUserProfileForm(@PathVariable Long id) {
+        ModelAndView modelAndView = new ModelAndView("user/profile");
+        modelAndView.addObject("user", userRepository.findById(id)
+                                                     .orElseThrow(NoSuchUserException::new));
+        return modelAndView;
     }
 
     @GetMapping("/users/{id}/form")
@@ -45,13 +44,11 @@ public class UserController {
     }
 
     @PutMapping("/users/{id}")
-    public String editIndividualInfo(@PathVariable Long id, User user) {
-        User editedUser = users.stream()
-                               .filter(u -> u.equalsId(id))
-                               .findAny()
-                               .orElseThrow(NoSuchUserException::new);
-
-        editedUser.update(user);
+    public String editIndividualInfo(@PathVariable Long id, EditUserDto editUserDto) {
+        User user = userRepository.findById(id)
+                                  .orElseThrow(NoSuchUserException::new);
+        user.update(editUserDto);
+        userRepository.save(user);
         return "redirect:/users";
     }
 }
