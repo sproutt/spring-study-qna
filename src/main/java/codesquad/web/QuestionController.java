@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.NoSuchElementException;
+
 @Controller
 public class QuestionController {
 
@@ -37,19 +39,21 @@ public class QuestionController {
     @GetMapping("/questions/{index}")
     public ModelAndView show(@PathVariable Long index) {
         ModelAndView mav = new ModelAndView("qna/show");
-        mav.addObject("question", questionRepository.findById(index).get());
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        mav.addObject("question", savedQuestion);
         return mav;
     }
 
     @GetMapping("/questions/{index}/updateForm")
     public String updateForm(@PathVariable Long index, Model model) {
-        model.addAttribute("question", questionRepository.findById(index).get());
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        model.addAttribute("question", savedQuestion);
         return "qna/updateForm";
     }
 
     @PostMapping("/questions/{index}")
     public String update(@PathVariable Long index, Question updatedQuestion) {
-        Question savedQuestion = questionRepository.findById(index).orElseThrow(RuntimeException::new);
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         if(savedQuestion.equalsIndex(index)) {
             savedQuestion.update(updatedQuestion);
             questionRepository.save(savedQuestion);
@@ -59,7 +63,7 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{index}")
     public String delete(@PathVariable Long index) {
-        Question question = questionRepository.findById(index).orElseThrow(RuntimeException::new);
+        Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         questionRepository.delete(question);
         return "redirect:/";
     }
