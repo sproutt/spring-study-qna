@@ -99,10 +99,27 @@ public class QuestionController {
         return "qna/show_failed";
     }
 
-    @DeleteMapping("/questions/{id}/delete")
-    public String remove(@PathVariable("id") Long id) {
-        questionRepository.delete(getQuestionById(id));
-        return "redirect:/";
+    @DeleteMapping("/questions/{id}")
+    public String remove(@PathVariable("id") Long id, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
+
+        if (sessionedUser != null) {
+            User user = (User) sessionedUser;
+            Question savedQuestion = getQuestionById(id);
+            User savedUser = userRepository.findByName(savedQuestion.getWriter())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
+
+            logger.info("user: {}", user.getName());
+            logger.info("question: {}", savedQuestion.getWriter());
+
+            if (user.getId().equals(savedUser.getId())) {
+                questionRepository.delete(getQuestionById(id));
+                return "redirect:/";
+            }
+        }
+
+
+        return "user/login_failed";
     }
 
     private Question getQuestionById(Long id) {
