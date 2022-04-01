@@ -62,7 +62,7 @@ public class User {
         }
     }
 
-    private boolean equalsPassword(String password) {
+    public boolean equalsPassword(String password) {
         return this.password.equals(password);
     }
 }

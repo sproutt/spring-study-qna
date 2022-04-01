@@ -20,4 +20,9 @@ logging.level:
 handlebars:
   cache: false
   suffix: ".html"
-#  org.hibernate.type: trace
+  expose-session-attributes: true
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie

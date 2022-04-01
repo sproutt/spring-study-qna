@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -50,6 +51,18 @@ public class UserController {
         savedUser.update(user);
 
         userRepository.save(savedUser);
+        return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User savedUser = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
+
+        if (savedUser.equalsPassword(password)) {
+            session.setAttribute("sessionedUser", savedUser);
+        }
+
         return "redirect:/users";
     }
 
