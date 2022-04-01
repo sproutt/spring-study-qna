@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @RequestMapping("/users")
 public class UserController {
@@ -52,6 +54,7 @@ public class UserController {
     }
 
     private User getUserById(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id)
+                .orElseThrow(NoSuchElementException::new);
     }
 }
