@@ -1,5 +1,7 @@
 package codesquad.user;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,9 +21,11 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @PostMapping("")
     public String create(User user) {
-        System.out.println("user = " + user);
+        logger.info("user = {}", user);
         userRepository.save(user);
         return "redirect:/users";
     }
@@ -35,30 +39,28 @@ public class UserController {
     @GetMapping("{id}")
     public ModelAndView show(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("user/profile");
-        mav.addObject("user", getUserById(id));
+        mav.addObject("user", findUserById(id));
         return mav;
     }
 
     @GetMapping("{id}/form")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", getUserById(id));
+        model.addAttribute("user", findUserById(id));
         return "/user/updateForm";
     }
 
     @PostMapping("{id}/update")
     public String update(User changedUser, @PathVariable("id") Long id, HttpSession session) {
-        Object sessionedUser = session.getAttribute("sessionedUser");
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
 
-        if (sessionedUser != null) {
-            User user = (User) sessionedUser;
-            if (user.getId().equals(id)) {
-                user.update(changedUser);
-                userRepository.save(user);
-                return "redirect:/users";
-            }
+        if (sessionedUser == null || !sessionedUser.equalsId(id)) {
+            return "/user/login_failed";
         }
 
-        return "/user/login_failed";
+        sessionedUser.update(changedUser);
+        userRepository.save(sessionedUser);
+
+        return "redirect:/users";
     }
 
     @PostMapping("/login")
@@ -73,7 +75,7 @@ public class UserController {
         return "redirect:/users";
     }
 
-    private User getUserById(Long id) {
+    private User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(NoSuchElementException::new);
     }

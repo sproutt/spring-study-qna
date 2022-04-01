@@ -65,4 +65,8 @@ public class User {
     public boolean equalsPassword(String password) {
         return this.password.equals(password);
     }
+
+    public boolean equalsId(Long id) {
+        return this.id.equals(id);
+    }
 }
