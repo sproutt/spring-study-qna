@@ -46,10 +46,10 @@ public class UserController {
 
     @PostMapping("{id}/update")
     public String update(User user, @PathVariable("id") Long id) {
-        User foundUser = getUserById(id);
-        foundUser.update(user);
+        User savedUser = getUserById(id);
+        savedUser.update(user);
 
-        userRepository.save(foundUser);
+        userRepository.save(savedUser);
         return "redirect:/users";
     }
 
