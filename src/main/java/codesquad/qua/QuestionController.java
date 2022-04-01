@@ -1,12 +1,14 @@
 package codesquad.qua;
 
+import codesquad.user.User;
+import codesquad.user.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
@@ -16,6 +18,11 @@ public class QuestionController {
 
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    UserRepository userRepository;
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @GetMapping("/questions/form")
     public String createForm(HttpSession session) {
@@ -46,21 +53,50 @@ public class QuestionController {
         return "qna/show";
     }
 
-    @PostMapping("/questions/{id}/update")
-    public String update(Question question, @PathVariable("id") Long id) {
-        Question savedQuestion = getQuestionById(id);
+    @Transactional
+    @PutMapping("/questions/{id}")
+    public String update(Question changedQuestion, @PathVariable("id") Long id, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
 
-        savedQuestion.update(question);
-        questionRepository.save(savedQuestion);
-        return "redirect:/";
+        if (sessionedUser != null) {
+            User user = (User) sessionedUser;
+            Question savedQuestion = getQuestionById(id);
+            User savedUser = userRepository.findByName(savedQuestion.getWriter())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
+
+            logger.info("user: {}", user.getName());
+            logger.info("question: {}", savedQuestion.getWriter());
+
+            if (user.getId().equals(savedUser.getId())) {
+                savedQuestion.update(changedQuestion);
+
+                return "redirect:/";
+            }
+        }
+
+        return "qna/show_failed";
     }
 
     @GetMapping("/questions/{id}/updateForm")
-    public String updateForm(Model model, @PathVariable("id") Long id) {
-        Question savedQuestion = getQuestionById(id);
-        model.addAttribute("question", savedQuestion);
+    public String updateForm(Model model, @PathVariable("id") Long id, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
 
-        return "/qna/updateForm";
+        if (sessionedUser != null) {
+            User user = (User) sessionedUser;
+            Question savedQuestion = getQuestionById(id);
+            User savedUser = userRepository.findByName(savedQuestion.getWriter())
+                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
+
+            logger.info("user: {}", user.getName());
+            logger.info("question: {}", savedQuestion.getWriter());
+
+            if (user.getId().equals(savedUser.getId())) {
+                model.addAttribute("question", savedQuestion);
+                return "qna/updateForm";
+            }
+        }
+
+        return "qna/show_failed";
     }
 
     @DeleteMapping("/questions/{id}/delete")
