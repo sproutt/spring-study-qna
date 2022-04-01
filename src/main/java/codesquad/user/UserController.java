@@ -1,5 +1,6 @@
 package codesquad.user;
 
+import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +19,9 @@ import java.util.NoSuchElementException;
 @RequestMapping("/users")
 public class UserController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private UserRepository userRepository;
-
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @PostMapping("")
     public String create(User user) {
@@ -51,14 +51,14 @@ public class UserController {
 
     @PostMapping("{id}/update")
     public String update(User changedUser, @PathVariable("id") Long id, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
 
-        if (sessionedUser == null || !sessionedUser.equalsId(id)) {
+        if (user == null || !user.equalsId(id)) {
             return "/user/login_failed";
         }
 
-        sessionedUser.update(changedUser);
-        userRepository.save(sessionedUser);
+        user.update(changedUser);
+        userRepository.save(user);
 
         return "redirect:/users";
     }
@@ -69,7 +69,7 @@ public class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
 
         if (savedUser.equalsPassword(password)) {
-            session.setAttribute("sessionedUser", savedUser);
+            SessionUtil.setSession(session, savedUser);
         }
 
         return "redirect:/users";

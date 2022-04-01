@@ -1,6 +1,7 @@
 package codesquad.qua;
 
 import codesquad.user.User;
+import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,14 +16,13 @@ import java.util.NoSuchElementException;
 @Controller
 public class QuestionController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     QuestionRepository questionRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @GetMapping("/questions/form")
     public String createForm(HttpSession session) {
-        User user = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
 
         if (user == null) {
             return "/login";
@@ -33,7 +33,8 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
-        User user = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
+
 
         if (user == null) {
             return "/login";
@@ -60,7 +61,7 @@ public class QuestionController {
     @Transactional
     @PutMapping("/questions/{id}")
     public String update(Question changedQuestion, @PathVariable("id") Long id, HttpSession session) {
-        User user = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
@@ -77,7 +78,7 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}/updateForm")
     public String updateForm(Model model, @PathVariable("id") Long id, HttpSession session) {
-        User user = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
@@ -94,7 +95,7 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{id}")
     public String remove(@PathVariable("id") Long id, HttpSession session) {
-        User user = (User) session.getAttribute("sessionedUser");
+        User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
