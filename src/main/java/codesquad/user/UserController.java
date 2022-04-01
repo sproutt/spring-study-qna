@@ -46,12 +46,19 @@ public class UserController {
     }
 
     @PostMapping("{id}/update")
-    public String update(User user, @PathVariable("id") Long id) {
-        User savedUser = getUserById(id);
-        savedUser.update(user);
+    public String update(User changedUser, @PathVariable("id") Long id, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
 
-        userRepository.save(savedUser);
-        return "redirect:/users";
+        if (sessionedUser != null) {
+            User user = (User) sessionedUser;
+            if (user.getId().equals(id)) {
+                user.update(changedUser);
+                userRepository.save(user);
+                return "redirect:/users";
+            }
+        }
+
+        return "/user/login_failed";
     }
 
     @PostMapping("/login")
