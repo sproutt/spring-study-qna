@@ -69,4 +69,8 @@ public class User {
     public boolean equalsId(Long id) {
         return this.id.equals(id);
     }
+
+    public boolean equalsId(User user) {
+        return id.equals(user.getId());
+    }
 }
