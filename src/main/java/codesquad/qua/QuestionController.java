@@ -36,8 +36,16 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(Question question) {
+    public String create(Question question, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
+
+        if (sessionedUser == null) {
+            return "/login";
+        }
+
+        question.setWriter((User) sessionedUser);
         questionRepository.save(question);
+        logger.info("user : {}", question.getWriter().getName());
         return "redirect:/";
     }
 
@@ -61,13 +69,11 @@ public class QuestionController {
         if (sessionedUser != null) {
             User user = (User) sessionedUser;
             Question savedQuestion = getQuestionById(id);
-            User savedUser = userRepository.findByName(savedQuestion.getWriter())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
 
             logger.info("user: {}", user.getName());
             logger.info("question: {}", savedQuestion.getWriter());
 
-            if (user.getId().equals(savedUser.getId())) {
+            if (user.getId().equals(savedQuestion.getWriter().getId())) {
                 savedQuestion.update(changedQuestion);
 
                 return "redirect:/";
@@ -84,13 +90,11 @@ public class QuestionController {
         if (sessionedUser != null) {
             User user = (User) sessionedUser;
             Question savedQuestion = getQuestionById(id);
-            User savedUser = userRepository.findByName(savedQuestion.getWriter())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
 
             logger.info("user: {}", user.getName());
             logger.info("question: {}", savedQuestion.getWriter());
 
-            if (user.getId().equals(savedUser.getId())) {
+            if (user.getId().equals(savedQuestion.getWriter().getId())) {
                 model.addAttribute("question", savedQuestion);
                 return "qna/updateForm";
             }
@@ -106,13 +110,11 @@ public class QuestionController {
         if (sessionedUser != null) {
             User user = (User) sessionedUser;
             Question savedQuestion = getQuestionById(id);
-            User savedUser = userRepository.findByName(savedQuestion.getWriter())
-                    .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
 
             logger.info("user: {}", user.getName());
             logger.info("question: {}", savedQuestion.getWriter());
 
-            if (user.getId().equals(savedUser.getId())) {
+            if (user.getId().equals(savedQuestion.getWriter().getId())) {
                 questionRepository.delete(getQuestionById(id));
                 return "redirect:/";
             }
