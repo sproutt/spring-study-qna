@@ -3,8 +3,6 @@
 {{> base}}
 
 <body>
-
-
 <div class="container" id="main">
     <div class="col-md-10 col-md-offset-1">
         <div class="panel panel-default">
@@ -12,31 +10,28 @@
                 <thead>
                 <tr>
                     <th>#</th>
-                    <th>사용자 아이디</th>
-                    <th>이름</th>
-                    <th>이메일</th>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>내용</th>
                     <th></th>
                 </tr>
                 </thead>
                 <tbody>
-                {{#users}}
+                {{#question}}
                 <tr>
                     <th scope="row">
                         {{id}}
                     </th>
-                    <td onclick="location.href='users/{{id}}'">{{userId}}</td>
-                    <td>{{name}}</td>
-                    <td>{{email}}</td>
-                    <td><a href="/users/{{id}}/form" class="btn btn-success" role="button">수정</a></td>
+                    <td onclick="location.href='/questions/{{id}}'">{{title}}</td>
+                    <td>{{writer}}</td>
+                    <td>{{contents}}</td>
+                    <td><a href="/questions/{{id}}/updateForm" class="btn btn-success" role="button">수정</a></td>
                 </tr>
-                {{/users}}
+                {{/question}}
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
-<!-- script references -->
-
 </body>
 </html>
