@@ -49,5 +49,4 @@ public class QuestionController {
                                                     .orElseThrow(NoSuchQuestionException::new));
         return "redirect:/questions";
     }
-
 }
