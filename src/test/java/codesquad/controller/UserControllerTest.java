@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpSession;
 
 import javax.transaction.Transactional;
@@ -36,11 +35,10 @@ class UserControllerTest {
         userRepository.save(user1);
 
         // then
-        User result = userRepository.findByUserId("saint6839")
+        User result = userRepository.findByUserId("user1")
                                     .get();
 
-        assertThat(user1)
-                .isEqualTo(result);
+        assertThat(user1).isEqualTo(result);
     }
 
     @Test
@@ -60,8 +58,7 @@ class UserControllerTest {
 
         // then
         List<User> results = userRepository.findAll();
-        assertThat(results.size())
-                .isEqualTo(4);
+        assertThat(results.size()).isEqualTo(4);
     }
 
     @Test
@@ -83,9 +80,7 @@ class UserControllerTest {
     void 로그인() {
         // given
         User user1 = new User("user1", "1", "채상엽", "email1@gmail.com");
-
         MockHttpSession session = new MockHttpSession();
-
         session.setAttribute("user1", user1);
 
         // when
