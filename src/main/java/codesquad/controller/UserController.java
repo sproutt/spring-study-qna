@@ -9,6 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class UserController {
 
@@ -16,6 +18,11 @@ public class UserController {
 
     public UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
+    }
+
+    @GetMapping("/")
+    public String home() {
+        return "index";
     }
 
     @PostMapping("/users")
@@ -50,5 +57,20 @@ public class UserController {
         user.update(editUserDto);
         userRepository.save(user);
         return "redirect:/users";
+    }
+
+    @GetMapping("/users/login")
+    public String showLoginForm() {
+        return "user/login";
+    }
+
+    @PostMapping("/users/login")
+    public String login(String userId, String password, HttpSession session) {
+        User user = userRepository.findByUserId(userId)
+                                  .filter(s -> s.getPassword()
+                                                .equals(password))
+                                  .orElseThrow(NoSuchUserException::new);
+        session.setAttribute("sessionedUser", user);
+        return "index";
     }
 }
