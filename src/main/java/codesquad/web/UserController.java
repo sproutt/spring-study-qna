@@ -53,9 +53,16 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/form")
-    public String userInfoUpdateForm(@PathVariable Long id, Model model) {
-        User savedUser = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-        model.addAttribute("user", savedUser);
+    public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+
+        if(value == null) {
+            return "redirect:/login";
+        }
+
+        User user = (User) value;
+        model.addAttribute("user", user);
+
         return "user/updateForm";
     }
 
