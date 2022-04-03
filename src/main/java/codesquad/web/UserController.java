@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -23,6 +24,11 @@ public class UserController {
     @GetMapping("/users/form")
     public String userForm() {
         return "user/form";
+    }
+
+    @GetMapping("/users/login/form")
+    public String userLoginForm() {
+        return "user/login";
     }
 
     @PostMapping("/users")
@@ -63,5 +69,21 @@ public class UserController {
         }
 
         return "redirect:/users";
+    }
+
+    @PostMapping("/login")
+    public String login(String userId, String password, HttpSession session) {
+        User savedUser = userRepository.findByUserId(userId);
+
+        if(savedUser == null) {
+            return ":redirect/login";
+        }
+
+        if(!savedUser.equalsPassword(password)) {
+            return ":redirect/login";
+        }
+
+        session.setAttribute("sessionedUser", savedUser);
+        return "redirect:/";
     }
 }
