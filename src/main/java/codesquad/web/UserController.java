@@ -2,6 +2,7 @@ package codesquad.web;
 
 import codesquad.domain.user.User;
 import codesquad.domain.user.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.NoSuchElementException;
 
 @Controller
+@Slf4j
 public class UserController {
 
     @Autowired
@@ -25,7 +27,7 @@ public class UserController {
 
     @PostMapping("/users")
     public String create(User user) {
-        System.out.println("user = " + user);
+        log.info("user = {}", user);
         userRepository.save(user);
         return "redirect:/users";
     }
