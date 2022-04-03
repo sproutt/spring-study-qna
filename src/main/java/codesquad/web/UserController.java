@@ -54,21 +54,22 @@ public class UserController {
 
     @GetMapping("/users/{id}/form")
     public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object value = session.getAttribute("sessionedUser");
+        Object sessionedUser = session.getAttribute("sessionedUser");
 
-        if(value == null) {
+        if(sessionedUser == null) {
             return "redirect:/login";
         }
 
-        User user = (User) value;
+        User user = (User) sessionedUser;
         model.addAttribute("user", user);
 
         return "user/updateForm";
     }
 
     @PostMapping("/users/{id}/update")
-    public String update(@PathVariable Long id, User updatedUser) {
-        User savedUser = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
+    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+        Object sessionedUser = session.getAttribute("sessionedUser");
+        User savedUser = (User) sessionedUser;
 
         if (savedUser.equalsPassword(updatedUser.getPassword())) {
             savedUser.update(updatedUser);
