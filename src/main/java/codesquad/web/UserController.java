@@ -54,14 +54,13 @@ public class UserController {
 
     @GetMapping("/users/{id}/form")
     public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        Object sessionedUser = session.getAttribute("sessionedUser");
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
 
         if(sessionedUser == null) {
             return "redirect:/login";
         }
 
-        User user = (User) sessionedUser;
-        model.addAttribute("user", user);
+        model.addAttribute("user", sessionedUser);
 
         return "user/updateForm";
     }
