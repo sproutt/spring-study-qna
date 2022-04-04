@@ -1,23 +1,22 @@
 package codesquad.domain;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Entity
 public class Question {
-    private String writer;
-    private String title;
-    private String contents;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+    private User writer;
+    private String title;
+    private String contents;
     private LocalDateTime time;
 
-    public Question(String writer, String title, String contents, LocalDateTime time) {
+    public Question(User writer, String title, String contents, LocalDateTime time) {
         this.writer = writer;
         this.title = title;
         this.contents = contents;
@@ -28,8 +27,8 @@ public class Question {
 
     }
 
-    public void setWriter(String writer) {
-        this.writer = writer;
+    public User getWriter() {
+        return writer;
     }
 
     public void setTitle(String title) {
@@ -44,13 +43,12 @@ public class Question {
         this.time = writtenTime;
     }
 
-
     public Long getId() {
         return id;
     }
 
-    public String getWriter() {
-        return writer;
+    public void setWriter(User writer) {
+        this.writer = writer;
     }
 
     public String getTitle() {
@@ -65,4 +63,12 @@ public class Question {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm");
         return time.format(formatter);
     }
+
+    public void write(User writer, WriteQuestionDto writeQuestionDto, LocalDateTime writtenTime) {
+        this.writer = writer;
+        this.title = writeQuestionDto.getTitle();
+        this.contents = writeQuestionDto.getContents();
+        this.time = writtenTime;
+    }
+
 }
