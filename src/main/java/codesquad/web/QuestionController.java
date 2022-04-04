@@ -2,6 +2,7 @@ package codesquad.web;
 
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
+import codesquad.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
 @Controller
@@ -25,7 +27,14 @@ public class QuestionController {
     }
 
     @PostMapping("/questions")
-    public String create(Question question) {
+    public String create(Question question, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+
+        if(sessionedUser == null) {
+            return "redirect:/login";
+        }
+
+        question.setWriter(sessionedUser);
         questionRepository.save(question);
         return "redirect:/";
     }
