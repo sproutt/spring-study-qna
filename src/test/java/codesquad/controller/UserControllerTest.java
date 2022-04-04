@@ -45,6 +45,7 @@ class UserControllerTest {
     @DisplayName("여러명의 사용자가 회원가입 했을때 사용자 목록의 크기가 일치하는지 테스트")
     void 회원목록_조회() {
         // given
+        // 쿼리문으로 두명의 사용자가 이미 들어가 있는 상태
         User user3 = new User("user3", "1", "채상엽", "email1@gmail.com");
         User user4 = new User("user4", "1", "홍동건", "email2@gmail.com");
         User user5 = new User("user5", "1", "김성혁", "email3@gmail.com");
