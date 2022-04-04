@@ -53,8 +53,8 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/form")
-    public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+    public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
 
         if(sessionedUser == null) {
             return "redirect:/login";
@@ -66,8 +66,8 @@ public class UserController {
     }
 
     @PostMapping("/users/{id}/update")
-    public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        User sessionedUser = (User) session.getAttribute("sessionedUser");
+    public String update(@PathVariable Long id, User updatedUser, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
 
         if (sessionedUser.equalsPassword(updatedUser.getPassword())) {
             sessionedUser.update(updatedUser);
@@ -78,7 +78,7 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
+    public String login(String userId, String password, HttpSession httpSession) {
         User savedUser = userRepository.findByUserId(userId);
 
         if(savedUser == null) {
@@ -89,7 +89,7 @@ public class UserController {
             return ":redirect/login";
         }
 
-        session.setAttribute("sessionedUser", savedUser);
+        httpSession.setAttribute("sessionedUser", savedUser);
         return "redirect:/";
     }
 }

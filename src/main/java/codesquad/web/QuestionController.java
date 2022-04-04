@@ -46,7 +46,7 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public ModelAndView show(@PathVariable Long index) {
+    public ModelAndView show(@PathVariable Long index, HttpSession httpSession) {
         ModelAndView mav = new ModelAndView("qna/show");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         mav.addObject("question", savedQuestion);
