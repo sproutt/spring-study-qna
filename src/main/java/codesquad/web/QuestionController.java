@@ -6,10 +6,7 @@ import codesquad.domain.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
@@ -54,13 +51,19 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}/updateForm")
-    public String updateForm(@PathVariable Long index, Model model) {
+    public String updateForm(@PathVariable Long index, Model model, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+
+        if(!sessionedUser.isSameUser(savedQuestion.getWriter().getUserId())) {
+            return "failed";
+        }
+
         model.addAttribute("question", savedQuestion);
         return "qna/updateForm";
     }
 
-    @PostMapping("/questions/{index}")
+    @PutMapping("/questions/{index}")
     public String update(@PathVariable Long index, Question updatedQuestion) {
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         if(savedQuestion.equalsIndex(index)) {

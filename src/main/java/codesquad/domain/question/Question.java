@@ -57,7 +57,6 @@ public class Question {
     }
 
     public void update(Question updatedQuestion) {
-        this.writer = updatedQuestion.getWriter();
         this.title = updatedQuestion.getTitle();
         this.contents = updatedQuestion.getContents();
     }
