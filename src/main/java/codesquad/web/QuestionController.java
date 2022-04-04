@@ -64,7 +64,8 @@ public class QuestionController {
     }
 
     @PutMapping("/questions/{index}")
-    public String update(@PathVariable Long index, Question updatedQuestion) {
+    public String update(@PathVariable Long index, Question updatedQuestion, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         if(savedQuestion.equalsIndex(index)) {
             savedQuestion.update(updatedQuestion);
@@ -74,8 +75,12 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{index}")
-    public String delete(@PathVariable Long index) {
+    public String delete(@PathVariable Long index, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        if(!sessionedUser.isSameUser(question.getWriter().getUserId())) {
+            return "redirect:/login";
+        }
         questionRepository.delete(question);
         return "redirect:/";
     }
