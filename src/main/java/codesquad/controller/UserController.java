@@ -46,8 +46,20 @@ public class UserController {
     }
 
     @GetMapping("/users/{id}/form")
-    public String showEditIndividualInfoForm(@PathVariable Long id) {
-        return "user/updateForm";
+    public String showEditIndividualInfoForm(@PathVariable Long id, HttpSession session) {
+        Object value = session.getAttribute("sessionedUser");
+        if (value != null) {
+            User sessionedUser = (User) value;
+            try {
+                userRepository.findById(id)
+                              .filter(s -> s.getId()
+                                            .equals(sessionedUser.getId()))
+                              .orElseThrow(NoSuchUserException::new);
+            } catch (NoSuchUserException exception) {
+                return "user/edit_failed";
+            }
+        }
+        return "user/update_form";
     }
 
     @PutMapping("/users/{id}")
