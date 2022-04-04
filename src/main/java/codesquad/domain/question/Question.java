@@ -12,7 +12,6 @@ public class Question {
 
     @ManyToOne
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
-    @Column(nullable = false, length = 20)
     private User writer;
 
     @Column(nullable = false, length = 200)
