@@ -1,5 +1,7 @@
 package codesquad.domain.question;
 
+import codesquad.domain.user.User;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,8 +10,10 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
 
+    @ManyToOne
+    @JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
     @Column(nullable = false, length = 20)
-    private String writer;
+    private User writer;
 
     @Column(nullable = false, length = 200)
     private String title;
@@ -25,11 +29,11 @@ public class Question {
         this.index = index;
     }
 
-    public String getWriter() {
+    public User getWriter() {
         return writer;
     }
 
-    public void setWriter(String writer) {
+    public void setWriter(User writer) {
         this.writer = writer;
     }
 
