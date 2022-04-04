@@ -68,12 +68,11 @@ public class UserController {
 
     @PostMapping("/users/{id}/update")
     public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
-        Object sessionedUser = session.getAttribute("sessionedUser");
-        User savedUser = (User) sessionedUser;
+        User sessionedUser = (User) session.getAttribute("sessionedUser");
 
-        if (savedUser.equalsPassword(updatedUser.getPassword())) {
-            savedUser.update(updatedUser);
-            userRepository.save(savedUser);
+        if (sessionedUser.equalsPassword(updatedUser.getPassword())) {
+            sessionedUser.update(updatedUser);
+            userRepository.save(sessionedUser);
         }
 
         return "redirect:/users";

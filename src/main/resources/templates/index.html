@@ -39,7 +39,12 @@
                 </ul>
               </div>
               <div class="col-md-3 qna-write">
+                  {{^sessionedUser}}
+                  <a href="/users/login/form" class="btn btn-primary pull-right" role="button">질문하기</a>
+                  {{/sessionedUser}}
+                  {{#sessionedUser}}
                   <a href="/questions" class="btn btn-primary pull-right" role="button">질문하기</a>
+                  {{/sessionedUser}}
               </div>
           </div>
         </div>
