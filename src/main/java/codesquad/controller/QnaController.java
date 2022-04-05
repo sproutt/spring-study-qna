@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import codesquad.domain.question.Question;
@@ -56,15 +57,19 @@ public class QnaController {
 	}
 
 	@GetMapping("/questions/{index}/form")
-	public String updateForm(@PathVariable Long index, Model model) {
+	public String updateForm(@PathVariable Long index, Model model, HttpSession session) {
+		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(savedQuestion.isSameIndex(index)) {
-			model.addAttribute("question", savedQuestion);
+
+		if(!sessionedUser.isSameId(savedQuestion.getWriter().getUserId())) {
+			return "failed";
 		}
+
+		model.addAttribute("question", savedQuestion);
 		return "qna/updateForm";
 	}
 
-	@PostMapping("/questions/{index}")
+	@PutMapping("/questions/{index}")
 	public String update(@PathVariable Long index, Question updatedQuestion) {
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		if(updatedQuestion.isSameIndex(question.getIndex())) {

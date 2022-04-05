@@ -31,8 +31,8 @@ public class User {
 		return false;
 	}
 
-	public boolean isSameId(Long userid) {
-		if (this.id.equals(userid)) {
+	public boolean isSameId(String userid) {
+		if (this.userId.equals(userid)) {
 			return true;
 		}
 		return false;
