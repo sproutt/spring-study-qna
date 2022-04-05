@@ -79,10 +79,7 @@
       <div class="panel panel-default content-main">
           {{#question}}
           <form name="question" method="post" action="/questions/{{{index}}}">
-              <div class="form-group">
-                  <label for="writer">글쓴이</label>
-                  <input type = "text" class="form-control" id="writer" name="writer" value="{{writer}}" placeholder="글쓴이" disabled/>
-              </div>
+              <input type="hidden" name="_method" value="PUT">
               <div class="form-group">
                   <label for="title">제목</label>
                   <input type="text" class="form-control" id="title" name="title" value="{{title}}" placeholder="제목"/>

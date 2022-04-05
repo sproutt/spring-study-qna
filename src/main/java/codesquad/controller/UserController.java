@@ -1,6 +1,6 @@
 package codesquad.controller;
 
-import java.util.NoSuchElementException;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -45,21 +45,51 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model) {
-		User savedUser = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-		if(savedUser.isSameId(id)) {
-			model.addAttribute("user", savedUser);
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+		Object sessionedUser = session.getAttribute("sessionedUser");
+
+		if(sessionedUser == null) {
+			return "redirect:/login";
 		}
+
+		User user = (User) sessionedUser;
+		model.addAttribute("user", user);
 		return "user/updateForm";
 	}
 
 	@PostMapping("/users/{id}/update")
-	public String update(@PathVariable Long id, User updatedUser) {
-		User user = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-		if(user.isSamePassword(updatedUser.getPassword())) {
-			user.update(updatedUser);
-			userRepository.save(user);
+	public String update(@PathVariable Long id, User updatedUser, HttpSession session) {
+		User sessionedUser = (User) session.getAttribute("sessionedUser");
+
+		if(sessionedUser.isSamePassword(updatedUser.getPassword())) {
+			sessionedUser.update(updatedUser);
+			userRepository.save(sessionedUser);
 		}
 		return "redirect:/users";
 	}
+
+	@GetMapping("/users/login/form")
+	public String userLoginForm(){
+		return "user/login";
+	}
+
+	@PostMapping("/login")
+	public String login(String userId, String password, HttpSession session){
+		User savedUser = userRepository.findByUserId(userId);
+
+		if(savedUser == null){
+			return "redirect:/login";
+		}
+
+		if(!savedUser.isSamePassword(password)){
+			return "redirect:/login";
+		}
+
+		session.setAttribute("sessionedUser", savedUser);
+		return "redirect:/";
+	}
+
+
+
+
 }

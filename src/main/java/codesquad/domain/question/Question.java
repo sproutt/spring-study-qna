@@ -2,9 +2,14 @@ package codesquad.domain.question;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+
+import codesquad.domain.user.User;
 
 @Entity
 public class Question {
@@ -12,11 +17,13 @@ public class Question {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long index;
 
-	@Column(nullable = false, length = 20)
-	private String writer;
+	@ManyToOne
+	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+	private User writer;
 
 	@Column(nullable = false, length = 200)
 	private String title;
+
 
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String contents;
@@ -29,11 +36,11 @@ public class Question {
 		this.index = index;
 	}
 
-	public String getWriter() {
+	public User getWriter() {
 		return writer;
 	}
 
-	public void setWriter(String writer) {
+	public void setWriter(User writer) {
 		this.writer = writer;
 	}
 
