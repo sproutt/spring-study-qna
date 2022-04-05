@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
@@ -47,10 +48,11 @@ public class QnaController {
 	}
 
 	@GetMapping("/questions/{index}")
-	public String show(@PathVariable Long index, Model model) {
+	public ModelAndView show(@PathVariable Long index, HttpSession session) {
+		ModelAndView mav = new ModelAndView("qna/show");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		model.addAttribute("question", question);
-		return "qna/show";
+		mav.addObject("question", question);
+		return mav;
 	}
 
 	@GetMapping("/questions/{index}/form")

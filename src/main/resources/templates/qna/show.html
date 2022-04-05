@@ -26,6 +26,13 @@
                   </div>
                   <div class="article-util">
                       <ul class="article-util-list">
+
+                          {{^sessionedUser}}
+                          <li>
+                              <a class="link-modify-article" href="/index.html">목록</a>
+                          </li>
+                          {{/sessionedUser}}
+                          {{#sessionedUser}}
                           <li>
                               <a class="link-modify-article" href="/questions/{{{index}}}/form">수정</a>
                           </li>
@@ -38,6 +45,7 @@
                           <li>
                               <a class="link-modify-article" href="/index.html">목록</a>
                           </li>
+                          {{/sessionedUser}}
                       </ul>
                   </div>
               </article>
