@@ -1,20 +1,38 @@
-package codesquad.domain;
+package codesquad.domain.user;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class User {
-	private long id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(nullable = false, length = 20)
 	private String userId;
+
 	private String password;
 	private String name;
 	private String email;
 
-	public void update(User user){
-		this.password = user.getPassword();
+	public void update(User user) {
 		this.name = user.getName();
 		this.email = user.getEmail();
 	}
 
-	public boolean validatePassword(User user){
-		if (this.password.equals(user.getPassword())){
+	public boolean isSamePassword(String password) {
+		if (this.password.equals(password)) {
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isSameId(Long userid) {
+		if (this.id.equals(userid)) {
 			return true;
 		}
 		return false;
@@ -52,11 +70,11 @@ public class User {
 		this.email = email;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 }
