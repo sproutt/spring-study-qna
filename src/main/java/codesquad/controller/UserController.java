@@ -47,11 +47,15 @@ public class UserController {
 	}
 
 	@GetMapping("/users/{id}/form")
-	public String updateForm(@PathVariable Long id, Model model) {
-		User savedUser = userRepository.findById(id).orElseThrow(NoSuchElementException::new);
-		if(savedUser.isSameId(id)) {
-			model.addAttribute("user", savedUser);
+	public String updateForm(@PathVariable Long id, Model model, HttpSession session) {
+		Object value = session.getAttribute("sessionedUser");
+
+		if(value == null) {
+			return "redirect:/login";
 		}
+
+		User user = (User) value;
+		model.addAttribute("user", user);
 		return "user/updateForm";
 	}
 
@@ -85,4 +89,8 @@ public class UserController {
 		session.setAttribute("sessionedUser", savedUser);
 		return "redirect:/";
 	}
+
+
+
+
 }
