@@ -2,6 +2,8 @@ package codesquad.controller;
 
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -61,5 +63,26 @@ public class UserController {
 			userRepository.save(user);
 		}
 		return "redirect:/users";
+	}
+
+	@GetMapping("/users/login/form")
+	public String userLoginForm(){
+		return "user/login";
+	}
+
+	@PostMapping("/login")
+	public String login(String userId, String password, HttpSession session){
+		User savedUser = userRepository.findByUserId(userId);
+
+		if(savedUser == null){
+			return "redirect:/login";
+		}
+
+		if(!savedUser.isSamePassword(password)){
+			return "redirect:/login";
+		}
+
+		session.setAttribute("sessionedUser", savedUser);
+		return "redirect:/";
 	}
 }
