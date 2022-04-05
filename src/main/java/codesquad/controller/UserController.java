@@ -64,10 +64,14 @@ public class UserController {
 
     @PutMapping("/users/{id}")
     public String editIndividualInfo(@PathVariable Long id, EditUserDto editUserDto) {
-        User user = userRepository.findById(id)
-                                  .orElseThrow(NoSuchUserException::new);
-        user.update(editUserDto);
-        userRepository.save(user);
+        try {
+            User user = userRepository.findById(id)
+                                      .orElseThrow(NoSuchUserException::new);
+            user.update(editUserDto);
+            userRepository.save(user);
+        } catch (NoSuchUserException exception) {
+            return "user/no_user_form";
+        }
         return "redirect:/users";
     }
 

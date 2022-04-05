@@ -39,9 +39,13 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String showQuestionDetail(@PathVariable Long id, Model model) {
-        Question question = questionRepository.findById(id)
-                                              .orElseThrow(NoSuchQuestionException::new);
-        model.addAttribute("question", question);
+        try {
+            Question question = questionRepository.findById(id)
+                                                  .orElseThrow(NoSuchQuestionException::new);
+            model.addAttribute("question", question);
+        } catch (NoSuchQuestionException exception) {
+            return "qna/no_question_form";
+        }
         return "qna/show";
     }
 
