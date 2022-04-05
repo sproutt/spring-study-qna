@@ -5,7 +5,6 @@ import codesquad.domain.User;
 import codesquad.domain.WriteQuestionDto;
 import codesquad.repository.QuestionRepository;
 import codesquad.repository.UserRepository;
-import org.apache.tomcat.jni.Local;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
