@@ -2,6 +2,8 @@ package codesquad.controller;
 
 import java.util.NoSuchElementException;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
+import codesquad.domain.user.User;
 
 @Controller
 public class QnaController {
@@ -32,7 +35,13 @@ public class QnaController {
 	}
 
 	@PostMapping("/questions")
-	public String ask(Question question) {
+	public String ask(Question question, HttpSession session) {
+		User sessionedUser = (User) session.getAttribute("sessionedUser");
+
+		if(sessionedUser == null){
+			return "redirect:/login";
+		}
+		question.setWriter(sessionedUser);
 		questionRepository.save(question);
 		return "redirect:/";
 	}
