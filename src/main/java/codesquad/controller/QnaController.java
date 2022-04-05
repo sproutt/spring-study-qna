@@ -38,9 +38,9 @@ public class QnaController {
 
 	@PostMapping("/questions")
 	public String ask(Question question, HttpSession session) {
-		User sessionedUser = (User) session.getAttribute("sessionedUser");
+		User sessionedUser = (User)session.getAttribute("sessionedUser");
 
-		if(sessionedUser == null){
+		if (sessionedUser == null) {
 			return "redirect:/login";
 		}
 		question.setWriter(sessionedUser);
@@ -58,10 +58,10 @@ public class QnaController {
 
 	@GetMapping("/questions/{index}/form")
 	public String updateForm(@PathVariable Long index, Model model, HttpSession session) {
-		User sessionedUser = (User) session.getAttribute("sessionedUser");
+		User sessionedUser = (User)session.getAttribute("sessionedUser");
 		Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 
-		if(!sessionedUser.isSameId(savedQuestion.getWriter().getUserId())) {
+		if (!sessionedUser.isSameId(savedQuestion.getWriter().getUserId())) {
 			return "failed";
 		}
 
@@ -70,18 +70,24 @@ public class QnaController {
 	}
 
 	@PutMapping("/questions/{index}")
-	public String update(@PathVariable Long index, Question updatedQuestion) {
+	public String update(@PathVariable Long index, Question updatedQuestion, HttpSession session) {
+		User sessionedUser = (User)session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(updatedQuestion.isSameIndex(question.getIndex())) {
+		if (question.isSameIndex(index)) {
 			question.update(updatedQuestion);
 			questionRepository.save(question);
 		}
 		return "redirect:/";
+
 	}
 
 	@DeleteMapping("/questions/{index}")
-	public String delete(@PathVariable Long index) {
+	public String delete(@PathVariable Long index, HttpSession session) {
+		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		if(!sessionedUser.isSameId(question.getWriter().getUserId())) {
+			return "redirect:/login";
+		}
 		questionRepository.delete(question);
 		return "redirect:/";
 	}
