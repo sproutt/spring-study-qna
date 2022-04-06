@@ -1,42 +1,87 @@
 package codesquad.web;
 
-import codesquad.domain.Question;
+import codesquad.domain.question.Question;
+import codesquad.domain.question.QuestionRepository;
+import codesquad.domain.user.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpSession;
+import java.util.NoSuchElementException;
 
 @Controller
 public class QuestionController {
 
-    private List<Question> questions = new ArrayList<>();
-    private static Long index = 1L;
+    @Autowired
+    private QuestionRepository questionRepository;
+
+    @GetMapping("/questions")
+    public String qnaForm() {
+        return "qna/form";
+    }
 
     @PostMapping("/questions")
-    public String create(Question question) {
-        question.setIndex(index++);
-        questions.add(question);
+    public String create(Question question, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+
+        if(sessionedUser == null) {
+            return "redirect:/login";
+        }
+
+        question.setWriter(sessionedUser);
+        questionRepository.save(question);
         return "redirect:/";
     }
 
     @GetMapping("/")
     public String list(Model model) {
-        model.addAttribute("questions", questions);
+        model.addAttribute("questions", questionRepository.findAll());
         return "index";
     }
 
     @GetMapping("/questions/{index}")
-    public String show(@PathVariable int index, Model model) {
-        for(Question question : questions) {
-            if(question.getIndex() == index) {
-                model.addAttribute("question", question);
-                break;
-            }
+    public ModelAndView show(@PathVariable Long index, HttpSession httpSession) {
+        ModelAndView mav = new ModelAndView("qna/show");
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        mav.addObject("question", savedQuestion);
+        return mav;
+    }
+
+    @GetMapping("/questions/{index}/updateForm")
+    public String updateForm(@PathVariable Long index, Model model, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+
+        if(!sessionedUser.isSameUser(savedQuestion.getWriter().getUserId())) {
+            return "failed";
         }
-        return "qna/show";
+
+        model.addAttribute("question", savedQuestion);
+        return "qna/updateForm";
+    }
+
+    @PutMapping("/questions/{index}")
+    public String update(@PathVariable Long index, Question updatedQuestion, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        if(savedQuestion.equalsIndex(index)) {
+            savedQuestion.update(updatedQuestion);
+            questionRepository.save(savedQuestion);
+        }
+        return "redirect:/";
+    }
+
+    @DeleteMapping("/questions/{index}")
+    public String delete(@PathVariable Long index, HttpSession httpSession) {
+        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+        Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        if(!sessionedUser.isSameUser(question.getWriter().getUserId())) {
+            return "redirect:/login";
+        }
+        questionRepository.delete(question);
+        return "redirect:/";
     }
 }
