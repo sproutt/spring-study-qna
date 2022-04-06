@@ -1,7 +1,16 @@
-복<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="kr">
 <head>
-    {{> include/header }}
+    <meta content="text/html; charset=UTF-8" http-equiv="content-type">
+    <meta charset="utf-8">
+    <title>SLiPP Java Web Programming</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1" name="viewport">
+    <link href="../../css/bootstrap.min.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="../../css/styles.css" rel="stylesheet">
+
 </head>
 <body>
 {{> include/content }}
@@ -20,7 +29,7 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">{{time}}</span>
-                                <a class="author" href="../user/profile.html">{{writer}}</a>
+                                <a class="author" href="../user/profile.html">{{writer.name}}</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -81,7 +90,7 @@
                     </ul>
                 </div>
                 <div class="col-md-3 qna-write">
-                    <a class="btn btn-primary pull-right" href="../qna/form.html" role="button">질문하기</a>
+                    <a class="btn btn-primary pull-right" href="/questions/form" role="button">질문하기</a>
                 </div>
             </div>
         </div>
@@ -89,6 +98,8 @@
 </div>
 
 <!-- script references -->
-{{> include/footer }}
+<script src="../../js/jquery-2.2.0.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/scripts.js"></script>
 </body>
 </html>

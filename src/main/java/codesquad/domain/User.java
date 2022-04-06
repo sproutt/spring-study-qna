@@ -1,37 +1,57 @@
 package codesquad.domain;
 
+import codesquad.exception.NoSuchPasswordException;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public User(Long id, String userId, String password, String name, String email) {
-        this.id = id;
+    public User(String userId, String password, String name, String email) {
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public void createId(Long id) {
-        this.id = id;
+    public User() {
+
     }
 
-    public void editInfo(User user) {
-        this.userId = user.getUserId();
-        this.password = user.getPassword();
-        this.name = user.getName();
-        this.email = user.getEmail();
+    public void update(EditUserDto editUserDto) {
+        if (equalsPassword(editUserDto.getPassword())) {
+            this.password = editUserDto.getPassword();
+            this.name = editUserDto.getName();
+            this.email = editUserDto.getEmail();
+        } else {
+            throw new NoSuchPasswordException();
+        }
     }
 
-    public boolean isIdEqual(Long id) {
-        return this.id.equals(id);
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public boolean isUserIdEqual(String userId) {
-        return this.userId.equals(userId);
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Long getId() {
@@ -52,5 +72,9 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public boolean equalsPassword(String passwd) {
+        return this.password.equals(passwd);
     }
 }
