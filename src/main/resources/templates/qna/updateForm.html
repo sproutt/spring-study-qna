@@ -8,12 +8,7 @@
     <div class="col-md-12 col-sm-12 col-lg-10 col-lg-offset-1">
         <div class="panel panel-default content-main">
             {{#question}}
-            <form action="/questions/{{id}}/update" method="post" name="question">
-                <div class="form-group">
-                    <label for="writer">글쓴이</label>
-                    <input class="form-control" id="writer" name="writer" placeholder="글쓴이"
-                           value="{{writer}}"/>
-                </div>
+            <form action="/questions/{{id}}" method="post" name="question">
                 <div class="form-group">
                     <label for="title">제목</label>
                     <input class="form-control" id="title" name="title" placeholder="제목" type="text"
@@ -24,6 +19,7 @@
                     <textarea class="form-control" id="contents" name="contents" rows="5">{{contents}}</textarea>
                 </div>
                 <button class="btn btn-success clearfix pull-right" type="submit">질문하기</button>
+                <input type="hidden" name="_method" value="PUT">
                 <div class="clearfix"/>
             </form>
             {{/question}}

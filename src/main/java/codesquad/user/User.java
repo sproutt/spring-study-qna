@@ -62,7 +62,15 @@ public class User {
         }
     }
 
-    private boolean equalsPassword(String password) {
+    public boolean equalsPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean equalsId(Long id) {
+        return this.id.equals(id);
+    }
+
+    public boolean equalsId(User user) {
+        return id.equals(user.getId());
     }
 }
