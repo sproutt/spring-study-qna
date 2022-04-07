@@ -35,7 +35,6 @@ public class QuestionController {
     public String create(Question question, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
-
         if (user == null) {
             return "/login";
         }
