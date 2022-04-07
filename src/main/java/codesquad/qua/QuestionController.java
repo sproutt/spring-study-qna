@@ -116,6 +116,6 @@ public class QuestionController {
     }
 
     private boolean isQuestionMatchUser(User loginUser, Question question) {
-        return loginUser.equalsId(question.getWriter());
+        return question.equalsWriter(loginUser);
     }
 }

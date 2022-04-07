@@ -51,4 +51,8 @@ public class Question {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
+
+    public boolean equalsWriter(User user) {
+        return writer.equals(user);
+    }
 }
