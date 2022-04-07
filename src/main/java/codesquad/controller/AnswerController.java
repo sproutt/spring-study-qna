@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
@@ -35,4 +36,20 @@ public class AnswerController {
 		answerRepository.save(answer);
 		return String.format("redirect:/questions/%d", index);
 	}
+
+	@DeleteMapping("/questions/{index}/answers/{index}")
+	public String delete(@PathVariable Long index, HttpSession session) {
+		User sessionedUser = (User) session.getAttribute("sessionedUser");
+		Answer answer = answerRepository.findById(index).orElseThrow(NoSuchElementException::new);
+		if(!answer.isSameWriter(sessionedUser)){
+			return "redircet:/questions/{index}/answers";
+		}
+
+		if(sessionedUser == null) {
+			return "redirect:/login";
+		}
+		answerRepository.delete(answer);
+		return "redirect:/questions/{index}";
+	}
+
 }

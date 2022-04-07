@@ -42,7 +42,12 @@ public class Answer {
 		this.question = question;
 	}
 
-
+	public boolean isSameWriter(User writer){
+		if(this.writer.getId().equals(writer.getId())){
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean equals(Object o) {
