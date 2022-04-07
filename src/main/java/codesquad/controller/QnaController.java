@@ -32,7 +32,7 @@ public class QnaController {
 	@GetMapping("/")
 	// @RequestMapping(value = "/", method = RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("questions", questionRepository.findAll());
+		model.addAttribute("questions", questionRepository.findAllByState(true));
 		return "index";
 	}
 
@@ -44,6 +44,7 @@ public class QnaController {
 			return "redirect:/login";
 		}
 		question.setWriter(sessionedUser);
+		question.setState(true);
 		questionRepository.save(question);
 		return "redirect:/";
 	}
@@ -89,10 +90,18 @@ public class QnaController {
 			return "redircet:/questions/{index}";
 		}
 
-		if(!question.isSameWriter(sessionedUser)) {
+		if(sessionedUser == null) {
 			return "redirect:/login";
 		}
-		questionRepository.delete(question);
+
+		if(!question.checkEmptyAnswerList()){
+		 	if(!question.checkExistAnotherAnswerWriter(sessionedUser)){
+				return "redircet:/questions/{index}";
+			}
+		}
+
+		question.delete();
+		questionRepository.save(question);
 		return "redirect:/";
 	}
 }

@@ -33,6 +33,9 @@ public class Question {
 	@Column(nullable = false, columnDefinition = "TEXT")
 	private String contents;
 
+	@Column
+	private boolean state;
+
 	@OneToMany(mappedBy ="question")
 	private List<Answer> answers;
 
@@ -54,6 +57,31 @@ public class Question {
 		this.title = question.title;
 		this.contents = question.contents;
 	}
+
+	public void delete(){
+		this.state = false;
+	}
+
+	public boolean checkEmptyAnswerList(){
+		if(answers.isEmpty()){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean checkExistAnotherAnswerWriter(User writer){
+		for (Answer answer : answers) {
+			if(!answer.isSameWriter(writer)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void setState(boolean state) {
+		this.state = state;
+	}
+
 
 	public Long getIndex() {
 		return index;
