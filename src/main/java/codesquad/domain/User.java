@@ -1,6 +1,6 @@
 package codesquad.domain;
 
-import codesquad.exception.NoSuchPasswordException;
+import codesquad.exception.InvalidPasswordException;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -34,7 +34,7 @@ public class User {
             this.name = editUserDto.getName();
             this.email = editUserDto.getEmail();
         } else {
-            throw new NoSuchPasswordException();
+            throw new InvalidPasswordException();
         }
     }
 
