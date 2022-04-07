@@ -85,7 +85,11 @@ public class QnaController {
 	public String delete(@PathVariable Long index, HttpSession session) {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(!sessionedUser.isSameId(question.getWriter().getUserId())) {
+		if(!question.isSameWriter(sessionedUser)){
+			return "redircet:/questions/{index}";
+		}
+
+		if(!question.isSameWriter(sessionedUser)) {
 			return "redirect:/login";
 		}
 		questionRepository.delete(question);

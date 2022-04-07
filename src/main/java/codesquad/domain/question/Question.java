@@ -43,6 +43,13 @@ public class Question {
 		return false;
 	}
 
+	public boolean isSameWriter(User writer){
+		if(this.writer.getId().equals(writer.getId())){
+			return true;
+		}
+		return false;
+	}
+
 	public void update(Question question){
 		this.title = question.title;
 		this.contents = question.contents;
@@ -79,4 +86,21 @@ public class Question {
 	public void setContents(String contents) {
 		this.contents = contents;
 	}
+
+	// @Override
+	// public boolean equals(Object o) {
+	// 	if (this == o)
+	// 		return true;
+	// 	if (o == null || getClass() != o.getClass())
+	// 		return false;
+	// 	Question question = (Question)o;
+	// 	return Objects.equals(index, question.index) && Objects.equals(writer, question.writer)
+	// 			&& Objects.equals(title, question.title) && Objects.equals(contents, question.contents)
+	// 			&& Objects.equals(answers, question.answers);
+	// }
+
+	// @Override
+	// public int hashCode() {
+	// 	return Objects.hash(index, writer, title, contents, answers);
+	// }
 }
