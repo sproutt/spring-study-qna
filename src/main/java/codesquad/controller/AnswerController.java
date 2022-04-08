@@ -6,6 +6,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,13 +26,14 @@ public class AnswerController {
 	AnswerRepository answerRepository;
 
 	@PostMapping("/questions/{index}/answers")
-	public String create(@PathVariable Long index, String contents, HttpSession session){
+	public String create(@PathVariable Long index, String contents, HttpSession session, Model model){
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		if (sessionedUser == null) {
 			return "redirect:/login";
 		}
-
+		int answersSize = question.getAnswersSize();
+		model.addAttribute("answersSize", answersSize);
 		Answer answer = new Answer(sessionedUser, contents, question);
 		answerRepository.save(answer);
 		return String.format("redirect:/questions/%d", index);

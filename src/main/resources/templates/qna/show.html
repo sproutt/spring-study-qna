@@ -52,8 +52,9 @@
 
               <div class="qna-comment">
                   <div class="qna-comment-slipp">
-
-                      <p class="qna-comment-count"><strong>2</strong>개의 의견</p>
+                      {{#answersSize}}
+                      <p class="qna-comment-count"><strong>{{answersSize}}</strong>개의 의견</p>
+                      {{/answersSize}}
                       <div class="qna-comment-slipp-articles">
                           {{#answers}}
                           <article class="article" id="answer-1405">

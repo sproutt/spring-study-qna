@@ -82,7 +82,9 @@ public class Question {
 		this.state = state;
 	}
 
-
+	public int getAnswersSize(){
+		return answers.size();
+	}
 	public Long getIndex() {
 		return index;
 	}
