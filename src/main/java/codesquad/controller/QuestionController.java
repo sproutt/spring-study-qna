@@ -45,6 +45,8 @@ public class QuestionController {
             Question question = questionRepository.findById(id)
                                                   .orElseThrow(NoSuchElementException::new);
             model.addAttribute("question", question);
+            model.addAttribute("count", question.getAnswers()
+                                                .size());
         } catch (NoSuchElementException exception) {
             return "qna/no_question_form";
         }
