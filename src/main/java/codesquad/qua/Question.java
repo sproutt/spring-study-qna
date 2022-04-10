@@ -22,11 +22,21 @@ public class Question {
 
     private String contents;
 
+    private Boolean deleteFlag;
+
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
+
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
     }
 
     public User getWriter() {

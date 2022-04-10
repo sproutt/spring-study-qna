@@ -1,5 +1,7 @@
 package codesquad.qua;
 
+import codesquad.answer.Answer;
+import codesquad.answer.AnswerRepository;
 import codesquad.user.User;
 import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -19,6 +21,9 @@ public class QuestionController {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     QuestionRepository questionRepository;
+
+    @Autowired
+    AnswerRepository answerRepository;
 
     @GetMapping("/questions/form")
     public String createForm(HttpSession session) {
@@ -104,12 +109,23 @@ public class QuestionController {
             return "qna/login_failed";
         }
 
-        logger.info("user: {}", user.getName());
-        logger.info("question: {}", savedQuestion.getWriter());
+        if (savedQuestion.getAnswers().size() != 0) {
+            boolean deleteFlag = true;
+            for (Answer answer : savedQuestion.getAnswers()) {
+                if (!answer.equalsWriter(user)) {
+                    deleteFlag = false;
+                    break;
+                }
+            }
+            if(deleteFlag) {
+                savedQuestion.setDeleteFlag(false);
+                answerRepository.deleteAll(savedQuestion.getAnswers());
+            } else{
+                return "user/login_failed";
+            }
+        }
 
-        questionRepository.delete(savedQuestion);
-
-        return "redirect:/";
+        return "redirect:/questions/" + id;
     }
 
     private Question findQuestionById(Long id) {
