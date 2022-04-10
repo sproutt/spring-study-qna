@@ -15,6 +15,8 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
+    private String writer;
+
     private String comment;
 
     public String getWriter() {
