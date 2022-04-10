@@ -17,6 +17,14 @@ public class Answer {
 
     private String comment;
 
+    public String getWriter() {
+        return writer;
+    }
+
+    public void setWriter(String writer) {
+        this.writer = writer;
+    }
+
     public void setComment(String comment) {
         this.comment = comment;
     }

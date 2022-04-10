@@ -31,6 +31,7 @@ public class AnswerController {
         Question question = questionRepository.findById(questionId).orElseThrow(NoSuchElementException::new);
 
         logger.info("답글 내용 : {}", answer.getComment());
+        logger.info("답글 작성자 : {}", answer.getWriter());
 
         User user = SessionUtil.getUserBySession(session);
 
