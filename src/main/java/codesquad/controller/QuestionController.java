@@ -3,6 +3,7 @@ package codesquad.controller;
 import codesquad.domain.Question;
 import codesquad.domain.User;
 import codesquad.domain.WriteQuestionDto;
+import codesquad.repository.AnswerRepository;
 import codesquad.repository.QuestionRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,9 +17,11 @@ import java.util.NoSuchElementException;
 public class QuestionController {
 
     private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
 
-    public QuestionController(QuestionRepository questionRepository) {
+    public QuestionController(QuestionRepository questionRepository, AnswerRepository answerRepository) {
         this.questionRepository = questionRepository;
+        this.answerRepository = answerRepository;
     }
 
     @GetMapping("/questions/form")
@@ -111,10 +114,34 @@ public class QuestionController {
         if (getSessionValue(session) != null) {
             try {
                 User sessionedUser = (User) sessionValue;
-                questionRepository.delete(questionRepository.findById(id)
-                                                            .filter(s -> s.getId()
-                                                                          .equals(sessionedUser.getId()))
-                                                            .orElseThrow(NoSuchElementException::new));
+
+                Question question = questionRepository.findById(id)
+                                                      .orElseThrow(NoSuchElementException::new);
+
+                if (question.getWriter()
+                            .getId()
+                            .equals(sessionedUser.getId())) {
+                    if (question.getAnswers()
+                                .size() == 0) {
+                        question.setDeleteFlag(true);
+                    } else {
+                        boolean flag = true;
+                        for (Answer answer : question.getAnswers()) {
+                            if (!answer.getWriter()
+                                       .equals(question.getWriter()
+                                                       .getName())) {
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            answerRepository.deleteAll(question.getAnswers());
+                            question.getAnswers()
+                                    .clear();
+                            question.setDeleteFlag(true);
+                        }
+                    }
+                }
             } catch (NoSuchElementException exception) {
                 return "redirect:/users/login";
             }
