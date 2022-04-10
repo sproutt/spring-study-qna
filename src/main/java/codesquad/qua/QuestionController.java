@@ -105,8 +105,11 @@ public class QuestionController {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
-        if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
-            return "qna/login_failed";
+        logger.info("user: {}", user.getName());
+        logger.info("question: {}", savedQuestion.getWriter());
+
+        if(user == null || !isQuestionMatchUser(user, savedQuestion)) {
+            return "qna/show_failed";
         }
 
         if (savedQuestion.getAnswers().size() != 0) {
