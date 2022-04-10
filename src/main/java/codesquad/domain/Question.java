@@ -3,6 +3,8 @@ package codesquad.domain;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -15,6 +17,9 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime time;
+    @OneToMany(mappedBy = "question")
+    private final List<Answer> answers = new ArrayList<>();
+    private Boolean deleteFlag;
 
     public Question(User writer, String title, String contents, LocalDateTime time) {
         this.writer = writer;
