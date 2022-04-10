@@ -65,7 +65,7 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean isSameUser(String userId) {
-        return this.userId.equals(userId);
+    public boolean isSameUser(User user) {
+        return this.userId.equals(user.userId);
     }
 }

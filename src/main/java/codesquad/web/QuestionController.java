@@ -55,7 +55,7 @@ public class QuestionController {
         User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 
-        if(!sessionedUser.isSameUser(savedQuestion.getWriter().getUserId())) {
+        if(!sessionedUser.isSameUser(savedQuestion.getWriter())) {
             return "failed";
         }
 
@@ -78,7 +78,7 @@ public class QuestionController {
     public String delete(@PathVariable Long index, HttpSession httpSession) {
         User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-        if(!sessionedUser.isSameUser(question.getWriter().getUserId())) {
+        if(!sessionedUser.isSameUser(question.getWriter())) {
             return "redirect:/login";
         }
         questionRepository.delete(question);
