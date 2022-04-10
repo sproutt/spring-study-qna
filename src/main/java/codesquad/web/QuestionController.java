@@ -50,7 +50,7 @@ public class QuestionController {
         return mav;
     }
 
-    @GetMapping("/questions/{index}/updateForm")
+    @GetMapping("/questions/{index}/form")
     public String updateForm(@PathVariable Long index, Model model, HttpSession httpSession) {
         User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
