@@ -1,6 +1,7 @@
 package codesquad.answer;
 
 import codesquad.qua.Question;
+import codesquad.user.User;
 
 import javax.persistence.*;
 
@@ -50,5 +51,9 @@ public class Answer {
     public void addQuestion(Question question) {
         question.getAnswers().add(this);
         this.question = question;
+    }
+
+    public boolean equalsWriter(User user) {
+        return this.writer.equals(user.getName());
     }
 }

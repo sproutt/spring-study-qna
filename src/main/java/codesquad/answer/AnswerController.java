@@ -43,4 +43,20 @@ public class AnswerController {
 
         return "redirect:/questions/" + questionId;
     }
+
+    @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
+    public String remove(@PathVariable("question-id") Long questionId,
+                         @PathVariable("answer-id") Long answerId, HttpSession session) {
+        User user = SessionUtil.getUserBySession(session);
+
+        Answer answer = answerRepository.findById(answerId).orElseThrow(NoSuchElementException::new);
+
+        if(!answer.equalsWriter(user)){
+            return "user/login_failed";
+        }
+
+        answerRepository.delete(answer);
+
+        return "redirect:/questions/" + questionId;
+    }
 }
