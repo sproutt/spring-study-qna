@@ -27,11 +27,6 @@ public class AnswerController {
         this.answerRepository = answerRepository;
     }
 
-    @GetMapping("/questions/{question-id}/answers/{answer-id}")
-    public String showAnswer() {
-        return null;
-    }
-
     @PostMapping("/questions/{question-id}/answers")
     @Transactional
     public String create(@PathVariable("question-id") Long questionId, String comment, HttpSession session) {
