@@ -1,5 +1,6 @@
 package codesquad.controller;
 
+import codesquad.domain.Answer;
 import codesquad.domain.Question;
 import codesquad.domain.User;
 import codesquad.domain.WriteQuestionDto;
