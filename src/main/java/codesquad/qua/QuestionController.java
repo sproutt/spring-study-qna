@@ -108,25 +108,27 @@ public class QuestionController {
         logger.info("user: {}", user.getName());
         logger.info("question: {}", savedQuestion.getWriter());
 
-        if(user == null || !isQuestionMatchUser(user, savedQuestion)) {
+        if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
             return "qna/show_failed";
         }
 
-        if (savedQuestion.getAnswers().size() != 0) {
-            boolean deleteFlag = true;
+        boolean deleteFlag = true;
+
+        if(savedQuestion.getAnswers().size() > 0){
             for (Answer answer : savedQuestion.getAnswers()) {
                 if (!answer.equalsWriter(user)) {
                     deleteFlag = false;
                     break;
                 }
             }
-            if(deleteFlag) {
-                savedQuestion.setDeleteFlag(false);
-                answerRepository.deleteAll(savedQuestion.getAnswers());
-            } else{
-                return "user/login_failed";
-            }
         }
+
+        if(!deleteFlag){
+            return "qna/delete_failed";
+        }
+
+        savedQuestion.setDeleteFlag(false);
+        answerRepository.deleteAll(savedQuestion.getAnswers());
 
         return "redirect:/questions/" + id;
     }
