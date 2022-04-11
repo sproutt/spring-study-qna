@@ -19,22 +19,25 @@ import java.util.NoSuchElementException;
 @Controller
 public class AnswerController {
 
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
     @Autowired
     private AnswerRepository answerRepository;
-
     @Autowired
     private QuestionRepository questionRepository;
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @PostMapping("/questions/{question-id}/answers")
     public String create(@PathVariable("question-id") Long questionId, Answer answer, HttpSession session, Model model) {
-        Question question = questionRepository.findById(questionId).orElseThrow(NoSuchElementException::new);
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(NoSuchElementException::new);
 
         logger.info("답글 내용 : {}", answer.getComment());
         logger.info("답글 작성자 : {}", answer.getWriter());
 
         User user = SessionUtil.getUserBySession(session);
+
+        if (user == null) {
+            return "/login";
+        }
 
         answer.setWriter(user.getName());
 
@@ -49,9 +52,14 @@ public class AnswerController {
                          @PathVariable("answer-id") Long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
-        Answer answer = answerRepository.findById(answerId).orElseThrow(NoSuchElementException::new);
+        Answer answer = answerRepository.findById(answerId)
+                .orElseThrow(NoSuchElementException::new);
 
-        if(!answer.equalsWriter(user)){
+        if (user == null) {
+            return "/login";
+        }
+
+        if (!answer.equalsWriter(user)) {
             return "user/login_failed";
         }
 

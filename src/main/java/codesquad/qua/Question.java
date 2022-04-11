@@ -31,12 +31,12 @@ public class Question {
         return answers;
     }
 
-    public void setDeleteFlag(Boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
-    }
-
     public Boolean getDeleteFlag() {
         return deleteFlag;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 
     public User getWriter() {

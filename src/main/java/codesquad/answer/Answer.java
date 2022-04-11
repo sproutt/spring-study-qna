@@ -28,14 +28,6 @@ public class Answer {
         this.writer = writer;
     }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
     public Long getId() {
         return id;
     }
@@ -44,8 +36,16 @@ public class Answer {
         return question;
     }
 
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
+
     public String getComment() {
         return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public void addQuestion(Question question) {
@@ -54,6 +54,6 @@ public class Answer {
     }
 
     public boolean equalsWriter(User user) {
-        return this.writer.equals(user.getName());
+        return writer.equals(user.getName());
     }
 }
