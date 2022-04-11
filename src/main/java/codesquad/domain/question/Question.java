@@ -91,4 +91,8 @@ public class Question {
     public void addCountOfAnswer() {
         this.countOfAnswer += 1;
     }
+
+    public void deleteAnswer() {
+        this.countOfAnswer -= 1;
+    }
 }

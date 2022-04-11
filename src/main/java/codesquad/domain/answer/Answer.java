@@ -53,4 +53,8 @@ public class Answer {
     public void setContents(String contents) {
         this.contents = contents;
     }
+
+    public boolean isSameWriter(User user) {
+        return this.writer.isSameUser(user);
+    }
 }

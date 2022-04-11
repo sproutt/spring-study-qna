@@ -9,6 +9,7 @@ import codesquad.util.HttpSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,5 +41,26 @@ public class AnswerController {
         answerRepository.save(answer);
 
         return String.format("redirect:/questions/%d", index);
+    }
+
+    @DeleteMapping("/{id}")
+    public String delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
+        }
+
+        Answer savedAnswer = answerRepository.findById(id).orElseThrow(NoSuchElementException::new);
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+        if(!savedAnswer.isSameWriter(sessionedUser)) {
+            return "redirect:/users/login/form";
+        }
+
+        answerRepository.delete(savedAnswer);
+
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        savedQuestion.deleteAnswer();
+        questionRepository.save(savedQuestion);
+
+        return String.format("redirect:/questions/{index}");
     }
 }
