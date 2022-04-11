@@ -2,6 +2,7 @@ package codesquad.web;
 
 import codesquad.domain.user.User;
 import codesquad.domain.user.UserRepository;
+import codesquad.util.HttpSessionUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -54,10 +55,14 @@ public class UserController {
 
     @GetMapping("/users/{id}/form")
     public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
+        }
 
-        if(sessionedUser == null) {
-            return "redirect:/login";
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+
+        if(!sessionedUser.equalsId(id)) {
+            return "failed";
         }
 
         model.addAttribute("user", sessionedUser);
@@ -67,26 +72,37 @@ public class UserController {
 
     @PostMapping("/users/{id}/update")
     public String update(@PathVariable Long id, User updatedUser, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
-
-        if (sessionedUser.equalsPassword(updatedUser.getPassword())) {
-            sessionedUser.update(updatedUser);
-            userRepository.save(sessionedUser);
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
         }
+
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+
+        if(!sessionedUser.equalsId(id)) {
+            return "failed";
+        }
+
+        if (!sessionedUser.equalsPassword(updatedUser.getPassword())) {
+            return "failed";
+        }
+
+        sessionedUser.update(updatedUser);
+        userRepository.save(sessionedUser);
 
         return "redirect:/users";
     }
+
 
     @PostMapping("/login")
     public String login(String userId, String password, HttpSession httpSession) {
         User savedUser = userRepository.findByUserId(userId);
 
         if(savedUser == null) {
-            return ":redirect/login";
+            return ":redirect/users/login/form";
         }
 
         if(!savedUser.equalsPassword(password)) {
-            return ":redirect/login";
+            return ":redirect/users/login/form";
         }
 
         httpSession.setAttribute("sessionedUser", savedUser);

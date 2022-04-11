@@ -3,6 +3,7 @@ package codesquad.web;
 import codesquad.domain.question.Question;
 import codesquad.domain.question.QuestionRepository;
 import codesquad.domain.user.User;
+import codesquad.util.HttpSessionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,17 +20,20 @@ public class QuestionController {
     private QuestionRepository questionRepository;
 
     @GetMapping("/questions")
-    public String qnaForm() {
+    public String qnaForm(HttpSession httpSession) {
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
+        }
         return "qna/form";
     }
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
-
-        if(sessionedUser == null) {
-            return "redirect:/login";
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
         }
+
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
         question.setWriter(sessionedUser);
         questionRepository.save(question);
@@ -43,19 +47,23 @@ public class QuestionController {
     }
 
     @GetMapping("/questions/{index}")
-    public ModelAndView show(@PathVariable Long index, HttpSession httpSession) {
+    public ModelAndView show(@PathVariable Long index) {
         ModelAndView mav = new ModelAndView("qna/show");
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         mav.addObject("question", savedQuestion);
         return mav;
     }
 
-    @GetMapping("/questions/{index}/updateForm")
+    @GetMapping("/questions/{index}/form")
     public String updateForm(@PathVariable Long index, Model model, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
-        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
+        }
 
-        if(!sessionedUser.isSameUser(savedQuestion.getWriter().getUserId())) {
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+
+        if(!savedQuestion.isSameWriter(sessionedUser)) {
             return "failed";
         }
 
@@ -65,23 +73,37 @@ public class QuestionController {
 
     @PutMapping("/questions/{index}")
     public String update(@PathVariable Long index, Question updatedQuestion, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
-        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-        if(savedQuestion.equalsIndex(index)) {
-            savedQuestion.update(updatedQuestion);
-            questionRepository.save(savedQuestion);
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
         }
-        return "redirect:/";
+
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+
+        if(!savedQuestion.isSameWriter(sessionedUser)) {
+            return "failed";
+        }
+
+        savedQuestion.update(updatedQuestion);
+        questionRepository.save(savedQuestion);
+
+        return String.format("redirect:/questions/%d", index);
     }
 
     @DeleteMapping("/questions/{index}")
     public String delete(@PathVariable Long index, HttpSession httpSession) {
-        User sessionedUser = (User) httpSession.getAttribute("sessionedUser");
-        Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-        if(!sessionedUser.isSameUser(question.getWriter().getUserId())) {
-            return "redirect:/login";
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return "redirect:/users/login/form";
         }
-        questionRepository.delete(question);
+
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+
+        if(!savedQuestion.isSameWriter(sessionedUser)) {
+            return "redirect:/users/login/form";
+        }
+        questionRepository.delete(savedQuestion);
+
         return "redirect:/";
     }
 }
