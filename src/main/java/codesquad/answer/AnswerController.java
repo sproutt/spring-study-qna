@@ -40,8 +40,8 @@ public class AnswerController {
         }
 
         answer.setWriter(user.getName());
-
         answer.addQuestion(question);
+
         answerRepository.save(answer);
 
         return "redirect:/questions/" + questionId;

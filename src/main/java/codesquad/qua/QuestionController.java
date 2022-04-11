@@ -114,7 +114,7 @@ public class QuestionController {
 
         boolean deleteFlag = true;
 
-        if(savedQuestion.getAnswers().size() > 0){
+        if (savedQuestion.hasAnswers()) {
             for (Answer answer : savedQuestion.getAnswers()) {
                 if (!answer.equalsWriter(user)) {
                     deleteFlag = false;
@@ -123,11 +123,11 @@ public class QuestionController {
             }
         }
 
-        if(!deleteFlag){
+        if (!deleteFlag) {
             return "qna/delete_failed";
         }
 
-        savedQuestion.setDeleteFlag(false);
+        savedQuestion.changeDeleteFlag(true);
         answerRepository.deleteAll(savedQuestion.getAnswers());
 
         return "redirect:/questions/" + id;
