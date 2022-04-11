@@ -60,4 +60,8 @@ public class Question {
         this.title = updatedQuestion.getTitle();
         this.contents = updatedQuestion.getContents();
     }
+
+    public boolean isSameWriter(User user) {
+        return this.writer.isSameUser(user);
+    }
 }

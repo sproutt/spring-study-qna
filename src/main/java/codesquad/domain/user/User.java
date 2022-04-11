@@ -68,4 +68,8 @@ public class User {
     public boolean isSameUser(User user) {
         return this.userId.equals(user.userId);
     }
+
+    public boolean equalsId(Long id) {
+        return this.id.equals(id);
+    }
 }
