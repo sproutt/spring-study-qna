@@ -27,6 +27,8 @@ public class Question {
 
     private Integer countOfAnswer = 0;
 
+    private Boolean isDeleted = false;
+
     public Long getIndex() {
         return index;
     }
@@ -94,5 +96,16 @@ public class Question {
 
     public void deleteAnswer() {
         this.countOfAnswer -= 1;
+    }
+
+    public void delete() {
+        isDeleted = true;
+    }
+
+    public boolean canDelete() {
+        if(countOfAnswer.equals(0)) {
+            return true;
+        }
+        return false;
     }
 }

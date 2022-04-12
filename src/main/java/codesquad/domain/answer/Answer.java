@@ -56,6 +56,10 @@ public class Answer {
         this.contents = contents;
     }
 
+    public Boolean getDeleted() {
+        return isDeleted;
+    }
+
     public boolean isSameWriter(User user) {
         return this.writer.isSameUser(user);
     }

@@ -5,6 +5,7 @@
       <div class="panel panel-default qna-list">
           <ul class="list">
               {{#questions}}
+              {{^isDeleted}}
               <li>
                   <div class="wrap">
                       <div class="main">
@@ -23,6 +24,7 @@
                       </div>
                   </div>
               </li>
+              {{/isDeleted}}
               {{/questions}}
           </ul>
           <div class="row">

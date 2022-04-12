@@ -106,7 +106,14 @@ public class QuestionController {
         if (!savedQuestion.isSameWriter(sessionedUser)) {
             return "redirect:/users/login/form";
         }
-        questionRepository.delete(savedQuestion);
+
+        if(!savedQuestion.canDelete()) {
+            throw new IllegalStateException("질문을 삭제할 수 없습니다.");
+        }
+
+        savedQuestion.delete();
+
+        questionRepository.save(savedQuestion);
 
         return "redirect:/";
     }
