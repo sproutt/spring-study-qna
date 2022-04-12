@@ -55,13 +55,13 @@ public class UserController {
 
     @GetMapping("/users/{id}/form")
     public String userInfoUpdateForm(@PathVariable Long id, Model model, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
-        if(!sessionedUser.equalsId(id)) {
+        if (!sessionedUser.equalsId(id)) {
             return "failed";
         }
 
@@ -72,13 +72,13 @@ public class UserController {
 
     @PostMapping("/users/{id}/update")
     public String update(@PathVariable Long id, User updatedUser, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
-        if(!sessionedUser.equalsId(id)) {
+        if (!sessionedUser.equalsId(id)) {
             return "failed";
         }
 
@@ -97,11 +97,11 @@ public class UserController {
     public String login(String userId, String password, HttpSession httpSession) {
         User savedUser = userRepository.findByUserId(userId);
 
-        if(savedUser == null) {
+        if (savedUser == null) {
             return ":redirect/users/login/form";
         }
 
-        if(!savedUser.equalsPassword(password)) {
+        if (!savedUser.equalsPassword(password)) {
             return ":redirect/users/login/form";
         }
 

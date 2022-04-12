@@ -54,6 +54,7 @@
                       <p class="qna-comment-count"><strong>{{countOfAnswer}}</strong>개의 의견</p>
                       <div class="qna-comment-slipp-articles">
                           {{#answers}}
+                          {{^isDeleted}}
                           <article class="article" id="answer-1405">
                               <div class="article-header">
                                   <div class="article-header-thumb">
@@ -83,6 +84,7 @@
                                   </ul>
                               </div>
                           </article>
+                          {{/isDeleted}}
                           {{/answers}}
                           <form class="submit-write" method="post" action="/questions/{{index}}/answers">
                               <div class="form-group" style="padding:14px;">

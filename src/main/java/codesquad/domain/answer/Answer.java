@@ -22,6 +22,8 @@ public class Answer {
     @Column(columnDefinition = "TEXT", length = 300, nullable = false)
     private String contents;
 
+    private Boolean isDeleted = false;
+
     public Long getId() {
         return id;
     }
@@ -56,5 +58,9 @@ public class Answer {
 
     public boolean isSameWriter(User user) {
         return this.writer.isSameUser(user);
+    }
+
+    public void delete() {
+        isDeleted = true;
     }
 }

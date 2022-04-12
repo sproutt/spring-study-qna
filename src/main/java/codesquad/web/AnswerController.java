@@ -29,15 +29,17 @@ public class AnswerController {
 
     @PostMapping("")
     public String create(@PathVariable Long index, Answer answer, HttpSession httpSession, Model model) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
+
         answer.setWriter(sessionedUser);
         answer.setQuestion(savedQuestion);
         savedQuestion.addCountOfAnswer();
+
         answerRepository.save(answer);
 
         return String.format("redirect:/questions/%d", index);
@@ -45,20 +47,24 @@ public class AnswerController {
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         Answer savedAnswer = answerRepository.findById(id).orElseThrow(NoSuchElementException::new);
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
-        if(!savedAnswer.isSameWriter(sessionedUser)) {
+
+        if (!savedAnswer.isSameWriter(sessionedUser)) {
             return "redirect:/users/login/form";
         }
 
-        answerRepository.delete(savedAnswer);
+        savedAnswer.delete();
+
+        answerRepository.save(savedAnswer);
 
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         savedQuestion.deleteAnswer();
+
         questionRepository.save(savedQuestion);
 
         return String.format("redirect:/questions/{index}");

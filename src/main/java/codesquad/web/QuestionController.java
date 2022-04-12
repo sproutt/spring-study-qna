@@ -21,7 +21,7 @@ public class QuestionController {
 
     @GetMapping("/questions")
     public String qnaForm(HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
         return "qna/form";
@@ -29,14 +29,16 @@ public class QuestionController {
 
     @PostMapping("/questions")
     public String create(Question question, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
         question.setWriter(sessionedUser);
+
         questionRepository.save(question);
+
         return "redirect:/";
     }
 
@@ -56,35 +58,37 @@ public class QuestionController {
 
     @GetMapping("/questions/{index}/form")
     public String updateForm(@PathVariable Long index, Model model, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
-        if(!savedQuestion.isSameWriter(sessionedUser)) {
+        if (!savedQuestion.isSameWriter(sessionedUser)) {
             return "failed";
         }
 
         model.addAttribute("question", savedQuestion);
+
         return "qna/updateForm";
     }
 
     @PutMapping("/questions/{index}")
     public String update(@PathVariable Long index, Question updatedQuestion, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 
-        if(!savedQuestion.isSameWriter(sessionedUser)) {
+        if (!savedQuestion.isSameWriter(sessionedUser)) {
             return "failed";
         }
 
         savedQuestion.update(updatedQuestion);
+
         questionRepository.save(savedQuestion);
 
         return String.format("redirect:/questions/%d", index);
@@ -92,14 +96,14 @@ public class QuestionController {
 
     @DeleteMapping("/questions/{index}")
     public String delete(@PathVariable Long index, HttpSession httpSession) {
-        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+        if (!HttpSessionUtil.isLoginUser(httpSession)) {
             return "redirect:/users/login/form";
         }
 
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
         Question savedQuestion = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 
-        if(!savedQuestion.isSameWriter(sessionedUser)) {
+        if (!savedQuestion.isSameWriter(sessionedUser)) {
             return "redirect:/users/login/form";
         }
         questionRepository.delete(savedQuestion);
