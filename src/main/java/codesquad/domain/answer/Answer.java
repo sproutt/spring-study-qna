@@ -59,4 +59,20 @@ public class Answer {
 		return Objects.equals(index, answer.index) && Objects.equals(question, answer.question)
 				&& Objects.equals(contents, answer.contents);
 	}
+
+	public Long getIndex() {
+		return index;
+	}
+
+	public User getWriter() {
+		return writer;
+	}
+
+	public Question getQuestion() {
+		return question;
+	}
+
+	public String getContents() {
+		return contents;
+	}
 }

@@ -79,7 +79,7 @@
                                           <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
                                       </li>
                                       <li>
-                                          <form class="delete-answer-form" action="/questions/{{{index}}}/answers/{{{index}}}"
+                                          <form class="delete-answer-form" action="/api/questions/{{{index}}}/answers/{{{index}}}"
                                                 method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>
@@ -89,7 +89,7 @@
                               </div>
                           </article>
                           {{/answers}}
-                          <form class="submit-write" method="post" action="/questions/{{{index}}}/answers">
+                          <form class="submit-writer" method="post" action="/api/questions/{{{index}}}/answers">
                               <div class="form-group" style="padding:14px;">
                                   <textarea class="form-control" placeholder="Update your status"
                                             name="contents"></textarea>
