@@ -103,7 +103,7 @@ public class Question {
     }
 
     public boolean canDelete() {
-        if(countOfAnswer.equals(0)) {
+        if (countOfAnswer.equals(0)) {
             return true;
         }
         return false;

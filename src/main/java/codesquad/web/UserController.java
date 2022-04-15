@@ -70,7 +70,7 @@ public class UserController {
 
             model.addAttribute("user", sessionedUser);
 
-        } catch(IllegalStateException exception) {
+        } catch (IllegalStateException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             return "redirect:/users/login/form";
         }
@@ -98,7 +98,7 @@ public class UserController {
             sessionedUser.update(updatedUser);
 
             userRepository.save(sessionedUser);
-        } catch(IllegalStateException exception) {
+        } catch (IllegalStateException exception) {
             redirectAttributes.addFlashAttribute("errorMessage", exception.getMessage());
             return "redirect:/users/login/form";
         }
