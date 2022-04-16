@@ -60,15 +60,7 @@ public class QuestionController {
     public String qnaInfo(Model model, @PathVariable("id") Long id) {
         Question question = findQuestionById(id);
         model.addAttribute("question", question);
-
-        int count = 0;
-
-        for (Answer answer : question.getAnswers()) {
-            if (!answer.isDeletedFlag()) {
-                count++;
-            }
-        }
-        model.addAttribute("count", count);
+        model.addAttribute("count", countAnswers(question));
 
         return "qna/show";
     }
@@ -121,18 +113,7 @@ public class QuestionController {
             return "qna/show_failed";
         }
 
-        boolean deleteFlag = true;
-
-        if (savedQuestion.hasAnswers()) {
-            for (Answer answer : savedQuestion.getAnswers()) {
-                if (!answer.equalsWriter(user)) {
-                    deleteFlag = false;
-                    break;
-                }
-            }
-        }
-
-        if (!deleteFlag) {
+        if (!canDeleteQuestion(savedQuestion, user)) {
             return "qna/delete_failed";
         }
 
@@ -147,10 +128,31 @@ public class QuestionController {
 
     private Question findQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                                 .orElseThrow(NoSuchElementException::new);
     }
 
     private boolean isQuestionMatchUser(User loginUser, Question question) {
         return question.equalsWriter(loginUser);
+    }
+
+    private boolean canDeleteQuestion(Question deletedQuestion, User user) {
+        if (deletedQuestion.hasAnswers()) {
+            for (Answer answer : deletedQuestion.getAnswers()) {
+                if (!answer.equalsWriter(user)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private int countAnswers(Question question) {
+        int count = 0;
+        for (Answer answer : question.getAnswers()) {
+            if (!answer.isDeletedFlag()) {
+                count++;
+            }
+        }
+        return count;
     }
 }
