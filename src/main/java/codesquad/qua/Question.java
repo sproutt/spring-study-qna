@@ -1,8 +1,11 @@
 package codesquad.qua;
 
+import codesquad.answer.Answer;
 import codesquad.user.User;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -18,6 +21,23 @@ public class Question {
     private String title;
 
     private String contents;
+
+    private boolean deletedFlag = false;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers = new ArrayList<>();
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void changeDeleteFlag() {
+        deletedFlag = true;
+    }
+
+    public boolean isDeletedFlag() {
+        return deletedFlag;
+    }
 
     public User getWriter() {
         return writer;
@@ -50,5 +70,13 @@ public class Question {
     public void update(Question question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
+    }
+
+    public boolean equalsWriter(User user) {
+        return writer.equals(user);
+    }
+
+    public boolean hasAnswers() {
+        return answers.size() > 0;
     }
 }

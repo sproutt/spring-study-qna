@@ -1,5 +1,7 @@
 package codesquad.qua;
 
+import codesquad.answer.Answer;
+import codesquad.answer.AnswerRepository;
 import codesquad.user.User;
 import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -20,6 +22,9 @@ public class QuestionController {
     @Autowired
     QuestionRepository questionRepository;
 
+    @Autowired
+    AnswerRepository answerRepository;
+
     @GetMapping("/questions/form")
     public String createForm(HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
@@ -34,7 +39,6 @@ public class QuestionController {
     @PostMapping("/questions")
     public String create(Question question, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
-
 
         if (user == null) {
             return "/login";
@@ -54,7 +58,10 @@ public class QuestionController {
 
     @GetMapping("/questions/{id}")
     public String qnaInfo(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("question", findQuestionById(id));
+        Question question = findQuestionById(id);
+        model.addAttribute("question", question);
+        model.addAttribute("count", countAnswers(question));
+
         return "qna/show";
     }
 
@@ -94,28 +101,58 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}")
+    @Transactional
     public String remove(@PathVariable("id") Long id, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
-        if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
-            return "qna/login_failed";
-        }
-
         logger.info("user: {}", user.getName());
         logger.info("question: {}", savedQuestion.getWriter());
 
-        questionRepository.delete(savedQuestion);
+        if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
+            return "qna/show_failed";
+        }
 
-        return "redirect:/";
+        if (!canDeleteQuestion(savedQuestion, user)) {
+            return "qna/delete_failed";
+        }
+
+        savedQuestion.changeDeleteFlag();
+
+        for (Answer answer : savedQuestion.getAnswers()) {
+            answer.changeDeletedFlag();
+        }
+
+        return "redirect:/questions/" + id;
     }
 
     private Question findQuestionById(Long id) {
         return questionRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
+                                 .orElseThrow(NoSuchElementException::new);
     }
 
     private boolean isQuestionMatchUser(User loginUser, Question question) {
-        return loginUser.equalsId(question.getWriter());
+        return question.equalsWriter(loginUser);
+    }
+
+    private boolean canDeleteQuestion(Question deletedQuestion, User user) {
+        if (deletedQuestion.hasAnswers()) {
+            for (Answer answer : deletedQuestion.getAnswers()) {
+                if (!answer.equalsWriter(user)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private int countAnswers(Question question) {
+        int count = 0;
+        for (Answer answer : question.getAnswers()) {
+            if (!answer.isDeletedFlag()) {
+                count++;
+            }
+        }
+        return count;
     }
 }

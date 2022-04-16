@@ -18,6 +18,7 @@
                 </thead>
                 <tbody>
                 {{#question}}
+                {{^deletedFlag}}
                 <tr>
                     <th scope="row">
                         {{id}}
@@ -27,6 +28,7 @@
                     <td>{{contents}}</td>
                     <td><a href="/questions/{{id}}/updateForm" class="btn btn-success" role="button">수정</a></td>
                 </tr>
+                {{/deletedFlag}}
                 {{/question}}
                 </tbody>
             </table>
