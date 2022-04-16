@@ -20,6 +20,16 @@ public class Answer {
 
     private String comment;
 
+    private boolean deletedFlag = true;
+
+    public boolean isDeletedFlag() {
+        return deletedFlag;
+    }
+
+    public void changeDeletedFlag() {
+        deletedFlag = false;
+    }
+
     public String getWriter() {
         return writer;
     }

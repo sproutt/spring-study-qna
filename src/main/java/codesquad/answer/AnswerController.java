@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,12 +49,13 @@ public class AnswerController {
     }
 
     @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
+    @Transactional
     public String remove(@PathVariable("question-id") Long questionId,
                          @PathVariable("answer-id") Long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
         Answer answer = answerRepository.findById(answerId)
-                .orElseThrow(NoSuchElementException::new);
+                                        .orElseThrow(NoSuchElementException::new);
 
         if (user == null) {
             return "/login";
@@ -63,7 +65,7 @@ public class AnswerController {
             return "user/login_failed";
         }
 
-        answerRepository.delete(answer);
+        answer.changeDeletedFlag();
 
         return "redirect:/questions/" + questionId;
     }
