@@ -7,6 +7,7 @@
     <div class="col-md-12 col-sm-12 col-lg-12">
         <div class="panel panel-default">
             {{#question}}
+            {{^deletedFlag}}
             <header class="qna-header">
                 <h2 class="qna-title">{{title}}</h2>
             </header>
@@ -50,7 +51,7 @@
                         <p class="qna-comment-count"><strong>{{count}}</strong>개의 의견</p>
                         <div class="qna-comment-slipp-articles">
                             {{#question.answers}}
-                            {{#deletedFlag}}
+                            {{^deletedFlag}}
                             <article class="article" id="answer-1405">
                                 <div class="article-header">
                                     <div class="article-header-thumb">
@@ -97,6 +98,7 @@
                     </div>
                 </div>
             </div>
+            {{/deletedFlag}}
             {{/question}}
         </div>
     </div>

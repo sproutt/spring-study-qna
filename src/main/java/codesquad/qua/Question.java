@@ -22,7 +22,7 @@ public class Question {
 
     private String contents;
 
-    private boolean deleteFlag;
+    private boolean deletedFlag = false;
 
     @OneToMany(mappedBy = "question")
     private List<Answer> answers = new ArrayList<>();
@@ -31,12 +31,12 @@ public class Question {
         return answers;
     }
 
-    public void changeDeleteFlag(boolean deleteFlag) {
-        this.deleteFlag = deleteFlag;
+    public void changeDeleteFlag() {
+        deletedFlag = true;
     }
 
-    public boolean isDeleteFlag() {
-        return deleteFlag;
+    public boolean isDeletedFlag() {
+        return deletedFlag;
     }
 
     public User getWriter() {

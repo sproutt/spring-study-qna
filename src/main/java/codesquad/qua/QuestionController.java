@@ -60,7 +60,15 @@ public class QuestionController {
     public String qnaInfo(Model model, @PathVariable("id") Long id) {
         Question question = findQuestionById(id);
         model.addAttribute("question", question);
-        model.addAttribute("count", question.getAnswers().size());
+
+        int count = 0;
+
+        for (Answer answer : question.getAnswers()) {
+            if (!answer.isDeletedFlag()) {
+                count++;
+            }
+        }
+        model.addAttribute("count", count);
 
         return "qna/show";
     }
@@ -101,6 +109,7 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}")
+    @Transactional
     public String remove(@PathVariable("id") Long id, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
@@ -127,8 +136,11 @@ public class QuestionController {
             return "qna/delete_failed";
         }
 
-        savedQuestion.changeDeleteFlag(true);
-        answerRepository.deleteAll(savedQuestion.getAnswers());
+        savedQuestion.changeDeleteFlag();
+
+        for (Answer answer : savedQuestion.getAnswers()) {
+            answer.changeDeletedFlag();
+        }
 
         return "redirect:/questions/" + id;
     }

@@ -20,14 +20,14 @@ public class Answer {
 
     private String comment;
 
-    private boolean deletedFlag = true;
+    private boolean deletedFlag = false;
 
     public boolean isDeletedFlag() {
         return deletedFlag;
     }
 
     public void changeDeletedFlag() {
-        deletedFlag = false;
+        deletedFlag = true;
     }
 
     public String getWriter() {

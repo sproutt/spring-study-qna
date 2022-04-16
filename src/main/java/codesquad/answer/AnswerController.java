@@ -29,7 +29,7 @@ public class AnswerController {
     @PostMapping("/questions/{question-id}/answers")
     public String create(@PathVariable("question-id") Long questionId, Answer answer, HttpSession session, Model model) {
         Question question = questionRepository.findById(questionId)
-                .orElseThrow(NoSuchElementException::new);
+                                              .orElseThrow(NoSuchElementException::new);
 
         logger.info("답글 내용 : {}", answer.getComment());
         logger.info("답글 작성자 : {}", answer.getWriter());
