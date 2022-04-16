@@ -7,15 +7,13 @@ import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
-@Controller
+@RestController
 public class AnswerController {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -25,7 +23,6 @@ public class AnswerController {
     private QuestionRepository questionRepository;
 
     @PostMapping("/questions/{question-id}/answers")
-    @ResponseBody
     public Answer create(@PathVariable("question-id") Long questionId, @RequestBody Answer answer, HttpSession session) {
         Question question = questionRepository.findById(questionId)
                                               .orElseThrow(NoSuchElementException::new);
@@ -49,23 +46,23 @@ public class AnswerController {
 
     @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
     @Transactional
-    public String remove(@PathVariable("question-id") Long questionId,
+    public Answer remove(@PathVariable("question-id") Long questionId,
                          @PathVariable("answer-id") Long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
-        Answer answer = answerRepository.findById(answerId)
+        Answer answer = answerRepository.findFetchJoinById(answerId)
                                         .orElseThrow(NoSuchElementException::new);
 
         if (user == null) {
-            return "/login";
+            return null;
         }
 
         if (!answer.equalsWriter(user)) {
-            return "user/login_failed";
+            return null;
         }
 
         answer.changeDeletedFlag();
 
-        return "redirect:/questions/" + questionId;
+        return answer;
     }
 }

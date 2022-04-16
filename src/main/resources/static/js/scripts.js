@@ -16,9 +16,15 @@ document.addEventListener("DOMContentLoaded", () => {
 function initEvents() {
   const answerBtn = $(".submit-write .btn");
   console.log(answerBtn);
-  if (answerBtn == null) return;
-  //deleteAnswerHandler
+
   answerBtn.addEventListener("click", registerAnswerHandler);
+
+  const answerList = document.querySelectorAll(".article-hi");
+
+  answerList.forEach(answer => {
+    console.log(answer.getElementsByClassName("delete-answer-button")); //htmlcollection
+    answer.getElementsByClassName("delete-answer-button")[0].addEventListener("click", deleteAnswerHandler);
+  });
 }
 
 function fetchManager({url, method, body, headers, callback}) {
@@ -83,4 +89,31 @@ function appendAnswer({id, comment, question, writer}) {
         </article>`
 
   $(".qna-comment-slipp-articles").insertAdjacentHTML("beforeend", html);
+  initEvents();
+}
+
+function deleteAnswerHandler(evt) {
+  evt.preventDefault();
+  const url = $(".delete-answer-form").action;
+  console.log(url);
+  const id = url.replace(/.+\/(\d+)$/, "$1");
+  console.log("deleteAnswerHandler" + url);
+  console.log("deleteAnswerHandler" + id);
+
+  fetchManager({
+    url,
+    method: 'DELETE',
+    headers: {'content-type': 'application/json'},
+    body: JSON.stringify({id}),
+    callback: deleteAnswer
+  })
+}
+
+function deleteAnswer({id}) {
+  console.log(id);
+  const selector = `.article-hi[data-id='${id}']`;
+  console.log(id);
+  console.log("deleteAnswer" + selector);
+  const target = $(selector);
+  target.parentNode.removeChild(target);
 }
