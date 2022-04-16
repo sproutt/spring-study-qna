@@ -2,6 +2,7 @@ package codesquad.qua;
 
 import codesquad.answer.Answer;
 import codesquad.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class Question {
     private boolean deletedFlag = false;
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     private List<Answer> answers = new ArrayList<>();
 
     public List<Answer> getAnswers() {

@@ -10,9 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
@@ -27,7 +25,8 @@ public class AnswerController {
     private QuestionRepository questionRepository;
 
     @PostMapping("/questions/{question-id}/answers")
-    public String create(@PathVariable("question-id") Long questionId, Answer answer, HttpSession session, Model model) {
+    @ResponseBody
+    public Answer create(@PathVariable("question-id") Long questionId, @RequestBody Answer answer, HttpSession session) {
         Question question = questionRepository.findById(questionId)
                                               .orElseThrow(NoSuchElementException::new);
 
@@ -37,7 +36,7 @@ public class AnswerController {
         User user = SessionUtil.getUserBySession(session);
 
         if (user == null) {
-            return "/login";
+            return null;
         }
 
         answer.setWriter(user.getName());
@@ -45,7 +44,7 @@ public class AnswerController {
 
         answerRepository.save(answer);
 
-        return "redirect:/questions/" + questionId;
+        return answer;
     }
 
     @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
