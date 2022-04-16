@@ -71,10 +71,6 @@ public class User {
         return this.id.equals(id);
     }
 
-    public boolean equalsName(String name) {
-        return this.name.equals(name);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
