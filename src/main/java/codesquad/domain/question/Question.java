@@ -1,8 +1,10 @@
 package codesquad.domain.question;
 
+import codesquad.domain.answer.Answer;
 import codesquad.domain.user.User;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Question {
@@ -19,6 +21,13 @@ public class Question {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
+
+    @OneToMany(mappedBy = "question")
+    private List<Answer> answers;
+
+    private Integer countOfAnswer = 0;
+
+    private Boolean isDeleted = false;
 
     public Long getIndex() {
         return index;
@@ -56,6 +65,22 @@ public class Question {
         return this.index.equals(index);
     }
 
+    public List<Answer> getAnswers() {
+        return answers;
+    }
+
+    public void setAnswers(List<Answer> answers) {
+        this.answers = answers;
+    }
+
+    public Integer getCountOfAnswer() {
+        return countOfAnswer;
+    }
+
+    public void setCountOfAnswer(Integer countOfAnswer) {
+        this.countOfAnswer = countOfAnswer;
+    }
+
     public void update(Question updatedQuestion) {
         this.title = updatedQuestion.getTitle();
         this.contents = updatedQuestion.getContents();
@@ -63,5 +88,24 @@ public class Question {
 
     public boolean isSameWriter(User user) {
         return this.writer.isSameUser(user);
+    }
+
+    public void addCountOfAnswer() {
+        this.countOfAnswer += 1;
+    }
+
+    public void deleteAnswer() {
+        this.countOfAnswer -= 1;
+    }
+
+    public void delete() {
+        isDeleted = true;
+    }
+
+    public boolean canDelete() {
+        if (countOfAnswer.equals(0)) {
+            return true;
+        }
+        return false;
     }
 }
