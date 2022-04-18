@@ -2,6 +2,7 @@ package codesquad.answer;
 
 import codesquad.qua.Question;
 import codesquad.qua.QuestionRepository;
+import codesquad.response.Result;
 import codesquad.user.User;
 import codesquad.utils.SessionUtil;
 import org.slf4j.Logger;
@@ -46,23 +47,23 @@ public class AnswerController {
 
     @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
     @Transactional
-    public Answer remove(@PathVariable("question-id") Long questionId,
+    public Result<Answer> remove(@PathVariable("question-id") Long questionId,
                          @PathVariable("answer-id") Long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
-        Answer answer = answerRepository.findFetchJoinById(answerId)
+        Answer answer = answerRepository.findQuestionFetchJoinById(answerId)
                                         .orElseThrow(NoSuchElementException::new);
 
         if (user == null) {
-            return null;
+            return Result.fail("로그인 하세요");
         }
 
         if (!answer.equalsWriter(user)) {
-            return null;
+            return Result.fail("다른 사람 답글은 삭제 못해요");
         }
 
         answer.changeDeletedFlag();
 
-        return answer;
+        return Result.ok(answer);
     }
 }

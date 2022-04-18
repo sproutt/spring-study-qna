@@ -5,6 +5,7 @@ String.prototype.format = function () {
   });
 };
 
+
 function $(selector) {
   return document.querySelector(selector);
 }
@@ -20,9 +21,11 @@ function initEvents() {
   answerBtn.addEventListener("click", registerAnswerHandler);
 
   const answerList = document.querySelectorAll(".article-hi");
+  console.log("answerList 길이 = " + answerList.length);
 
   answerList.forEach(answer => {
-    console.log(answer.getElementsByClassName("delete-answer-button")); //htmlcollection
+    console.log(answer.getElementsByClassName("delete-answer-button")[0]);
+    console.log(answer.getElementsByClassName("delete-answer-button")[1]);
     answer.getElementsByClassName("delete-answer-button")[0].addEventListener("click", deleteAnswerHandler);
   });
 }
@@ -30,9 +33,23 @@ function initEvents() {
 function fetchManager({url, method, body, headers, callback}) {
   fetch(url, {method, body, headers, credentials: "same-origin"})
       .then((response) => {
-        return response.json();
-      }).then((result) => {
-    callback(result);
+        const data = response.json();
+        console.log(data);
+        return data.then(result =>  {
+          return {
+            'result' : result,
+            'status' : response.status
+          }
+        })
+      }).then( ({result, status}) => {
+    if(status >= 400) {
+      console.log('error 가 발생했네요 ', result.error);
+    }else{
+      console.log(result);
+      callback(result);
+    }
+  }).catch(err => {
+    console.log("oops..", err);
   })
 }
 
@@ -54,6 +71,8 @@ function registerAnswerHandler(evt) {
 }
 
 function appendAnswer({id, comment, question, writer}) {
+  console.log("id = " + id);
+
   const html = `
             <article class="article-hi" data-id="${id}">
             <div class="article-header">
@@ -97,8 +116,8 @@ function deleteAnswerHandler(evt) {
   const url = $(".delete-answer-form").action;
   console.log(url);
   const id = url.replace(/.+\/(\d+)$/, "$1");
-  console.log("deleteAnswerHandler" + url);
-  console.log("deleteAnswerHandler" + id);
+  console.log("deleteAnswerHandler = " + url);
+  console.log("deleteAnswerHandler = " + id);
 
   fetchManager({
     url,
@@ -109,10 +128,9 @@ function deleteAnswerHandler(evt) {
   })
 }
 
-function deleteAnswer({id}) {
-  console.log(id);
-  const selector = `.article-hi[data-id='${id}']`;
-  console.log(id);
+function deleteAnswer({result}) {
+  console.log("id = " + result.id);
+  const selector = `.article-hi[data-id='${result.id}']`;
   console.log("deleteAnswer" + selector);
   const target = $(selector);
   target.parentNode.removeChild(target);
