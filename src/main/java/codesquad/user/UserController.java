@@ -21,8 +21,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public String create(User user) {
-        userService.join(user);
+    public String join(User user) {
+        userService.create(user);
         return "redirect:/users";
     }
 

@@ -18,7 +18,7 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void join(User user) {
+    public void create(User user) {
         log.info("user = {}", user);
         userRepository.save(user);
     }
