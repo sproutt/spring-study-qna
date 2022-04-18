@@ -27,7 +27,8 @@ public class Question {
 
     private Integer countOfAnswer = 0;
 
-    private Boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted = false;
 
     public Long getIndex() {
         return index;

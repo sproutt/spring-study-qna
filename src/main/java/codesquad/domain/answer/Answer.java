@@ -15,14 +15,15 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Column(columnDefinition = "TEXT", length = 300, nullable = false)
     private String contents;
 
-    private Boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean isDeleted = false;
 
     public Long getId() {
         return id;
@@ -56,7 +57,7 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Boolean getDeleted() {
+    public boolean getDeleted() {
         return isDeleted;
     }
 
