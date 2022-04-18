@@ -34,4 +34,5 @@ dependencies {
     runtime('net.rakugakibox.spring.boot:logback-access-spring-boot-starter:2.7.1')
     testCompile('org.springframework.boot:spring-boot-starter-test')
     testCompile('org.assertj:assertj-core:3.10.0')
+    implementation 'org.projectlombok:lombok'
 }
