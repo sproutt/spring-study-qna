@@ -100,7 +100,8 @@ function appendAnswer({id, comment, question, writer}) {
                         <form class="delete-answer-form" action="/questions/${question.id}/answers/${id}"
                               method="POST">
                             <input type="hidden" name="_method" value="DELETE">
-                                <button type="submit" class="delete-answer-button">삭제</button>
+                                <button type="button" class="delete-answer-button"
+                                onclick="deleteAnswerHandler(this)" value="${id}/${question.id}">삭제</button>
                         </form>
                     </li>
                 </ul>
@@ -111,19 +112,18 @@ function appendAnswer({id, comment, question, writer}) {
   initEvents();
 }
 
-function deleteAnswerHandler(evt) {
-  evt.preventDefault();
-  const url = $(".delete-answer-form").action;
+function deleteAnswerHandler(target) {
+  // target.preventDefault();
+  const value = target.value.split("/");
+  console.log("value = " + value);
+  const url = "/questions/" + value[1] + "/answers/" + value[0];
   console.log(url);
-  const id = url.replace(/.+\/(\d+)$/, "$1");
   console.log("deleteAnswerHandler = " + url);
-  console.log("deleteAnswerHandler = " + id);
 
   fetchManager({
     url,
     method: 'DELETE',
     headers: {'content-type': 'application/json'},
-    body: JSON.stringify({id}),
     callback: deleteAnswer
   })
 }
