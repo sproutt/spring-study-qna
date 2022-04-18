@@ -1,9 +1,7 @@
 package codesquad.user;
 
-import codesquad.utils.SessionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,70 +11,54 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
-import java.util.NoSuchElementException;
 
 @Controller
 @RequestMapping("/users")
+@RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private UserRepository userRepository;
+    private final UserService userService;
 
     @PostMapping("")
     public String create(User user) {
-        logger.info("user = {}", user);
-        userRepository.save(user);
+        userService.join(user);
         return "redirect:/users";
     }
 
     @GetMapping("")
-    public String list(Model model) {
-        model.addAttribute("users", userRepository.findAll());
+    public String showUserList(Model model) {
+        userService.list(model);
         return "/user/list";
     }
 
     @GetMapping("{id}")
-    public ModelAndView show(@PathVariable long id) {
+    public ModelAndView showUser(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("user/profile");
-        mav.addObject("user", findUserById(id));
+        userService.show(id, mav);
         return mav;
     }
 
     @GetMapping("{id}/form")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        model.addAttribute("user", findUserById(id));
+        userService.setUpdateForm(model, id);
         return "/user/updateForm";
     }
 
     @PostMapping("{id}/update")
-    public String update(User changedUser, @PathVariable("id") Long id, HttpSession session) {
-        User user = SessionUtil.getUserBySession(session);
+    public String updateUser(User changedUser, @PathVariable("id") Long id, HttpSession session) {
 
-        if (user == null || !user.equalsId(id)) {
-            return "/user/login_failed";
+        if (userService.update(changedUser, id, session)) {
+            return "redirect:/users";
         }
 
-        user.update(changedUser);
-        userRepository.save(user);
-
-        return "redirect:/users";
+        return "/user/login_failed";
     }
 
     @PostMapping("/login")
-    public String login(String userId, String password, HttpSession session) {
-        User savedUser = userRepository.findByUserId(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원"));
-
-        if (savedUser.equalsPassword(password)) {
-            SessionUtil.setSession(session, savedUser);
-        }
+    public String loginUser(UserDto userDto, HttpSession session) {
+        userService.login(userDto, session);
 
         return "redirect:/users";
-    }
-
-    private User findUserById(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new);
     }
 }
