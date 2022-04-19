@@ -21,7 +21,7 @@ public class AnswerService {
     private final AnswerRepository answerRepository;
     private final QuestionRepository questionRepository;
 
-    public ResponseAnswerDto create(long questionId, RequestAnswerDto requestAnswerDto, HttpSession session) {
+    public Result<ResponseAnswerDto> create(long questionId, RequestAnswerDto requestAnswerDto, HttpSession session) {
         log.info("comment = {}", requestAnswerDto.getComment());
 
         Question question = questionRepository.findById(questionId)
@@ -30,14 +30,14 @@ public class AnswerService {
         User user = SessionUtil.getUserBySession(session);
 
         if (user == null) {
-            return null;
+            return Result.fail("로그인 하세요");
         }
 
         Answer answer = new Answer(question, user, requestAnswerDto.getComment());
         answer.addQuestion(question);
         answerRepository.save(answer);
 
-        return answer.toResponseAnswerDto();
+        return Result.ok(answer.toResponseAnswerDto());
     }
 
     @Transactional

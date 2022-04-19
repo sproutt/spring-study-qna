@@ -70,7 +70,13 @@ function registerAnswerHandler(evt) {
   })
 }
 
-function appendAnswer({id, comment, questionId, writer}) {
+function appendAnswer({result}) {
+  console.log("result = " + result);
+  id = result.id;
+  comment = result.comment;
+  questionId = result.questionId;
+  writer = result.writer;
+
   console.log("id = " + id);
   console.log("comment = " + comment);
   console.log("question = " + questionId);

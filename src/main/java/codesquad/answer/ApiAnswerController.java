@@ -15,7 +15,7 @@ public class ApiAnswerController {
     private final AnswerService answerService;
 
     @PostMapping("/questions/{question-id}/answers")
-    public ResponseAnswerDto create(@PathVariable("question-id") Long questionId, @RequestBody RequestAnswerDto requestAnswerDto, HttpSession session) {
+    public Result<ResponseAnswerDto> create(@PathVariable("question-id") Long questionId, @RequestBody RequestAnswerDto requestAnswerDto, HttpSession session) {
         return answerService.create(questionId, requestAnswerDto, session);
     }
 
