@@ -5,31 +5,27 @@ import codesquad.qua.QuestionRepository;
 import codesquad.response.Result;
 import codesquad.user.User;
 import codesquad.utils.SessionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.NoSuchElementException;
 
-@RestController
-public class AnswerController {
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class AnswerService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
-    @Autowired
-    private AnswerRepository answerRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final QuestionRepository questionRepository;
 
-    @PostMapping("/questions/{question-id}/answers")
-    public Answer create(@PathVariable("question-id") Long questionId, @RequestBody Answer answer, HttpSession session) {
+    public ResponseAnswerDto create(long questionId, RequestAnswerDto requestAnswerDto, HttpSession session) {
+        log.info("comment = {}", requestAnswerDto.getComment());
+
         Question question = questionRepository.findById(questionId)
                                               .orElseThrow(NoSuchElementException::new);
-
-        logger.info("답글 내용 : {}", answer.getComment());
-        logger.info("답글 작성자 : {}", answer.getWriter());
 
         User user = SessionUtil.getUserBySession(session);
 
@@ -37,18 +33,15 @@ public class AnswerController {
             return null;
         }
 
-        answer.setWriter(user.getName());
+        Answer answer = new Answer(question, user, requestAnswerDto.getComment());
         answer.addQuestion(question);
-
         answerRepository.save(answer);
 
-        return answer;
+        return answer.toResponseAnswerDto();
     }
 
-    @DeleteMapping("/questions/{question-id}/answers/{answer-id}")
     @Transactional
-    public Result<Answer> remove(@PathVariable("question-id") Long questionId,
-                         @PathVariable("answer-id") Long answerId, HttpSession session) {
+    public Result<ResponseAnswerDto> remove(long questionId, long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
         Answer answer = answerRepository.findQuestionFetchJoinById(answerId)
@@ -64,6 +57,6 @@ public class AnswerController {
 
         answer.changeDeletedFlag();
 
-        return Result.ok(answer);
+        return Result.ok(answer.toResponseAnswerDto());
     }
 }

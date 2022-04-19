@@ -70,8 +70,11 @@ function registerAnswerHandler(evt) {
   })
 }
 
-function appendAnswer({id, comment, question, writer}) {
+function appendAnswer({id, comment, questionId, writer}) {
   console.log("id = " + id);
+  console.log("comment = " + comment);
+  console.log("question = " + questionId);
+  console.log("writer = " + writer);
 
   const html = `
             <article class="article-hi" data-id="${id}">
@@ -97,11 +100,11 @@ function appendAnswer({id, comment, question, writer}) {
                            href="/questions/413/answers/1405/form">수정</a>
                     </li>
                     <li>
-                        <form class="delete-answer-form" action="/questions/${question.id}/answers/${id}"
+                        <form class="delete-answer-form" action="/questions/${questionId}/answers/${id}"
                               method="POST">
                             <input type="hidden" name="_method" value="DELETE">
                                 <button type="button" class="delete-answer-button"
-                                onclick="deleteAnswerHandler(this)" value="${id}/${question.id}">삭제</button>
+                                onclick="deleteAnswerHandler(this)" value="${id}/${questionId}">삭제</button>
                         </form>
                     </li>
                 </ul>
@@ -109,11 +112,11 @@ function appendAnswer({id, comment, question, writer}) {
         </article>`
 
   $(".qna-comment-slipp-articles").insertAdjacentHTML("beforeend", html);
-  initEvents();
 }
 
 function deleteAnswerHandler(target) {
-  // target.preventDefault();
+  if(target.className !== "delete-answer-button") return;
+  console.log("target = " + target);
   const value = target.value.split("/");
   console.log("value = " + value);
   const url = "/questions/" + value[1] + "/answers/" + value[0];
@@ -129,7 +132,8 @@ function deleteAnswerHandler(target) {
 }
 
 function deleteAnswer({result}) {
-  console.log("id = " + result.id);
+  console.log("result = " + result);
+  console.log("result.id = " + result.id);
   const selector = `.article-hi[data-id='${result.id}']`;
   console.log("deleteAnswer" + selector);
   const target = $(selector);

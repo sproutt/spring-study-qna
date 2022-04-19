@@ -1,5 +1,8 @@
 package codesquad.response;
 
+import lombok.Getter;
+
+@Getter
 public class Result<T> {
 
     private T result;
@@ -18,11 +21,4 @@ public class Result<T> {
         return new Result<>(null, message);
     }
 
-    public T getResult() {
-        return result;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
