@@ -46,6 +46,9 @@ public class ApiAnswerController {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Answer answer = answerRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		answerRepository.delete(answer);
-		return ResponseEntity.ok().build();
+
+		Map<String, Long> tmp = new HashMap<>();
+		tmp.put("index", answer.getIndex());
+		return tmp;
 	}
 }

@@ -84,6 +84,7 @@ function appendAnswer({index, contents, question, writer}) {
 
   `
     $(".qna-comment-slipp-articles").insertAdjacentHTML("afterbegin", html);
+    initCreateEvents();
 }
 
 function deleteAnswerHandler(evt){
