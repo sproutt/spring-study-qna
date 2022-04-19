@@ -22,11 +22,9 @@ function initCreateEvents() {
     if (answerBtn === null) return;
     answerBtn.addEventListener("click", registerAnswerHandler);
 
-
-    const answerList = document.querySelectorAll(".article");
+    const answerList = document.querySelectorAll(".article-i");
     answerList.forEach(answer => {
-        console.log(answer.getElementsByClassName(".delete-answer-button"));
-        answer.getElementsByClassName(".delete-answer-button")[0].addEventListener('click', deleteAnswerHandler)
+        answer.getElementsByClassName("delete-answer-button")[0].addEventListener("click", deleteAnswerHandler)
     });
 }
 
@@ -57,7 +55,7 @@ function registerAnswerHandler(evt) {
 function appendAnswer({index, contents, question, writer}) {
     const html = `
 
-  <article class="article" id="answer-1405">
+  <article class="article-i" data-id="${index}">
     <div class="article-header">
         <div class="article-header-thumb">
             <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -77,7 +75,7 @@ function appendAnswer({index, contents, question, writer}) {
             <li>
                 <form class="delete-answer-form" action="/api/questions/${question.index}/answers/${index}" method="POST">
                     <input type="hidden" name="_method" value="DELETE">
-                    <button type="submit" class="c">삭제</button>
+                    <button type="submit" class="delete-answer-button">삭제</button>
             </form>
             </li>
         </ul>
@@ -90,21 +88,19 @@ function appendAnswer({index, contents, question, writer}) {
 
 function deleteAnswerHandler(evt){
     evt.preventDefault();
-    const url = $(".delete-answer-form").getAttribute("action");
-    const id = url.replace(/.+\/(\d+)$/, "$1");
-    console.log(url);
+    const url = $(".delete-answer-form").action;
+    const index = url.replace(/.+\/(\d+)$/, "$1");
     fetchManager({
         url: url,
         method: 'DELETE',
-        body : id,
+        body: JSON.stringify({index}),
         headers: {'content-type': 'application/json'},
         callback: deleteAnswer
     })
 }
 
-function deleteAnswer({id}) {
-    const selector = `.answer[data-id='${id}']`;
+function deleteAnswer({index}) {
+    const selector = `.article-i[data-id='${index}']`;
     const target = $(selector);
-    console.log(target);
     target.parentNode.removeChild(target);
 }

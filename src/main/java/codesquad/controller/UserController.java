@@ -26,7 +26,6 @@ public class UserController {
 
 	@PostMapping("/users")
 	public String join(User user) {
-		System.out.println("user : " + user);
 		userRepository.save(user);
 		return "redirect:/users";
 	}

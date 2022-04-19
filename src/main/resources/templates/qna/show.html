@@ -57,7 +57,7 @@
                       {{/answersSize}}
                       <div class="qna-comment-slipp-articles">
                           {{#answers}}
-                          <article class="article" id="answer-1405">
+                          <article class="article-i" data-id="{{index}}">
                               <div class="article-header">
                                   <div class="article-header-thumb">
                                       <img src="https://graph.facebook.com/v2.3/1324855987/picture"
@@ -79,7 +79,7 @@
                                           <a class="link-modify-article" href="/questions/413/answers/1405/form">수정</a>
                                       </li>
                                       <li>
-                                          <form class="delete-answer-form" action="/api/questions/{{{index}}}/answers/{{{index}}}"
+                                          <form class="delete-answer-form" action="/api/questions/{{{question.index}}}/answers/{{{index}}}"
                                                 method="POST">
                                               <input type="hidden" name="_method" value="DELETE">
                                               <button type="submit" class="delete-answer-button">삭제</button>

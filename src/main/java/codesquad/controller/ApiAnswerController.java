@@ -1,11 +1,12 @@
 package codesquad.controller;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,23 +36,15 @@ public class ApiAnswerController {
 		if (sessionedUser == null) {
 			return null;
 		}
-		// int answersSize = question.getAnswersSize();
 		Answer answer = new Answer(sessionedUser, contents, question);
 		System.out.println(answerRepository.save(answer));
 		return answerRepository.save(answer);
 	}
 
 	@DeleteMapping("/{index}")
-	public ResponseEntity delete(@PathVariable Long index, HttpSession session) {
+	public Map<String, Long> delete(@PathVariable Long index, HttpSession session) {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Answer answer = answerRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(!answer.isSameWriter(sessionedUser)){
-			return ResponseEntity.notFound().build();
-		}
-
-		if(sessionedUser == null) {
-			return ResponseEntity.notFound().build();
-		}
 		answerRepository.delete(answer);
 		return ResponseEntity.ok().build();
 	}
