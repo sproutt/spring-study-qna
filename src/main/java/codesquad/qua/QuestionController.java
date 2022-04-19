@@ -1,7 +1,7 @@
 package codesquad.qua;
 
 import codesquad.exception.QuestionDeleteException;
-import codesquad.exception.QuestionShowException;
+import codesquad.exception.QuestionEditException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -54,7 +54,7 @@ public class QuestionController {
     public String updateQuestion(Question changedQuestion, @PathVariable("id") Long id, HttpSession session) {
         try {
             questionService.update(changedQuestion, id, session);
-        } catch (QuestionShowException showException) {
+        } catch (QuestionEditException showException) {
             return "qna/show_failed";
         }
 
@@ -65,7 +65,7 @@ public class QuestionController {
     public String updateForm(Model model, @PathVariable("id") Long id, HttpSession session) {
         try {
             questionService.setUpdateForm(id, session);
-        } catch (QuestionShowException showException) {
+        } catch (QuestionEditException showException) {
             return "qna/show_failed";
         }
 
@@ -80,7 +80,7 @@ public class QuestionController {
 
         try {
             questionService.remove(id, session);
-        } catch (QuestionShowException showException) {
+        } catch (QuestionEditException showException) {
             return "qna/show_failed";
         } catch (QuestionDeleteException deleteException) {
             return "qna/delete_failed";

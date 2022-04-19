@@ -2,7 +2,7 @@ package codesquad.qua;
 
 import codesquad.answer.Answer;
 import codesquad.exception.QuestionDeleteException;
-import codesquad.exception.QuestionShowException;
+import codesquad.exception.QuestionEditException;
 import codesquad.user.User;
 import codesquad.utils.SessionUtil;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +50,7 @@ public class QuestionService {
         Question savedQuestion = findQuestionById(id);
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
-            throw new QuestionShowException();
+            throw new QuestionEditException();
         }
 
         log.info("user: {}", user.getName());
@@ -62,7 +62,7 @@ public class QuestionService {
         Question savedQuestion = findQuestionById(id);
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
-            throw new QuestionShowException();
+            throw new QuestionEditException();
         }
 
         log.info("user: {}", user.getName());
@@ -79,7 +79,7 @@ public class QuestionService {
         log.info("question: {}", savedQuestion.getWriter());
 
         if (user == null || !isQuestionMatchUser(user, savedQuestion)) {
-            throw new QuestionShowException();
+            throw new QuestionEditException();
         }
 
         if (!canDeleteQuestion(savedQuestion, user)) {
