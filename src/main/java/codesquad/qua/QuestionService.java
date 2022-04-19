@@ -93,8 +93,14 @@ public class QuestionService {
         }
     }
 
-    public int countAnswers(long id) {
-        return questionRepository.countNotDeletedAnswers(id);
+    public long countAnswers(long id) {
+        Long countAnswer = questionRepository.countNotDeletedAnswers(id);
+
+        if(countAnswer == null) {
+            return 0L;
+        }
+
+        return countAnswer;
     }
 
     public Question findQuestionById(Long id) {
