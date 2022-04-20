@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class Result<T> {
 
-    private T result;
-    private String message;
+    private final T result;
+    private final String message;
 
     public Result(T answer, String message) {
         this.result = answer;

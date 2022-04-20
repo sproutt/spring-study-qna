@@ -92,7 +92,7 @@ public class QuestionService {
     public long countAnswers(long questionId) {
         Long countAnswer = questionRepository.countNotDeletedAnswers(questionId);
 
-        if(countAnswer == null) {
+        if (countAnswer == null) {
             return 0L;
         }
 

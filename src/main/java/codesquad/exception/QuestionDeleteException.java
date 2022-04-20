@@ -1,6 +1,6 @@
 package codesquad.exception;
 
-public class QuestionDeleteException extends RuntimeException{
+public class QuestionDeleteException extends RuntimeException {
 
     public QuestionDeleteException() {
     }
