@@ -86,11 +86,7 @@ public class QuestionService {
             throw new QuestionDeleteException();
         }
 
-        savedQuestion.changeDeleteFlag();
-
-        for (Answer answer : savedQuestion.getAnswers()) {
-            answer.changeDeletedFlag();
-        }
+        savedQuestion.deleteQuestion();
     }
 
     public long countAnswers(long id) {

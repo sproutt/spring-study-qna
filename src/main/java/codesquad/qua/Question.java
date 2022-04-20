@@ -57,4 +57,12 @@ public class Question {
     public boolean hasAnswers() {
         return answers.size() > 0;
     }
+
+    public void deleteQuestion() {
+        changeDeleteFlag();
+
+        for (Answer answer : answers) {
+            answer.changeDeletedFlag();
+        }
+    }
 }
