@@ -32,10 +32,10 @@ public class ApiAnswerController {
 	@PostMapping("")
 	public Answer create(@PathVariable Long index, @RequestBody String contents, HttpSession session){
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
-		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		if (sessionedUser == null) {
 			return null;
 		}
+		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		Answer answer = new Answer(sessionedUser, contents, question);
 		System.out.println(answerRepository.save(answer));
 		return answerRepository.save(answer);
@@ -44,6 +44,9 @@ public class ApiAnswerController {
 	@DeleteMapping("/{index}")
 	public Map<String, Long> delete(@PathVariable Long index, HttpSession session) {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
+		if (sessionedUser == null) {
+			return null;
+		}
 		Answer answer = answerRepository.findById(index).orElseThrow(NoSuchElementException::new);
 		answerRepository.delete(answer);
 
