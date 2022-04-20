@@ -7,8 +7,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class UserDto {
+public class SingUpUserDto {
 
     private String userId;
     private String password;
+    private String name;
+    private String email;
 }

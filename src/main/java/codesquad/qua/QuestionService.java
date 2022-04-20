@@ -89,8 +89,8 @@ public class QuestionService {
         savedQuestion.deleteQuestion();
     }
 
-    public long countAnswers(long id) {
-        Long countAnswer = questionRepository.countNotDeletedAnswers(id);
+    public long countAnswers(long questionId) {
+        Long countAnswer = questionRepository.countNotDeletedAnswers(questionId);
 
         if(countAnswer == null) {
             return 0L;

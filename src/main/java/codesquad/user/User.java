@@ -1,10 +1,15 @@
 package codesquad.user;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class User {
 
     @Id
@@ -20,40 +25,11 @@ public class User {
 
     private String email;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
+    User(SingUpUserDto singUpUserDto) {
+        userId = singUpUserDto.getUserId();
+        password = singUpUserDto.getPassword();
+        name = singUpUserDto.getName();
+        email = singUpUserDto.getEmail();
     }
 
     public void update(User user) {
@@ -67,8 +43,8 @@ public class User {
         return this.password.equals(password);
     }
 
-    public boolean equalsPassword(UserDto userDto) {
-        return password.equals(userDto.getPassword());
+    public boolean equalsPassword(LoginUserDto loginUserDto) {
+        return password.equals(loginUserDto.getPassword());
     }
 
     public boolean equalsId(Long id) {

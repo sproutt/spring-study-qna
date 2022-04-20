@@ -21,27 +21,27 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("")
-    public String join(User user) {
-        userService.create(user);
+    public String join(SingUpUserDto singUpUserDto) {
+        userService.create(singUpUserDto);
         return "redirect:/users";
     }
 
     @GetMapping("")
     public String showUserList(Model model) {
-        userService.list(model);
+        model.addAttribute("users", userService.list());
         return "/user/list";
     }
 
     @GetMapping("{id}")
     public ModelAndView showUser(@PathVariable long id) {
         ModelAndView mav = new ModelAndView("user/profile");
-        userService.show(id, mav);
+        mav.addObject("user", userService.findUserById(id));
         return mav;
     }
 
     @GetMapping("{id}/form")
     public String updateForm(Model model, @PathVariable("id") Long id) {
-        userService.setUpdateForm(model, id);
+        model.addAttribute("user", userService.findUserById(id));
         return "/user/updateForm";
     }
 
@@ -56,9 +56,11 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String loginUser(UserDto userDto, HttpSession session) {
-        userService.login(userDto, session);
+    public String loginUser(LoginUserDto loginUserDto, HttpSession session) {
+        if(userService.login(loginUserDto, session)){
+            return "redirect:/users";
+        }
 
-        return "redirect:/users";
+        return "/user/login_failed";
     }
 }
