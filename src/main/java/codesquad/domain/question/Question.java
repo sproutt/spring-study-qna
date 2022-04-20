@@ -117,20 +117,4 @@ public class Question {
 		this.contents = contents;
 	}
 
-	// @Override
-	// public boolean equals(Object o) {
-	// 	if (this == o)
-	// 		return true;
-	// 	if (o == null || getClass() != o.getClass())
-	// 		return false;
-	// 	Question question = (Question)o;
-	// 	return Objects.equals(index, question.index) && Objects.equals(writer, question.writer)
-	// 			&& Objects.equals(title, question.title) && Objects.equals(contents, question.contents)
-	// 			&& Objects.equals(answers, question.answers);
-	// }
-
-	// @Override
-	// public int hashCode() {
-	// 	return Objects.hash(index, writer, title, contents, answers);
-	// }
 }
