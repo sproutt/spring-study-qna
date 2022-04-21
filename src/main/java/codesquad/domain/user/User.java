@@ -1,9 +1,11 @@
 package codesquad.domain.user;
 
+import codesquad.domain.BaseTimeEntity;
+
 import javax.persistence.*;
 
 @Entity
-public class User {
+public class User extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,5 +1,6 @@
 package codesquad.domain.question;
 
+import codesquad.domain.BaseTimeEntity;
 import codesquad.domain.answer.Answer;
 import codesquad.domain.user.User;
 
@@ -7,7 +8,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
