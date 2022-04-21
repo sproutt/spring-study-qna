@@ -3,6 +3,7 @@ package codesquad.domain.question;
 import codesquad.domain.BaseTimeEntity;
 import codesquad.domain.answer.Answer;
 import codesquad.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
@@ -24,12 +25,13 @@ public class Question extends BaseTimeEntity {
     private String contents;
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     private List<Answer> answers;
 
     private Integer countOfAnswer = 0;
 
     @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted = false;
+    private boolean deleted = false;
 
     public Long getIndex() {
         return index;
@@ -101,7 +103,11 @@ public class Question extends BaseTimeEntity {
     }
 
     public void delete() {
-        isDeleted = true;
+        deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public boolean canDelete() {

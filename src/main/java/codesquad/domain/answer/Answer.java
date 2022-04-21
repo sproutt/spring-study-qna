@@ -24,7 +24,17 @@ public class Answer extends BaseTimeEntity {
     private String contents;
 
     @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted = false;
+    private boolean deleted = false;
+
+    public Answer() {
+
+    }
+
+    public Answer(User writer, Question question, String contents) {
+        this.writer = writer;
+        this.question = question;
+        this.contents = contents;
+    }
 
     public Long getId() {
         return id;
@@ -58,8 +68,8 @@ public class Answer extends BaseTimeEntity {
         this.contents = contents;
     }
 
-    public boolean getDeleted() {
-        return isDeleted;
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public boolean isSameWriter(User user) {
@@ -67,6 +77,6 @@ public class Answer extends BaseTimeEntity {
     }
 
     public void delete() {
-        isDeleted = true;
+        deleted = true;
     }
 }
