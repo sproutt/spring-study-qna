@@ -38,12 +38,12 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public Long delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
+    public Answer delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
         if(!HttpSessionUtil.isLoginUser(httpSession)) {
-            return null;
+            throw new IllegalStateException("세션이 만료되었습니다. 다시 로그인 해주세요.");
         }
 
-        Answer savedAnswer = answerRepository.findById(id).orElseThrow(() -> new NoSuchElementException("답변이 존재하지 않습니다."));
+        Answer savedAnswer = answerRepository.findQuestionFetchJoinById(id).orElseThrow(() -> new NoSuchElementException("답변이 존재하지 않습니다."));
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
         if (!savedAnswer.isSameWriter(sessionedUser)) {
@@ -58,6 +58,7 @@ public class ApiAnswerController {
         savedQuestion.deleteAnswer();
 
         questionRepository.save(savedQuestion);
-        return id;
+
+        return savedAnswer;
     }
 }

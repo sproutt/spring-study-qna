@@ -18,9 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initEvents() {
   const answerBtn = $(".submit-write .btn");
-  const deleteBtn = $(".delete-answer-button");
+
+  console.log(answerBtn);
   answerBtn.addEventListener("click", registerAnswerHandler);
-  deleteBtn.addEventListener("click", deleteAnswerHandler);
+  $('.qna-comment-slipp-articles').addEventListener('click',deleteAnswerHandler);
 }
 
 function fetchManager({ url, method, body, headers, callback}) {
@@ -35,8 +36,7 @@ function fetchManager({ url, method, body, headers, callback}) {
 function registerAnswerHandler(evt) {
   evt.preventDefault();
   const contents = $(".submit-write textarea").value;
-  $(".form-control").value = "";
-
+  $(".submit-write textarea").value = "";
   const url = $(".submit-write").action;
 
   fetchManager({
@@ -69,7 +69,7 @@ function appendAnswer({id, contents, question, writer, createdDate}) {
                 <a class="link-modify-article" href="/questions/${question.index}/answers/${id}">수정</a>
             </li>
             <li>
-                <form class="delete-answer-form" action="/questions/${question.index}/answers/${id}" method="POST">
+                <form class="delete-answer-form" action="/api/questions/${question.index}/answers/${id}" method="POST">
                 <input type="hidden" name="_method" value="DELETE">
                  <button type="submit" class="delete-answer-button">삭제</button>
                 </form>
@@ -82,10 +82,12 @@ function appendAnswer({id, contents, question, writer, createdDate}) {
 }
 
 function deleteAnswerHandler(evt) {
-  if(evt.target.className !== "answer-delete-button") return;
+  console.log(evt.target.className);
+  if(evt.target.className !== "delete-answer-button") return;
   evt.preventDefault();
 
   const url = $(".delete-answer-form").action;
+  console.log(url);
 
   fetchManager({
     url: url,
@@ -96,7 +98,9 @@ function deleteAnswerHandler(evt) {
 }
 
 function deleteAnswer({id}) {
+  console.log(id);
   const target = $(`.article-comment[data-id='${id}']`);
+  console.log(target);
+  console.log(target.parentNode);
   target.parentNode.removeChild(target);
-
 }
