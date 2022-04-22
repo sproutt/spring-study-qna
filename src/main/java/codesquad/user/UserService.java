@@ -27,7 +27,7 @@ public class UserService {
     }
 
     @Transactional
-    public boolean update(User changedUser, long userId, HttpSession session) {
+    public boolean update(SingUpUserDto changedUser, long userId, HttpSession session) {
         log.info("changedUser = {}", changedUser);
         log.info("userId = {}", userId);
 

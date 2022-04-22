@@ -46,7 +46,7 @@ public class UserController {
     }
 
     @PostMapping("{id}/update")
-    public String updateUser(User changedUser, @PathVariable("id") Long id, HttpSession session) {
+    public String updateUser(SingUpUserDto changedUser, @PathVariable("id") Long id, HttpSession session) {
 
         if (userService.update(changedUser, id, session)) {
             return "redirect:/users";

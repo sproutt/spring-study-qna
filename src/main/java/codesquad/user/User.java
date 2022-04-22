@@ -31,7 +31,7 @@ public class User {
         email = singUpUserDto.getEmail();
     }
 
-    public void update(User user) {
+    public void update(SingUpUserDto user) {
         if (equalsPassword(user.getPassword())) {
             name = user.getName();
             email = user.getEmail();
