@@ -59,7 +59,7 @@ public class QuestionService {
     }
 
     @Transactional
-    public void update(Question changedQuestion, long id, HttpSession session) {
+    public void update(QuestionDto changedQuestion, long id, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
 
@@ -68,7 +68,8 @@ public class QuestionService {
         }
 
         log.info("user: {}", user.getName());
-        log.info("question: {}", savedQuestion.getWriter());
+        log.info("question content: {}", changedQuestion.getContents());
+        log.info("question title: {}", changedQuestion.getTitle());
 
         savedQuestion.update(changedQuestion);
     }
@@ -119,6 +120,7 @@ public class QuestionService {
     }
 
     private boolean isQuestionMatchUser(User loginUser, Question question) {
+        log.info("match User? = {}", question.equalsWriter(loginUser));
         return question.equalsWriter(loginUser);
     }
 }

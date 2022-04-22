@@ -50,7 +50,7 @@ public class QuestionController {
     }
 
     @PutMapping("/questions/{id}")
-    public String updateQuestion(Question changedQuestion, @PathVariable("id") Long id, HttpSession session) {
+    public String updateQuestion(QuestionDto changedQuestion, @PathVariable("id") Long id, HttpSession session) {
         try {
             questionService.update(changedQuestion, id, session);
         } catch (QuestionEditException showException) {

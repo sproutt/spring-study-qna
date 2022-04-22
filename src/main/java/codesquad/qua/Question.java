@@ -45,7 +45,7 @@ public class Question {
         deletedFlag = true;
     }
 
-    public void update(Question question) {
+    public void update(QuestionDto question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
