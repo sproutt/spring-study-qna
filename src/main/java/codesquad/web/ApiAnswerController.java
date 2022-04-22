@@ -36,4 +36,28 @@ public class ApiAnswerController {
 
         return answerRepository.save(answer);
     }
+
+    @DeleteMapping("/{id}")
+    public Long delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
+        if(!HttpSessionUtil.isLoginUser(httpSession)) {
+            return null;
+        }
+
+        Answer savedAnswer = answerRepository.findById(id).orElseThrow(() -> new NoSuchElementException("답변이 존재하지 않습니다."));
+        User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
+
+        if (!savedAnswer.isSameWriter(sessionedUser)) {
+            throw new IllegalStateException("다른 사람의 게시글을 삭제할 수 없습니다.");
+        }
+
+        savedAnswer.delete();
+
+        answerRepository.save(savedAnswer);
+
+        Question savedQuestion = questionRepository.findById(index).orElseThrow(() -> new NoSuchElementException("게시글이 존재하지 않습니다."));
+        savedQuestion.deleteAnswer();
+
+        questionRepository.save(savedQuestion);
+        return id;
+    }
 }

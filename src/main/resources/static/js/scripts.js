@@ -18,8 +18,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function initEvents() {
   const answerBtn = $(".submit-write .btn");
-  if(answerBtn === null) return;
+  const deleteBtn = $(".delete-answer-button");
   answerBtn.addEventListener("click", registerAnswerHandler);
+  deleteBtn.addEventListener("click", deleteAnswerHandler);
 }
 
 function fetchManager({ url, method, body, headers, callback}) {
@@ -49,7 +50,7 @@ function registerAnswerHandler(evt) {
 
 function appendAnswer({id, contents, question, writer, createdDate}) {
   const html = `
-    <article class="article">
+    <article class="article-comment" data-id=${id}>
        <div class="article-header">
             <div class="article-header-thumb">
                 <img src="https://graph.facebook.com/v2.3/1324855987/picture" class="article-author-thumb" alt="">
@@ -78,4 +79,24 @@ function appendAnswer({id, contents, question, writer, createdDate}) {
     </article>`
 
   $('.qna-comment-slipp-articles').insertAdjacentHTML('afterbegin', html);
+}
+
+function deleteAnswerHandler(evt) {
+  if(evt.target.className !== "answer-delete-button") return;
+  evt.preventDefault();
+
+  const url = $(".delete-answer-form").action;
+
+  fetchManager({
+    url: url,
+    method: 'DELETE',
+    headers: { 'content-type': 'application/json'},
+    callback: deleteAnswer
+  })
+}
+
+function deleteAnswer({id}) {
+  const target = $(`.article-comment[data-id='${id}']`);
+  target.parentNode.removeChild(target);
+
 }
