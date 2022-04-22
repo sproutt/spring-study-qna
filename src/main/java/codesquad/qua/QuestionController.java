@@ -49,7 +49,6 @@ public class QuestionController {
         return "qna/show";
     }
 
-    @Transactional
     @PutMapping("/questions/{id}")
     public String updateQuestion(Question changedQuestion, @PathVariable("id") Long id, HttpSession session) {
         try {
@@ -75,7 +74,6 @@ public class QuestionController {
     }
 
     @DeleteMapping("/questions/{id}")
-    @Transactional
     public String removeQuestion(@PathVariable("id") Long id, HttpSession session) {
 
         try {

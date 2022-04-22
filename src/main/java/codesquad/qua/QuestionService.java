@@ -8,6 +8,7 @@ import codesquad.utils.SessionUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -57,6 +58,7 @@ public class QuestionService {
         log.info("question: {}", savedQuestion.getWriter());
     }
 
+    @Transactional
     public void update(Question changedQuestion, long id, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
@@ -71,6 +73,7 @@ public class QuestionService {
         savedQuestion.update(changedQuestion);
     }
 
+    @Transactional
     public void remove(long id, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
         Question savedQuestion = findQuestionById(id);
