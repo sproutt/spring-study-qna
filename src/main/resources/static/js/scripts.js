@@ -97,9 +97,10 @@ function deleteAnswerHandler(evt) {
   })
 }
 
-function deleteAnswer({id}) {
-  console.log(id);
-  const target = $(`.article-comment[data-id='${id}']`);
+function deleteAnswer({data}) {
+  console.log(data);
+  console.log(data.id);
+  const target = $(`.article-comment[data-id='${data.id}']`);
   console.log(target);
   console.log(target.parentNode);
   target.parentNode.removeChild(target);

@@ -1,5 +1,6 @@
 package codesquad.web;
 
+import codesquad.domain.Result;
 import codesquad.domain.answer.Answer;
 import codesquad.domain.answer.AnswerRepository;
 import codesquad.domain.question.Question;
@@ -38,16 +39,16 @@ public class ApiAnswerController {
     }
 
     @DeleteMapping("/{id}")
-    public Answer delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
+    public Result<Answer> delete(@PathVariable Long index, @PathVariable Long id, HttpSession httpSession) {
         if(!HttpSessionUtil.isLoginUser(httpSession)) {
-            throw new IllegalStateException("세션이 만료되었습니다. 다시 로그인 해주세요.");
+            return Result.fail("세션이 만료되었습니다. 다시 로그인 해주세요.");
         }
 
         Answer savedAnswer = answerRepository.findQuestionFetchJoinById(id).orElseThrow(() -> new NoSuchElementException("답변이 존재하지 않습니다."));
         User sessionedUser = HttpSessionUtil.getUserFrom(httpSession);
 
         if (!savedAnswer.isSameWriter(sessionedUser)) {
-            throw new IllegalStateException("다른 사람의 게시글을 삭제할 수 없습니다.");
+            return Result.fail("다른 사람의 게시글을 삭제할 수 없습니다.");
         }
 
         savedAnswer.delete();
@@ -59,6 +60,6 @@ public class ApiAnswerController {
 
         questionRepository.save(savedQuestion);
 
-        return savedAnswer;
+        return Result.ok(savedAnswer);
     }
 }
