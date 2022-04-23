@@ -134,7 +134,7 @@ public class QuestionController {
             }
 
             if (!savedQuestion.canDelete()) {
-                throw new IllegalStateException("질문에 다른 사용자의 답변이 존재하여 질문을 삭제할 수 없습니다.");
+                throw new IllegalStateException("질문을 삭제할 수 없습니다.");
             }
 
             savedQuestion.delete();

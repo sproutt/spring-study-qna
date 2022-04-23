@@ -1,13 +1,15 @@
 package codesquad.domain.question;
 
+import codesquad.domain.BaseTimeEntity;
 import codesquad.domain.answer.Answer;
 import codesquad.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
-public class Question {
+public class Question extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long index;
@@ -23,11 +25,13 @@ public class Question {
     private String contents;
 
     @OneToMany(mappedBy = "question")
+    @JsonIgnore
     private List<Answer> answers;
 
     private Integer countOfAnswer = 0;
 
-    private Boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted = false;
 
     public Long getIndex() {
         return index;
@@ -99,11 +103,18 @@ public class Question {
     }
 
     public void delete() {
-        isDeleted = true;
+        deleted = true;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public boolean canDelete() {
-        if (countOfAnswer.equals(0)) {
+        boolean isAnswerStatusAllTrue = answers.stream()
+                           .allMatch(answer -> answer.isDeleted() == true);
+
+        if (countOfAnswer.equals(0) || isAnswerStatusAllTrue) {
             return true;
         }
         return false;

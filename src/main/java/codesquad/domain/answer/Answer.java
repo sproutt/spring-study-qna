@@ -1,12 +1,13 @@
 package codesquad.domain.answer;
 
+import codesquad.domain.BaseTimeEntity;
 import codesquad.domain.question.Question;
 import codesquad.domain.user.User;
 
 import javax.persistence.*;
 
 @Entity
-public class Answer {
+public class Answer extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,14 +16,25 @@ public class Answer {
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
     private User writer;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
     private Question question;
 
     @Column(columnDefinition = "TEXT", length = 300, nullable = false)
     private String contents;
 
-    private Boolean isDeleted = false;
+    @Column(columnDefinition = "boolean default false")
+    private boolean deleted = false;
+
+    public Answer() {
+
+    }
+
+    public Answer(User writer, Question question, String contents) {
+        this.writer = writer;
+        this.question = question;
+        this.contents = contents;
+    }
 
     public Long getId() {
         return id;
@@ -56,8 +68,8 @@ public class Answer {
         this.contents = contents;
     }
 
-    public Boolean getDeleted() {
-        return isDeleted;
+    public boolean isDeleted() {
+        return deleted;
     }
 
     public boolean isSameWriter(User user) {
@@ -65,6 +77,6 @@ public class Answer {
     }
 
     public void delete() {
-        isDeleted = true;
+        deleted = true;
     }
 }
