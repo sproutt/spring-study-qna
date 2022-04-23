@@ -19,7 +19,7 @@ import codesquad.domain.question.QuestionRepository;
 import codesquad.domain.user.User;
 
 @Controller
-public class QnaController {
+public class QuestionController {
 
 	@Autowired
 	private QuestionRepository questionRepository;
