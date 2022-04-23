@@ -24,7 +24,7 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "question")
     @JsonIgnore
     private List<Answer> answers;
 
