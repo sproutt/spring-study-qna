@@ -24,7 +24,7 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String contents;
 
-    @OneToMany(mappedBy = "question")
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Answer> answers;
 
@@ -111,7 +111,10 @@ public class Question extends BaseTimeEntity {
     }
 
     public boolean canDelete() {
-        if (countOfAnswer.equals(0)) {
+        boolean isAnswerStatusAllTrue = answers.stream()
+                           .allMatch(answer -> answer.isDeleted() == true);
+
+        if (countOfAnswer.equals(0) || isAnswerStatusAllTrue) {
             return true;
         }
         return false;
