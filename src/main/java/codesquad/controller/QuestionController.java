@@ -19,7 +19,7 @@ import codesquad.domain.question.QuestionRepository;
 import codesquad.domain.user.User;
 
 @Controller
-public class QnaController {
+public class QuestionController {
 
 	@Autowired
 	private QuestionRepository questionRepository;
@@ -32,7 +32,7 @@ public class QnaController {
 	@GetMapping("/")
 	// @RequestMapping(value = "/", method = RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("questions", questionRepository.findAll());
+		model.addAttribute("questions", questionRepository.findAllByState(true));
 		return "index";
 	}
 
@@ -44,6 +44,7 @@ public class QnaController {
 			return "redirect:/login";
 		}
 		question.setWriter(sessionedUser);
+		question.setState(true);
 		questionRepository.save(question);
 		return "redirect:/";
 	}
@@ -85,10 +86,22 @@ public class QnaController {
 	public String delete(@PathVariable Long index, HttpSession session) {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(!sessionedUser.isSameId(question.getWriter().getUserId())) {
+		if(!question.isSameWriter(sessionedUser)){
+			return "redircet:/questions/{index}";
+		}
+
+		if(sessionedUser == null) {
 			return "redirect:/login";
 		}
-		questionRepository.delete(question);
+
+		if(!question.checkEmptyAnswerList()){
+		 	if(!question.checkExistAnotherAnswerWriter(sessionedUser)){
+				return "redircet:/questions/{index}";
+			}
+		}
+
+		question.delete();
+		questionRepository.save(question);
 		return "redirect:/";
 	}
 }
