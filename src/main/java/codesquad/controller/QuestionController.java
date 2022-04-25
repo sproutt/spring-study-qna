@@ -1,5 +1,6 @@
 package codesquad.controller;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 import javax.servlet.http.HttpSession;
@@ -32,7 +33,8 @@ public class QuestionController {
 	@GetMapping("/")
 	// @RequestMapping(value = "/", method = RequestMethod.GET)
 	public String list(Model model) {
-		model.addAttribute("questions", questionRepository.findAllByState(true));
+		List<Question> notDeletedQuestion = questionRepository.findNotDeletedStateQuestion(true);
+		model.addAttribute("questions", notDeletedQuestion);
 		return "index";
 	}
 
@@ -86,12 +88,12 @@ public class QuestionController {
 	public String delete(@PathVariable Long index, HttpSession session) {
 		User sessionedUser = (User) session.getAttribute("sessionedUser");
 		Question question = questionRepository.findById(index).orElseThrow(NoSuchElementException::new);
-		if(!question.isSameWriter(sessionedUser)){
-			return "redircet:/questions/{index}";
-		}
-
 		if(sessionedUser == null) {
 			return "redirect:/login";
+		}
+
+		if(!question.isSameWriter(sessionedUser)){
+			return "redircet:/questions/{index}";
 		}
 
 		if(!question.checkEmptyAnswerList()){
