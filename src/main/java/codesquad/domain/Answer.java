@@ -19,6 +19,17 @@ public class Answer {
     private String comment;
 
     private LocalDateTime localDateTime;
+    private boolean deletedFlag;
+
+    public Answer() {
+    }
+
+    public Answer(User loginUser, Question question, String comment, LocalDateTime localDateTime) {
+        this.writer = loginUser.getName();
+        this.question = question;
+        this.comment = comment;
+        this.localDateTime = localDateTime;
+    }
 
     public Long getId() {
         return id;
@@ -53,6 +64,14 @@ public class Answer {
         this.localDateTime = localDateTime;
     }
 
+    public boolean isDeletedFlag() {
+        return deletedFlag;
+    }
+
+    public void setDeletedFlag(boolean deletedFlag) {
+        this.deletedFlag = deletedFlag;
+    }
+
     public void writeAnswer(String comment, String writer, LocalDateTime localDateTime) {
         this.comment = comment;
         this.localDateTime = localDateTime;
@@ -62,5 +81,9 @@ public class Answer {
     public void addQuestion(Question question) {
         question.getAnswers().add(this);
         this.question = question;
+    }
+
+    public boolean isSameWriter(User user) {
+        return this.writer.equals(user.getName());
     }
 }
