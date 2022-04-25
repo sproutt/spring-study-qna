@@ -127,6 +127,7 @@ public class QuestionController {
                     if (question.getAnswers()
                                 .size() == 0) {
                         question.setDeleteFlag(true);
+                        questionRepository.save(question);
                     } else {
                         boolean flag = true;
                         for (Answer answer : question.getAnswers()) {
@@ -142,6 +143,7 @@ public class QuestionController {
                             question.getAnswers()
                                     .clear();
                             question.setDeleteFlag(true);
+                            questionRepository.save(question);
                         }
                     }
                 }
