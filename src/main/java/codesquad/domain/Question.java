@@ -1,5 +1,7 @@
 package codesquad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -17,6 +19,8 @@ public class Question {
     private String title;
     private String contents;
     private LocalDateTime time;
+
+    @JsonIgnore
     @OneToMany(mappedBy = "question")
     private final List<Answer> answers = new ArrayList<>();
     private Boolean deleteFlag;
@@ -54,10 +58,6 @@ public class Question {
 
     public void setContents(String contents) {
         this.contents = contents;
-    }
-
-    public void createWrittenTime(LocalDateTime writtenTime) {
-        this.time = writtenTime;
     }
 
     public Long getId() {
