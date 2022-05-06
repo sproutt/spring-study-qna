@@ -17,9 +17,9 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public void create(SingUpUserDto singUpUserDto) {
-        log.info("singUpUserDto = {}", singUpUserDto);
-        userRepository.save(new User(singUpUserDto));
+    public void create(SignUpUserDto signUpUserDto) {
+        log.info("singUpUserDto = {}", signUpUserDto);
+        userRepository.save(new User(signUpUserDto));
     }
 
     public List<User> list() {
@@ -27,7 +27,7 @@ public class UserService {
     }
 
     @Transactional
-    public boolean update(SingUpUserDto changedUser, long userId, HttpSession session) {
+    public boolean update(SignUpUserDto changedUser, long userId, HttpSession session) {
         log.info("changedUser = {}", changedUser);
         log.info("userId = {}", userId);
 

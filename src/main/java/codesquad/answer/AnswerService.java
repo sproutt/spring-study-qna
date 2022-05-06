@@ -24,14 +24,14 @@ public class AnswerService {
     public Result<ResponseAnswerDto> create(long questionId, RequestAnswerDto requestAnswerDto, HttpSession session) {
         log.info("comment = {}", requestAnswerDto.getComment());
 
-        Question question = questionRepository.findById(questionId)
-                                              .orElseThrow(NoSuchElementException::new);
-
         User user = SessionUtil.getUserBySession(session);
 
         if (user == null) {
             return Result.fail("로그인 하세요");
         }
+
+        Question question = questionRepository.findById(questionId)
+                .orElseThrow(NoSuchElementException::new);
 
         Answer answer = new Answer(question, user, requestAnswerDto.getComment());
         answer.addQuestion(question);
@@ -44,12 +44,12 @@ public class AnswerService {
     public Result<ResponseAnswerDto> remove(long questionId, long answerId, HttpSession session) {
         User user = SessionUtil.getUserBySession(session);
 
-        Answer answer = answerRepository.findQuestionFetchJoinById(answerId)
-                                        .orElseThrow(NoSuchElementException::new);
-
         if (user == null) {
             return Result.fail("로그인 하세요");
         }
+
+        Answer answer = answerRepository.findQuestionFetchJoinById(answerId)
+                .orElseThrow(NoSuchElementException::new);
 
         if (!answer.equalsWriter(user)) {
             return Result.fail("다른 사람 답글은 삭제 못해요");

@@ -25,14 +25,14 @@ public class User {
 
     private String email;
 
-    User(SingUpUserDto singUpUserDto) {
-        userId = singUpUserDto.getUserId();
-        password = singUpUserDto.getPassword();
-        name = singUpUserDto.getName();
-        email = singUpUserDto.getEmail();
+    User(SignUpUserDto signUpUserDto) {
+        userId = signUpUserDto.getUserId();
+        password = signUpUserDto.getPassword();
+        name = signUpUserDto.getName();
+        email = signUpUserDto.getEmail();
     }
 
-    public void update(SingUpUserDto user) {
+    public void update(SignUpUserDto user) {
         if (equalsPassword(user.getPassword())) {
             name = user.getName();
             email = user.getEmail();
