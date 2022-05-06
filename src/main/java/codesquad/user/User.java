@@ -1,10 +1,15 @@
 package codesquad.user;
 
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class User {
 
     @Id
@@ -20,43 +25,14 @@ public class User {
 
     private String email;
 
-    public String getUserId() {
-        return userId;
+    User(SignUpUserDto signUpUserDto) {
+        userId = signUpUserDto.getUserId();
+        password = signUpUserDto.getPassword();
+        name = signUpUserDto.getName();
+        email = signUpUserDto.getEmail();
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void update(User user) {
+    public void update(SignUpUserDto user) {
         if (equalsPassword(user.getPassword())) {
             name = user.getName();
             email = user.getEmail();
@@ -65,6 +41,10 @@ public class User {
 
     public boolean equalsPassword(String password) {
         return this.password.equals(password);
+    }
+
+    public boolean equalsPassword(LoginUserDto loginUserDto) {
+        return password.equals(loginUserDto.getPassword());
     }
 
     public boolean equalsId(Long id) {
@@ -76,15 +56,11 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) &&
-                Objects.equals(getUserId(), user.getUserId()) &&
-                Objects.equals(getPassword(), user.getPassword()) &&
-                Objects.equals(getName(), user.getName()) &&
-                Objects.equals(getEmail(), user.getEmail());
+        return Objects.equals(getId(), user.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getUserId(), getPassword(), getName(), getEmail());
+        return Objects.hash(getId());
     }
 }

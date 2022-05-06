@@ -2,12 +2,17 @@ package codesquad.qua;
 
 import codesquad.answer.Answer;
 import codesquad.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@NoArgsConstructor
+@Getter
 public class Question {
 
     @Id
@@ -22,52 +27,25 @@ public class Question {
 
     private String contents;
 
-    private boolean deletedFlag = false;
+    private boolean deletedFlag;
 
     @OneToMany(mappedBy = "question")
-    private List<Answer> answers = new ArrayList<>();
+    @JsonIgnore
+    private List<Answer> answers;
 
-    public List<Answer> getAnswers() {
-        return answers;
+    public Question(QuestionDto questionDto, User user) {
+        this.writer = user;
+        this.title = questionDto.getTitle();
+        this.contents = questionDto.getContents();
+        answers = new ArrayList<>();
+        deletedFlag = false;
     }
 
     public void changeDeleteFlag() {
         deletedFlag = true;
     }
 
-    public boolean isDeletedFlag() {
-        return deletedFlag;
-    }
-
-    public User getWriter() {
-        return writer;
-    }
-
-    public void setWriter(User writer) {
-        this.writer = writer;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContents() {
-        return contents;
-    }
-
-    public void setContents(String contents) {
-        this.contents = contents;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void update(Question question) {
+    public void update(QuestionDto question) {
         this.title = question.getTitle();
         this.contents = question.getContents();
     }
@@ -78,5 +56,13 @@ public class Question {
 
     public boolean hasAnswers() {
         return answers.size() > 0;
+    }
+
+    public void deleteQuestion() {
+        changeDeleteFlag();
+
+        for (Answer answer : answers) {
+            answer.changeDeletedFlag();
+        }
     }
 }
