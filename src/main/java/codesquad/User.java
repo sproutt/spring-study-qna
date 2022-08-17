@@ -1,12 +1,7 @@
-package board;
+package codesquad;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-
-@Entity
 public class User {
-    private @Id @GeneratedValue Long id;
+    private Integer id;
     private String userId;
     private String password;
     private String name;
@@ -14,18 +9,19 @@ public class User {
 
     public User() {}
 
-    public User(String userId, String password, String name, String email) {
+    public User(Integer id, String userId, String password, String name, String email) {
+        this.id = id;
         this.userId = userId;
         this.password = password;
         this.name = name;
         this.email = email;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
