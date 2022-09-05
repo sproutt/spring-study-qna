@@ -8,32 +8,33 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Controller
+@RequestMapping(value = "/users")
 class UserController {
 
     private static final int START_NUMBER = 3;
     private List<User> users = new ArrayList<>();
 
-    @GetMapping("/users/join")
+    @GetMapping("/join")
     public String getRegisterForm() {
         return "user/form";
     }
 
-    @PostMapping("/users")
-    public String registerUser(@ModelAttribute User user) {
+    @PostMapping()
+    public String registerUser(User user) {
         user.setId(users.size() + START_NUMBER);
         users.add(user);
 
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
+    @GetMapping()
     public String getUserList(Model model) {
         model.addAttribute("users", users);
 
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
+    @GetMapping("/{userId}")
     public String getUserProfile(@PathVariable String userId, Model model) {
 
         User user = findUser(userId);
