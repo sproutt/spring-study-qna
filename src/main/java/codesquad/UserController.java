@@ -37,7 +37,7 @@ class UserController {
     @GetMapping("/{userId}")
     public String getUserProfile(@PathVariable String userId, Model model) {
 
-        User user = findUser(userId);
+        UserDTO user = findUser(userId);
 
         model.addAttribute("name", user.getName());
         model.addAttribute("email", user.getEmail());
@@ -45,10 +45,10 @@ class UserController {
         return "user/profile";
     }
 
-    private User findUser(String userId) {
+    private UserDTO findUser(String userId) {
         for (User user : users) {
             if (userId.equals(user.getUserId())) {
-                return user;
+                return new UserDTO(user);
             }
         }
         throw new UserNotFoundException("일치하는 아이디가 없습니다.");

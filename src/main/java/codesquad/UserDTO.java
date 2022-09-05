@@ -1,25 +1,18 @@
 package codesquad;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-
-@Entity
-public class User {
-
-    @Id
+public class UserDTO {
     private int id;
     private String userId;
     private String password;
     private String name;
     private String email;
 
-    public User() {}
-
-    public User(int id, String userId, String password, String name, String email) {
-        this.userId = userId;
-        this.password = password;
-        this.name = name;
-        this.email = email;
+    public UserDTO(User user) {
+        this.id = user.getId();
+        this.userId = user.getUserId();
+        this.password = user.getPassword();
+        this.name = user.getName();
+        this.email = user.getEmail();
     }
 
     public int getId() {
