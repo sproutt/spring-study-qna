@@ -33,7 +33,7 @@
                 </tr>
                 {{#users}}
                 <tr>
-                    <th scope="row">{{id}}</th><td>{{userId}}</td><td>{{name}}</td><td>{{email}}</td><td><a href="/users/{{userId}}" class="btn btn-success" role="button">수정</a></th>
+                    <th scope="row">{{setStartingIndexNumber @index}}</th><td>{{userId}}</td><td>{{name}}</td><td>{{email}}</td><td><a href="/users/{{userId}}" class="btn btn-success" role="button">수정</a></th>
                 </tr>
                 {{/users}}
               </tbody>
