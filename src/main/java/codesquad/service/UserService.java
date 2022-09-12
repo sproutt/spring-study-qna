@@ -1,12 +1,11 @@
 package codesquad.service;
 
-import codesquad.dto.UserDto;
 import codesquad.entity.UserEntity;
 
 import java.util.List;
 
 public interface UserService {
-    void registerUser(UserDto userDto);
+    void registerUser(UserEntity userEntity);
 
     UserEntity findUser(String userId);
 

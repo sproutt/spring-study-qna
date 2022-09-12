@@ -2,7 +2,9 @@ package codesquad.controller;
 
 import codesquad.AppConfig;
 import codesquad.dto.UserDto;
+import codesquad.entity.UserEntity;
 import codesquad.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class UserController {
     ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
     UserService userService = applicationContext.getBean("userService", UserService.class);
+    ModelMapper modelMapper = new ModelMapper();
 
     @GetMapping("/join")
     public String getRegisterForm() {
@@ -28,14 +31,17 @@ public class UserController {
 
     @PostMapping()
     public String registerUser(UserDto userDto) {
-        userService.registerUser(userDto);
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
+        userService.registerUser(userEntity);
 
         return "redirect:/users";
     }
 
     @GetMapping()
     public String getUserList(Model model) {
-        List<UserDto> users = userService.findUsers().stream().map(UserDto::new).collect(Collectors.toList());
+        System.out.println("userService.findUsers().get(0) = " + userService.findUsers().get(0));
+        List<UserDto> users = userService.findUsers().stream()
+                .map(userEntity -> modelMapper.map(userEntity, UserDto.class)).collect(Collectors.toList());
         model.addAttribute("users", users);
 
         return "user/list";

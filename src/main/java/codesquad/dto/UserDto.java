@@ -48,8 +48,4 @@ public class UserDto {
                 ", email='" + email + '\'' +
                 '}';
     }
-
-    public UserEntity toEntity() {
-        return new UserEntity(userId, name, password, email);
-    }
 }

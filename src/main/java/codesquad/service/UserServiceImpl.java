@@ -1,6 +1,5 @@
 package codesquad.service;
 
-import codesquad.dto.UserDto;
 import codesquad.entity.UserEntity;
 import codesquad.repository.UserRepository;
 
@@ -15,8 +14,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerUser(UserDto userDto) {
-        userRepository.register(userDto.toEntity());
+    public void registerUser(UserEntity user) {
+        userRepository.register(user);
     }
 
     @Override

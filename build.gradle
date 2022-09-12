@@ -34,6 +34,7 @@ dependencies {
     compile 'com.github.jknack:handlebars-jackson2:4.2.0'
     compile 'com.github.jknack:handlebars-humanize:4.2.0'
     compile 'com.github.jknack:handlebars-markdown:4.2.0'
+    implementation 'org.modelmapper:modelmapper:3.0.0'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.11'
     implementation 'com.h2database:h2'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
