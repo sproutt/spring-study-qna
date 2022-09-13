@@ -1,47 +1,60 @@
 package codesquad.controller;
 
-import codesquad.domain.User;
-import codesquad.exception.NoSuchUserException;
+import codesquad.AppConfig;
+import codesquad.dto.UserDto;
+import codesquad.entity.UserEntity;
+import codesquad.service.UserService;
+import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
+import java.util.stream.Collectors;
 
 @Controller
+@RequestMapping(value = "/users")
 public class UserController {
+    ApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+    UserService userService = applicationContext.getBean("userService", UserService.class);
+    ModelMapper modelMapper = new ModelMapper();
 
-    private List<User> users = new ArrayList<>();
-    private Long id = 1L;
+    @GetMapping("/join")
+    public String getRegisterForm() {
+        return "user/form";
+    }
 
-    @PostMapping("/users")
-    public String create(@ModelAttribute User user) {
-        user.createId(id++);
-        users.add(user);
+    @PostMapping()
+    public String registerUser(UserDto userDto) {
+        UserEntity userEntity = modelMapper.map(userDto, UserEntity.class);
+        userService.registerUser(userEntity);
+
         return "redirect:/users";
     }
 
-    @GetMapping("/users")
-    public String showAllUsers(Model model) {
+    @GetMapping()
+    public String getUserList(Model model) {
+        System.out.println("userService.findUsers().get(0) = " + userService.findUsers().get(0));
+        List<UserDto> users = userService.findUsers().stream()
+                .map(userEntity -> modelMapper.map(userEntity, UserDto.class)).collect(Collectors.toList());
         model.addAttribute("users", users);
+
         return "user/list";
     }
 
-    @GetMapping("/users/{userId}")
-    public String showUserInfo(@PathVariable String userId, Model model) {
-        User user = users.stream()
-                .filter(u -> u.getUserId().equals(userId))
-                .findAny()
-                .orElseThrow(NoSuchUserException::new);
+    @GetMapping("/{userId}")
+    public String getUserProfile(@PathVariable String userId, Model model) {
 
-        model.addAttribute("userId", user.getUserId());
+        UserDto user = new UserDto(userService.findUser(userId));
+
+        model.addAttribute("name", user.getName());
         model.addAttribute("email", user.getEmail());
+
         return "user/profile";
     }
 }
