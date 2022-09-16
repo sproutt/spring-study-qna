@@ -17,7 +17,7 @@ public class ArrayUserRepository implements UserRepository {
     @Override
     public UserEntity findById(String userId) {
         for (UserEntity user : users) {
-            if (userId.equals(user.getUserId())) {
+            if (user.matchId(user, userId)) {
                 return user;
             }
         }

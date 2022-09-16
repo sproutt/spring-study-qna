@@ -33,4 +33,8 @@ public class UserEntity {
                 ", email='" + email + '\'' +
                 '}';
     }
+
+    public boolean matchId(UserEntity user, String userId) {
+        return userId.equals(user.getUserId());
+    }
 }
