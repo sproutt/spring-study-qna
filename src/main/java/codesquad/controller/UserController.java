@@ -39,7 +39,6 @@ public class UserController {
 
     @GetMapping()
     public String getUserList(Model model) {
-        System.out.println("userService.findUsers().get(0) = " + userService.findUsers().get(0));
         List<UserDto> users = userService.findUsers().stream()
                 .map(userEntity -> modelMapper.map(userEntity, UserDto.class)).collect(Collectors.toList());
         model.addAttribute("users", users);
