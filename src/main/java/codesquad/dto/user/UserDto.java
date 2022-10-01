@@ -1,13 +1,11 @@
-package codesquad.dto;
+package codesquad.dto.user;
 
 import codesquad.entity.UserEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class UserDto {

@@ -1,7 +1,7 @@
 package codesquad.controller;
 
 import codesquad.AppConfig;
-import codesquad.dto.UserDto;
+import codesquad.dto.user.UserDto;
 import codesquad.entity.UserEntity;
 import codesquad.service.UserService;
 import org.modelmapper.ModelMapper;
