@@ -8,4 +8,6 @@ public interface QuestionService {
     void postQuestion(QuestionEntity questionEntity);
 
     List<QuestionEntity> findQuestions();
+
+    QuestionEntity findQuestion(String id);
 }

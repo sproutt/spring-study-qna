@@ -2,11 +2,9 @@ package codesquad.service;
 
 import codesquad.entity.QuestionEntity;
 import codesquad.repository.QuestionRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public class QuestionServiceImpl implements QuestionService {
     private final QuestionRepository questionRepository;
 
@@ -23,5 +21,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<QuestionEntity> findQuestions() {
         return questionRepository.findAll();
+    }
+
+    @Override
+    public QuestionEntity findQuestion(String id) {
+        return questionRepository.findAll().get(Integer.parseInt(id) - 1);
     }
 }
