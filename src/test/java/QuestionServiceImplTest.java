@@ -21,13 +21,23 @@ public class QuestionServiceImplTest {
     @InjectMocks
     private QuestionService questionService = new QuestionServiceImpl(questionRepository);
 
+    void setUp() {
+        QuestionEntity questionEntity = QuestionEntity.builder()
+                .writer("july")
+                .title("title")
+                .contents("contents")
+                .build();
+
+        questionService.postQuestion(questionEntity);
+    }
+
     @Test
     void 질문_등록_테스트() {
         // given
         QuestionEntity questionEntity = QuestionEntity.builder()
-                .writer("작성자")
-                .title("제목")
-                .contents("제목")
+                .writer("july")
+                .title("title")
+                .contents("contents")
                 .build();
 
         // when
@@ -39,7 +49,26 @@ public class QuestionServiceImplTest {
     }
 
     @Test
-    void contextLoads() {
-        System.out.println(org.springframework.core.SpringVersion.getVersion());
+    void 모든_질문_불러오기_테스트() {
+        // given
+        setUp();
+
+        // when
+        List<QuestionEntity> testQuestionEntity = questionService.findQuestions();
+
+        // then
+        Assertions.assertEquals(testQuestionEntity.size(), 1);
+    }
+
+    @Test
+    void 특정_질문_불러오기_테스트() {
+        // given
+        setUp();
+
+        // when
+        QuestionEntity questionEntity = questionService.findQuestion("1");
+
+        // then
+        Assertions.assertEquals(questionEntity.getTitle(), "title");
     }
 }
