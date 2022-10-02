@@ -1,5 +1,8 @@
 package codesquad.dto.user;
 
+import lombok.Builder;
+
+@Builder
 public class UserUpdateRequestDto {
     private String password;
     private String name;
