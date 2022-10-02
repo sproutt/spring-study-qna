@@ -29,4 +29,16 @@ public class UserEntity {
     public boolean matchId(UserEntity user, String userId) {
         return userId.equals(user.getUserId());
     }
+
+    public void updatePassword(String password) {
+        this.password = password;
+    }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }
