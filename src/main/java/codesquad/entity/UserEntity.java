@@ -26,7 +26,7 @@ public class UserEntity {
                 '}';
     }
 
-    public boolean matchId(UserEntity user, String userId) {
+    public boolean isSameId(UserEntity user, String userId) {
         return userId.equals(user.getUserId());
     }
 
