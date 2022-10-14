@@ -1,13 +1,11 @@
-package codesquad.dto;
+package codesquad.dto.user;
 
 import codesquad.entity.UserEntity;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class UserDto {
@@ -21,22 +19,6 @@ public class UserDto {
         password = userEntity.getPassword();
         name = userEntity.getName();
         email = userEntity.getEmail();
-    }
-
-    public String getUserId() {
-        return userId;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     @Override

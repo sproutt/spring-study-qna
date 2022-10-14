@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="kr">
 <head>
-    <!--TODO: 중복 제거-->
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
     <title>SLiPP Java Web Programming</title>
@@ -17,7 +16,7 @@
 <nav class="navbar navbar-fixed-top header">
     <div class="col-md-12">
         <div class="navbar-header">
-            <a href="index.html" class="navbar-brand">SLiPP</a>
+            <a href="questions" class="navbar-brand">SLiPP</a>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse1">
                 <i class="glyphicon glyphicon-search"></i>
             </button>
@@ -92,7 +91,7 @@
                             <div class="auth-info">
                                 <i class="icon-add-comment"></i>
                                 <span class="time">2016-01-15 18:47</span>
-                                <a href="../templates/user/profile.html" class="author">자바지기</a>
+                                <a href="../templates/user/profile.html" class="author">자바지기지기지기지기</a>
                             </div>
                             <div class="reply" title="댓글">
                                 <i class="icon-reply"></i>
@@ -119,6 +118,27 @@
                         </div>
                     </div>
                 </li>
+                {{#questions}}
+                <li>
+                    <div class="wrap">
+                        <div class="main">
+                            <strong class="subject">
+                                <a href="/questions/{{setStartingIndexNumberIs1 @index}}">{{title}}</a>
+                            </strong>
+                            <div class="auth-info">
+                                <i class="icon-add-comment"></i>
+                                <span class="time">{{date}}</span>
+                                <a href="../templates/user/profile.html" class="author">{{writer}}</a>
+                            </div>
+                            <div class="reply" title="댓글">
+                                <i class="icon-reply"></i>
+                                <span class="point">12</span>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {{/questions}}
+            </ul>
             <div class="row">
                 <div class="col-md-3"></div>
                 <div class="col-md-6 text-center">

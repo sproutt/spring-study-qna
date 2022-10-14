@@ -1,18 +1,17 @@
 package codesquad.controller;
 
 import codesquad.AppConfig;
-import codesquad.dto.UserDto;
+import codesquad.dto.user.UserDto;
+import codesquad.dto.user.UserUpdateRequestDto;
 import codesquad.entity.UserEntity;
+import codesquad.mapper.UserMapper;
 import codesquad.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -39,7 +38,6 @@ public class UserController {
 
     @GetMapping()
     public String getUserList(Model model) {
-        System.out.println("userService.findUsers().get(0) = " + userService.findUsers().get(0));
         List<UserDto> users = userService.findUsers().stream()
                 .map(userEntity -> modelMapper.map(userEntity, UserDto.class)).collect(Collectors.toList());
         model.addAttribute("users", users);
@@ -56,5 +54,16 @@ public class UserController {
         model.addAttribute("email", user.getEmail());
 
         return "user/profile";
+    }
+
+    @GetMapping("/{userId}/form")
+    public String getProfileEditForm() {
+        return "user/update_form";
+    }
+
+    @PutMapping("/{userId}/update")
+    public String updateUserProfile(@PathVariable("userId") String userId, UserUpdateRequestDto requestDto) {
+        userService.updateUser(userId, UserMapper.dtoToEntity(requestDto));
+        return "redirect:/users";
     }
 }

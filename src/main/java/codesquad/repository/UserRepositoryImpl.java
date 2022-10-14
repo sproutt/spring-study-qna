@@ -6,7 +6,7 @@ import codesquad.entity.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayUserRepository implements UserRepository {
+public class UserRepositoryImpl implements UserRepository {
     private final List<UserEntity> users = new ArrayList<>();
 
     @Override
@@ -15,9 +15,20 @@ public class ArrayUserRepository implements UserRepository {
     }
 
     @Override
+    public void update(String userId, UserEntity userEntity) {
+        for (UserEntity user : users) {
+            if (user.isSameId(user, userId)) {
+                user.updatePassword(userEntity.getPassword());
+                user.updateName(userEntity.getName());
+                user.updateEmail(userEntity.getEmail());
+            }
+        }
+    }
+
+    @Override
     public UserEntity findById(String userId) {
         for (UserEntity user : users) {
-            if (userId.equals(user.getUserId())) {
+            if (user.isSameId(user, userId)) {
                 return user;
             }
         }
