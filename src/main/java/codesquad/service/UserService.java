@@ -1,6 +1,5 @@
 package codesquad.service;
 
-import codesquad.dto.user.UserUpdateRequestDto;
 import codesquad.entity.UserEntity;
 
 import java.util.List;
@@ -8,7 +7,7 @@ import java.util.List;
 public interface UserService {
     void registerUser(UserEntity userEntity);
 
-    void updateUser(String userId, UserUpdateRequestDto requestDto);
+    void updateUser(String userId, UserEntity userEntity);
 
     UserEntity findUser(String userId);
 

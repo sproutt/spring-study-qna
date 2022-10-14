@@ -1,7 +1,6 @@
 package codesquad.repository;
 
 import codesquad.UserNotFoundException;
-import codesquad.dto.user.UserUpdateRequestDto;
 import codesquad.entity.UserEntity;
 
 import java.util.ArrayList;
@@ -16,12 +15,12 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public void update(String userId, UserUpdateRequestDto userUpdateRequestDto) {
+    public void update(String userId, UserEntity userEntity) {
         for (UserEntity user : users) {
             if (user.isSameId(user, userId)) {
-                user.updatePassword(userUpdateRequestDto.getPassword());
-                user.updateName(userUpdateRequestDto.getName());
-                user.updateEmail(userUpdateRequestDto.getEmail());
+                user.updatePassword(userEntity.getPassword());
+                user.updateName(userEntity.getName());
+                user.updateEmail(userEntity.getEmail());
             }
         }
     }

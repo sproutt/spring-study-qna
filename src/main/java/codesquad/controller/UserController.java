@@ -4,6 +4,7 @@ import codesquad.AppConfig;
 import codesquad.dto.user.UserDto;
 import codesquad.dto.user.UserUpdateRequestDto;
 import codesquad.entity.UserEntity;
+import codesquad.mapper.UserMapper;
 import codesquad.service.UserService;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationContext;
@@ -61,8 +62,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/update")
-    public String updateUserProfile(@PathVariable String userId, UserUpdateRequestDto requestDto) {
-        userService.updateUser(userId, requestDto);
+    public String updateUserProfile(@PathVariable("userId") String userId, UserUpdateRequestDto requestDto) {
+        userService.updateUser(userId, UserMapper.dtoToEntity(requestDto));
         return "redirect:/users";
     }
 }
