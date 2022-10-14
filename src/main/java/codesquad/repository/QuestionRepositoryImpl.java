@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayQuestionRepository implements QuestionRepository {
+public class QuestionRepositoryImpl implements QuestionRepository {
     private final List<QuestionEntity> questions = new ArrayList<>();
 
     @Override

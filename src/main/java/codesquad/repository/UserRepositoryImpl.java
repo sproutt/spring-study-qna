@@ -7,7 +7,7 @@ import codesquad.entity.UserEntity;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ArrayUserRepository implements UserRepository {
+public class UserRepositoryImpl implements UserRepository {
     private final List<UserEntity> users = new ArrayList<>();
 
     @Override

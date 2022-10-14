@@ -1,7 +1,7 @@
 package codesquad;
 
-import codesquad.repository.ArrayQuestionRepository;
-import codesquad.repository.ArrayUserRepository;
+import codesquad.repository.QuestionRepositoryImpl;
+import codesquad.repository.UserRepositoryImpl;
 import codesquad.repository.QuestionRepository;
 import codesquad.repository.UserRepository;
 import codesquad.service.QuestionService;
@@ -21,7 +21,7 @@ public class AppConfig {
 
     @Bean
     public UserRepository userRepository() {
-        return new ArrayUserRepository();
+        return new UserRepositoryImpl();
     }
 
     @Bean
@@ -31,6 +31,6 @@ public class AppConfig {
 
     @Bean
     public QuestionRepository questionRepository() {
-        return new ArrayQuestionRepository();
+        return new QuestionRepositoryImpl();
     }
 }
