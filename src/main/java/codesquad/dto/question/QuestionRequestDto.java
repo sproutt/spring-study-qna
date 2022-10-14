@@ -2,7 +2,6 @@ package codesquad.dto.question;
 
 import lombok.*;
 
-@NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
