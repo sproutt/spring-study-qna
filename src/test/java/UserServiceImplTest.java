@@ -1,8 +1,5 @@
-import codesquad.dto.user.UserUpdateRequestDto;
 import codesquad.entity.UserEntity;
-import codesquad.repository.ArrayUserRepository;
-import codesquad.repository.UserRepository;
-import codesquad.service.UserService;
+import codesquad.repository.UserRepositoryImpl;
 import codesquad.service.UserServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,85 +8,64 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
-
-    @Mock
-    private UserRepository userRepository = new ArrayUserRepository();
-
     @InjectMocks
-    private UserService userService = new UserServiceImpl(userRepository);
-
-    void setUp() {
-        UserEntity userEntity = UserEntity.builder()
-                .userId("userId")
-                .password("password")
-                .name("name")
-                .email("email@domain.com")
-                .build();
-
-        userService.registerUser(userEntity);
-    }
+    private UserServiceImpl userService;
+    @Mock
+    private UserRepositoryImpl userRepository;
 
     @Test
     void 사용자_등록_테스트() {
-        // given
-        UserEntity userEntity = UserEntity.builder()
-                .userId("wnajsldkf")
-                .password("1234")
-                .name("jeongin")
-                .email("wnajsldkf@naver.com")
-                .build();
+        UserEntity userEntity = userList().get(0);
 
-        // when
-        userService.registerUser(userEntity);
-        List<UserEntity> userEntityList = userService.findUsers();
-
-        // then
-        Assertions.assertEquals(userEntityList.get(0).getUserId(), userEntity.getUserId());
+        doThrow(RuntimeException.class).when(userRepository).register(userEntity);
+        Assertions.assertThrows(RuntimeException.class, () -> userService.registerUser(userEntity));
     }
 
     @Test
     void 사용자_정보_수정_테스트() {
-        // given
-        setUp();
-        UserUpdateRequestDto testUserUpdateRequestDto = UserUpdateRequestDto.builder()
-                .password("qwer")
-                .name("july")
-                .email("1234@naver.com")
-                .build();
+        UserEntity userEntity = userList().get(0);
 
-        // when
-        userService.updateUser("userId", testUserUpdateRequestDto);
-        UserEntity testUserEntity = userService.findUser("userId");
-
-        // then
-        Assertions.assertEquals(testUserEntity.getName(), testUserUpdateRequestDto.getName());
+        doThrow(RuntimeException.class).when(userRepository).update("july", userEntity);
+        Assertions.assertThrows(RuntimeException.class, () -> userService.updateUser("july", userEntity));
     }
 
     @Test
     void 특정_사용자_불러오기_테스트() {
         // given
-        setUp();
+        doReturn(userList().get(0)).when(userRepository)
+                .findById("july");
 
         // when
-        UserEntity userEntity = userService.findUser("userId");
+        UserEntity userEntity = userService.findUser("july");
 
         // then
-        Assertions.assertEquals(userEntity.getEmail(), "email@domain.com");
+        Assertions.assertEquals(userEntity.getEmail(), "test@mail.com");
     }
+
 
     @Test
     void 모든_사용자_불러오기() {
         // given
-        setUp();
+        doReturn(userList()).when(userRepository)
+                .findAll();
 
         // when
-        List<UserEntity> userEntityList = userService.findUsers();
+        List<UserEntity> userList = userService.findUsers();
 
         // then
-        Assertions.assertEquals(userEntityList.size(), 1);
+        Assertions.assertEquals(userList.size(), 1);
+    }
+
+    List<UserEntity> userList(){
+        List<UserEntity> userList = new ArrayList<>();
+        userList.add(new UserEntity("july", "123", "jeongin", "test@mail.com"));
+        return userList;
     }
 }

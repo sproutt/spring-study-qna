@@ -1,7 +1,5 @@
 import codesquad.entity.QuestionEntity;
-import codesquad.repository.ArrayQuestionRepository;
-import codesquad.repository.QuestionRepository;
-import codesquad.service.QuestionService;
+import codesquad.repository.QuestionRepositoryImpl;
 import codesquad.service.QuestionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -10,65 +8,44 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 
 @ExtendWith(MockitoExtension.class)
 public class QuestionServiceImplTest {
-
     @Mock
-    private QuestionRepository questionRepository = new ArrayQuestionRepository();
+    private QuestionRepositoryImpl questionRepository;
 
     @InjectMocks
-    private QuestionService questionService = new QuestionServiceImpl(questionRepository);
-
-    void setUp() {
-        QuestionEntity questionEntity = QuestionEntity.builder()
-                .writer("july")
-                .title("title")
-                .contents("contents")
-                .build();
-
-        questionService.postQuestion(questionEntity);
-    }
+    private QuestionServiceImpl questionService;
 
     @Test
     void 질문_등록_테스트() {
-        // given
-        QuestionEntity questionEntity = QuestionEntity.builder()
-                .writer("july")
-                .title("title")
-                .contents("contents")
-                .build();
+        QuestionEntity questionEntity = questionList().get(0);
 
-        // when
-        questionService.postQuestion(questionEntity);
-        List<QuestionEntity> questionEntityList = questionService.findQuestions();
-
-        // then
-        Assertions.assertEquals(questionEntityList.get(0).getWriter(), questionEntity.getWriter());
+        doThrow(RuntimeException.class).when(questionRepository).post(questionEntity);
+        Assertions.assertThrows(RuntimeException.class, () -> questionService.postQuestion(questionEntity));
     }
 
     @Test
     void 모든_질문_불러오기_테스트() {
         // given
-        setUp();
+        doReturn(questionList()).when(questionRepository)
+                .findAll();
 
         // when
-        List<QuestionEntity> testQuestionEntity = questionService.findQuestions();
+        List<QuestionEntity> questionList = questionService.findQuestions();
 
         // then
-        Assertions.assertEquals(testQuestionEntity.size(), 1);
+        Assertions.assertEquals(questionList.size(), 1);
     }
 
-    @Test
-    void 특정_질문_불러오기_테스트() {
-        // given
-        setUp();
-
-        // when
-        QuestionEntity questionEntity = questionService.findQuestion("1");
-
-        // then
-        Assertions.assertEquals(questionEntity.getTitle(), "title");
+    List<QuestionEntity> questionList() {
+        List<QuestionEntity> questionList = new ArrayList<>();
+        questionList.add(new QuestionEntity("write", "title", "contents"));
+        return questionList;
     }
 }
